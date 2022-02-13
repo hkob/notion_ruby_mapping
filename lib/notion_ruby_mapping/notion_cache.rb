@@ -11,14 +11,16 @@ module NotionRubyMapping
     def initialize
       @object_hash = {}
       @client = nil
+      @wait = 0
     end
     attr_reader :object_hash, :client
     attr_accessor :use_cache
 
     # @param [String] notion_token
     # @return [NotionRubyMapping::NotionCache] self (NotionCache.instance)
-    def create_client(notion_token)
+    def create_client(notion_token, wait = 0.3333)
       @client ||= Notion::Client.new token: notion_token
+      @wait = wait
       self
     end
 
@@ -46,24 +48,34 @@ module NotionRubyMapping
     # @param [String] id
     # @return [NotionRubyMapping::Page, nil] Page object or nil
     def page(id)
-      object_for_key(id) { p @client.page page_id: id }
+      object_for_key(id) do
+        sleep @wait
+        @client.page page_id: id
+      end
     end
 
     # @param [String] id
     # @return [NotionRubyMapping::Database, nil] Database object or nil
     def database(id)
-      object_for_key(id) { @client.database database_id: id }
+      object_for_key(id) do
+        sleep @wait
+        @client.database database_id: id
+      end
     end
 
     # @param [String] id
     # @return [NotionRubyMapping::Block, nil]
     def block(id)
-      object_for_key(id) { @client.block block_id: id }
+      object_for_key(id) do
+        sleep @wait
+        @client.block block_id: id
+      end
     end
 
     def block_children(id)
       array = []
-      @client.block_children(block_id: id, sleep_interval: 5, max_retries: 20) do |page|
+      sleep @wait
+      @client.block_children(block_id: id, sleep_interval: @wait, max_retries: 20) do |page|
         array.concat page.results
       end
       Base.create_from_json({"object" => "list", "results" => array})
@@ -71,13 +83,18 @@ module NotionRubyMapping
 
     def database_query(id, query)
       array = []
-      parameters = {database_id: id, sleep_interval: 5, max_retries: 20}
+      parameters = {database_id: id, sleep_interval: @wait, max_retries: 20}
       parameters[:filter] = query.filter unless query.filter.empty?
       parameters[:sort] = query.sort unless query.sort.empty?
       @client.database_query(**parameters) do |page|
         array.concat page.results
       end
       Base.create_from_json({"object" => "list", "results" => array})
+    end
+
+    def update_page(id, payload)
+      sleep @wait
+      @client.update_page payload.merge({page_id: id})
     end
   end
 end

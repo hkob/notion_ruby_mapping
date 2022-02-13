@@ -7,8 +7,3 @@
    query].each do |k|
   require_relative "notion_ruby_mapping/#{k}"
 end
-
-module NotionRubyMapping
-  class Error < StandardError; end
-  # Your code goes here...
-end

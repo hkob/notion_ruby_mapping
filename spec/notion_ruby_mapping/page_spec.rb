@@ -5,44 +5,57 @@ require "json"
 require "notion"
 require_relative "../spec_helper"
 
-RSpec.describe NotionRubyMapping::Page do
-  let(:config) { YAML.load_file "env.yml" }
-  let!(:nc) { NotionRubyMapping::NotionCache.instance.create_client config["notion_token"] }
+module NotionRubyMapping
+  RSpec.describe Page do
+    let(:config) { YAML.load_file "env.yml" }
+    let!(:nc) { NotionCache.instance.create_client config["notion_token"] }
 
-  context "For top page" do
-    let(:top_page) { NotionRubyMapping::Page.find config["top_page"] }
+    describe "find" do
+      context "For an existing top page" do
+        let(:top_page) { Page.find config["top_page"] }
 
-    describe "a page" do
-      it "receive id" do
-        expect(top_page.id).to eq nc.hex_id(config["top_page"])
+        it "receive id" do
+          expect(top_page.id).to eq nc.hex_id(config["top_page"])
+        end
+      end
+
+      context "Wrong page" do
+        context "wrong format id" do
+          subject { Page.find "AAA" }
+          it "Can't receive page" do
+            expect(subject).to be_nil
+          end
+        end
+
+        context "wrong id" do
+          subject { Page.find config["unpermitted_page"] }
+          it "Can't receive page" do
+            is_expected.to be_nil
+          end
+        end
       end
     end
 
-    describe "Retrieve block children" do
-      subject { top_page.children }
-
-      it "count children count" do
-        expect(subject.count).to eq 2
+    describe "update_icon" do
+      let(:top_page) { Page.new id: config["top_page"] }
+      before do
+        top_page.set_icon(**params)
       end
-    end
+      subject { top_page.icon }
 
-    describe "Update icon" do
-      subject { top_page.update_icon }
-    end
-  end
-
-  context "Wrong page" do
-    context "wrong format id" do
-      subject { NotionRubyMapping::Page.find "AAA" }
-      it "Can't receive page" do
-        expect(subject).to be_nil
+      context "for emoji icon" do
+        let(:params) { {emoji: "😀"} }
+        it "update icon (emoji)" do
+          is_expected.to eq({"type" => "emoji", "emoji" => "😀"})
+        end
       end
-    end
 
-    context "wrong id" do
-      subject { NotionRubyMapping::Page.find config["unpermitted_page"] }
-      it "Can't receive page" do
-        is_expected.to be_nil
+      context "for link icon" do
+        let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
+        let(:params) { {url: url } }
+        it "update icon (link)" do
+          is_expected.to eq({"type" => "external", "external" => {"url" => url}})
+        end
       end
     end
   end

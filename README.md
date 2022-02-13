@@ -1,8 +1,6 @@
 # NotionRubyMapping
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/notion_ruby_mapping`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Notion Ruby mapping is currently under development.
 
 ## Installation
 
@@ -363,6 +361,13 @@ page = Page.find("c01166c6-13ae-45cb-b968-18b4ef2f5a77")
 - Retrieve block children (List object)
 ```Ruby
 children = page.children
+```
+
+- Set icon
+
+```Ruby
+page.set_icon emoji: "💿"
+page.set_icon url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png"
 ```
 
 #### List class

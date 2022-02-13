@@ -3,10 +3,10 @@
 module NotionRubyMapping
   # Notion Base object (Parent of Page / Database / List)
   class Base
-    def initialize(json)
+    def initialize(json: nil, id: nil)
       @nc = NotionCache.instance
       @json = json
-      @id = @nc.hex_id @json["id"]
+      @id = @nc.hex_id(id || @json["id"])
     end
     attr_reader :json, :id
 
@@ -15,13 +15,13 @@ module NotionRubyMapping
     def self.create_from_json(json)
       case json["object"]
       when "page"
-        Page.new json
+        Page.new json: json
       when "database"
-        Database.new json
+        Database.new json: json
       when "list"
-        List.new json
+        List.new json: json
       when "block"
-        Block.new json
+        Block.new json: json
       else
         throw Notion::Api::Errors::ObjectNotFound
       end
@@ -30,6 +30,20 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::List]
     def children
       @children ||= @nc.block_children(id)
+    end
+
+    def update_json(json)
+      if @json.nil? || @json["type"] == json["type"]
+        @json = json
+        clear_object
+      end
+    end
+
+    def clear_object
+    end
+
+    def icon
+      @json["icon"]
     end
   end
 end
