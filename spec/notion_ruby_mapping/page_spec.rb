@@ -38,9 +38,7 @@ module NotionRubyMapping
 
     describe "update_icon" do
       let(:top_page) { Page.new id: config["top_page"] }
-      before do
-        top_page.set_icon(**params)
-      end
+      before { top_page.set_icon(**params) }
       subject { top_page.icon }
 
       context "for emoji icon" do

@@ -45,7 +45,7 @@ module NotionRubyMapping
       end
     end
 
-    # @param [String] id
+    # @param [String] id page_id (with or without "-")
     # @return [NotionRubyMapping::Page, nil] Page object or nil
     def page(id)
       object_for_key(id) do
@@ -54,7 +54,7 @@ module NotionRubyMapping
       end
     end
 
-    # @param [String] id
+    # @param [String] id database_id (with or without "-")
     # @return [NotionRubyMapping::Database, nil] Database object or nil
     def database(id)
       object_for_key(id) do
@@ -63,8 +63,8 @@ module NotionRubyMapping
       end
     end
 
-    # @param [String] id
-    # @return [NotionRubyMapping::Block, nil]
+    # @param [String] id block_id (with or without "-")
+    # @return [NotionRubyMapping::Block, nil] Block object or nil
     def block(id)
       object_for_key(id) do
         sleep @wait
@@ -72,6 +72,8 @@ module NotionRubyMapping
       end
     end
 
+    # @param [String] id page_id / block_id (with or without "-")
+    # @return [NotionRubyMapping::List] List object
     def block_children(id)
       array = []
       sleep @wait
@@ -81,6 +83,9 @@ module NotionRubyMapping
       Base.create_from_json({"object" => "list", "results" => array})
     end
 
+    # @param [String] id page_id / block_id (with or without "-")
+    # @param [NotionRubyMapping::Query] query query object
+    # @return [NotionRubyMapping::List] List object
     def database_query(id, query)
       array = []
       parameters = {database_id: id, sleep_interval: @wait, max_retries: 20}
@@ -92,9 +97,18 @@ module NotionRubyMapping
       Base.create_from_json({"object" => "list", "results" => array})
     end
 
+    # @param [String] id page_id (with or without "-")
+    # @param [Hash] payload
     def update_page(id, payload)
       sleep @wait
       @client.update_page payload.merge({page_id: id})
+    end
+
+    # @param [String] id page_id (with or without "-")
+    # @param [Hash] payload
+    def update_database(id, payload)
+      sleep @wait
+      @client.update_database payload.merge({database_id: id})
     end
   end
 end

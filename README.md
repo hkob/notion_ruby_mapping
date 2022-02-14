@@ -2,6 +2,27 @@
 
 Notion Ruby mapping is currently under development.
 
+Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.notion.so/hkob/Idea-note-of-notion_ruby_mapping-3b0a3bb3c171438a830f9579d41df501)
+
+## Table of Contents
+- [NotionRubyMapping](#notionrubymapping)
+  - [Installation](#installation)
+  - [Example code](#example-code)
+  - [Usage](#usage)
+    - [Create a New Integration](#create-a-new-integration)
+    - [Create client](#create-client)
+    - [Classes](#classes)
+      - [Database class](#database-class)
+      - [Query class](#query-class)
+      - [Page class](#page-class)
+      - [List class](#list-class)
+      - [Block class](#block-class)
+  - [ChangeLog](#changelog)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Code of Conduct](#code-of-conduct)
+  - [Acknowledgements](#acknowledgements)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -17,6 +38,28 @@ And then execute:
 Or install it yourself as:
 
     $ gem install notion_ruby_mapping
+
+## Example code
+
+The following code sets a "💿" icon on all unset pages in the database.
+```Ruby
+require "notion_ruby_mapping"
+
+include NotionRubyMapping
+
+token = ENV["NOTION_API_TOKEN"]
+database_id = ENV["DATABASE_ID"]
+
+NotionCache.instance.create_client token
+
+Database.query(database_id).each do |page|
+  p page.set_icon(emoji: "💿").id unless page.icon
+end
+```
+
+|Before execution|After execution|
+|---|---|
+|![Before execution](images/pre_set_icon.png)|![After execution](images/post_set_icon.png)|
 
 ## Usage
 
@@ -46,6 +89,13 @@ You can obtain filtered and ordered pages using Query object.
 ```Ruby
 Database.query("c37a2c66-e3aa-4a0d-a447-73de3b80c253") # retrieves all pages
 Database.query("c37a2c66-e3aa-4a0d-a447-73de3b80c253", query) # retrieves using query
+```
+
+- Set icon
+
+```Ruby
+db.set_icon emoji: "💿"
+db.set_icon url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png"
 ```
 
 #### Query class
@@ -379,19 +429,19 @@ list.each do |obj| # obj's class is Page or Block
 end
 ```
 
-### Block class
+#### Block class
 
 Not implemented
 
-## Development
+## ChangeLog
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+- 2022/2/14 added Database#set_icon
+- 2022/2/13 added Page#set_icon
+- 2022/2/13 First commit
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/notion_ruby_mapping. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/notion_ruby_mapping/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/hkob/notion_ruby_mapping. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/notion_ruby_mapping/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 

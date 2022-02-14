@@ -42,6 +42,14 @@ module NotionRubyMapping
     def clear_object
     end
 
+    def set_icon(emoji: nil, url: nil)
+      if self.is_a?(Page) || self.is_a?(Database)
+        payload = emoji ? {type: :emoji, emoji: emoji} : {type: :external, external: {url: url}}
+        update_json(update(id, {icon: payload}))
+      end
+      self
+    end
+
     def icon
       @json["icon"]
     end
