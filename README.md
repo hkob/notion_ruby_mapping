@@ -76,6 +76,30 @@ Please create a client (notion-ruby-client) before you use the following class.
 
 ### Classes
 
+#### Base class (Abstract class for Database / Page / Block / List)
+
+- Set icon (only Database / Page)
+
+```Ruby
+obj.set_icon emoji: "💿" # set emoji
+obj.set_icon url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" # set external url
+```
+
+- Get values and properties
+
+```Ruby
+obj.icon # obtain icon json
+obj["icon"] # same as obj.icon
+obj.properties # obtain PropertyCache (Methods of PropertyCache are not implemented yet.)
+obj.payload # obtain Payload (Methods of Payload are not implemented yet.)
+```
+
+- Update values and properties
+
+```Ruby
+obj.update # Update Notion data using Payload object included in Base object
+```
+
 #### Database class
 
 - Retrieve a database
@@ -91,14 +115,7 @@ Database.query("c37a2c66-e3aa-4a0d-a447-73de3b80c253") # retrieves all pages
 Database.query("c37a2c66-e3aa-4a0d-a447-73de3b80c253", query) # retrieves using query
 ```
 
-- Set icon
-
-```Ruby
-db.set_icon emoji: "💿"
-db.set_icon url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png"
-```
-
-#### Query class
+#### Query class and related *Property class
 
 Query object can be generated from the following Property objects.
 For example, in order to obtain the pages whose title starts with "A" and ordered by ascending,
@@ -411,13 +428,6 @@ page = Page.find("c01166c6-13ae-45cb-b968-18b4ef2f5a77")
 - Retrieve block children (List object)
 ```Ruby
 children = page.children
-```
-
-- Set icon
-
-```Ruby
-page.set_icon emoji: "💿"
-page.set_icon url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png"
 ```
 
 #### List class

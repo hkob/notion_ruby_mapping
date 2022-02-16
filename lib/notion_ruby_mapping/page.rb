@@ -8,9 +8,9 @@ module NotionRubyMapping
     end
 
     # @param [String] id page_id (with or without "-")
-    # @param [Hash] payload
-    def update(id, payload)
-      @nc.update_page(id, payload)
+    # @param [Payload] payload
+    def update
+      update_json @nc.update_page(@id, payload.create_json)
     end
   end
 end

@@ -3,8 +3,8 @@
 module NotionRubyMapping
   # Notion database
   class Database < Base
-    def self.find(key)
-      NotionCache.instance.database key
+    def self.find(id)
+      NotionCache.instance.database id
     end
 
     # @param [String] id database_id (with or without "-")
@@ -15,9 +15,10 @@ module NotionRubyMapping
     end
 
     # @param [String] id database_id (with or without "-")
-    # @param [Hash] payload
-    def update(id, payload)
-      @nc.update_database(id, payload)
+    # @param [Payload] payload
+    def update
+      update_json @nc.update_database @id, @payload.create_json
     end
   end
 end
+

@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "yaml"
-require "json"
-require "notion"
 require_relative "../spec_helper"
 
 module NotionRubyMapping
