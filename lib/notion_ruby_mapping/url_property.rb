@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class UrlProperty < TextProperty
-    TYPE = :url
+    TYPE = "url"
   end
 end

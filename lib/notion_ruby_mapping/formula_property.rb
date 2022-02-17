@@ -6,6 +6,6 @@ module NotionRubyMapping
     include ContainsDoesNotContain
     include StartsWithEndsWith
     include GreaterThanLessThan
-    TYPE = :formula
+    TYPE = "formula"
   end
 end

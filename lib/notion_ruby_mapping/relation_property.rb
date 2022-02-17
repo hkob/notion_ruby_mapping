@@ -3,6 +3,6 @@
 module NotionRubyMapping
   # MultiSelect property
   class RelationProperty < MultiProperty
-    TYPE = :relation
+    TYPE = "relation"
   end
 end

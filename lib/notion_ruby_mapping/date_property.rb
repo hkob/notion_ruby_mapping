@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class DateProperty < DateBaseProperty
-    TYPE = :date
+    TYPE = "date"
   end
 end

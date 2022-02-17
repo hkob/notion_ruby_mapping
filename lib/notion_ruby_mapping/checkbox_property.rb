@@ -4,6 +4,6 @@ module NotionRubyMapping
   # Checkbox property
   class CheckboxProperty < Property
     include EqualsDoesNotEqual
-    TYPE = :checkbox
+    TYPE = "checkbox"
   end
 end

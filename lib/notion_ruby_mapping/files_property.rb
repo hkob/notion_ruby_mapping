@@ -4,6 +4,6 @@ module NotionRubyMapping
   # Select property
   class FilesProperty < Property
     include IsEmptyIsNotEmpty
-    TYPE = :files
+    TYPE = "files"
   end
 end

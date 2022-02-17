@@ -26,8 +26,16 @@ module NotionRubyMapping
         end
       end
 
-      context "text filter, ascending title" do
+      context "text filter" do
         let(:query) { TitleProperty.new("Title").filter_starts_with("A") }
+        it "count page count" do
+          expect(subject.count).to eq 1
+        end
+      end
+
+      context "text filter and ascending sort" do
+        let(:tp) { TitleProperty.new("Title") }
+        let(:query) { tp.filter_starts_with("A").ascending tp }
         it "count page count" do
           expect(subject.count).to eq 1
         end
@@ -56,3 +64,4 @@ module NotionRubyMapping
     end
   end
 end
+

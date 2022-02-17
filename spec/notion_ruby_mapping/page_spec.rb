@@ -53,5 +53,33 @@ module NotionRubyMapping
         end
       end
     end
+
+    describe "update" do
+      subject { page.update.properties["NumberTitle"].create_json }
+      context "Unloaded page" do
+        let(:page) { Page.new id: config["first_page"] }
+        it "update NumberProperty by add_property" do
+          np = NumberProperty.new "NumberTitle", number: 3.14
+          page.add_property_for_update np
+          is_expected.to eq({"number" => 3.14, "type" => "number"})
+        end
+
+        it "update NumberProperty by substitution" do
+          page.properties["NumberTitle"].number = 1.41421356
+          is_expected.to eq({"number" => 1.41421356, "type" => "number"})
+        end
+
+      end
+
+      context "loaded page" do
+        let(:page) { Page.find config["first_page"] }
+        let(:np) { page.properties["NumberTitle"] }
+        it "update NumberProperty by substitution" do
+          np.number = 2022
+          page.update
+          is_expected.to eq({"number" => 2022, "type" => "number"})
+        end
+      end
+    end
   end
 end

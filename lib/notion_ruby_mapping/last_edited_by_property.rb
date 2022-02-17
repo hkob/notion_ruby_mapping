@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class LastEditedByProperty < MultiProperty
-    TYPE = :last_edited_by
+    TYPE = "last_edited_by"
   end
 end

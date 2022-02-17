@@ -17,7 +17,7 @@ module NotionRubyMapping
       context "for emoji icon" do
         let(:params) { {emoji: "😀"} }
         it "update icon (emoji)" do
-          is_expected.to eq({icon: {type: "emoji", emoji: "😀"}})
+          is_expected.to eq({"icon" => {"type" => "emoji", "emoji" => "😀"}})
         end
       end
 
@@ -25,7 +25,7 @@ module NotionRubyMapping
         let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
         let(:params) { {url: url } }
         it "update icon (link)" do
-          is_expected.to eq({icon: {type: "external", external: {url: url}}})
+          is_expected.to eq({"icon" => {"type" => "external", "external" => {"url" => url}}})
         end
       end
     end

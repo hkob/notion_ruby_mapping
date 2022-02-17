@@ -12,7 +12,7 @@ module NotionRubyMapping
       context "one filter" do
         let(:query) { tp.filter_starts_with "start" }
         it "create a single filter" do
-          is_expected.to eq({property: "tp", title: {starts_with: "start"}})
+          is_expected.to eq({"property" => "tp", "title" => {"starts_with" => "start"}})
         end
       end
 
@@ -23,14 +23,14 @@ module NotionRubyMapping
         end
         it "create and filter" do
           is_expected.to eq({
-                              and: [
+                              "and" => [
                                 {
-                                  property: "tp",
-                                  title: {starts_with: "start"},
+                                  "property" => "tp",
+                                  "title" => {"starts_with" => "start"},
                                 },
                                 {
-                                  property: "np",
-                                  number: {greater_than: 100},
+                                  "property" => "np",
+                                  "number" => {"greater_than" => 100},
                                 },
                               ],
                             })
@@ -45,18 +45,18 @@ module NotionRubyMapping
         end
         it "create and filter" do
           is_expected.to eq({
-                              and: [
+                              "and" => [
                                 {
-                                  property: "tp",
-                                  title: {starts_with: "start"},
+                                  "property" => "tp",
+                                  "title" => {"starts_with" => "start"},
                                 },
                                 {
-                                  property: "np",
-                                  number: {greater_than: 100},
+                                  "property" => "np",
+                                  "number" => {"greater_than" => 100},
                                 },
                                 {
-                                  property: "cp",
-                                  checkbox: {equals: true},
+                                  "property" => "cp",
+                                  "checkbox" => {"equals" => true},
                                 },
                               ],
                             })
@@ -70,14 +70,14 @@ module NotionRubyMapping
         end
         it "create or filter" do
           is_expected.to eq({
-                              or: [
+                              "or" => [
                                 {
-                                  property: "tp",
-                                  title: {starts_with: "start"},
+                                  "property" => "tp",
+                                  "title" => {"starts_with" => "start"},
                                 },
                                 {
-                                  property: "np",
-                                  number: {greater_than: 100},
+                                  "property" => "np",
+                                  "number" => {"greater_than" => 100},
                                 },
                               ],
                             })
@@ -92,18 +92,18 @@ module NotionRubyMapping
         end
         it "create or filter" do
           is_expected.to eq({
-                              or: [
+                              "or" => [
                                 {
-                                  property: "tp",
-                                  title: {starts_with: "start"},
+                                  "property" => "tp",
+                                  "title" => {"starts_with" => "start"},
                                 },
                                 {
-                                  property: "np",
-                                  number: {greater_than: 100},
+                                  "property" => "np",
+                                  "number" => {"greater_than" => 100},
                                 },
                                 {
-                                  property: "cp",
-                                  checkbox: {equals: true},
+                                  "property" => "cp",
+                                  "checkbox" => {"equals" => true},
                                 },
                               ],
                             })
@@ -118,22 +118,22 @@ module NotionRubyMapping
         end
         it "create or filter" do
           is_expected.to eq({
-                              or: [
+                              "or" => [
                                 {
-                                  and: [
+                                  "and" => [
                                     {
-                                      property: "tp",
-                                      title: {starts_with: "start"},
+                                      "property" => "tp",
+                                      "title" => {"starts_with" => "start"},
                                     },
                                     {
-                                      property: "np",
-                                      number: {greater_than: 100},
+                                      "property" => "np",
+                                      "number" => {"greater_than" => 100},
                                     },
                                   ],
                                 },
                                 {
-                                  property: "cp",
-                                  checkbox: {equals: true},
+                                  "property" => "cp",
+                                  "checkbox" => {"equals" => true},
                                 },
                               ],
                             })
@@ -148,22 +148,22 @@ module NotionRubyMapping
         end
         it "create or filter" do
           is_expected.to eq({
-                              and: [
+                              "and" => [
                                 {
-                                  or: [
+                                  "or" => [
                                     {
-                                      property: "tp",
-                                      title: {starts_with: "start"},
+                                      "property" => "tp",
+                                      "title" => {"starts_with" => "start"},
                                     },
                                     {
-                                      property: "np",
-                                      number: {greater_than: 100},
+                                      "property" => "np",
+                                      "number" => {"greater_than" => 100},
                                     },
                                   ],
                                 },
                                 {
-                                  property: "cp",
-                                  checkbox: {equals: true},
+                                  "property" => "cp",
+                                  "checkbox" => {"equals" => true},
                                 },
                               ],
                             })
@@ -177,28 +177,28 @@ module NotionRubyMapping
         end
         it "create or filter" do
           is_expected.to eq({
-                              or: [
+                              "or" => [
                                 {
-                                  and: [
+                                  "and" => [
                                     {
-                                      property: "np",
-                                      number: {greater_than: 100},
+                                      "property" => "np",
+                                      "number" => {"greater_than" => 100},
                                     },
                                     {
-                                      property: "np",
-                                      number: {less_than: 200},
+                                      "property" => "np",
+                                      "number" => {"less_than" => 200},
                                     },
                                   ],
                                 },
                                 {
-                                  and: [
+                                  "and" => [
                                     {
-                                      property: "np",
-                                      number: {greater_than: 300},
+                                      "property" => "np",
+                                      "number" => {"greater_than" => 300},
                                     },
                                     {
-                                      property: "np",
-                                      number: {less_than: 400},
+                                      "property" => "np",
+                                      "number" => {"less_than" => 400},
                                     },
                                   ],
                                 },
@@ -213,21 +213,21 @@ module NotionRubyMapping
 
       context "ascending" do
         it "create ascending sort (property)" do
-          expect(Query.new.ascending(tp).sort).to eq([{property: "tp", direction: "ascending"}])
+          expect(Query.new.ascending(tp).sort).to eq([{"property" => "tp", "direction" => "ascending"}])
         end
 
         it "create ascending sort (timestamp)" do
-          expect(Query.new.ascending(letp).sort).to eq([{timestamp: "letp", direction: "ascending"}])
+          expect(Query.new.ascending(letp).sort).to eq([{"timestamp" => "letp", "direction" => "ascending"}])
         end
       end
 
       context "descending" do
         it "create a descending sort" do
-          expect(Query.new.descending(tp).sort).to eq([{property: "tp", direction: "descending"}])
+          expect(Query.new.descending(tp).sort).to eq([{"property" => "tp", "direction" => "descending"}])
         end
 
         it "create ascending sort (timestamp)" do
-          expect(Query.new.descending(letp).sort).to eq([{timestamp: "letp", direction: "descending"}])
+          expect(Query.new.descending(letp).sort).to eq([{"timestamp" => "letp", "direction" => "descending"}])
         end
       end
     end

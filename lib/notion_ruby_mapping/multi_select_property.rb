@@ -3,6 +3,6 @@
 module NotionRubyMapping
   # MultiSelect property
   class MultiSelectProperty < MultiProperty
-    TYPE = :multi_select
+    TYPE = "multi_select"
   end
 end

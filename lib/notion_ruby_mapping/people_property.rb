@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class PeopleProperty < MultiProperty
-    TYPE = :people
+    TYPE = "people"
   end
 end

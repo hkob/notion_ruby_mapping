@@ -12,6 +12,7 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
     - [Create a New Integration](#create-a-new-integration)
     - [Create client](#create-client)
     - [Classes](#classes)
+      - [Base class](#base-class)
       - [Database class](#database-class)
       - [Query class](#query-class)
       - [Page class](#page-class)
@@ -57,6 +58,16 @@ Database.query(database_id).each do |page|
 end
 ```
 
+The following code sets serial numbers to the pages whose title is not empty in ascending order of titles.
+```Ruby
+tp = RichTextProperty.new("TextTitle")
+Database.query(database_id, tp.filter_is_not_empty.ascending(tp)).each.with_index(1) do |page, index|
+  page.properties["NumberTitle"].number = index
+  page.update
+end
+
+```
+
 |Before execution|After execution|
 |---|---|
 |![Before execution](images/pre_set_icon.png)|![After execution](images/post_set_icon.png)|
@@ -90,14 +101,7 @@ obj.set_icon url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.pn
 ```Ruby
 obj.icon # obtain icon json
 obj["icon"] # same as obj.icon
-obj.properties # obtain PropertyCache (Methods of PropertyCache are not implemented yet.)
-obj.payload # obtain Payload (Methods of Payload are not implemented yet.)
-```
-
-- Update values and properties
-
-```Ruby
-obj.update # Update Notion data using Payload object included in Base object
+obj.properties["NumberTitle"]
 ```
 
 #### Database class
@@ -214,14 +218,14 @@ query1 = tp.filter_starts_with("start")
 
 # Result of query1.filter
 {
-  and: [
+  "and" => [
     {
-      property: "tp",
-      title: {starts_with: "start"},
+      "property" => "tp",
+      "title" => {"starts_with" => "start"},
     },
     {
-      property: "np",
-      number: {greater_than: 100},
+      "property" => "np",
+      "number" => {"greater_than" => 100},
     },
   ],
 }
@@ -235,18 +239,18 @@ query2 = tp.filter_starts_with("start")
 
 # Result of query2.filter
 {
-  and: [
+  "and" => [
     {
-      property: "tp",
-      title: {starts_with: "start"},
+      "property" => "tp",
+      "title" => {"starts_with" => "start"},
     },
     {
-      property: "np",
-      number: {greater_than: 100},
+      "property" => "np",
+      "number" => {"greater_than" => 100},
     },
     {
-      property: "cp",
-      checkbox: {equals: true},
+      "property" => "cp",
+      "checkbox" => {"equals" => true},
     },
   ],
 }
@@ -259,14 +263,14 @@ query3 = tp.filter_starts_with("start")
 
 # Result of query3.filter
 {
-  or: [
+  "or" => [
     {
-      property: "tp",
-      title: {starts_with: "start"},
+      "property" => "tp",
+      "title" => {"starts_with" => "start"},
     },
     {
-      property: "np",
-      number: {greater_than: 100},
+      "property" => "np",
+      "number" => {"greater_than" => 100},
     },
   ],
 }
@@ -280,18 +284,18 @@ query4 = tp.filter_starts_with("start")
 
 # Result of query4.filter
 {
-  or: [
+  "or" => [
     {
-      property: "tp",
-      title: {starts_with: "start"},
+      "property" => "tp",
+      "title" => {"starts_with" => "start"},
     },
     {
-      property: "np",
-      number: {greater_than: 100},
+      "property" => "np",
+      "number" => {"greater_than" => 100},
     },
     {
-      property: "cp",
-      checkbox: {equals: true},
+      "property" => "cp",
+      "checkbox" => {"equals" => true},
     },
   ],
 }
@@ -305,22 +309,22 @@ query5 = tp.filter_starts_with("start")
 
 # Result of query5.filter
 {
-  or: [
+  "or" => [
     {
-      and: [
+      "and" => [
         {
-          property: "tp",
-          title: {starts_with: "start"},
+          "property" => "tp",
+          "title" => {"starts_with" => "start"},
         },
         {
-          property: "np",
-          number: {greater_than: 100},
+          "property" => "np",
+          "number" => {"greater_than" => 100},
         },
       ],
     },
     {
-      property: "cp",
-      checkbox: {equals: true},
+      "property" => "cp",
+      "checkbox" => {"equals" => true},
     },
   ],
 }
@@ -334,22 +338,22 @@ query6 = tp.filter_starts_with("start")
 
 # Result of query6.filter
 {
-  and: [
+  "and" => [
     {
-      or: [
+      "or" => [
         {
-          property: "tp",
-          title: {starts_with: "start"},
+          "property" => "tp",
+          "title" => {"starts_with" => "start"},
         },
         {
-          property: "np",
-          number: {greater_than: 100},
+          "property" => "np",
+          "number" => {"greater_than" => 100},
         },
       ],
     },
     {
-      property: "cp",
-      checkbox: {equals: true},
+      "property" => "cp",
+      "checkbox" => {"equals" => true},
     },
   ],
 }
@@ -362,28 +366,28 @@ query7 = np.filter_greater_than(100).and(np.filter_less_than(200))
 
 # Result of query7.filter
 {
-  or: [
+  "or" => [
     {
-      and: [
+      "and" => [
         {
-          property: "np",
-          number: {greater_than: 100},
+          "property" => "np",
+          "number" => {"greater_than" => 100},
         },
         {
-          property: "np",
-          number: {less_than: 200},
+          "property" => "np",
+          "number" => {"less_than" => 200},
         },
       ],
     },
     {
-      and: [
+      "and" => [
         {
-          property: "np",
-          number: {greater_than: 300},
+          "property" => "np",
+          "number" => {"greater_than" => 300},
         },
         {
-          property: "np",
-          number: {less_than: 400},
+          "property" => "np",
+          "number" => {"less_than" => 400},
         },
       ],
     },
@@ -400,22 +404,33 @@ query11 = Query.new.descending letp
 query12 = Query.new.ascending(tp).descending letp
 
 # Result of query8.sort
-[{property: "tp", direction: "ascending"}]
+[{"property" => "tp", "direction" => "ascending"}]
 
 # Result of query9.sort
-[{timestamp: "letp", direction: "ascending"}]
+[{"timestamp" => "letp", "direction" => "ascending"}]
 
 # Result of query10.sort
-[{property: "tp", direction: "descending"}]
+[{"property" => "tp", "direction" => "descending"}]
 
 # Result of query11.sort
-[{timestamp: "letp", direction: "descending"}]
+[{"timestamp" => "letp", "direction" => "descending"}]
 
 # Result of query12.sort
 [
-  {property: "tp", direction: "ascending"},
-  {timestamp: "letp", direction: "descending"},
+  {"property" => "tp", "direction" => "ascending"},
+  {"timestamp" => "letp", "direction" => "descending"},
 ]
+```
+
+- filter with sort
+```Ruby
+query13 = tp.filter_starts_with("A").ascending(tp)
+
+# Result of query13.filter
+{"property" => "tp", "title" => {"starts_with" => "start"}},
+
+# Result of query13.sort
+[{"property" => "tp", "direction" => "ascending"}]
 ```
 
 #### Page class
@@ -423,6 +438,35 @@ query12 = Query.new.ascending(tp).descending letp
 - Retrieve a page
 ```Ruby
 page = Page.find("c01166c6-13ae-45cb-b968-18b4ef2f5a77")
+```
+
+- Update values and properties
+
+Page properties can update in the following three ways.
+
+  1. update the property directory (fastest: one API call only)
+```Ruby
+page = Page.new id: page_id
+np = NumberProperty.new "NumberTitle", number: 3.14
+page.add_property_for_update np
+page.update # update page API call
+print page
+```
+
+  2. update the loaded page (easy but slow: two API call)
+```Ruby
+page = Page.find first_page_id # retrieve page API call
+page.properties["NumberTitle"].number = 2022
+page.update # update page API call
+print page
+```
+
+  3. update the unloaded page using autoload (easy but slow: two API call)
+```Ruby
+page = Page.new id: first_page_id
+page.properties["NumberTitle"].number = 12345 # retrieve page API call (autoload)
+page.update # update page API call
+print page
 ```
 
 - Retrieve block children (List object)
@@ -445,6 +489,8 @@ Not implemented
 
 ## ChangeLog
 
+- 2022/2/17 added Page#properties, Page#add_property_for_update, Page#update
+- 2022/2/16 added PropertyCache and Payload class
 - 2022/2/14 added Database#set_icon
 - 2022/2/13 added Page#set_icon
 - 2022/2/13 First commit

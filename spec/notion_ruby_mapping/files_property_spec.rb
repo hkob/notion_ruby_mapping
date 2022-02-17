@@ -10,10 +10,10 @@ module NotionRubyMapping
 
       context "create query" do
         subject { query.filter }
-        %i[is_empty is_not_empty].each do |key|
+        %w[is_empty is_not_empty].each do |key|
           context key do
             let(:query) { property.send "filter_#{key}" }
-            it { is_expected.to eq({property: "fp", files: {key => true}}) }
+            it { is_expected.to eq({"property" => "fp", "files" => {key => true}}) }
           end
         end
       end

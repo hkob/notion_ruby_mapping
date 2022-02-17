@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class RichTextProperty < TextProperty
-    TYPE = :rich_text
+    TYPE = "rich_text"
   end
 end

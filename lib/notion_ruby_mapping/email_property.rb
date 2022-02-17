@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class EmailProperty < TextProperty
-    TYPE = :email
+    TYPE = "email"
   end
 end

@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class LastEditedTimeProperty < DateBaseProperty
-    TYPE = :last_edited_time
+    TYPE = "last_edited_time"
   end
 end

@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class CreatedByProperty < MultiProperty
-    TYPE = :created_by
+    TYPE = "created_by"
   end
 end

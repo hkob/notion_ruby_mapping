@@ -5,6 +5,6 @@ module NotionRubyMapping
   class SelectProperty < Property
     include EqualsDoesNotEqual
     include IsEmptyIsNotEmpty
-    TYPE = :select
+    TYPE = "select"
   end
 end

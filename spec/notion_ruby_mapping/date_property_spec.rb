@@ -2,10 +2,10 @@
 
 module NotionRubyMapping
   [
-    [DateProperty, :date],
-    [CreatedTimeProperty, :created_time],
-    # [LastEditedTime, :last_edited_time],
-  ].each do |c, sym|
+    [DateProperty, "date"],
+    [CreatedTimeProperty, "created_time"],
+    [LastEditedTimeProperty, "last_edited_time"],
+  ].each do |c, type|
     RSpec.describe c do
       let(:property) { c.new "dp" }
       describe "a date property" do
@@ -20,26 +20,26 @@ module NotionRubyMapping
             ["time", Time.new(2022, 2, 12, 1, 23, 45, "+09:00"), "2022-02-12T01:23:45+09:00"],
           ].each do |(title, d, ds)|
             context "on parameter #{title}" do
-              %i[equals before after on_or_before on_or_after].each do |key|
+              %w[equals before after on_or_before on_or_after].each do |key|
                 context key do
                   let(:query) { property.send "filter_#{key}", d }
-                  it { is_expected.to eq({property: "dp", sym => {key => ds}}) }
+                  it { is_expected.to eq({"property" => "dp", type => {key => ds}}) }
                 end
               end
             end
           end
 
-          %i[is_empty is_not_empty].each do |key|
+          %w[is_empty is_not_empty].each do |key|
             context key do
               let(:query) { property.send "filter_#{key}" }
-              it { is_expected.to eq({property: "dp", sym => {key => true}}) }
+              it { is_expected.to eq({"property" => "dp", type => {key => true}}) }
             end
           end
 
-          %i[past_week past_month past_year next_week next_month next_year].each do |key|
+          %w[past_week past_month past_year next_week next_month next_year].each do |key|
             context key do
               let(:query) { property.send "filter_#{key}" }
-              it { is_expected.to eq({property: "dp", sym => {key => {}}}) }
+              it { is_expected.to eq({"property" => "dp", type => {key => {}}}) }
             end
           end
         end
@@ -47,3 +47,4 @@ module NotionRubyMapping
     end
   end
 end
+

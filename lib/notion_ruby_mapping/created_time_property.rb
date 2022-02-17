@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class CreatedTimeProperty < DateBaseProperty
-    TYPE = :created_time
+    TYPE = "created_time"
   end
 end

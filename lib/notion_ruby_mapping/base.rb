@@ -34,6 +34,24 @@ module NotionRubyMapping
       @payload ||= Payload.new
     end
 
+    # @return [NotionRubyMapping::PropertyCache] get or created PropertyCache object
+    def properties
+      unless @property_cache
+        unless @json
+          return nil if @id.nil?
+
+          update_json reload
+        end
+        @property_cache = PropertyCache.new json_properties
+      end
+      @property_cache
+   end
+
+    # @return [Hash] json properties
+    def json_properties
+      @json && @json["properties"]
+    end
+
     # @return [NotionRubyMapping::List]
     def children
       @children ||= @nc.block_children(id)
@@ -67,7 +85,9 @@ module NotionRubyMapping
       end
       self
     end
-
+    
+    # @param [String] key
+    # @return [NotionRubyMapping::PropertyCache, Hash] obtained Page value or PropertyCache
     def [](key)
       unless @json
         return nil if @id.nil?
@@ -76,14 +96,27 @@ module NotionRubyMapping
       end
       case key
       when "properties"
-        @property_cache ||= PropertyCache.new
+        properties
       else
         @json[key]
       end
     end
 
+    # @return [Hash, nil] obtained Hash
     def icon
       self["icon"]
+    end
+
+    # @param [Property] property Property object for udpate or create
+    # @return [NotionRubyMapping::Base]
+    def add_property_for_update(property)
+      properties.add_property property, will_update: true
+      self
+    end
+
+    # @return [Hash] created json
+    def create_json
+      payload.create_json @property_cache&.create_json
     end
   end
 end

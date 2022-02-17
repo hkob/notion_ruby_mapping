@@ -38,7 +38,6 @@ module NotionRubyMapping
 
       begin
         json = yield(@client)
-        p json
         @object_hash[key] = Base.create_from_json json
       rescue StandardError
         nil
@@ -46,30 +45,41 @@ module NotionRubyMapping
     end
 
     # @param [String] id page_id (with or without "-")
+    # @return [Hash] obtained json
+    def page_json(id)
+      sleep @wait
+      @client.page page_id: id
+    end
+
+    # @param [String] id page_id (with or without "-")
     # @return [NotionRubyMapping::Page, nil] Page object or nil
     def page(id)
-      object_for_key(id) do
-        sleep @wait
-        @client.page page_id: id
-      end
+      object_for_key(id) { page_json id }
+    end
+
+    # @param [String] id database_id (with or without "-")
+    # @return [Hash] obtained json
+    def database_json(id)
+      sleep @wait
+      @client.database database_id: id
     end
 
     # @param [String] id database_id (with or without "-")
     # @return [NotionRubyMapping::Database, nil] Database object or nil
     def database(id)
-      object_for_key(id) do
-        sleep @wait
-        @client.database database_id: id
-      end
+      object_for_key(id) { database_json id }
     end
 
     # @param [String] id block_id (with or without "-")
+    # @return [Hash] obtained json
+    def block_json(id)
+      sleep @wait
+      @client.block block_id: id
+    end
+    # @param [String] id block_id (with or without "-")
     # @return [NotionRubyMapping::Block, nil] Block object or nil
     def block(id)
-      object_for_key(id) do
-        sleep @wait
-        @client.block block_id: id
-      end
+      object_for_key(id) { block_json id }
     end
 
     # @param [String] id page_id / block_id (with or without "-")
@@ -90,8 +100,9 @@ module NotionRubyMapping
       array = []
       parameters = {database_id: id, sleep_interval: @wait, max_retries: 20}
       parameters[:filter] = query.filter unless query.filter.empty?
-      parameters[:sort] = query.sort unless query.sort.empty?
-      @client.database_query(**parameters) do |page|
+      parameters[:sorts] = query.sort unless query.sort.empty?
+
+      @client.database_query(parameters) do |page|
         array.concat page.results
       end
       Base.create_from_json({"object" => "list", "results" => array})

@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class PhoneNumberProperty < TextProperty
-    TYPE = :phone_number
+    TYPE = "phone_number"
   end
 end

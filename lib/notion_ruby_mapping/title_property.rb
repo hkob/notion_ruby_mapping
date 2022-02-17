@@ -2,6 +2,6 @@
 
 module NotionRubyMapping
   class TitleProperty < TextProperty
-    TYPE = :title
+    TYPE = "title"
   end
 end

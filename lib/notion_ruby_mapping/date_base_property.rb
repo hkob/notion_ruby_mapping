@@ -23,51 +23,51 @@ module NotionRubyMapping
     end
 
     def filter_equals(value)
-      make_filter_query :equals, value_str(value)
+      make_filter_query "equals", value_str(value)
     end
 
     def filter_does_not_equal(value)
-      make_filter_query :does_not_equal, value_str(value)
+      make_filter_query "does_not_equal", value_str(value)
     end
 
     def filter_before(value)
-      make_filter_query :before, value_str(value)
+      make_filter_query "before", value_str(value)
     end
 
     def filter_after(value)
-      make_filter_query :after, value_str(value)
+      make_filter_query "after", value_str(value)
     end
 
     def filter_on_or_before(value)
-      make_filter_query :on_or_before, value_str(value)
+      make_filter_query "on_or_before", value_str(value)
     end
 
     def filter_on_or_after(value)
-      make_filter_query :on_or_after, value_str(value)
+      make_filter_query "on_or_after", value_str(value)
     end
 
     def filter_past_week
-      make_filter_query :past_week, {}
+      make_filter_query "past_week", {}
     end
 
     def filter_past_month
-      make_filter_query :past_month, {}
+      make_filter_query "past_month", {}
     end
 
     def filter_past_year
-      make_filter_query :past_year, {}
+      make_filter_query "past_year", {}
     end
 
     def filter_next_week
-      make_filter_query :next_week, {}
+      make_filter_query "next_week", {}
     end
 
     def filter_next_month
-      make_filter_query :next_month, {}
+      make_filter_query "next_month", {}
     end
 
     def filter_next_year
-      make_filter_query :next_year, {}
+      make_filter_query "next_year", {}
     end
   end
 end
