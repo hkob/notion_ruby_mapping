@@ -58,6 +58,10 @@ Database.query(database_id).each do |page|
 end
 ```
 
+|Before execution|After execution|
+|---|---|
+|![Before execution](images/pre_set_icon.png)|![After execution](images/post_set_icon.png)|
+
 The following code sets serial numbers to the pages whose title is not empty in ascending order of titles.
 ```Ruby
 tp = RichTextProperty.new("TextTitle")
@@ -65,12 +69,10 @@ Database.query(database_id, tp.filter_is_not_empty.ascending(tp)).each.with_inde
   page.properties["NumberTitle"].number = index
   page.update
 end
-
 ```
-
-|Before execution|After execution|
-|---|---|
-|![Before execution](images/pre_set_icon.png)|![After execution](images/post_set_icon.png)|
+| After execution                               |
+|-----------------------------------------------|
+| ![After exuecution](images/serial_number.png) |
 
 ## Usage
 
