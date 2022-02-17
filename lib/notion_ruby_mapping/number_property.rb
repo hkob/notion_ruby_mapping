@@ -15,6 +15,7 @@ module NotionRubyMapping
       super(name)
       @number = number
     end
+    attr_reader :number
 
     def create_json
       {"type" => "number", "number" => @number}

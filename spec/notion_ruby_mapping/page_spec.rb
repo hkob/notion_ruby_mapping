@@ -68,7 +68,6 @@ module NotionRubyMapping
           page.properties["NumberTitle"].number = 1.41421356
           is_expected.to eq({"number" => 1.41421356, "type" => "number"})
         end
-
       end
 
       context "loaded page" do

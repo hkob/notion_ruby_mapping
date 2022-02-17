@@ -3,8 +3,8 @@
 module NotionRubyMapping
   # Notion page object
   class Page < Base
-    def self.find(key)
-      NotionCache.instance.page key
+    def self.find(id)
+      NotionCache.instance.page id
     end
 
     # @param [String] id page_id (with or without "-")
@@ -14,7 +14,7 @@ module NotionRubyMapping
     end
     
     # @return [Hash]
-    def reload
+    def reload_json
       @nc.page_json @id
     end
   end

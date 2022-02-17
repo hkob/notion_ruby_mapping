@@ -17,8 +17,12 @@ module NotionRubyMapping
     # @param [String] id database_id (with or without "-")
     # @param [Payload] payload
     def update
-      update_json @nc.update_database @id, @payload.create_json
+      update_json @nc.update_database(@id, create_json)
+    end
+
+    # @return [Hash]
+    def reload_json
+      @nc.database_json @id
     end
   end
 end
-

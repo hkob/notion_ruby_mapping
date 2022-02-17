@@ -14,7 +14,6 @@ module NotionRubyMapping
       @wait = 0
     end
     attr_reader :object_hash, :client
-    attr_accessor :use_cache
 
     # @param [String] notion_token
     # @return [NotionRubyMapping::NotionCache] self (NotionCache.instance)

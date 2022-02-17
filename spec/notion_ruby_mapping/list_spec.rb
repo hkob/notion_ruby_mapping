@@ -14,7 +14,7 @@ RSpec.describe NotionRubyMapping::Page do
     subject { top_page.children }
 
     it "count children count" do
-      expect(subject.count).to eq 2
+      expect(subject.count).to eq 3
     end
   end
 end

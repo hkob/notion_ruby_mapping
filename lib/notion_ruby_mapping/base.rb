@@ -40,12 +40,18 @@ module NotionRubyMapping
         unless @json
           return nil if @id.nil?
 
-          update_json reload
+          reload
         end
         @property_cache = PropertyCache.new json_properties
       end
       @property_cache
-   end
+    end
+
+    # @return [NotionRubyMapping::Base] reloaded self
+    def reload
+      update_json reload_json
+      self
+    end
 
     # @return [Hash] json properties
     def json_properties
