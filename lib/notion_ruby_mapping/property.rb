@@ -31,6 +31,8 @@ module NotionRubyMapping
       case json["type"]
       when "number"
         NumberProperty.new key, number: json["number"]
+      when "select"
+        SelectProperty.new key, select: json["select"]
       else
         nil
       end

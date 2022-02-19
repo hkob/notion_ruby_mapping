@@ -55,28 +55,46 @@ module NotionRubyMapping
     end
 
     describe "update" do
-      subject { page.update.properties["NumberTitle"].create_json }
       context "Unloaded page" do
         let(:page) { Page.new id: config["first_page"] }
-        it "update NumberProperty by add_property" do
-          np = NumberProperty.new "NumberTitle", number: 3.14
-          page.add_property_for_update np
-          is_expected.to eq({"number" => 3.14, "type" => "number"})
+        [
+          [NumberProperty, "NumberTitle", {number: 3.14}, ->(p) { p["number"] }, 3.14],
+          [SelectProperty, "SelectTitle", {select: "Select 1"}, ->(p) { p["select"]["name"]["name"] }, "Select 1"],
+        ].each do |(klass, title, constructor_hash, proc, value)|
+          it "update #{klass} by add_property" do
+            property = klass.new title, **constructor_hash
+            page.add_property_for_update property
+            page.update
+            expect(proc.call page.properties[title].create_json).to eq value
+            page.clear_object
+          end
         end
 
-        it "update NumberProperty by substitution" do
-          page.properties["NumberTitle"].number = 1.41421356
-          is_expected.to eq({"number" => 1.41421356, "type" => "number"})
+        [
+          ["NumberTitle", :number=, 1.41421356, ->(p) { p["number"] }, 1.41421356],
+          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"]["name"] }, "Select 1"],
+        ].each do |(title, method, value, proc)|
+          it "update NumberProperty by substitution(autoload)" do
+            page.properties[title].send method, value
+            page.update
+            expect(proc.call page.properties[title].create_json).to eq value
+            page.clear_object
+          end
         end
       end
 
+
       context "loaded page" do
         let(:page) { Page.find config["first_page"] }
-        let(:np) { page.properties["NumberTitle"] }
-        it "update NumberProperty by substitution" do
-          np.number = 2022
-          page.update
-          is_expected.to eq({"number" => 2022, "type" => "number"})
+        [
+          ["NumberTitle", :number=, 1.41421356, ->(p) { p["number"] }, 1.41421356],
+          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"]["name"] }, "Select 1"],
+        ].each do |(title, method, value, proc)|
+          it "update NumberProperty by substitution" do
+            page.properties[title].send method, value
+            page.update
+            expect(proc.call page.properties[title].create_json).to eq value
+          end
         end
       end
     end

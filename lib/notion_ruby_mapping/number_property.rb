@@ -9,8 +9,7 @@ module NotionRubyMapping
     TYPE = "number"
 
     # @param [String] name Property name
-    # @param [Number, Fixnum] number Number value (optional)
-    # @param [String] format Format string (optional, default: "number")
+    # @param [Float] number Number value (optional)
     def initialize(name, number: nil)
       super(name)
       @number = number

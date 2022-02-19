@@ -25,5 +25,38 @@ module NotionRubyMapping
         end
       end
     end
+
+    describe "a select property with parameters" do
+      let(:property) { SelectProperty.new "sp", select: "Select 1" }
+      subject { property.create_json }
+      it { is_expected.to eq({"select" => {"name" => "Select 1"}}) }
+      it "will not update" do
+        expect(property.will_update).to be_falsey
+      end
+
+      describe "select=" do
+        before { property.select = "Select 1" }
+        it { is_expected.to eq({"select" => {"name" => "Select 1"}}) }
+        it "will update" do
+          expect(property.will_update).to be_truthy
+        end
+      end
+    end
+
+    describe "create_from_json" do
+      let(:json) { {"type" => "select", "select" => "Select 1"} }
+      let(:property) { Property.create_from_json "sp", json }
+      it "has_name" do
+        expect(property.name).to eq "sp"
+      end
+
+      it "create_json" do
+        expect(property.create_json).to eq({"select" => {"name" => "Select 1"}})
+      end
+
+      it "will not update" do
+        expect(property.will_update).to be_falsey
+      end
+    end
   end
 end
