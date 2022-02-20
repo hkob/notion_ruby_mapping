@@ -4,10 +4,12 @@ module NotionRubyMapping
   # abstract class for property
   class Property
     # @param [String] name Property name
+    # @param [Hash] json
     # @return [Property] generated Property object
-    def initialize(name)
+    def initialize(name, json: nil)
       @name = name
       @will_update = false
+      @json = json
     end
     attr_reader :name
     attr_accessor :will_update
@@ -25,14 +27,16 @@ module NotionRubyMapping
     end
 
     # @param [String] key
-    # @param [Hash] json
-    # @return [NotionRubyMapping::NumberProperty, nil] generated Property object
-    def self.create_from_json(key, json)
-      case json["type"]
-      when "number"
-        NumberProperty.new key, number: json["number"]
-      when "select"
-        SelectProperty.new key, select: json["select"]
+    # @param [Hash] input_json
+    # @return [NotionRubyMapping::Property, nil] generated Property object
+    def self.create_from_json(key, input_json)
+      keys = input_json.keys
+      if keys.include? "number"
+        NumberProperty.new key, json: input_json["number"]
+      elsif keys.include? "select"
+        SelectProperty.new key, json: input_json["select"]
+      elsif keys.include? "multi_select"
+        MultiSelectProperty.new key, json: input_json["multi_select"]
       else
         nil
       end

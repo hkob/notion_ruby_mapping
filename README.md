@@ -429,7 +429,7 @@ query12 = Query.new.ascending(tp).descending letp
 query13 = tp.filter_starts_with("A").ascending(tp)
 
 # Result of query13.filter
-{"property" => "tp", "title" => {"starts_with" => "start"}},
+{"property" => "tp", "title" => {"starts_with" => "start"}}
 
 # Result of query13.sort
 [{"property" => "tp", "direction" => "ascending"}]
@@ -489,8 +489,65 @@ end
 
 Not implemented
 
+#### NumberProperty class
+
+- constructor
+```Ruby
+np = NumberProperty.new "np", number: 123
+```
+
+- set value
+```Ruby
+np.number = 456 # number <- 456 and will_update <- true
+```
+
+- create json
+```Ruby
+np.create_json # {"number" => 456}
+```
+
+#### SelectProperty class
+
+- constructor
+```Ruby
+sp = SelectProperty.new "sp", select: "Select 1"
+```
+
+- set value
+```Ruby
+sp.select = "Select 2" # select <- "Select 2" and will_update <- true
+```
+
+- create json
+```Ruby
+sp.create_json # {"select" => {"name" => "Select 2"}}
+```
+
+#### MultiSelectProperty class
+
+- constructor
+```Ruby
+msp1 = MultiSelectProperty.new "msp1", multi_select: "MS1" # Single value
+msp2 = MultiSelectProperty.new "msp2", multi_select: %w[MS1 MS2] # Multi values
+```
+
+- set value
+```Ruby
+msp1.multi_select = %w[MS2 MS1] # multi_select <- ["MS1", "MS2"] and will_update <- true
+msp2.select = "MS2" # multi_select <- "MS2" and will_update <- true
+```
+
+- create json
+```Ruby
+msp1.create_json # {"multi_select" => [{"name" => "MS2"}, {"name" => "MS1"}]}
+msp2.create_json # {"multi_select" => [{"name" => "MS2"}]}
+```
+
 ## ChangeLog
 
+- 2022/2/20 add support for MultiSelectProperty
+- 2022/2/19 add support for SelectProperty
+- 2022/2/17 added Page#properties, Page#add_property_for_update, Page#update
 - 2022/2/17 added Page#properties, Page#add_property_for_update, Page#update
 - 2022/2/16 added PropertyCache and Payload class
 - 2022/2/14 added Database#set_icon

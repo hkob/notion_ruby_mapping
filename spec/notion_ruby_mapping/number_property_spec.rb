@@ -29,14 +29,14 @@ module NotionRubyMapping
     describe "a number property with parameters" do
       let(:property) { NumberProperty.new "np", number: 3.14 }
       subject { property.create_json }
-      it { is_expected.to eq({"type" => "number", "number" => 3.14}) }
+      it { is_expected.to eq({"number" => 3.14}) }
       it "will not update" do
         expect(property.will_update).to be_falsey
       end
 
       describe "number=" do
         before { property.number = 2022 }
-        it { is_expected.to eq({"type" => "number", "number" => 2022}) }
+        it { is_expected.to eq({"number" => 2022}) }
         it "will update" do
           expect(property.will_update).to be_truthy
         end
@@ -51,7 +51,7 @@ module NotionRubyMapping
       end
 
       it "create_json" do
-        expect(property.create_json).to eq({"type" => "number", "number" => 123})
+        expect(property.create_json).to eq({"number" => 123})
       end
 
       it "will not update" do

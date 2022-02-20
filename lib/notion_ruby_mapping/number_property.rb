@@ -9,15 +9,17 @@ module NotionRubyMapping
     TYPE = "number"
 
     # @param [String] name Property name
+    # @param [Hash] json
     # @param [Float] number Number value (optional)
-    def initialize(name, number: nil)
-      super(name)
+    def initialize(name, json: nil, number: nil)
+      super(name, json: json)
       @number = number
     end
     attr_reader :number
 
+    # @return [Hash]
     def create_json
-      {"type" => "number", "number" => @number}
+      {"number" => @number || @json}
     end
 
     def number=(n)

@@ -52,7 +52,7 @@ module NotionRubyMapping
         end
 
         it "can generate json" do
-          expect(subject.create_json).to eq({"properties" => {"np" => {"type" => "number", "number" => 123}}})
+          expect(subject.create_json).to eq({"properties" => {"np" => {"number" => 123}}})
         end
       end
     end

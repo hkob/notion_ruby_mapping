@@ -59,7 +59,7 @@ module NotionRubyMapping
         let(:page) { Page.new id: config["first_page"] }
         [
           [NumberProperty, "NumberTitle", {number: 3.14}, ->(p) { p["number"] }, 3.14],
-          [SelectProperty, "SelectTitle", {select: "Select 1"}, ->(p) { p["select"]["name"]["name"] }, "Select 1"],
+          [SelectProperty, "SelectTitle", {select: "Select 1"}, ->(p) { p["select"]["name"] }, "Select 1"],
         ].each do |(klass, title, constructor_hash, proc, value)|
           it "update #{klass} by add_property" do
             property = klass.new title, **constructor_hash
@@ -72,7 +72,7 @@ module NotionRubyMapping
 
         [
           ["NumberTitle", :number=, 1.41421356, ->(p) { p["number"] }, 1.41421356],
-          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"]["name"] }, "Select 1"],
+          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"] }, "Select 1"],
         ].each do |(title, method, value, proc)|
           it "update NumberProperty by substitution(autoload)" do
             page.properties[title].send method, value
@@ -88,7 +88,7 @@ module NotionRubyMapping
         let(:page) { Page.find config["first_page"] }
         [
           ["NumberTitle", :number=, 1.41421356, ->(p) { p["number"] }, 1.41421356],
-          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"]["name"] }, "Select 1"],
+          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"] }, "Select 1"],
         ].each do |(title, method, value, proc)|
           it "update NumberProperty by substitution" do
             page.properties[title].send method, value

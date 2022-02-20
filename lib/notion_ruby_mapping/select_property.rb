@@ -8,17 +8,20 @@ module NotionRubyMapping
     TYPE = "select"
 
     # @param [String] name Property name
+    # @param [Hash] json
     # @param [String] select String value (optional)
-    def initialize(name, select: nil)
-      super(name)
+    def initialize(name, json: nil, select: nil)
+      super(name, json: json)
       @select = select
     end
-    attr_reader :name
 
+    # @return [Hash]
     def create_json
-      {"select" => {"name" => @select}}
+      {"select" => @select ? {"name" => @select} : @json} || {}
     end
 
+    # @param [String] select
+    # @return [String] settled value
     def select=(select)
       @will_update = true
       @select = select
