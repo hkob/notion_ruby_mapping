@@ -44,7 +44,7 @@ module NotionRubyMapping
     end
 
     describe "create_from_json" do
-      let(:json) { {"type" => "number", "number" => 123} }
+      let(:json) { {"number" => 123} }
       let(:property) { Property.create_from_json "np", json }
       it "has_name" do
         expect(property.name).to eq "np"

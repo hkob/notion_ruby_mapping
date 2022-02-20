@@ -51,7 +51,7 @@ module NotionRubyMapping
       end
 
       it "create_json" do
-        expect(property.create_json).to eq({"select" => {"name" => "Select 1"}})
+        expect(property.create_json).to eq(json)
       end
 
       it "will not update" do

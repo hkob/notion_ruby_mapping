@@ -55,48 +55,92 @@ module NotionRubyMapping
     end
 
     describe "update" do
-      context "Unloaded page" do
-        let(:page) { Page.new id: config["first_page"] }
-        [
-          [NumberProperty, "NumberTitle", {number: 3.14}, ->(p) { p["number"] }, 3.14],
-          [SelectProperty, "SelectTitle", {select: "Select 1"}, ->(p) { p["select"]["name"] }, "Select 1"],
-        ].each do |(klass, title, constructor_hash, proc, value)|
-          it "update #{klass} by add_property" do
-            property = klass.new title, **constructor_hash
-            page.add_property_for_update property
-            page.update
-            expect(proc.call page.properties[title].create_json).to eq value
-            page.clear_object
-          end
-        end
+       context "Unloaded page" do
+         let(:page) { Page.new id: config["first_page"] }
+         [
+           [NumberProperty, "NumberTitle", {number: 3.14}, [[%w[number], 3.14]]],
+           [SelectProperty, "SelectTitle", {select: "Select 1"}, [[%w[select name], "Select 1"]]],
+           [MultiSelectProperty, "MultiSelectTitle", {multi_select: "Multi Select 1"},
+            [
+              [["multi_select", 0, "name"], "Multi Select 1"]
+            ],
+           ],
+           [DateProperty, "DateTitle", {start_date: Date.new(2022, 2, 21), end_date: Date.new(2022, 2, 22)},
+            [
+              [%w[date start], "2022-02-21"],
+              [%w[date end], "2022-02-22"],
+            ]
+           ],
+         ].each do |(klass, title, constructor_hash, array)|
+           it "update #{title} by add_property_for_update" do
+             property = klass.new title, **constructor_hash
+             page.add_property_for_update property
+             page.update
+             array.each do |(keys, answer)|
+               value = keys.reduce(page.properties[title].create_json) { |hash, k| hash[k] }
+               expect(value).to eq answer
+             end
+             page.clear_object
+           end
+         end
 
-        [
-          ["NumberTitle", :number=, 1.41421356, ->(p) { p["number"] }, 1.41421356],
-          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"] }, "Select 1"],
-        ].each do |(title, method, value, proc)|
-          it "update NumberProperty by substitution(autoload)" do
-            page.properties[title].send method, value
-            page.update
-            expect(proc.call page.properties[title].create_json).to eq value
-            page.clear_object
-          end
-        end
-      end
+         [
+           ["NumberTitle", :number=, 1.7320508, [[%w[number], 1.7320508]]],
+           ["SelectTitle", :select=, "Select 2", [[%w[select name], "Select 2"]]],
+           ["MultiSelectTitle", :multi_select=, ["Multi Select 2"],
+            [
+              [["multi_select", 0, "name"], "Multi Select 2"]
+            ],
+           ],
+           ["DateTitle", :start_date=, Time.new(2022, 2, 24, 1, 23, 45, "+09:00"),
+            [
+              [%w[date start], "2022-02-24T01:23:00.000+09:00"],
+              [%w[date end], nil],
+            ],
+           ]
+         ].each do |(title, method, value, array)|
+           it "update #{title} by substitution(autoload)" do
+             page.properties[title].send method, value
+             page.update
+             array.each do |(keys, answer)|
+               value = keys.reduce(page.properties[title].create_json) { |hash, k| hash[k] }
+               expect(value).to eq answer
+             end
+             page.clear_object
+           end
+         end
+       end
 
 
-      context "loaded page" do
-        let(:page) { Page.find config["first_page"] }
-        [
-          ["NumberTitle", :number=, 1.41421356, ->(p) { p["number"] }, 1.41421356],
-          ["SelectTitle", :select=, "Select 1", ->(p) { p["select"]["name"] }, "Select 1"],
-        ].each do |(title, method, value, proc)|
-          it "update NumberProperty by substitution" do
-            page.properties[title].send method, value
-            page.update
-            expect(proc.call page.properties[title].create_json).to eq value
-          end
-        end
-      end
+       context "loaded page" do
+         let(:page) { Page.find config["first_page"] }
+         [
+           ["NumberTitle", :number=, 1.41421356, [[%w[number], 1.41421356]]],
+           ["SelectTitle", :select=, "Select 3", [[%w[select name], "Select 3"]]],
+           ["MultiSelectTitle", :multi_select=, ["Multi Select 2", "Multi Select 1"],
+            [
+              [["multi_select", 0, "name"], "Multi Select 2"],
+              [["multi_select", 1, "name"], "Multi Select 1"],
+            ],
+           ],
+           ["DateTitle", :start_date=, DateTime.new(2022, 2, 25, 1, 23, 45, "+09:00"),
+            [
+              [%w[date start], "2022-02-25T01:23:00.000+09:00"],
+              [%w[date end], nil],
+            ],
+           ]
+         ].each do |(title, method, value, array)|
+           it "update #{title}Property by substitution" do
+             page.properties[title].send method, value
+             page.update
+             array.each do |(keys, answer)|
+               value = keys.reduce(page.properties[title].create_json) { |hash, k| hash[k] }
+               expect(value).to eq answer
+             end
+             page.clear_object
+           end
+         end
+       end
     end
   end
 end

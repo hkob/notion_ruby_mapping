@@ -48,7 +48,7 @@ module NotionRubyMapping
       end
 
       it "create_json" do
-        expect(property.create_json).to eq({"multi_select" => nms1ms2})
+        expect(property.create_json).to eq json
       end
 
       it "will not update" do

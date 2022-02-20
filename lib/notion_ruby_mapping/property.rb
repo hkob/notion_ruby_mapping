@@ -37,6 +37,8 @@ module NotionRubyMapping
         SelectProperty.new key, json: input_json["select"]
       elsif keys.include? "multi_select"
         MultiSelectProperty.new key, json: input_json["multi_select"]
+      elsif keys.include? "date"
+        DateProperty.new key, json: input_json["date"]
       else
         nil
       end

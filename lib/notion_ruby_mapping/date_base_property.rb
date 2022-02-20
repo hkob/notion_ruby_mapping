@@ -7,7 +7,7 @@ module NotionRubyMapping
   class DateBaseProperty < Property
     include IsEmptyIsNotEmpty
 
-    # @param [Date, Time, DateTime, String] obj
+    # @param [Date, Time, DateTime, String, nil] obj
     # @return [String] iso8601 format string
     def value_str(obj)
       case obj
