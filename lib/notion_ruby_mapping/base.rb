@@ -91,7 +91,7 @@ module NotionRubyMapping
       end
       self
     end
-    
+
     # @param [String] key
     # @return [NotionRubyMapping::PropertyCache, Hash] obtained Page value or PropertyCache
     def [](key)
@@ -116,8 +116,21 @@ module NotionRubyMapping
     # @param [Property] property Property object for udpate or create
     # @return [NotionRubyMapping::Base]
     def add_property_for_update(property)
-      properties.add_property property, will_update: true
+      @property_cache ||= PropertyCache.new {}
+      @property_cache.add_property property, will_update: true
       self
+    end
+
+    # @param [Class] klass
+    # @param [String] title
+    # @return [Property] generated property
+    def assign_property(klass, title)
+      @property_cache ||= PropertyCache.new {}
+
+      property = klass.new(title)
+      property.will_update = true
+      @property_cache.add_property property
+      property
     end
 
     # @return [Hash] created json

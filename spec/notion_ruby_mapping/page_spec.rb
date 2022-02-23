@@ -72,7 +72,7 @@ module NotionRubyMapping
             ]
            ],
          ].each do |(klass, title, constructor_hash, array)|
-           it "update #{title} by add_property_for_update" do
+           it "update #{title} by add_property_for_update (willl deprecate)" do
              property = klass.new title, **constructor_hash
              page.add_property_for_update property
              page.update
@@ -100,7 +100,35 @@ module NotionRubyMapping
            ]
          ].each do |(title, method, value, array)|
            it "update #{title} by substitution(autoload)" do
-             page.properties[title].send method, value
+             property = page.properties[title]
+             property.send method, value
+             page.update
+             array.each do |(keys, answer)|
+               value = keys.reduce(page.properties[title].create_json) { |hash, k| hash[k] }
+               expect(value).to eq answer
+             end
+             page.clear_object
+           end
+         end
+
+         [
+           [NumberProperty, "NumberTitle", :number=, 1.7320508, [[%w[number], 1.7320508]]],
+           [SelectProperty, "SelectTitle", :select=, "Select 2", [[%w[select name], "Select 2"]]],
+           [MultiSelectProperty, "MultiSelectTitle", :multi_select=, ["Multi Select 2"],
+            [
+              [["multi_select", 0, "name"], "Multi Select 2"]
+            ],
+           ],
+           [DateProperty, "DateTitle", :start_date=, Time.new(2022, 2, 24, 1, 23, 45, "+09:00"),
+            [
+              [%w[date start], "2022-02-24T01:23:00.000+09:00"],
+              [%w[date end], nil],
+            ],
+           ]
+         ].each do |(klass, title, method, value, array)|
+           it "update #{title} by assign_property" do
+             property = page.assign_property klass, title
+             property.send method, value
              page.update
              array.each do |(keys, answer)|
                value = keys.reduce(page.properties[title].create_json) { |hash, k| hash[k] }
@@ -131,7 +159,8 @@ module NotionRubyMapping
            ]
          ].each do |(title, method, value, array)|
            it "update #{title}Property by substitution" do
-             page.properties[title].send method, value
+             property = page.properties[title]
+             property.send method, value
              page.update
              array.each do |(keys, answer)|
                value = keys.reduce(page.properties[title].create_json) { |hash, k| hash[k] }
