@@ -7,22 +7,22 @@ module NotionRubyMapping
       NotionCache.instance.database id
     end
 
-    # @param [String] id database_id (with or without "-")
     # @param [NotionRubyMapping::Query] query object
-    def self.query(id, query = nil)
-      query ||= Query.new
-      NotionCache.instance.database_query(id, query)
+    def query_database(query = Query.new)
+      response = @nc.database_query @id, query
+      List.new json: response, database: self, query: query
     end
 
-    # @param [String] id database_id (with or without "-")
-    # @param [Payload] payload
+    # @return [NotionRubyMapping::Base]
     def update
-      update_json @nc.update_database(@id, create_json)
+      update_json @nc.update_database_request(@id, property_values_json)
     end
+
+    protected
 
     # @return [Hash]
     def reload_json
-      @nc.database_json @id
+      @nc.database_request @id
     end
   end
 end

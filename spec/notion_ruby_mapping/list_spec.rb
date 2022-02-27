@@ -1,20 +1,29 @@
 # frozen_string_literal: true
 
-require "yaml"
-require "json"
-require "notion"
 require_relative "../spec_helper"
 
-RSpec.describe NotionRubyMapping::Page do
-  let(:config) { YAML.load_file "env.yml" }
-  let!(:nc) { NotionRubyMapping::NotionCache.instance.create_client config["notion_token"] }
-  let(:top_page) { NotionRubyMapping::Page.find config["top_page"] }
+module NotionRubyMapping
+  RSpec.describe List do
+    tc = TestConnection.instance
 
-  describe "a list" do
-    subject { top_page.children }
+    describe "query" do
+      let(:database) { Database.new id: tc.database_id }
+      subject { database.query_database query }
+      context "limit 2" do
+        let(:query) { Query.new page_size: 2 }
 
-    it "count children count" do
-      expect(subject.count).to eq 3
+        it "count page count" do
+          expect(subject.count).to eq 5
+        end
+
+        it "has_more" do
+          expect(subject.has_more).to be_truthy
+        end
+
+        it "retrieve each_page" do
+          expect(subject.map { |page| page.properties["Title"].text_objects.first.text }).to eq %w[JKL MNO DEF GHI ABC]
+        end
+      end
     end
   end
 end

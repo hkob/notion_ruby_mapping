@@ -11,9 +11,9 @@ module NotionRubyMapping
       end
     end
 
-    subject { payload.create_json }
+    subject { payload.property_values_json }
     describe "set_icon" do
-      before { payload.set_icon **params }
+      before { payload.set_icon(**params) }
       context "for emoji icon" do
         let(:params) { {emoji: "😀"} }
         it "update icon (emoji)" do
@@ -23,7 +23,7 @@ module NotionRubyMapping
 
       context "for link icon" do
         let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
-        let(:params) { {url: url } }
+        let(:params) { {url: url} }
         it "update icon (link)" do
           is_expected.to eq({"icon" => {"type" => "external", "external" => {"url" => url}}})
         end

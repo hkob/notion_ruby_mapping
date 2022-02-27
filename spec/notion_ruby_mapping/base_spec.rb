@@ -3,53 +3,108 @@
 require_relative "../spec_helper"
 
 module NotionRubyMapping
-  # note Common tests without API access
+  # NOTE: Common tests without API access
   RSpec.describe Base do
-    context "base with id only" do
-      let(:base) { Page.new json: {"id" => "without API"} }
+    context "Base created by new and assign" do
+      let(:target) do
+        Base.new id: "base created by new and assign",
+                 assign: [NumberProperty, "np"]
+      end
+      let(:np) { target.properties["np"] }
+      before { np.number = 12_345 }
 
-      describe "Base instances" do
-        it "has an auto generated payload" do
-          expect(base.payload).to be_an_instance_of(Payload)
-        end
-
-        it "has an auto generated property_cache" do
-          expect(base.properties).to be_an_instance_of(PropertyCache)
-        end
-
-        it "can generate empty json" do
-          expect(base.create_json).to eq({})
-        end
+      it "has an auto generated payload" do
+        expect(target.payload).to be_an_instance_of(Payload)
       end
 
-      describe "add_property_for_update" do
-        let(:np) { NumberProperty.new "np", number: 123 }
-        subject { base.add_property_for_update np }
-        it "property_cache has the NumberProperty" do
-          expect(subject["properties"]["np"]).to eq np
-        end
-
-        it "can generate json" do
-          expect(subject.create_json).to eq({"properties" => {"np" => {"number" => 123}}})
-        end
+      it "has an auto generated property_cache" do
+        expect(target.properties).to be_an_instance_of(PropertyCache)
       end
+
+      it_behaves_like :property_values_json, {
+        "properties" => {
+          "np" => {
+            "number" => 12_345,
+            "type" => "number",
+          },
+        },
+      }
     end
 
-    context "base with id and NumberProperty json" do
-      let(:json) {
+    context "base created by json" do
+      let(:json) do
         {
-          "id" => "with NumberProperty(without API)",
+          "id" => "created by json",
           "properties" => {
-            "np" => {
-              "type" => "number",
-              "number" => 123,
+            "Title" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "ABC\n",
+                  },
+                  "plain_text" => "ABC\n",
+                },
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "DEF",
+                  },
+                  "plain_text" => "DEF",
+                },
+              ],
             },
           },
         }
-      }
-      let(:base) { Page.new json: json }
-      it "property_cache has the NumberProperty" do
-        expect(base["properties"]["np"]).to be_an_instance_of NumberProperty
+      end
+      let(:target) { Page.new json: json }
+      let(:tp) { target.properties["Title"] }
+
+      it "has an auto generated payload" do
+        expect(target.payload).to be_an_instance_of(Payload)
+      end
+
+      it "has an auto generated property_cache" do
+        expect(target.properties).to be_an_instance_of(PropertyCache)
+      end
+
+      context "before change" do
+        it { expect(target.title).to eq "ABC\nDEF" }
+        it_behaves_like :property_values_json, {}
+      end
+
+      context "after change" do
+        before { tp[1].text = "updated text" }
+
+        it { expect(target.title).to eq "ABC\nupdated text" }
+        it_behaves_like :property_values_json, {
+          "properties" => {
+            "Title" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "ABC\n",
+                    "link" => nil,
+                  },
+                  "plain_text" => "ABC\n",
+                  "href" => nil,
+                },
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "updated text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "updated text",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+        }
       end
     end
   end

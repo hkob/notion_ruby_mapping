@@ -10,14 +10,20 @@ module NotionRubyMapping
     # @param [String] name Property name
     # @param [Hash] json
     # @param [String] select String value (optional)
-    def initialize(name, json: nil, select: nil)
-      super(name, json: json)
-      @select = select
+    def initialize(name, will_update: false, json: nil, select: nil)
+      super name, will_update: will_update
+      @select = select || json && json["name"]
+    end
+
+    # @param [Hash] json
+    def update_from_json(json)
+      @will_update = false
+      @select = json["select"]["name"]
     end
 
     # @return [Hash]
-    def create_json
-      {"select" => @select ? {"name" => @select} : @json} || {}
+    def property_values_json
+      {@name => {"type" => "select", "select" => (@select ? {"name" => @select} : @json)}}
     end
 
     # @param [String] select

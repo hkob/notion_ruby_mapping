@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module NotionRubyMapping
+  # Payload class
   class Payload
     def initialize
       @json = {}
@@ -20,9 +23,14 @@ module NotionRubyMapping
     end
 
     # @return [Hash] created json
-    # @param optional [Hash] optional_json
-    def create_json(optional_json = nil)
+    # @param [Hash] optional_json
+    def property_values_json(optional_json = nil)
       @json.merge(optional_json || {})
+    end
+
+    # @return [Hash] {}
+    def clear
+      @json = {}
     end
   end
 end

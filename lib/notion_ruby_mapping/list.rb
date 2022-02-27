@@ -5,12 +5,43 @@ module NotionRubyMapping
   class List < Base
     include Enumerable
 
+    def initialize(json: nil, id: nil, database: nil, query: nil)
+      super(json: json, id: id)
+      @has_more = @json["has_more"]
+      @database = database
+      @query = query
+      @index = 0
+      @has_content = true
+    end
+    attr_reader :has_more
+
     def each
       return enum_for(:each) unless block_given?
 
-      json["results"].each do |block_json|
-        yield Base.create_from_json(block_json)
+      while @has_content
+        if @index < results.length
+          object = Base.create_from_json(results[@index])
+          @index += 1
+          yield object
+        elsif @has_more
+          if @database
+            @query.start_cursor = @json["next_cursor"]
+            @json = @database.query_database @query
+            @index = 0
+            @has_more = @json["has_more"]
+          else
+            @has_content = false
+          end
+        else
+          @has_content = false
+        end
       end
+    end
+
+    private
+
+    def results
+      @json["results"]
     end
   end
 end

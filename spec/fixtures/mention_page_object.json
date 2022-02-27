@@ -1,0 +1,19 @@
+{
+  "type": "mention",
+  "mention": {
+    "type": "page",
+    "page": {
+      "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    }
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "@Anonymous",
+  "href": null
+}

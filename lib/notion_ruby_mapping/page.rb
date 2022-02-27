@@ -7,13 +7,16 @@ module NotionRubyMapping
       NotionCache.instance.page id
     end
 
+    # @return [NotionRubyMapping::Base]
     def update
-      update_json @nc.update_page(@id, create_json)
+      update_json @nc.update_page_request(@id, property_values_json)
     end
+
+    protected
 
     # @return [Hash]
     def reload_json
-      @nc.page_json @id
+      @nc.page_request @id
     end
   end
 end

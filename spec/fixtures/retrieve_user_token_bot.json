@@ -1,0 +1,13 @@
+{
+  "object": "user",
+  "id": "019a87c7-d197-44a4-b19a-baa684400f81",
+  "name": "notion_ruby_mapping",
+  "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/b56f7ece-934d-41af-8892-89a6032fc721/nr.png",
+  "type": "bot",
+  "bot": {
+    "owner": {
+      "type": "workspace",
+      "workspace": true
+    }
+  }
+}

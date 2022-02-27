@@ -1,36 +1,55 @@
+# frozen_string_literal: true
+
 module NotionRubyMapping
+  # PropertyCache class
   class PropertyCache
+    include Enumerable
     def initialize(json = {})
       @properties = {}
       @json = json
     end
+    attr_writer :json
 
     # @param [String] key
     # @return [Property] Property for key
     def [](key)
-      ans = @properties[key]
-      unless ans
-        if @json && @json[key]
-          @properties[key] = Property.create_from_json key, @json[key]
-        end
+      @properties[key] ||= Property.create_from_json key, @json[key]
+    end
+
+    # @param [Array] key
+    # @return [Array]
+    def values_at(*key)
+      generate_all_properties
+      @properties.values_at(*key)
+    end
+
+    def generate_all_properties
+      if @json.empty?
+        @properties.values
+      else
+        @json.keys.map { |key| self[key] }
       end
-      @properties[key]
+    end
+
+    # @return [Hash, Enumerator]
+    def each(&block)
+      return enum_for(:each) unless block_given?
+
+      generate_all_properties.each(&block)
     end
 
     # @param [Property] property added Property
-    # @param [FalseClass] will_update true if the property value will update to Notion
-    def add_property(property, will_update: false)
+    def add_property(property)
       @properties[property.name] = property
-      property.will_update = true if will_update
       self
     end
 
     # @return [Hash] created json
-    def create_json
-      @properties.each_with_object({}) do |(key, property), ans|
+    def property_values_json
+      @properties.each_with_object({}) do |(_, property), ans|
         if property.will_update
           ans["properties"] ||= {}
-          ans["properties"][key] = property.create_json
+          ans["properties"].merge! property.property_values_json
         end
       end
     end

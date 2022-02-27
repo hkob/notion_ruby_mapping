@@ -1,37 +1,18 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  [
-    [TitleProperty, "title"],
-    [RichTextProperty, "rich_text"],
-    [UrlProperty, "url"],
-    [EmailProperty, "email"],
-    [PhoneNumberProperty, "phone_number"],
-  ].each do |c, type|
+  [TitleProperty, RichTextProperty].each do |c|
     RSpec.describe c do
-      let(:property) { c.new "tp" }
-      describe "a text property" do
-        it "has name" do
-          expect(property.name).to eq "tp"
-        end
+      it_behaves_like :filter_test, c,
+                      %w[equals does_not_equal contains does_not_contain starts_with ends_with],
+                      value: "abc"
+      it_behaves_like :filter_test, c, %w[is_empty is_not_empty]
+    end
+  end
 
-        context "create filter" do
-          subject { query.filter }
-          %w[equals does_not_equal contains does_not_contain starts_with ends_with].each do |key|
-            context key do
-              let(:query) { property.send "filter_#{key}", "abc" }
-              it { is_expected.to eq({"property" => "tp", type => {key => "abc"}}) }
-            end
-          end
-
-          %w[is_empty is_not_empty].each do |key|
-            context key do
-              let(:query) { property.send "filter_#{key}" }
-              it { is_expected.to eq({"property" => "tp", type => {key => true}}) }
-            end
-          end
-        end
-      end
+  RSpec.describe TextProperty do
+    it "raise error to construct parent TextProperty directly" do
+      expect { TextProperty.new "name" }.to raise_error(StandardError)
     end
   end
 end

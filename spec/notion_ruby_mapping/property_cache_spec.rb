@@ -28,10 +28,10 @@ module NotionRubyMapping
     end
 
     describe "add_property" do
-      let(:property_cache) { PropertyCache.new }
+      subject { PropertyCache.new }
       let(:np) { NumberProperty.new "np", number: 123 }
+      before { subject.add_property np }
       context "no update" do
-        subject { property_cache.add_property np }
         it "has the NumberProperty" do
           expect(subject["np"]).to eq np
         end
@@ -41,8 +41,8 @@ module NotionRubyMapping
         end
       end
 
-      context "no update" do
-        subject { property_cache.add_property np, will_update: true }
+      context "update value" do
+        before { np.number = 456 }
         it "has the NumberProperty" do
           expect(subject["np"]).to eq np
         end
@@ -52,8 +52,26 @@ module NotionRubyMapping
         end
 
         it "can generate json" do
-          expect(subject.create_json).to eq({"properties" => {"np" => {"number" => 123}}})
+          expect(subject.property_values_json).to eq({"properties" => {"np" => {"number" => 456, "type" => "number"}}})
         end
+      end
+    end
+
+    describe "enumerators" do
+      subject { PropertyCache.new }
+      let(:np) { NumberProperty.new "np", number: 123 }
+      let(:tp) { TitleProperty.new "tp", text_objects: [TextObject.new("ABC")] }
+      before { [np, tp].each { |p| subject.add_property p } }
+      it "can map properties" do
+        expect(subject.map(&:name)).to eq %w[np tp]
+      end
+
+      it "can select properties" do
+        expect(subject.filter { |p| p.is_a? TitleProperty }).to eq [tp]
+      end
+
+      it "can obtain some properties using values_at" do
+        expect(subject.values_at("np", "tp")).to eq [np, tp]
       end
     end
   end

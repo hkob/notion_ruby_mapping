@@ -2,61 +2,50 @@
 
 module NotionRubyMapping
   RSpec.describe SelectProperty do
+    tc = TestConnection.instance
+
     let(:property) { SelectProperty.new "sp" }
-    describe "a select property" do
-      it "has name" do
-        expect(property.name).to eq "sp"
-      end
-
-      context "create query" do
-        subject { query.filter }
-        %w[equals does_not_equal].each do |key|
-          context key do
-            let(:query) { property.send "filter_#{key}", "abc" }
-            it { is_expected.to eq({"property" => "sp", "select" => {key => "abc"}}) }
-          end
-        end
-
-        %w[is_empty is_not_empty].each do |key|
-          context key do
-            let(:query) { property.send "filter_#{key}" }
-            it { is_expected.to eq({"property" => "sp", "select" => {key => true}}) }
-          end
-        end
-      end
-    end
+    it_behaves_like :filter_test, SelectProperty, %w[equals does_not_equal], value: true
+    it_behaves_like :filter_test, SelectProperty, %w[is_empty is_not_empty]
 
     describe "a select property with parameters" do
-      let(:property) { SelectProperty.new "sp", select: "Select 1" }
-      subject { property.create_json }
-      it { is_expected.to eq({"select" => {"name" => "Select 1"}}) }
-      it "will not update" do
-        expect(property.will_update).to be_falsey
-      end
+      let(:target) { SelectProperty.new "sp", select: "Select 1" }
+
+      it_behaves_like :property_values_json, {"sp" => {"select" => {"name" => "Select 1"}, "type" => "select"}}
+      it_behaves_like :will_not_update
 
       describe "select=" do
-        before { property.select = "Select 1" }
-        it { is_expected.to eq({"select" => {"name" => "Select 1"}}) }
-        it "will update" do
-          expect(property.will_update).to be_truthy
-        end
+        before { target.select = "Select 2" }
+        it_behaves_like :property_values_json, {"sp" => {"select" => {"name" => "Select 2"}, "type" => "select"}}
+        it_behaves_like :will_update
+      end
+
+      describe "update_from_json" do
+        before { target.update_from_json(tc.read_json("select_property_item")) }
+        it_behaves_like :will_not_update
+        it_behaves_like :property_values_json, {
+          "sp" => {
+            "type" => "select",
+            "select" => {
+              "name" => "Select 3",
+            },
+          },
+        }
       end
     end
 
-    describe "create_from_json" do
-      let(:json) { {"select" => {"name" => "Select 1"}} }
-      let(:property) { Property.create_from_json "sp", json }
-      it "has_name" do
-        expect(property.name).to eq "sp"
-      end
-
-      it "create_json" do
-        expect(property.create_json).to eq(json)
-      end
-
-      it "will not update" do
-        expect(property.will_update).to be_falsey
-      end
+    describe "a select property from property_item_json" do
+      let(:target) { Property.create_from_json "sp", tc.read_json("select_property_item") }
+      it_behaves_like :has_name_as, "sp"
+      it_behaves_like :will_not_update
+      it_behaves_like :property_values_json, {
+        "sp" => {
+          "type" => "select",
+          "select" => {
+            "name" => "Select 3",
+          },
+        },
+      }
     end
   end
 end

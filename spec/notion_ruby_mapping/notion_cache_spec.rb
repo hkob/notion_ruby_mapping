@@ -1,21 +1,23 @@
 # frozen_string_literal: true
 
 require "json"
-require "notion"
 require_relative "../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe NotionCache do
     let(:nc) { NotionCache.instance }
     describe "singleton" do
-      it "can set client" do
-        nc.create_client("notion_token")
-        expect(nc.client).not_to be_nil
-      end
-
       it "can get hex_id" do
         expect(nc.hex_id("0123-4567-89ab")).to eq "0123456789ab"
       end
+    end
+
+    describe "page_path" do
+      it { expect(nc.page_path("ABC")).to eq "v1/pages/ABC" }
+    end
+
+    describe "database_path" do
+      it { expect(nc.database_path("ABC")).to eq "v1/databases/ABC" }
     end
   end
 end

@@ -3,11 +3,14 @@
 module NotionRubyMapping
   # Query object
   class Query
-    def initialize(filter: {}, sort: [])
+    def initialize(filter: {}, sort: [], page_size: 100, start_cursor: nil)
       @filter = filter
       @sort = sort
+      @page_size = page_size
+      @start_cursor = start_cursor
     end
-    attr_reader :filter, :sort
+    attr_reader :filter, :sort, :page_size
+    attr_accessor :start_cursor
 
     # @param [Query] other_query other query
     # @return [NotionRubyMapping::Query] updated self (Query object)

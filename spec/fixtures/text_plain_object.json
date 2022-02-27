@@ -1,0 +1,17 @@
+{
+  "type": "text",
+  "text": {
+    "content": "abc\n",
+    "link": null
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "abc\n",
+  "href": null
+}

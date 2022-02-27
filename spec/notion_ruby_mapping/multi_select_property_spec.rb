@@ -2,58 +2,68 @@
 
 module NotionRubyMapping
   RSpec.describe MultiSelectProperty do
-    let(:nms1ms2) { [{"name" => "Multi Select 1"}, {"name" => "Multi Select 2"}] }
-    let(:ms1ms2) { ["Multi Select 1", "Multi Select 2"] }
+    tc = TestConnection.instance
+    ms12 = {"multi_select" => [{"name" => "MS1"}, {"name" => "MS2"}], "type" => "multi_select"}
+
     describe "a select property with parameters" do
-      let(:property) { MultiSelectProperty.new "msp", multi_select: ["Multi Select 1", "Multi Select 2"] }
-      subject { property.create_json }
-      it { is_expected.to eq({"multi_select" => nms1ms2}) }
-      it "will not update" do
-        expect(property.will_update).to be_falsey
-      end
+      let(:target) { MultiSelectProperty.new "msp", multi_select: %w[MS1 MS2] }
+      it_behaves_like :property_values_json, {"msp" => ms12}
+      it_behaves_like :will_not_update
 
       describe "multi_select=" do
         context "a value" do
-          before { property.multi_select = "Multi Select 1"}
-          it { is_expected.to eq({"multi_select" => [{"name" => "Multi Select 1"}]}) }
-          it "will update" do
-            expect(property.will_update).to be_truthy
-          end
+          before { target.multi_select = "MS1" }
+          it_behaves_like :property_values_json, {
+            "msp" => {
+              "type" => "multi_select",
+              "multi_select" => [{"name" => "MS1"}],
+            },
+          }
+          it_behaves_like :will_update
         end
 
         context "an array value" do
-          before { property.multi_select = ms1ms2 }
-          it { is_expected.to eq({"multi_select" => nms1ms2}) }
-          it "will update" do
-            expect(property.will_update).to be_truthy
-          end
+          before { target.multi_select = %w[MS1 MS2] }
+          it_behaves_like :property_values_json, {"msp" => ms12}
+          it_behaves_like :will_update
         end
       end
 
-      describe "multi_select_values=" do
-        before { property.multi_select = ["Multi Select 1", "Multi Select 2"] }
-        it { is_expected.to eq({"multi_select" => nms1ms2}) }
-        it "will update" do
-          expect(property.will_update).to be_truthy
-        end
+      describe "update_from_json" do
+        before { target.update_from_json(tc.read_json("multi_select_property_item")) }
+        it_behaves_like :property_values_json, {
+          "msp" => {
+            "type" => "multi_select",
+            "multi_select" => [
+              {
+                "name" => "Multi Select 2",
+              },
+              {
+                "name" => "Multi Select 1",
+              },
+            ],
+          },
+        }
       end
     end
 
-    describe "create_from_json" do
-      let(:json) { {"multi_select" => nms1ms2 } }
-      let(:property) { Property.create_from_json "msp", json }
-      it "has_name" do
-        expect(property.name).to eq "msp"
-
-      end
-
-      it "create_json" do
-        expect(property.create_json).to eq json
-      end
-
-      it "will not update" do
-        expect(property.will_update).to be_falsey
-      end
+    describe "a multi_select property from property_item_json" do
+      let(:target) { Property.create_from_json "msp", tc.read_json("multi_select_property_item") }
+      it_behaves_like :has_name_as, "msp"
+      it_behaves_like :will_not_update
+      it_behaves_like :property_values_json, {
+        "msp" => {
+          "type" => "multi_select",
+          "multi_select" => [
+            {
+              "name" => "Multi Select 2",
+            },
+            {
+              "name" => "Multi Select 1",
+            },
+          ],
+        },
+      }
     end
   end
 end

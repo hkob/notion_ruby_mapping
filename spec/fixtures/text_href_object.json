@@ -1,0 +1,19 @@
+{
+  "type": "text",
+  "text": {
+    "content": "高専HP",
+    "link": {
+      "url": "https://www.metro-cit.ac.jp"
+    }
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "高専HP",
+  "href": "https://www.metro-cit.ac.jp"
+}
