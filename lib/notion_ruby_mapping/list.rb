@@ -18,6 +18,14 @@ module NotionRubyMapping
     def each
       return enum_for(:each) unless block_given?
 
+      unless @has_content # re-exec
+        @query.start_cursor = nil
+        @json = @database.query_database @query
+        @index = 0
+        @has_more = @json["has_more"]
+        @has_content = true
+      end
+
       while @has_content
         if @index < results.length
           object = Base.create_from_json(results[@index])

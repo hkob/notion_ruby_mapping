@@ -16,6 +16,11 @@ module NotionRubyMapping
           expect(subject.count).to eq 5
         end
 
+        it "count page count (again)" do
+          subject.count
+          expect(subject.count).to eq 5
+        end
+
         it "has_more" do
           expect(subject.has_more).to be_truthy
         end
