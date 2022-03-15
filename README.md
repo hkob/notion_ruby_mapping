@@ -6,12 +6,7 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
 
 ## Table of Contents
 
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
-- [notion\_ruby\_mapping](#notion_ruby_mapping)
+- [notion_ruby_mapping](#notion_ruby_mapping)
   - [Table of Contents](#table-of-contents)
   - [1. Installation](#1-installation)
   - [2. Example code](#2-example-code)
@@ -29,12 +24,13 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
       - [4.1.2 Update page properties](#412-update-page-properties)
       - [4.1.3 Update other page information](#413-update-other-page-information)
       - [4.1.4 other methods](#414-other-methods)
-    - [4.2 Page](#42-page)
+    - [4.2 Database](#42-database)
       - [4.2.1 Retrieve a database](#421-retrieve-a-database)
       - [4.2.2 Query a database](#422-query-a-database)
         - [4.2.2.1 Complex conditions](#4221-complex-conditions)
         - [4.2.2.2 Sort criteria](#4222-sort-criteria)
-      - [4.2.3 Update database](#423-update-database)
+      - [4.2.3 Create child page](#423-create-child-page)
+      - [4.2.4 Update database](#424-update-database)
     - [4.3 List class](#43-list-class)
     - [4.4 Block class](#44-block-class)
     - [4.5 Property classes](#45-property-classes)
@@ -59,9 +55,6 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
   - [7. License](#7-license)
   - [8. Code of Conduct](#8-code-of-conduct)
   - [9. Acknowledgements](#9-acknowledgements)
-
-<!-- /code_chunk_output -->
-
 
 ## 1. Installation
 
@@ -548,9 +541,12 @@ query13 = tp.filter_starts_with("A").ascending(tp)
 #### 4.2.3 Create child page
 
 `create_child_page` creates a child page object of the database.
+After setting some properties, please call `page.save` to send page information to Notion.
 
 ```Ruby
 page = db.create_child_page TitleProperty, "Name"
+page.properties["Name"] << "New Page"
+page.save
 ```
 
 #### 4.2.4 Update database
@@ -843,6 +839,7 @@ p tp.property_values_json
 ```
 
 `<<` method appends a new TextObject or a String.
+
 ```Ruby
 to = TextObject.new "DEF"
 to.bold = true
@@ -857,6 +854,7 @@ p tp.property_values_json
 ```
 
 `delete_at(index)` method remove a TextObject at index.
+
 ```Ruby
 tp.delete_at 1
 tp << "GHI"
@@ -867,6 +865,7 @@ p tp.property_values_json
 ##### 4.5.3.9 CheckboxProperty
 
 PeopleProperty can set a boolean value by `.checkbox=`.
+
 ```Ruby
 cp = page.properties["CheckboxTitle"]
 cp.checkbox = true
@@ -877,6 +876,7 @@ p cp.property_values_json
 ##### 4.5.3.10 EmailProperty
 
 EmailProperty can set an email address by `.email=`.
+
 ```Ruby
 ep = page.properties["MailTitle"]
 ep.email = "hkobhkob@gmail.com"
@@ -914,9 +914,10 @@ p rp.property_values_json
 # Result => {"rp"=>{"type"=>"relation", "relation"=>[{"id"=>"R2"}, {"id"=>"R3"}]}}
 ```
 
-
 ## 6. ChangeLog
 
+- 2022/3/16 added database.create_child_page and base.save instead of base.update/create
+- 2022/3/15 Fixed not to reload from API when all contents are loaded
 - 2022/3/14 Exclude notion-ruby-client, update Property values, update for Notion-Version 2022-02-22
 - 2022/2/25 add_property_for_update -> assign_property, update README.md
 - 2022/2/20 add support for MultiSelectProperty
