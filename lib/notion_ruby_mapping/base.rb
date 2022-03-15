@@ -6,13 +6,14 @@ module NotionRubyMapping
     # @param [Hash, nil] json
     # @param [String, nil] id
     # @param [Array<Property, Class, String>] assign
-    def initialize(json: nil, id: nil, assign: [])
+    def initialize(json: nil, id: nil, assign: [], parent: nil)
       @nc = NotionCache.instance
       @json = json
       @id = @nc.hex_id(id || json && @json["id"])
-      raise StandardError, "Unknown id" if !is_a?(List) && @id.nil?
+      @new_record = true unless parent.nil?
+      raise StandardError, "Unknown id" if !is_a?(List) && @id.nil? && parent.nil?
 
-      @payload = nil
+      @payload = Payload.new(parent && {"parent" => parent})
       @property_cache = nil
       assign.each_slice(2) { |(klass, key)| assign_property(klass, key) }
     end
@@ -35,9 +36,8 @@ module NotionRubyMapping
       end
     end
 
-    # @return [NotionRubyMapping::Payload] get or created Payload object
-    def payload
-      @payload ||= Payload.new
+    def new_record?
+      @new_record
     end
 
     # @return [NotionRubyMapping::PropertyCache] get or created PropertyCache object
@@ -63,6 +63,11 @@ module NotionRubyMapping
       update_json reload_json
       self
     end
+    
+   # @return [NotionRubyMapping::Base]
+    def save
+      @new_record ? create : update
+    end
 
     # @return [Hash] json properties
     def json_properties
@@ -86,7 +91,7 @@ module NotionRubyMapping
     end
 
     def restore_from_json
-      payload.clear
+      @payload.clear
       return if (ps = @json["properties"]).nil?
 
       properties.json = json_properties
@@ -102,8 +107,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Base]
     def set_icon(emoji: nil, url: nil)
       if is_a?(Page) || is_a?(Database)
-        payload.set_icon(emoji: emoji, url: url)
-        update
+        @payload.set_icon(emoji: emoji, url: url)
       end
       self
     end
@@ -142,7 +146,7 @@ module NotionRubyMapping
 
     # @return [Hash] created json
     def property_values_json
-      payload.property_values_json @property_cache&.property_values_json
+      @payload.property_values_json @property_cache&.property_values_json
     end
   end
 end

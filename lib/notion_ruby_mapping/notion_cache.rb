@@ -42,6 +42,11 @@ module NotionRubyMapping
       "v1/pages/#{page_id}"
     end
 
+    # @return [String (frozen)] page_path
+    def pages_path
+      "v1/pages"
+    end
+
     # @param [String] database_id
     # @return [String (frozen)] page_path
     def database_path(database_id)
@@ -122,6 +127,12 @@ module NotionRubyMapping
     # @return [Hash] response
     def update_page_request(page_id, payload)
       request :patch, "v1/pages/#{page_id}", payload
+    end
+
+    # @param [Hash] payload
+    # @return [Hash] response
+    def create_page_request(payload)
+      request :post, "v1/pages", payload
     end
 
     # @param [String] id id string with "-"

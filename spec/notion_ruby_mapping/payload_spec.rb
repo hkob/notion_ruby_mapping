@@ -4,7 +4,7 @@ require_relative "../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe Payload do
-    let(:payload) { Payload.new }
+    let(:payload) { Payload.new nil }
     describe "constructor" do
       it "can create an object" do
         expect(payload).not_to be_nil

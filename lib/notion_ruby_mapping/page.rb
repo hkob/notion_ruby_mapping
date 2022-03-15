@@ -7,9 +7,15 @@ module NotionRubyMapping
       NotionCache.instance.page id
     end
 
-    # @return [NotionRubyMapping::Base]
+    # @return [NotionRubyMapping::Base]46G
     def update
       update_json @nc.update_page_request(@id, property_values_json)
+    end
+
+    # @return [NotionRubyMapping::Base]
+    def create
+      @new_record = false
+      update_json @nc.create_page_request(property_values_json)
     end
 
     protected

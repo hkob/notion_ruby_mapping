@@ -3,8 +3,8 @@
 module NotionRubyMapping
   # Payload class
   class Payload
-    def initialize
-      @json = {}
+    def initialize(json)
+      @json = json || {}
     end
 
     # @param [String] emoji

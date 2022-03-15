@@ -257,7 +257,11 @@ module NotionRubyMapping
 
     describe "update_icon" do
       let(:top_page) { Page.new id: tc.top_page_id }
-      before { top_page.set_icon(**params) }
+      before do
+        top_page.set_icon(**params)
+        top_page.save
+      end
+
       subject { top_page.icon }
 
       context "for emoji icon" do
@@ -511,7 +515,7 @@ module NotionRubyMapping
           tp << TextObject.new("new text")
           titlep << "MNO"
           urlp.url = "https://www.google.com/"
-          page.update # update page and reload properties
+          page.save # update page and reload properties
           aggregate_failures do
             {
               cp => {
@@ -633,6 +637,43 @@ module NotionRubyMapping
               expect(p.property_values_json[p.name]).to eq(json)
             end
           end
+        end
+      end
+    end
+
+    describe "create" do
+      context "database's children" do
+        let(:parent_db) { Database.new id: tc.parent_database_id }
+        let(:target) { parent_db.create_child_page TitleProperty, "Name" }
+        before { target.properties["Name"] << "New Page Title" }
+        it { expect(target.new_record?).to be_truthy }
+        it_behaves_like :property_values_json, {
+          "parent" => {
+            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
+          },
+          "properties" => {
+            "Name" => {
+              "title" => [
+                {
+                  "href" => nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page Title",
+                    "link" => nil
+                  },
+                  "plain_text" => "New Page Title",
+                }
+              ],
+              "type" => "title",
+            }
+          },
+        }
+
+        describe "create" do
+          before { target.save }
+          it_behaves_like :property_values_json, {}
+          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
+          it { expect(target.new_record?).to be_falsey }
         end
       end
     end

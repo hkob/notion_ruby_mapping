@@ -18,6 +18,12 @@ module NotionRubyMapping
       update_json @nc.update_database_request(@id, property_values_json)
     end
 
+    # @param [Array<Property, Class, String>] assign
+    # @return [NotionRubyMapping::Base]
+    def create_child_page(*assign)
+      Page.new assign: assign, parent: {"database_id" => @id}
+    end
+
     protected
 
     # @return [Hash]

@@ -13,10 +13,6 @@ module NotionRubyMapping
       let(:np) { target.properties["np"] }
       before { np.number = 12_345 }
 
-      it "has an auto generated payload" do
-        expect(target.payload).to be_an_instance_of(Payload)
-      end
-
       it "has an auto generated property_cache" do
         expect(target.properties).to be_an_instance_of(PropertyCache)
       end
@@ -60,10 +56,6 @@ module NotionRubyMapping
       end
       let(:target) { Page.new json: json }
       let(:tp) { target.properties["Title"] }
-
-      it "has an auto generated payload" do
-        expect(target.payload).to be_an_instance_of(Payload)
-      end
 
       it "has an auto generated property_cache" do
         expect(target.properties).to be_an_instance_of(PropertyCache)

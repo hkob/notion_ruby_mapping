@@ -69,6 +69,7 @@ module NotionRubyMapping
       retrieve_block
       query_database
       update_page
+      create_page
     end
 
     # @param [Symbol] method
@@ -77,7 +78,8 @@ module NotionRubyMapping
     # @param [Hash<Array>] array
     def generate_stubs_sub(method, prefix, path_method, array)
       array.each do |key, (id, code, payload)|
-        stub method, "#{prefix}_#{key}", @nc.send(path_method, id), code, payload
+        path = id ? @nc.send(path_method, id) : @nc.send(path_method)
+        stub method, "#{prefix}_#{key}", path, code, payload
       end
     end
 
@@ -236,6 +238,32 @@ module NotionRubyMapping
       }
     end
 
+    def create_page
+      generate_stubs_sub :post, __method__, :pages_path, {
+        parent_database: [nil, 200, {
+          "parent" => {
+            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f"
+          },
+          "properties" => {
+            "Name" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page Title",
+                    "link" => nil
+                  },
+                  "plain_text" => "New Page Title",
+                  "href" => nil
+                }
+              ]
+            }
+          }
+        }]
+      }
+    end
+
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
     def read_json(json_file)
@@ -281,6 +309,10 @@ module NotionRubyMapping
 
     def parent1_page_id
       @config["parent1_page"]
+    end
+
+    def parent_database_id
+      @config["parent_database"]
     end
 
     def user_hkob
