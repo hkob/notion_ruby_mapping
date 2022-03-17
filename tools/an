@@ -1,0 +1,103 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "date"
+require "notion_ruby_mapping"
+
+module NotionRubyMapping
+  # you Notion API token
+  NOTION_API_TOKEN = "secret_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx"
+  # your task Database id
+  DATABASE_ID = "0123456789abcdef0123456789abcdef"
+  # your Title name
+  TITLE_NAME = "タスク名"
+  # your DateProperty name
+  DATE_NAME = "日付"
+  # your time_zone
+  TIME_ZONE = "Asia/Tokyo"
+  # set true if you want to open the created page in the Notion.app
+  OPEN_AS_APP = true
+
+  # print usage and exit
+  def usage
+    print [
+      "Usage:",
+      "\tan task-name",
+      "\t\tCreate a today task as 'task-name'",
+      "\tan task-name hh:mm",
+      "\t\tCreate a today 'task-name' task at 'hh:mm'",
+      "\tan task-name MM/DD",
+      "\t\tInput a 'task-name' task at 'MM/DD'",
+      "\tan task-name YYYY/MM/DD",
+      "\t\tInput a 'task-name' task at 'YYYY/MM/DD'",
+      "\tan task-name MM/DD hh:mm",
+      "\t\tInput a 'task-name' task at 'MM/DD hh:mm",
+      "\tan task-name MM/DD h1:m1 h2:m2",
+      "\t\tInput a 'task-name' task at 'MM/DD h1:m1 - h2:m2'",
+      "\tan task-name YYYY/MM/DD hh:mm",
+      "\t\tInput a 'task-name' task at 'YYYY/MM/DD hh:mm",
+      "\tan task-name YYYY/MM/DD h1:m1 h2:m2",
+      "\t\tInput a 'task-name' task at 'YYYY/MM/DD h1:m1 - h2:m2'",
+    ].join("\n")
+    exit 1
+  end
+
+  if ARGV.empty?
+    usage
+  else
+    date_str = nil
+    end_time = nil
+    start_time = nil
+
+    # check start_time and end_time
+    end_time = ARGV.pop if ARGV[-1] =~ /\d+:\d+/
+    if end_time
+      start_time = ARGV.pop if ARGV[-1] =~ /\d+:\d+/
+      unless start_time
+        start_time = end_time
+        end_time = nil
+      end
+    end
+
+    # set date from date string or today
+    begin
+      date = Date.parse ARGV[-1]
+      # If the above Date.parse was success, the last parameter will remove.
+      date_str = ARGV.pop
+    rescue StandardError
+      date = nil
+    end
+    date ||= Date.today
+
+    # if task name does not exist, print usage and exit
+    if ARGV.empty?
+      print "`task-name' is required!!!"
+      usage
+    end
+
+    NotionCache.instance.create_client NOTION_API_TOKEN
+
+    # create database object without API call and create a child page
+    db = Database.new id: DATABASE_ID
+    page = db.create_child_page TitleProperty, TITLE_NAME, DateProperty, DATE_NAME
+
+    # obtain title and date properties and set values
+    tp, dp = page.properties.values_at TITLE_NAME, DATE_NAME
+    tp << ARGV.join(" ")
+    if end_time
+      dp.start_date = DateTime.parse "#{date_str} #{start_time}"
+      dp.end_date = DateTime.parse "#{date_str} #{end_time}"
+      dp.time_zone = TIME_ZONE
+    elsif start_time
+      dp.start_date = DateTime.parse "#{date_str} #{start_time}"
+      dp.time_zone = TIME_ZONE
+    else
+      dp.start_date = date
+    end
+
+    # Notion API call
+    page.save
+    url = "#{OPEN_AS_APP ? "notion" : "https"}://notion.so/#{page.id}"
+    system("open #{url}")
+  end
+end

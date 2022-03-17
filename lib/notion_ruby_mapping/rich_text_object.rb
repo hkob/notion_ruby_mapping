@@ -32,8 +32,16 @@ module NotionRubyMapping
           MentionObject.new options.merge({"database_id" => mention["database"]["id"]})
         when "date"
           MentionObject.new options.merge(mention["date"].slice("start", "end", "time_zone"))
+        when "template_mention"
+          template_mention = mention["template_mention"]
+          case template_mention["type"]
+          when "template_mention_date"
+            MentionObject.new options.merge({"template_mention" => template_mention["template_mention_date"]})
+          else
+            MentionObject.new options.merge({"template_mention" => template_mention["template_mention_user"]})
+          end
         else
-          raise StandardError, json
+          raise StandardError, "Unknown mention type: #{mention["type"]}"
         end
       else
         raise StandardError, json
@@ -58,6 +66,54 @@ module NotionRubyMapping
         "plain_text" => @options["plain_text"],
         "href" => @options["href"],
       }.merge annotations_json
+    end
+
+    # @param [String, RichTextObject] value
+    # @return [String] input text
+    def plain_text=(value)
+      text(value)
+    end
+
+    # @param [Boolean] flag
+    # @return [Boolean] input flag
+    def bold=(flag)
+      @will_update = true
+      @options["bold"] = flag
+    end
+
+    # @param [Boolean] flag
+    # @return [Boolean] input flag
+    def italic=(flag)
+      @will_update = true
+      @options["italic"] = flag
+    end
+
+    # @param [Boolean] flag
+    # @return [Boolean] input flag
+    def strikethrough=(flag)
+      @will_update = true
+      @options["strikethrough"] = flag
+    end
+
+    # @param [Boolean] flag
+    # @return [Boolean] input flag
+    def underline=(flag)
+      @will_update = true
+      @options["underline"] = flag
+    end
+
+    # @param [Boolean] flag
+    # @return [Boolean] input flag
+    def code=(flag)
+      @will_update = true
+      @options["code"] = flag
+    end
+
+    # @param [String] color
+    # @return [String] input color
+    def color=(color)
+      @will_update = true
+      @options["color"] = color
     end
 
     protected

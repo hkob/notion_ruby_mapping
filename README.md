@@ -50,11 +50,16 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
         - [4.5.3.10 EmailProperty](#45310-emailproperty)
         - [4.5.3.11 FilesProperty](#45311-filesproperty)
         - [4.5.3.12 RelationProperty](#45312-relationproperty)
+  - [5. XXXObjects](#5-xxxobjects)
+    - [5.1 RichTextObject](#51-richtextobject)
+    - [5.2 TextObject](#52-textobject)
+    - [5.3 MentionObject](#53-mentionobject)
+    - [5.4 UserObject](#54-userobject)
   - [6. ChangeLog](#6-changelog)
-  - [6. Contributing](#6-contributing)
-  - [7. License](#7-license)
-  - [8. Code of Conduct](#8-code-of-conduct)
-  - [9. Acknowledgements](#9-acknowledgements)
+  - [7. Contributing](#7-contributing)
+  - [8. License](#8-license)
+  - [9. Code of Conduct](#9-code-of-conduct)
+  - [10. Acknowledgements](#10-acknowledgements)
 
 ## 1. Installation
 
@@ -914,8 +919,59 @@ p rp.property_values_json
 # Result => {"rp"=>{"type"=>"relation", "relation"=>[{"id"=>"R2"}, {"id"=>"R3"}]}}
 ```
 
+## 5. XXXObjects
+
+### 5.1 RichTextObject
+
+RichTextObject is an abstract class for TextObject and MentionObject.
+It can store a link and some annotations.
+
+There are common instance methods for its subclass objects.
+
+- plain_text=(value)
+- bold=(flag)
+- italic=(flag)
+- strikethrough=(flag)
+- underline=(flag)
+- code=(flag)
+- color=(color)
+
+### 5.2 TextObject
+
+TextObject is a class for texts.
+`TextObject.new(text)` creates a TextObject.
+After creating or retrieving TextObject, `to.text=` replaces including text.
+
+```Ruby
+to = TextObject.new "first text"
+to.text = "replaced text"
+```
+
+### 5.3 MentionObject
+
+MentionObject is a class for mentions for user, page, database, date and template_mention.
+
+```Ruby
+mention_user = MentionObject.new user_id: "user_id", plain_text: "m_user"
+mention_page = MentionObject.new page_id: "page_id", plain_text: "m_page"
+mention_db = MentionObject.new database_id: "database_id", plain_text: "m_db"
+mention_date = MentionObject.new start: "2022-03-17", plain_text: "m_date"
+mention_today = MentionObject.new mention_template: "today"
+mention_now = MentionObject.new mention_template: "now"
+mention_user = MentionObject.new mention_template: "user"
+```
+
+### 5.4 UserObject
+
+UserObject is a class for users.
+
+```Ruby
+u = User.new id: "user_id"
+```
+
 ## 6. ChangeLog
 
+- 2022/3/17 added template_mention objects, tools/an command
 - 2022/3/16 added database.create_child_page and base.save instead of base.update/create
 - 2022/3/15 Fixed not to reload from API when all contents are loaded
 - 2022/3/14 Exclude notion-ruby-client, update Property values, update for Notion-Version 2022-02-22
@@ -929,18 +985,18 @@ p rp.property_values_json
 - 2022/2/13 added Page#set_icon
 - 2022/2/13 First commit
 
-## 6. Contributing
+## 7. Contributing
 
 Bug reports and pull requests are welcome on GitHub at <https://github.com/hkob/notion_ruby_mapping>. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/notion_ruby_mapping/blob/main/CODE_OF_CONDUCT.md).
 
-## 7. License
+## 8. License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-## 8. Code of Conduct
+## 9. Code of Conduct
 
 Everyone interacting in the NotionRubyMapping project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/notion_ruby_mapping/blob/main/CODE_OF_CONDUCT.md).
 
-## 9. Acknowledgements
+## 10. Acknowledgements
 
 The code depends on [notion-ruby-client](https://github.com/orbit-love/notion-ruby-client).

@@ -7,361 +7,335 @@ module NotionRubyMapping
 
     subject { target.property_values_json }
     describe "property_values_json" do
-      context "mention to user" do
-        context "normal" do
-          let(:target) { MentionObject.new "user_id" => "ABC", "plain_text" => "@Anonymous" }
-          it_behaves_like :property_values_json, {
-            "type" => "mention",
-            "mention" => {
-              "type" => "user",
-              "user" => {
-                "object" => "user",
-                "id" => "ABC",
-              },
-            },
+      {
+        "user" => [
+          {
+            "user_id" => "ABC",
             "plain_text" => "@Anonymous",
-            "href" => nil,
-          }
-        end
-
-        context "annotations" do
-          %w[bold italic strikethrough underline code].each do |an|
-            context "annotation #{an}" do
-              let(:target) { MentionObject.new "user_id" => "DEF", an => true, "plain_text" => "#{an}_mention" }
-              it_behaves_like :property_values_json, {
-                "type" => "mention",
-                "mention" => {
-                  "type" => "user",
-                  "user" => {
-                    "object" => "user",
-                    "id" => "DEF",
-                  },
-                },
-                "annotations" => {
-                  an => true,
-                },
-                "plain_text" => "#{an}_mention",
-                "href" => nil,
-              }
-            end
-          end
-        end
-
-        context "href" do
-          let(:target) { MentionObject.new "user_id" => "GHI", "href" => url, "plain_text" => "href_mention" }
-          it_behaves_like :property_values_json, {
-            "type" => "mention",
-            "mention" => {
-              "type" => "user",
-              "user" => {
-                "object" => "user",
-                "id" => "GHI",
-              },
-            },
-            "plain_text" => "href_mention",
-            "href" => url,
-          }
-        end
-      end
-
-      describe "create_from_json" do
-        let(:target) { RichTextObject.create_from_json tc.read_json("mention_user_object") }
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
+          },
+          {
             "type" => "user",
             "user" => {
               "object" => "user",
-              "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+              "id" => "ABC",
             },
           },
-          "annotations" => {
-            "bold" => false,
-            "italic" => false,
-            "strikethrough" => false,
-            "underline" => false,
-            "code" => false,
-            "color" => "default",
+          "@Anonymous",
+        ],
+        "page" => [
+          {
+            "page_id" => "ABC",
+            "plain_text" => "@Anonymous",
           },
-          "plain_text" => "@Hiroyuki KOBAYASHI",
-          "href" => nil,
-        }
-      end
-    end
-
-    context "mention to page" do
-      context "normal" do
-        let(:target) { MentionObject.new "page_id" => "ABC", "plain_text" => "@Anonymous" }
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
+          {
             "type" => "page",
             "page" => {
               "id" => "ABC",
             },
           },
-          "plain_text" => "@Anonymous",
-          "href" => nil,
-        }
-      end
-
-      context "annotations" do
-        %w[bold italic strikethrough underline code].each do |an|
-          context "annotation #{an}" do
-            let(:target) { MentionObject.new "page_id" => "DEF", an => true, "plain_text" => "#{an}_mention" }
-            it_behaves_like :property_values_json, {
-              "type" => "mention",
-              "mention" => {
-                "type" => "page",
-                "page" => {
-                  "id" => "DEF",
-                },
-              },
-              "annotations" => {
-                an => true,
-              },
-              "plain_text" => "#{an}_mention",
-              "href" => nil,
-            }
-          end
-        end
-      end
-
-      context "href" do
-        let(:target) { MentionObject.new "page_id" => "GHI", "href" => url, "plain_text" => "href_mention" }
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
-            "type" => "page",
-            "page" => {
-              "id" => "GHI",
-            },
+          "@Anonymous",
+        ],
+        "database" => [
+          {
+            "database_id" => "ABC",
+            "plain_text" => "@Anonymous",
           },
-          "plain_text" => "href_mention",
-          "href" => url,
-        }
-      end
-    end
-
-    describe "create_from_json" do
-      let(:target) { RichTextObject.create_from_json tc.read_json("mention_page_object") }
-      it_behaves_like :property_values_json, {
-        "type" => "mention",
-        "mention" => {
-          "type" => "page",
-          "page" => {
-            "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-          },
-        },
-        "annotations" => {
-          "bold" => false,
-          "italic" => false,
-          "strikethrough" => false,
-          "underline" => false,
-          "code" => false,
-          "color" => "default",
-        },
-        "plain_text" => "@Anonymous",
-        "href" => nil,
-      }
-    end
-
-    context "mention to date" do
-      context "normal" do
-        let(:target) { MentionObject.new "database_id" => "ABC", "plain_text" => "@Anonymous" }
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
+          {
             "type" => "database",
             "database" => {
               "id" => "ABC",
             },
           },
-          "plain_text" => "@Anonymous",
-          "href" => nil,
-        }
-      end
-
-      context "annotations" do
-        %w[bold italic strikethrough underline code].each do |an|
-          context "annotation #{an}" do
-            let(:target) do
-              MentionObject.new "database_id" => "DEF", an => true, "plain_text" => "#{an}_mention"
-            end
-            it_behaves_like :property_values_json, {
-              "type" => "mention",
-              "mention" => {
-                "type" => "database",
-                "database" => {
-                  "id" => "DEF",
-                },
-              },
-              "annotations" => {
-                an => true,
-              },
-              "plain_text" => "#{an}_mention",
-              "href" => nil,
-            }
-          end
-        end
-      end
-
-      context "href" do
-        let(:target) { MentionObject.new "database_id" => "GHI", "href" => url, "plain_text" => "href_mention" }
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
-            "type" => "database",
-            "database" => {
-              "id" => "GHI",
-            },
+          "@Anonymous",
+        ],
+        "date(start only)" => [
+          {
+            "start" => "2022-02-21",
+            "plain_text" => "2022-02-21 → ",
           },
-          "plain_text" => "href_mention",
-          "href" => url,
-        }
-      end
-    end
-
-    describe "create_from_json" do
-      let(:target) { TextObject.create_from_json tc.read_json("mention_database_object") }
-      it_behaves_like :property_values_json, {
-        "type" => "mention",
-        "mention" => {
-          "type" => "database",
-          "database" => {
-            "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-          },
-        },
-        "annotations" => {
-          "bold" => false,
-          "italic" => false,
-          "strikethrough" => false,
-          "underline" => false,
-          "code" => false,
-          "color" => "default",
-        },
-        "plain_text" => "@Anonymous",
-        "href" => nil,
-      }
-    end
-
-    context "mention to date" do
-      context "start only" do
-        let(:target) { MentionObject.new "start" => "2022-02-21", "plain_text" => "2022-02-21 → " }
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
+          {
             "type" => "date",
             "date" => {
               "start" => "2022-02-21",
             },
           },
-          "plain_text" => "2022-02-21 → ",
-          "href" => nil,
-        }
-      end
-
-      context "start and end" do
-        let(:target) do
-          MentionObject.new "start" => "2022-02-21", "end" => "2022-02-22", "plain_text" => "2022-02-21 → "
-        end
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
+          "2022-02-21 → ",
+        ],
+        "date(start and end)" => [
+          {
+            "start" => "2022-02-21",
+            "end" => "2022-02-22",
+            "plain_text" => "2022-02-21 → 2022-02-22",
+          },
+          {
             "type" => "date",
             "date" => {
               "start" => "2022-02-21",
               "end" => "2022-02-22",
             },
           },
-          "plain_text" => "2022-02-21 → ",
-          "href" => nil,
-        }
-      end
-
-      context "start and time_zone" do
-        let(:target) do
-          MentionObject.new "start" => "2022-02-22T09:00", "time_zone" => "Asia/Tokyo", "plain_text" => "2022-02-22 → "
-        end
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
+          "2022-02-21 → 2022-02-22",
+        ],
+        "date(start and time_zone)" => [
+          {
+            "start" => "2022-02-22T09:00",
+            "time_zone" => "Asia/Tokyo",
+            "plain_text" => "2022-02-22T09:00 → ",
+          },
+          {
             "type" => "date",
             "date" => {
               "start" => "2022-02-22T09:00",
               "time_zone" => "Asia/Tokyo",
             },
           },
-          "plain_text" => "2022-02-22 → ",
-          "href" => nil,
-        }
-      end
+          "2022-02-22T09:00 → ",
+        ],
+        "template_mention_date today" => [
+          {
+            "template_mention" => "today",
+          },
+          {
+            "type" => "template_mention",
+            "template_mention" => {
+              "type" => "template_mention_date",
+              "template_mention_date" => "today",
+            },
+          },
+          "@Today",
+        ],
+        "template_mention_date now" => [
+          {
+            "template_mention" => "now",
+          },
+          {
+            "type" => "template_mention",
+            "template_mention" => {
+              "type" => "template_mention_date",
+              "template_mention_date" => "now",
+            },
+          },
+          "@Now",
+        ],
+        "template_mention_user" => [
+          {
+            "template_mention" => "user",
+          },
+          {
+            "type" => "template_mention",
+            "template_mention" => {
+              "type" => "template_mention_user",
+              "template_mention_user" => "me",
+            },
+          },
+          "@Me",
+        ],
+      }.each do |key, (arg, mention, plain_text)|
+        context "mention to #{key}" do
+          let(:target) { MentionObject.new arg }
+          it_behaves_like :property_values_json, {
+            "type" => "mention",
+            "mention" => mention,
+            "plain_text" => plain_text,
+            "href" => nil,
+          }
 
-      context "annotations" do
-        %w[bold italic strikethrough underline code].each do |an|
-          context "annotation #{an}" do
-            let(:target) do
-              MentionObject.new "start" => "2022-02-21", an => true, "plain_text" => "#{an}_mention"
+          context "annotations" do
+            %w[bold italic strikethrough underline code].each do |an|
+              context "annotations #{an}" do
+                let(:target) { MentionObject.new arg.merge({an => true}) }
+                it_behaves_like :property_values_json, {
+                  "type" => "mention",
+                  "mention" => mention,
+                  "annotations" => {an => true},
+                  "plain_text" => plain_text,
+                  "href" => nil,
+                }
+              end
             end
+          end
+
+          context "href" do
+            let(:target) { MentionObject.new arg.merge({"href" => url}) }
             it_behaves_like :property_values_json, {
               "type" => "mention",
-              "mention" => {
-                "type" => "date",
-                "date" => {
-                  "start" => "2022-02-21",
-                },
-              },
-              "annotations" => {
-                an => true,
-              },
-              "plain_text" => "#{an}_mention",
-              "href" => nil,
+              "mention" => mention,
+              "plain_text" => plain_text,
+              "href" => url,
             }
           end
         end
       end
-
-      context "href" do
-        let(:target) do
-          MentionObject.new "start" => "2022-02-21", "href" => url, "plain_text" => "href_mention"
-        end
-        it_behaves_like :property_values_json, {
-          "type" => "mention",
-          "mention" => {
-            "type" => "date",
-            "date" => {
-              "start" => "2022-02-21",
-            },
-          },
-          "plain_text" => "href_mention",
-          "href" => url,
-        }
-      end
     end
 
     describe "create_from_json" do
-      let(:target) { MentionObject.create_from_json tc.read_json("mention_date_object") }
-      it_behaves_like :property_values_json, {
-        "type" => "mention",
-        "mention" => {
-          "type" => "date",
-          "date" => {
-            "start" => "2022-02-21",
-            "end" => nil,
-            "time_zone" => nil,
+      {
+        "user" => [
+          "mention_user_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "user",
+              "user" => {
+                "object" => "user",
+                "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "@Hiroyuki KOBAYASHI",
+            "href" => nil,
           },
-        },
-        "annotations" => {
-          "bold" => false,
-          "italic" => false,
-          "strikethrough" => false,
-          "underline" => false,
-          "code" => false,
-          "color" => "default",
-        },
-        "plain_text" => "2022-02-21 → ",
-        "href" => nil,
-      }
+        ],
+        "page" => [
+          "mention_page_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "page",
+              "page" => {
+                "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "@Anonymous",
+            "href" => nil,
+          },
+        ],
+        "database" => [
+          "mention_database_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "database",
+              "database" => {
+                "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "@Anonymous",
+            "href" => nil,
+          },
+        ],
+        "date" => [
+          "mention_date_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "date",
+              "date" => {
+                "start" => "2022-02-21",
+                "end" => nil,
+                "time_zone" => nil,
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "2022-02-21 → ",
+            "href" => nil,
+          },
+        ],
+        "template_mention_date_today" => [
+          "template_mention_date_today_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "template_mention",
+              "template_mention" => {
+                "type" => "template_mention_date",
+                "template_mention_date" => "today",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "@Today",
+            "href" => nil,
+          },
+        ],
+        "template_mention_date_now" => [
+          "template_mention_date_now_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "template_mention",
+              "template_mention" => {
+                "type" => "template_mention_date",
+                "template_mention_date" => "now",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "@Now",
+            "href" => nil,
+          },
+        ],
+        "template_mention_user" => [
+          "template_mention_user_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "template_mention",
+              "template_mention" => {
+                "type" => "template_mention_user",
+                "template_mention_user" => "me",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "@Me",
+            "href" => nil,
+          },
+        ],
+      }.each do |key, (fname, answer)|
+        context key do
+          let(:target) { RichTextObject.create_from_json tc.read_json(fname) }
+          it_behaves_like :property_values_json, answer
+        end
+      end
     end
   end
 end

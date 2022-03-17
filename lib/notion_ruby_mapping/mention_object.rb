@@ -41,8 +41,33 @@ module NotionRubyMapping
           "type" => "date",
           "date" => @options.slice("start", "end", "time_zone"),
         }
+      elsif @options.key? "template_mention"
+        sub = case @options["template_mention"]
+              when "today"
+                @options["plain_text"] = "@Today"
+                {
+                  "type" => "template_mention_date",
+                  "template_mention_date" => "today",
+                }
+              when "now"
+                @options["plain_text"] = "@Now"
+                {
+                  "type" => "template_mention_date",
+                  "template_mention_date" => "now",
+                }
+              else
+                @options["plain_text"] = "@Me"
+                {
+                  "type" => "template_mention_user",
+                  "template_mention_user" => "me",
+                }
+              end
+        {
+          "type" => "template_mention",
+          "template_mention" => sub,
+        }
       else
-        raise StandardError, "Irregular mention type"
+        raise StandardError, "Irregular mention type: #{@options.keys}"
       end
     end
   end

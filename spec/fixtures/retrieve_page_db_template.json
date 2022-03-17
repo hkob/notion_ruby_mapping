@@ -1,0 +1,278 @@
+{
+  "object": "page",
+  "id": "88f4a106-b84b-4d35-9c2d-256bcd55901f",
+  "created_time": "2022-03-16T12:46:00.000Z",
+  "last_edited_time": "2022-03-16T12:50:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "cover": null,
+  "icon": null,
+  "parent": {
+    "type": "database_id",
+    "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253"
+  },
+  "archived": false,
+  "properties": {
+    "RelationTitle": {
+      "id": "%3CnJT",
+      "type": "relation",
+      "relation": []
+    },
+    "MultiSelectTitle": {
+      "id": "Kjx%7D",
+      "type": "multi_select",
+      "multi_select": []
+    },
+    "LastEditedByTitle": {
+      "id": "LQGa",
+      "type": "last_edited_by",
+      "last_edited_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+        "name": "Hiroyuki KOBAYASHI",
+        "avatar_url": null,
+        "type": "person",
+        "person": {
+          "email": "hkob@metro-cit.ac.jp"
+        }
+      }
+    },
+    "CheckboxTitle": {
+      "id": "Lbi%5D",
+      "type": "checkbox",
+      "checkbox": false
+    },
+    "DateTitle": {
+      "id": "SPrp",
+      "type": "date",
+      "date": null
+    },
+    "RollupTitle": {
+      "id": "STe_",
+      "type": "rollup",
+      "rollup": {
+        "type": "array",
+        "array": [],
+        "function": "show_original"
+      }
+    },
+    "CreatedTimeTitle": {
+      "id": "WsEj",
+      "type": "created_time",
+      "created_time": "2022-03-16T12:46:00.000Z"
+    },
+    "LastEditedTimeTitle": {
+      "id": "X%3E%40X",
+      "type": "last_edited_time",
+      "last_edited_time": "2022-03-16T12:50:00.000Z"
+    },
+    "FormulaTitle": {
+      "id": "%5D~iZ",
+      "type": "formula",
+      "formula": {
+        "type": "date",
+        "date": {
+          "start": "2022-03-16T12:50:00.000+00:00",
+          "end": null,
+          "time_zone": null
+        }
+      }
+    },
+    "UserTitle": {
+      "id": "_x%3E%3D",
+      "type": "people",
+      "people": []
+    },
+    "CreatedByTitle": {
+      "id": "eR%3D~",
+      "type": "created_by",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+        "name": "Hiroyuki KOBAYASHI",
+        "avatar_url": null,
+        "type": "person",
+        "person": {
+          "email": "hkob@metro-cit.ac.jp"
+        }
+      }
+    },
+    "TextTitle": {
+      "id": "flUp",
+      "type": "rich_text",
+      "rich_text": [
+        {
+          "type": "mention",
+          "mention": {
+            "type": "template_mention",
+            "template_mention": {
+              "type": "template_mention_date",
+              "template_mention_date": "today"
+            }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "@Today",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": " ",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "mention",
+          "mention": {
+            "type": "template_mention",
+            "template_mention": {
+              "type": "template_mention_date",
+              "template_mention_date": "now"
+            }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "@Now",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": " ",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "mention",
+          "mention": {
+            "type": "template_mention",
+            "template_mention": {
+              "type": "template_mention_user",
+              "template_mention_user": "me"
+            }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "@Me",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": " ",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        }
+      ]
+    },
+    "MailTitle": {
+      "id": "p%7Ci%3F",
+      "type": "email",
+      "email": null
+    },
+    "File&MediaTitle": {
+      "id": "qEdK",
+      "type": "files",
+      "files": []
+    },
+    "NumberTitle": {
+      "id": "swq%5C",
+      "type": "number",
+      "number": null
+    },
+    "UrlTitle": {
+      "id": "tvis",
+      "type": "url",
+      "url": null
+    },
+    "SelectTitle": {
+      "id": "zE%7C%3F",
+      "type": "select",
+      "select": null
+    },
+    "TelTitle": {
+      "id": "%7CNHO",
+      "type": "phone_number",
+      "phone_number": null
+    },
+    "Title": {
+      "id": "title",
+      "type": "title",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "template",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "template",
+          "href": null
+        }
+      ]
+    }
+  },
+  "url": "https://www.notion.so/template-88f4a106b84b4d359c2d256bcd55901f"
+}

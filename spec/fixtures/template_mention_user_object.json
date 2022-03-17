@@ -1,0 +1,20 @@
+{
+  "type": "mention",
+  "mention": {
+    "type": "template_mention",
+    "template_mention": {
+      "type": "template_mention_user",
+      "template_mention_user": "me"
+    }
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "@Me",
+  "href": null
+}
