@@ -4,7 +4,7 @@ require_relative "../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe Page do
-    let(:tc) { TestConnection.instance }
+    tc = TestConnection.instance
     let!(:nc) { tc.nc }
 
     describe "find" do
@@ -18,6 +18,11 @@ module NotionRubyMapping
 
         it "receive title" do
           expect(subject.call.title).to eq "notion_ruby_mapping_test_data"
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { Page.find "page_id", dry_run: true }
+          it_behaves_like :dry_run, :get, :page_path, id: "page_id"
         end
       end
 
@@ -136,15 +141,19 @@ module NotionRubyMapping
           LastEditedByProperty, "LastEditedByTitle", {},
           MultiSelectProperty, "MultiSelectTitle", {
             "MultiSelectTitle" => {
-              "type" => "multi_select",
               "multi_select" => [
                 {
+                  "color" => "default",
+                  "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
                   "name" => "Multi Select 2",
                 },
                 {
+                  "color" => "yellow",
+                  "id" => "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
                   "name" => "Multi Select 1",
                 },
               ],
+              "type" => "multi_select",
             },
           },
           PeopleProperty, "UserTitle", {
@@ -184,6 +193,8 @@ module NotionRubyMapping
             "SelectTitle" => {
               "type" => "select",
               "select" => {
+                "color" => "purple",
+                "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
                 "name" => "Select 3",
               },
             },
@@ -246,7 +257,6 @@ module NotionRubyMapping
           context klass do
             let(:key) { title }
             it "should be an object of #{klass}" do
-              p klass
               expect(target).to be_is_a klass
             end
             it_behaves_like :property_values_json, ans
@@ -256,34 +266,49 @@ module NotionRubyMapping
     end
 
     describe "update_icon" do
-      let(:top_page) { Page.new id: tc.top_page_id }
+      let(:target) { Page.new id: tc.top_page_id }
       before do
-        top_page.set_icon(**params)
-        top_page.save
+        target.set_icon(**params)
       end
 
-      subject { top_page.icon }
+      subject { target.icon }
 
       context "for emoji icon" do
         let(:params) { {emoji: "😀"} }
-        it "update icon (emoji)" do
-          is_expected.to eq({"type" => "emoji", "emoji" => "😀"})
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+          it_behaves_like :dry_run, :patch, :page_path, use_id: true, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+          it "update icon (emoji)" do
+            is_expected.to eq({"type" => "emoji", "emoji" => "😀"})
+          end
         end
       end
 
       context "for link icon" do
         let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
         let(:params) { {url: url} }
-        it "update icon (link)" do
-          is_expected.to eq({"type" => "external", "external" => {"url" => url}})
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true}
+          it_behaves_like :dry_run, :patch, :page_path, use_id: true, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+          it "update icon (link)" do
+            is_expected.to eq({"type" => "external", "external" => {"url" => url}})
+          end
         end
       end
     end
 
     describe "update" do
       context "update payload check for loaded object" do
-        let(:page) { Page.find tc.db_first_page_id }
-        let(:properties) { page.properties }
+        let(:target) { Page.find tc.db_first_page_id }
+        let(:properties) { target.properties }
         {
           "CheckboxTitle" => [
             :checkbox=,
@@ -468,19 +493,20 @@ module NotionRubyMapping
         }.each do |key, (method, value, json)|
           context key do
             it {
+              tc.clear_object_hash
               if %w[Title TextTitle].include? key
                 properties[key][0].send(method, value)
               else
                 properties[key].send(method, value)
               end
-              expect(page.property_values_json).to eq({"properties" => json})
+              expect(target.property_values_json).to eq({"properties" => json})
             }
           end
         end
       end
 
       context "update check using API" do
-        let(:page) do
+        let(:target) do
           Page.new id: tc.db_update_page_id, assign: [
             CheckboxProperty, "CheckboxTitle",
             DateProperty, "DateTitle",
@@ -497,32 +523,41 @@ module NotionRubyMapping
             UrlProperty, "UrlTitle"
           ]
         end
+
+        before do
+          ps = target.properties.values_at "CheckboxTitle", "DateTitle", "MailTitle", "File&MediaTitle",
+                                           "MultiSelectTitle", "UserTitle", "RelationTitle", "NumberTitle",
+                                           "TelTitle", "SelectTitle", "TextTitle", "Title", "UrlTitle"
+          @cp, @dp, @mp, @fp, @msp, @up, @rp, @np, @telp, @sp, @tp, @titlep, @urlp = ps
+          @cp.checkbox = true
+          @dp.start_date = "2022-03-14"
+          @mp.email = "hkobhkob@gmail.com"
+          @fp.files = "https://img.icons8.com/ios-filled/250/000000/mac-os.png"
+          @msp.multi_select = "Multi Select 2"
+          @up.people = tc.user_hkob
+          @rp.relation = tc.parent1_page_id
+          @np.number = 3.1415926535
+          @telp.phone_number = "zz-zzzz-zzzz"
+          @sp.select = "Select 3"
+          @tp << TextObject.new("new text")
+          @titlep << "MNO"
+          @urlp.url = "https://www.google.com/"
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+          it_behaves_like :dry_run, :patch, :page_path, use_id: true, json_method: :property_values_json
+        end
+
         it "updates properties" do
-          ps = page.properties.values_at "CheckboxTitle", "DateTitle", "MailTitle", "File&MediaTitle",
-                                         "MultiSelectTitle", "UserTitle", "RelationTitle", "NumberTitle",
-                                         "TelTitle", "SelectTitle", "TextTitle", "Title", "UrlTitle"
-          cp, dp, mp, fp, msp, up, rp, np, telp, sp, tp, titlep, urlp = ps
-          cp.checkbox = true
-          dp.start_date = "2022-03-14"
-          mp.email = "hkobhkob@gmail.com"
-          fp.files = "https://img.icons8.com/ios-filled/250/000000/mac-os.png"
-          msp.multi_select = "Multi Select 2"
-          up.people = tc.user_hkob
-          rp.relation = tc.parent1_page_id
-          np.number = 3.1415926535
-          telp.phone_number = "zz-zzzz-zzzz"
-          sp.select = "Select 3"
-          tp << TextObject.new("new text")
-          titlep << "MNO"
-          urlp.url = "https://www.google.com/"
-          page.save # update page and reload properties
+          target.save # update page and reload properties
           aggregate_failures do
             {
-              cp => {
+              @cp => {
                 "type" => "checkbox",
                 "checkbox" => true,
               },
-              dp => {
+              @dp => {
                 "type" => "date",
                 "date" => {
                   "start" => "2022-03-14",
@@ -530,11 +565,11 @@ module NotionRubyMapping
                   "time_zone" => nil,
                 },
               },
-              mp => {
+              @mp => {
                 "type" => "email",
                 "email" => "hkobhkob@gmail.com",
               },
-              fp => {
+              @fp => {
                 "type" => "files",
                 "files" => [
                   {
@@ -546,15 +581,17 @@ module NotionRubyMapping
                   },
                 ],
               },
-              msp => {
+              @msp => {
                 "type" => "multi_select",
                 "multi_select" => [
                   {
+                    "color" => "default",
+                    "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
                     "name" => "Multi Select 2",
                   },
                 ],
               },
-              up => {
+              @up => {
                 "people" => [
                   {
                     "object" => "user",
@@ -563,7 +600,7 @@ module NotionRubyMapping
                 ],
                 "type" => "people",
               },
-              rp => {
+              @rp => {
                 "type" => "relation",
                 "relation" => [
                   {
@@ -571,21 +608,23 @@ module NotionRubyMapping
                   },
                 ],
               },
-              np => {
+              @np => {
                 "type" => "number",
                 "number" => 3.1415926535,
               },
-              telp => {
+              @telp => {
                 "type" => "phone_number",
                 "phone_number" => "zz-zzzz-zzzz",
               },
-              sp => {
+              @sp => {
                 "type" => "select",
                 "select" => {
+                  "color" => "purple",
+                  "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
                   "name" => "Select 3",
                 },
               },
-              tp => {
+              @tp => {
                 "type" => "rich_text",
                 "rich_text" => [
                   {
@@ -607,7 +646,7 @@ module NotionRubyMapping
                   },
                 ],
               },
-              titlep => {
+              @titlep => {
                 "type" => "title",
                 "title" => [
                   {
@@ -629,7 +668,7 @@ module NotionRubyMapping
                   },
                 ],
               },
-              urlp => {
+              @urlp => {
                 "type" => "url",
                 "url" => "https://www.google.com/",
               },
@@ -659,15 +698,20 @@ module NotionRubyMapping
                   "type" => "text",
                   "text" => {
                     "content" => "New Page Title",
-                    "link" => nil
+                    "link" => nil,
                   },
                   "plain_text" => "New Page Title",
-                }
+                },
               ],
               "type" => "title",
-            }
+            },
           },
         }
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+        end
 
         describe "create" do
           before { target.save }

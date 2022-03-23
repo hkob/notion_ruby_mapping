@@ -49,5 +49,15 @@ module NotionRubyMapping
       @sort << {key => property.name, "direction" => "descending"}
       self
     end
+
+    # @return [Hash]
+    def query_json
+      parameters = {}
+      parameters[:filter] = filter unless filter.empty?
+      parameters[:sorts] = sort unless sort.empty?
+      parameters[:start_cursor] = start_cursor if start_cursor
+      parameters[:page_size] = page_size if page_size
+      parameters
+    end
   end
 end

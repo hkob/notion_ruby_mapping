@@ -12,61 +12,35 @@ module NotionRubyMapping
     include StartsWithEndsWith
     include IsEmptyIsNotEmpty
 
+    ### Public announced methods
+
+    ## Page property only methods
+
+    attr_reader :text_objects
+
+    def_delegators :@text_objects, :[], :<<, :each, :full_text, :delete_at
+
+    ### Not public announced methods
+
+    ## Common methods
+
     # @param [String] name
-    # @param [Hash] json
+    # @param [Hash, Array] json
     # @param [Array<RichTextObject>] text_objects
-    def initialize(name, will_update: false, json: nil, text_objects: nil)
+    def initialize(name, will_update: false, base_type: :page, json: nil, text_objects: nil)
       raise StandardError, "TextObject is abstract class.  Please use RichTextProperty." if instance_of? TextProperty
 
-      super name, will_update: will_update
-      @text_objects = if text_objects
-                        text_objects.map { |to_s| RichTextObject.text_object to_s }
-                      elsif json
-                        json.map { |to| RichTextObject.create_from_json to }
+      super name, will_update: will_update, base_type: base_type
+      @text_objects = if database?
+                        json || {}
                       else
-                        []
+                        RichTextArray.new "title", json: json, text_objects: text_objects
                       end
     end
-    attr_reader :text_objects
 
     # @return [TrueClass, FalseClass] will update?
     def will_update
-      @will_update || @text_objects.map(&:will_update).any?
-    end
-
-    # @param [Proc] block
-    # @return [Enumerator]
-    def each(&block)
-      return enum_for(:each) unless block
-
-      @text_objects.each(&block)
-    end
-
-    # @param [String, RichTextObject] to
-    # @return [NotionRubyMapping::RichTextObject] added RichTextObject
-    def <<(to)
-      @will_update = true
-      rto = RichTextObject.text_object(to)
-      @text_objects << rto
-      rto
-    end
-
-    # @param [Numeric] index index number
-    # @return [RichTextObject] selected RichTextObject
-    def [](index)
-      @text_objects[index]
-    end
-
-    # @param [Numeric] index
-    # @return [NotionRubyMapping::RichTextObject] removed RichTextObject
-    def delete_at(index)
-      @will_update = true
-      @text_objects[index]
-    end
-
-    # @return [String] full_text
-    def full_text
-      map(&:text).join ""
+      @will_update || page? && @text_objects.will_update
     end
   end
 end

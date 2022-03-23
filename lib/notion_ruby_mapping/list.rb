@@ -16,6 +16,8 @@ module NotionRubyMapping
     end
     attr_reader :has_more
 
+    ### Public announced methods
+
     def each
       return enum_for(:each) unless block_given?
 
@@ -53,6 +55,7 @@ module NotionRubyMapping
 
     private
 
+    # @return [Hash]
     def results
       @json["results"]
     end

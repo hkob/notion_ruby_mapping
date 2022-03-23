@@ -4,48 +4,177 @@ module NotionRubyMapping
   RSpec.describe SelectProperty do
     tc = TestConnection.instance
 
-    let(:property) { SelectProperty.new "sp" }
-    it_behaves_like :filter_test, SelectProperty, %w[equals does_not_equal], value: true
-    it_behaves_like :filter_test, SelectProperty, %w[is_empty is_not_empty]
+    context "Database property" do
+      context "created by new" do
+        let(:target) { SelectProperty.new "sp", base_type: :database }
+        it_behaves_like :has_name_as, "sp"
+        it_behaves_like :filter_test, SelectProperty, %w[equals does_not_equal], value: true
+        it_behaves_like :filter_test, SelectProperty, %w[is_empty is_not_empty]
+        it_behaves_like :raw_json, :select, {"options" => []}
+        it_behaves_like :property_schema_json, {"sp" => {"select" => {"options" => []}}}
 
-    describe "a select property with parameters" do
-      let(:target) { SelectProperty.new "sp", select: "Select 1" }
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("select_property_object")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {}
+          it_behaves_like :raw_json, :select, {
+            "options" => [
+              {
+                "color" => "brown",
+                "id" => "0fed8e50-c917-4b56-96d9-9691a5132fc4",
+                "name" => "Select 1",
+              },
+              {
+                "color" => "default",
+                "id" => "0b71c5a8-ea82-4b21-970e-b155e7c68a7e",
+                "name" => "Select 2",
+              },
+              {
+                "color" => "purple",
+                "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
+                "name" => "Select 3",
+              },
+            ],
+          }
+        end
 
-      it_behaves_like :property_values_json, {"sp" => {"select" => {"name" => "Select 1"}, "type" => "select"}}
-      it_behaves_like :will_not_update
+        describe "select_options=" do
+          before { target.add_select_options name: "Select 4", color: "orange" }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {
+            "sp" => {
+              "select" => {
+                "options" => [
+                  {
+                    "name" => "Select 4",
+                    "color" => "orange",
+                  },
+                ],
+              },
+            },
+          }
+          it_behaves_like :property_schema_json, {
+            "sp" => {
+              "select" => {
+                "options" => [
+                  {
+                    "name" => "Select 4",
+                    "color" => "orange",
+                  },
+                ],
+              },
+            },
+          }
+        end
 
-      describe "select=" do
-        before { target.select = "Select 2" }
-        it_behaves_like :property_values_json, {"sp" => {"select" => {"name" => "Select 2"}, "type" => "select"}}
-        it_behaves_like :will_update
+        describe "new_name=" do
+          before { target.new_name = "new_name" }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"sp" => {"name" => "new_name"}}
+        end
+
+        describe "remove" do
+          before { target.remove }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"sp" => nil}
+        end
       end
 
-      describe "update_from_json" do
-        before { target.update_from_json(tc.read_json("select_property_item")) }
+      context "created from json" do
+        let(:target) { Property.create_from_json "sp", tc.read_json("select_property_object"), :database }
+        it_behaves_like :has_name_as, "sp"
+        it_behaves_like :will_not_update
+        it_behaves_like :assert_different_property, :property_values_json
+        it_behaves_like :update_property_schema_json, {}
+        it { expect(target.select_names).to eq ["Select 1", "Select 2", "Select 3"] }
+        it_behaves_like :raw_json, :select, {
+          "options" => [
+            {
+              "color" => "brown",
+              "id" => "0fed8e50-c917-4b56-96d9-9691a5132fc4",
+              "name" => "Select 1",
+            },
+            {
+              "color" => "default",
+              "id" => "0b71c5a8-ea82-4b21-970e-b155e7c68a7e",
+              "name" => "Select 2",
+            },
+            {
+              "color" => "purple",
+              "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
+              "name" => "Select 3",
+            },
+          ],
+        }
+      end
+    end
+
+    context "Page property" do
+      context "created by new" do
+        let(:target) { SelectProperty.new "sp", select: "Select 2" }
+
+        it_behaves_like :property_values_json, {
+          "sp" => {
+            "type" => "select",
+            "select" => {"name" => "Select 2"},
+          },
+        }
+        it_behaves_like :will_not_update
+        it_behaves_like :assert_different_property, :update_property_schema_json
+        it_behaves_like :assert_different_property, :property_schema_json
+
+        describe "select=" do
+          before { target.select = "Select 3" }
+          it_behaves_like :property_values_json, {
+            "sp" => {
+              "type" => "select",
+              "select" => {"name" => "Select 3"},
+            },
+          }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :update_property_schema_json
+          it_behaves_like :assert_different_property, :property_schema_json
+        end
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("select_property_item")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :property_values_json, {
+            "sp" => {
+              "type" => "select",
+              "select" => {
+                "color" => "purple",
+                "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
+                "name" => "Select 3",
+              },
+            },
+          }
+          it_behaves_like :assert_different_property, :update_property_schema_json
+          it_behaves_like :assert_different_property, :property_schema_json
+        end
+      end
+
+      context "created from json" do
+        let(:target) { Property.create_from_json "sp", tc.read_json("select_property_item") }
+        it_behaves_like :has_name_as, "sp"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {
           "sp" => {
             "type" => "select",
             "select" => {
+              "color" => "purple",
+              "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
               "name" => "Select 3",
             },
           },
         }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+        it_behaves_like :assert_different_property, :property_schema_json
       end
-    end
-
-    describe "a select property from property_item_json" do
-      let(:target) { Property.create_from_json "sp", tc.read_json("select_property_item") }
-      it_behaves_like :has_name_as, "sp"
-      it_behaves_like :will_not_update
-      it_behaves_like :property_values_json, {
-        "sp" => {
-          "type" => "select",
-          "select" => {
-            "name" => "Select 3",
-          },
-        },
-      }
     end
   end
 end

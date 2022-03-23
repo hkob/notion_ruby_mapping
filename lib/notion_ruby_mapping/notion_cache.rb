@@ -36,6 +36,18 @@ module NotionRubyMapping
 
     ### create path methods
 
+    # @param [String] database_id
+    # @return [String (frozen)] page_path
+    def database_path(database_id)
+      "v1/databases/#{database_id}"
+    end
+
+    # @param [String] database_id
+    # @return [String (frozen)] page_path
+    def databases_path
+      "v1/databases"
+    end
+
     # @param [String] page_id
     # @return [String (frozen)] page_path
     def page_path(page_id)
@@ -45,12 +57,6 @@ module NotionRubyMapping
     # @return [String (frozen)] page_path
     def pages_path
       "v1/pages"
-    end
-
-    # @param [String] database_id
-    # @return [String (frozen)] page_path
-    def database_path(database_id)
-      "v1/databases/#{database_id}"
     end
 
     # @param [String] block_id
@@ -135,6 +141,10 @@ module NotionRubyMapping
       request :post, "v1/pages", payload
     end
 
+    def create_database_request(payload)
+      request :post, databases_path, payload
+    end
+
     # @param [String] id id string with "-"
     # @return [String] id without "-"
     def hex_id(id)
@@ -184,13 +194,7 @@ module NotionRubyMapping
     # @param [NotionRubyMapping::Query] query query object
     # @return [NotionRubyMapping::Base] List object
     def database_query(id, query)
-      parameters = {}
-      parameters[:filter] = query.filter unless query.filter.empty?
-      parameters[:sorts] = query.sort unless query.sort.empty?
-      parameters[:start_cursor] = query.start_cursor if query.start_cursor
-      parameters[:page_size] = query.page_size if query.page_size
-
-      Base.create_from_json database_query_request(id, parameters)
+      Base.create_from_json database_query_request(id, query.query_json)
     end
 
     # @param [String] id page_id (with or without "-")

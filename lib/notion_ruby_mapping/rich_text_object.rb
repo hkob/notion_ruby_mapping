@@ -14,6 +14,7 @@ module NotionRubyMapping
       @type = type
       @options = options
     end
+    attr_reader :will_update
 
     def self.create_from_json(json)
       type = json["type"]

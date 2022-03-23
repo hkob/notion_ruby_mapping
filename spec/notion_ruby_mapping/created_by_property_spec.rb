@@ -4,6 +4,72 @@ module NotionRubyMapping
   RSpec.describe CreatedByProperty do
     tc = TestConnection.instance
 
+    context "Database property" do
+      context "created by new" do
+        let(:target) { CreatedByProperty.new "cbp", base_type: :database }
+        it_behaves_like :has_name_as, "cbp"
+        it_behaves_like :raw_json, :created_by, {}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("created_by_property_object")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {}
+          it_behaves_like :raw_json, :created_by, {}
+          it_behaves_like :property_schema_json, {"cbp" => {"created_by" => {}}}
+        end
+
+        describe "new_name=" do
+          before { target.new_name = "new_name" }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"cbp" => {"name" => "new_name"}}
+        end
+
+        describe "remove" do
+          before { target.remove }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"cbp" => nil}
+        end
+      end
+
+      context "created from json" do
+        let(:target) { Property.create_from_json "cbp", tc.read_json("created_by_property_object"), :database }
+        it_behaves_like :has_name_as, "cbp"
+        it_behaves_like :will_not_update
+        it_behaves_like :assert_different_property, :property_values_json
+        it_behaves_like :update_property_schema_json, {}
+        it_behaves_like :raw_json, :created_by, {}
+      end
+    end
+
+    context "Page property" do
+      context "created by new" do
+        let(:target) { CreatedByProperty.new "cbp", user_id: "user_id" }
+        it_behaves_like :property_values_json, {}
+        it_behaves_like :will_not_update
+        it { expect(target.created_by.user_id).to eq "user_id" }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("created_by_property_item")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :property_values_json, {}
+          it { expect(target.created_by.name).to eq "Hiroyuki KOBAYASHI" }
+          it_behaves_like :assert_different_property, :update_property_schema_json
+        end
+      end
+
+      context "created from json" do
+        let(:target) { Property.create_from_json "cbp", tc.read_json("created_by_property_item") }
+        it_behaves_like :has_name_as, "cbp"
+        it_behaves_like :will_not_update
+        it_behaves_like :property_values_json, {}
+        it { expect(target.created_by.name).to eq "Hiroyuki KOBAYASHI" }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+      end
+    end
     describe "a created_by property with parameters" do
       let(:target) { CreatedByProperty.new "ctp", user_id: "user_id" }
 

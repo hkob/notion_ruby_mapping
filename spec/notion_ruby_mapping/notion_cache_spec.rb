@@ -19,5 +19,9 @@ module NotionRubyMapping
     describe "database_path" do
       it { expect(nc.database_path("ABC")).to eq "v1/databases/ABC" }
     end
+
+    describe "databases_path" do
+      it { expect(nc.databases_path).to eq "v1/databases" }
+    end
   end
 end

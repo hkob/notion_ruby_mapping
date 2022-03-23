@@ -22,10 +22,28 @@ module NotionRubyMapping
       self
     end
 
+    # @param [Hash] json
+    def merge_property(json)
+      @json["properties"] ||= {}
+      @json["properties"].merge!(json)
+    end
+
     # @return [Hash] created json
-    # @param [Hash] optional_json
-    def property_values_json(optional_json = nil)
-      @json.merge(optional_json || {})
+    # @param [Object] others
+    def property_values_json(*others)
+      others.compact.reduce({}) { |hash, o| hash.merge o.property_values_json }.merge @json
+    end
+
+    # @return [Hash] created json
+    # @param [Object] others
+    def property_schema_json(*others)
+      others.compact.reduce({}) { |hash, o| hash.merge o.property_schema_json }.merge @json
+    end
+
+    # @return [Hash] created json
+    # @param [Object] others
+    def update_property_schema_json(*others)
+      others.compact.reduce({}) { |hash, o| hash.merge o.update_property_schema_json }.merge @json
     end
 
     # @return [Hash] {}

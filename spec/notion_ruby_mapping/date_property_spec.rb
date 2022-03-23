@@ -4,6 +4,37 @@ module NotionRubyMapping
   RSpec.describe DateProperty do
     tc = TestConnection.instance
 
+    context "Database property" do
+      context "created by new" do
+        let(:target) { DateProperty.new "dp", base_type: :database }
+        it_behaves_like :has_name_as, "dp"
+        it_behaves_like :raw_json, :date, {}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("date_property_object")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {}
+          it_behaves_like :raw_json, :date, {}
+          it_behaves_like :property_schema_json, {"dp" => {"date" => {}}}
+        end
+
+        describe "new_name=" do
+          before { target.new_name = "new_name" }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"dp" => {"name" => "new_name"}}
+        end
+
+        describe "remove" do
+          before { target.remove }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"dp" => nil}
+        end
+      end
+    end
+
     describe "update_from_json" do
       let(:target) { DateProperty.new "dp", start_date: Date.today }
       before { target.update_from_json(tc.read_json("date_property_item")) }

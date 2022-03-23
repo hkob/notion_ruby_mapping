@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  [DateProperty, CreatedTimeProperty, LastEditedTimeProperty].each do |c|
+  [CreatedTimeProperty, DateProperty, LastEditedTimeProperty].each do |c|
     RSpec.describe c do
-      let(:property) { c.new "dp" }
+      let(:target) { c.new "dp" }
       describe "a date property" do
-        it "has name" do
-          expect(property.name).to eq "dp"
-        end
+        it_behaves_like :has_name_as, "dp"
 
         context "create query for date" do
           subject { query.filter }
@@ -19,7 +17,6 @@ module NotionRubyMapping
               it_behaves_like :filter_test, c, %w[equals before after on_or_before on_or_after], value: d, value_str: ds
             end
           end
-
           it_behaves_like :filter_test, c, %w[is_empty is_not_empty]
           it_behaves_like :filter_test, c, %w[past_week past_month past_year next_week next_month next_year],
                           value_str: {}

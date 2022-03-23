@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  [MultiSelectProperty, CreatedByProperty, LastEditedByProperty, RelationProperty].each do |c|
+  [CreatedByProperty, LastEditedByProperty, MultiSelectProperty, RelationProperty].each do |c|
     RSpec.describe c do
       let(:property) { c.new "up" }
       describe "a user property" do

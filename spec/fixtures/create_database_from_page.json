@@ -1,0 +1,200 @@
+{
+  "object": "database",
+  "id": "c7697137-d49f-49c2-bbcd-d6a665c4f921",
+  "cover": null,
+  "icon": {
+    "type": "emoji",
+    "emoji": "🎉"
+  },
+  "created_time": "2022-03-23T10:43:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_time": "2022-03-23T10:43:00.000Z",
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "New database title",
+        "link": null
+      },
+      "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+      },
+      "plain_text": "New database title",
+      "href": null
+    }
+  ],
+  "properties": {
+    "Select": {
+      "id": "%3Abg~",
+      "name": "Select",
+      "type": "select",
+      "select": {
+        "options": [
+          {
+            "id": "56a526e1-0cec-4b85-b9db-fc68d00e50c6",
+            "name": "S1",
+            "color": "yellow"
+          },
+          {
+            "id": "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8",
+            "name": "S2",
+            "color": "default"
+          }
+        ]
+      }
+    },
+    "Url": {
+      "id": "Bdec",
+      "name": "Url",
+      "type": "url",
+      "url": {}
+    },
+    "CreatedTime": {
+      "id": "EiT%3E",
+      "name": "CreatedTime",
+      "type": "created_time",
+      "created_time": {}
+    },
+    "LastEditedTime": {
+      "id": "HrEw",
+      "name": "LastEditedTime",
+      "type": "last_edited_time",
+      "last_edited_time": {}
+    },
+    "LastEditedBy": {
+      "id": "IIg%5B",
+      "name": "LastEditedBy",
+      "type": "last_edited_by",
+      "last_edited_by": {}
+    },
+    "Rollup": {
+      "id": "MZDF",
+      "name": "Rollup",
+      "type": "rollup",
+      "rollup": {
+        "rollup_property_name": "NumberTitle",
+        "relation_property_name": "Relation",
+        "rollup_property_id": "swq\\",
+        "relation_property_id": "N`OG",
+        "function": "sum"
+      }
+    },
+    "Relation": {
+      "id": "N%60OG",
+      "name": "Relation",
+      "type": "relation",
+      "relation": {
+        "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+        "synced_property_name": "Related to New database title (Relation)",
+        "synced_property_id": "mfBo"
+      }
+    },
+    "Files": {
+      "id": "UWVC",
+      "name": "Files",
+      "type": "files",
+      "files": {}
+    },
+    "Number": {
+      "id": "XbGA",
+      "name": "Number",
+      "type": "number",
+      "number": {
+        "format": "yen"
+      }
+    },
+    "RichText": {
+      "id": "Xhfu",
+      "name": "RichText",
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "CreatedBy": {
+      "id": "%5D%3Fdx",
+      "name": "CreatedBy",
+      "type": "created_by",
+      "created_by": {}
+    },
+    "Email": {
+      "id": "mXDH",
+      "name": "Email",
+      "type": "email",
+      "email": {}
+    },
+    "MultiSelect": {
+      "id": "oKGI",
+      "name": "MultiSelect",
+      "type": "multi_select",
+      "multi_select": {
+        "options": [
+          {
+            "id": "98aaa1c0-4634-47e2-bfae-d739a8c5e564",
+            "name": "MS1",
+            "color": "orange"
+          },
+          {
+            "id": "71756a93-cfd8-4675-b508-facb1c31af2c",
+            "name": "MS2",
+            "color": "green"
+          }
+        ]
+      }
+    },
+    "Date": {
+      "id": "rOhS",
+      "name": "Date",
+      "type": "date",
+      "date": {}
+    },
+    "People": {
+      "id": "x%60sX",
+      "name": "People",
+      "type": "people",
+      "people": {}
+    },
+    "Checkbox": {
+      "id": "zR%3D%3B",
+      "name": "Checkbox",
+      "type": "checkbox",
+      "checkbox": {}
+    },
+    "Formula": {
+      "id": "%7C%3Aii",
+      "name": "Formula",
+      "type": "formula",
+      "formula": {
+        "expression": "now()"
+      }
+    },
+    "PhoneNumber": {
+      "id": "%7DbrA",
+      "name": "PhoneNumber",
+      "type": "phone_number",
+      "phone_number": {}
+    },
+    "Title": {
+      "id": "title",
+      "name": "Title",
+      "type": "title",
+      "title": {}
+    }
+  },
+  "parent": {
+    "type": "page_id",
+    "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+  },
+  "url": "https://www.notion.so/c7697137d49f49c2bbcdd6a665c4f921",
+  "archived": false
+}

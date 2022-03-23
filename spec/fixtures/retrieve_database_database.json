@@ -15,9 +15,9 @@
   },
   "last_edited_by": {
     "object": "user",
-    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
   },
-  "last_edited_time": "2022-03-08T00:32:00.000Z",
+  "last_edited_time": "2022-03-16T12:46:00.000Z",
   "title": [
     {
       "type": "text",
@@ -38,6 +38,16 @@
     }
   ],
   "properties": {
+    "RelationTitle": {
+      "id": "%3CnJT",
+      "name": "RelationTitle",
+      "type": "relation",
+      "relation": {
+        "database_id": "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
+        "synced_property_name": "Related to Sample table (Column)",
+        "synced_property_id": "jZZ>"
+      }
+    },
     "MultiSelectTitle": {
       "id": "Kjx%7D",
       "name": "MultiSelectTitle",
@@ -62,6 +72,12 @@
         ]
       }
     },
+    "LastEditedByTitle": {
+      "id": "LQGa",
+      "name": "LastEditedByTitle",
+      "type": "last_edited_by",
+      "last_edited_by": {}
+    },
     "CheckboxTitle": {
       "id": "Lbi%5D",
       "name": "CheckboxTitle",
@@ -74,11 +90,49 @@
       "type": "date",
       "date": {}
     },
+    "RollupTitle": {
+      "id": "STe_",
+      "name": "RollupTitle",
+      "type": "rollup",
+      "rollup": {
+        "rollup_property_name": "Tags",
+        "relation_property_name": "RelationTitle",
+        "rollup_property_id": ":>Fq",
+        "relation_property_id": "<nJT",
+        "function": "show_original"
+      }
+    },
+    "CreatedTimeTitle": {
+      "id": "WsEj",
+      "name": "CreatedTimeTitle",
+      "type": "created_time",
+      "created_time": {}
+    },
+    "LastEditedTimeTitle": {
+      "id": "X%3E%40X",
+      "name": "LastEditedTimeTitle",
+      "type": "last_edited_time",
+      "last_edited_time": {}
+    },
+    "FormulaTitle": {
+      "id": "%5D~iZ",
+      "name": "FormulaTitle",
+      "type": "formula",
+      "formula": {
+        "expression": "now()"
+      }
+    },
     "UserTitle": {
       "id": "_x%3E%3D",
       "name": "UserTitle",
       "type": "people",
       "people": {}
+    },
+    "CreatedByTitle": {
+      "id": "eR%3D~",
+      "name": "CreatedByTitle",
+      "type": "created_by",
+      "created_by": {}
     },
     "TextTitle": {
       "id": "flUp",
@@ -103,7 +157,7 @@
       "name": "NumberTitle",
       "type": "number",
       "number": {
-        "format": "number"
+        "format": "number_with_commas"
       }
     },
     "UrlTitle": {

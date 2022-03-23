@@ -1,0 +1,10 @@
+{
+  "id": "%3CnJT",
+  "name": "RelationTitle",
+  "type": "relation",
+  "relation": {
+    "database_id": "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
+    "synced_property_name": "Related to Sample table (Column)",
+    "synced_property_id": "jZZ>"
+  }
+}

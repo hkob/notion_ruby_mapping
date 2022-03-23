@@ -9,28 +9,39 @@ module NotionRubyMapping
     include IsEmptyIsNotEmpty
     TYPE = "phone_number"
 
-    # @param [String] name Property name
-    # @param [String] phone_number phone_number value (optional)
-    def initialize(name, will_update: false, phone_number: nil)
-      super name, will_update: will_update
-      @phone_number = phone_number
-    end
-    attr_reader :phone_number
+    ### Public announced methods
 
-    # @param [Hash] json
-    def update_from_json(json)
-      @will_update = false
-      @phone_number = json["phone_number"]
+    ## Common methods
+
+    # @return [String, Hash, nil] phone number (Page), {} (Database)
+    def phone_number
+      @json
     end
 
-    # @return [Hash]
-    def property_values_json
-      {@name => {"phone_number" => @phone_number, "type" => "phone_number"}}
-    end
+    ## Page property only methods
 
     def phone_number=(phone_number)
       @will_update = true
-      @phone_number = phone_number
+      @json = phone_number
+    end
+
+    ### Not public announced methods
+
+    ## Common methods
+
+    # @param [String] name Property name
+    # @param [String] phone_number phone_number value (optional)
+    def initialize(name, will_update: false, base_type: :page, json: nil)
+      super name, will_update: will_update, base_type: base_type
+      @json = database? ? {} : json
+    end
+
+    ## Page property only methods
+
+    # @return [Hash]
+    def property_values_json
+      assert_page_property __method__
+      {@name => {"phone_number" => @json, "type" => "phone_number"}}
     end
   end
 end

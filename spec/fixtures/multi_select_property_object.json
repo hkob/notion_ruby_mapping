@@ -1,0 +1,24 @@
+{
+  "id": "Kjx%7D",
+  "name": "MultiSelectTitle",
+  "type": "multi_select",
+  "multi_select": {
+    "options": [
+      {
+        "id": "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
+        "name": "Multi Select 1",
+        "color": "yellow"
+      },
+      {
+        "id": "5f554552-b77a-474b-b5c7-4ae819966e32",
+        "name": "Multi Select 2",
+        "color": "default"
+      },
+      {
+        "id": "d4bc3d6e-a6e1-4d57-af66-d8ecbbda1dd3",
+        "name": "multi_select",
+        "color": "red"
+      }
+    ]
+  }
+}

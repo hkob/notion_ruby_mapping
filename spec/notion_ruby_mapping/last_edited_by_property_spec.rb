@@ -4,21 +4,87 @@ module NotionRubyMapping
   RSpec.describe LastEditedByProperty do
     tc = TestConnection.instance
 
-    describe "a created_by property with parameters" do
-      let(:target) { LastEditedByProperty.new "lebp", user_id: "user_id" }
+    context "Database property" do
+      context "last_edited by new" do
+        let(:target) { LastEditedByProperty.new "lebp", base_type: :database }
+        it_behaves_like :has_name_as, "lebp"
+        it_behaves_like :raw_json, :last_edited_by, {}
 
-      it_behaves_like :property_values_json, {}
-      it_behaves_like :will_not_update
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("last_edited_by_property_object")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {}
+          it_behaves_like :raw_json, :last_edited_by, {}
+          it_behaves_like :property_schema_json, {"lebp" => {"last_edited_by" => {}}}
+        end
 
-      describe "update_from_json" do
-        before { target.update_from_json(tc.read_json("last_edited_by_property_item")) }
-        it { expect(target.user.name).to eq "Hiroyuki KOBAYASHI" }
+        describe "new_name=" do
+          before { target.new_name = "new_name" }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"lebp" => {"name" => "new_name"}}
+        end
+
+        describe "remove" do
+          before { target.remove }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"lebp" => nil}
+        end
+      end
+
+      context "last_edited from json" do
+        let(:target) { Property.create_from_json "lebp", tc.read_json("last_edited_by_property_object"), :database }
+        it_behaves_like :has_name_as, "lebp"
+        it_behaves_like :will_not_update
+        it_behaves_like :assert_different_property, :property_values_json
+        it_behaves_like :update_property_schema_json, {}
+        it_behaves_like :raw_json, :last_edited_by, {}
       end
     end
 
-    describe "a created_by property from property_item_json" do
-      let(:target) { Property.create_from_json "lebp", tc.read_json("last_edited_by_property_item") }
-      it_behaves_like :has_name_as, "lebp"
+    context "Page property" do
+      context "last_edited by new" do
+        let(:target) { LastEditedByProperty.new "lebp", user_id: "user_id" }
+        it_behaves_like :property_values_json, {}
+        it_behaves_like :will_not_update
+        it { expect(target.last_edited_by.user_id).to eq "user_id" }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("last_edited_by_property_item")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :property_values_json, {}
+          it { expect(target.last_edited_by.name).to eq "Hiroyuki KOBAYASHI" }
+          it_behaves_like :assert_different_property, :update_property_schema_json
+        end
+      end
+
+      context "last_edited from json" do
+        let(:target) { Property.create_from_json "lebp", tc.read_json("last_edited_by_property_item") }
+        it_behaves_like :has_name_as, "lebp"
+        it_behaves_like :will_not_update
+        it_behaves_like :property_values_json, {}
+        it { expect(target.last_edited_by.name).to eq "Hiroyuki KOBAYASHI" }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+      end
+    end
+    describe "a last_edited_by property with parameters" do
+      let(:target) { LastEditedByProperty.new "ctp", user_id: "user_id" }
+
+      it_behaves_like :property_values_json, {}
+      it_behaves_like :will_not_update
+      describe "update_from_json" do
+        before { target.update_from_json(tc.read_json("last_edited_by_property_item")) }
+        it_behaves_like :will_not_update
+        it_behaves_like :property_values_json, {}
+      end
+    end
+
+    describe "a last_edited_by property from property_item_json" do
+      let(:target) { Property.create_from_json "ctp", tc.read_json("last_edited_by_property_item") }
+      it_behaves_like :has_name_as, "ctp"
       it_behaves_like :will_not_update
       it_behaves_like :property_values_json, {}
     end

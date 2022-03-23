@@ -1,0 +1,12 @@
+{
+  "id": "STe_",
+  "name": "RollupTitle",
+  "type": "rollup",
+  "rollup": {
+    "rollup_property_name": "Tags",
+    "relation_property_name": "RelationTitle",
+    "rollup_property_id": ":>Fq",
+    "relation_property_id": "<nJT",
+    "function": "show_original"
+  }
+}

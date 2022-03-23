@@ -1,0 +1,8 @@
+{
+  "id": "swq%5C",
+  "name": "NumberTitle",
+  "type": "number",
+  "number": {
+    "format": "number_with_commas"
+  }
+}

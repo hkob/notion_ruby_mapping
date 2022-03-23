@@ -16,7 +16,6 @@ RSpec.configure do |config|
   end
   config.before do
     @tc = NotionRubyMapping::TestConnection.instance
-    @tc.clear_object_hash
   end
 end
 
@@ -70,6 +69,8 @@ module NotionRubyMapping
       query_database
       update_page
       create_page
+      create_database
+      update_database
     end
 
     # @param [Symbol] method
@@ -97,6 +98,7 @@ module NotionRubyMapping
         database: [database_id, 200],
         wrong_format: ["AAA", 400],
         unpermitted_database: [unpermitted_database_id, 404],
+        created: [created_database_id, 200],
       }
     end
 
@@ -241,9 +243,6 @@ module NotionRubyMapping
     def create_page
       generate_stubs_sub :post, __method__, :pages_path, {
         parent_database: [nil, 200, {
-          "parent" => {
-            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f"
-          },
           "properties" => {
             "Name" => {
               "type" => "title",
@@ -252,17 +251,184 @@ module NotionRubyMapping
                   "type" => "text",
                   "text" => {
                     "content" => "New Page Title",
-                    "link" => nil
+                    "link" => nil,
                   },
                   "plain_text" => "New Page Title",
-                  "href" => nil
-                }
-              ]
-            }
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
+          },
+        }],
+      }
+    end
+
+    def create_database
+      generate_stubs_sub :post, __method__, :databases_path, {
+        from_page: [nil, 200, {
+          "properties": {
+            "Checkbox": {"checkbox": {}},
+            "CreatedBy": {"created_by": {}},
+            "CreatedTime": {"created_time": {}},
+            "Date": {"date": {}},
+            "Email": {"email": {}},
+            "Files": {"files": {}},
+            "Formula": {"formula": {"expression": "now()"}},
+            "LastEditedBy": {"last_edited_by": {}},
+            "LastEditedTime": {"last_edited_time": {}},
+            "MultiSelect": {
+              "multi_select": {
+                "options": [
+                  {"name": "MS1", "color": "orange"},
+                  {"name": "MS2", "color": "green"},
+                ],
+              },
+            },
+            "Number": {"number": {"format": "yen"}},
+            "People": {"people": {}},
+            "PhoneNumber": {"phone_number": {}},
+            "Relation": {"relation": {"database_id": "c37a2c66e3aa4a0da44773de3b80c253"}},
+            "Rollup": {
+              "rollup": {
+                "function": "sum",
+                "relation_property_name": "Relation",
+                "rollup_property_name": "NumberTitle",
+              },
+            },
+            "RichText": {"rich_text": {}},
+            "Select": {
+              "select": {
+                "options": [
+                  {"name": "S1", "color": "yellow"},
+                  {"name": "S2", "color": "default"},
+                ],
+              },
+            },
+            "Title": {"title": {}},
+            "Url": {"url": {}},
+          },
+          "title": [
+            {
+              "type": "text",
+              "text": {"content": "New database title", "link": nil},
+              "plain_text": "New database title",
+              "href": nil,
+            },
+          ],
+          "parent": {
+            "type": "page_id",
+            "page_id": "c01166c613ae45cbb96818b4ef2f5a77",
+          },
+          "icon": {
+            "type": "emoji",
+            "emoji": "🎉",
+          },
+        }],
+      }
+    end
+
+    def update_database
+      generate_stubs_sub :patch, __method__, :database_path, {
+        created: [created_database_id, 200, {
+          "properties": {
+            "Select": {
+              "select": {
+                "options":[
+                  {"id": "56a526e1-0cec-4b85-b9db-fc68d00e50c6", "name": "S1", "color": "yellow"},
+                  {"id": "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", "name": "S2", "color": "default"},
+                  {"name": "S3","color": "red"}
+                ],
+              },
+            },
+            "Rollup": {
+              "rollup": {
+                "function": "average",
+                "relation_property_name": "Relation",
+                "rollup_property_name": "NumberTitle",
+              },
+            },
+            "Relation": {
+              "relation": {
+                "database_id": "c37a2c66e3aa4a0da44773de3b80c253",
+                "synced_property_name": "Renamed table",
+                "synced_property_id": "mfBo",
+              },
+            },
+            "Number": {"number": {"format": "percent"}},
+            "MultiSelect": {
+              "multi_select": {
+                "options":[
+                  {"id": "98aaa1c0-4634-47e2-bfae-d739a8c5e564", "name": "MS1", "color": "orange"},
+                  {"id": "71756a93-cfd8-4675-b508-facb1c31af2c", "name": "MS2", "color": "green"},
+                  {"name": "MS3", "color": "blue"},
+                ],
+              },
+            },
+            "Formula": {"formula": {"expression": "pi"}},
+          },
+          "title": [
+            {
+              "type": "text",
+              "text": {
+                "content": "New database title",
+                "link": nil
+              },
+              "plain_text": "New database title",
+              "href": nil,
+              "annotations": {
+                "bold":false,
+                "italic":false,
+                "strikethrough":false,
+                "underline":false,
+                "code":false,
+                "color": "default",
+              },
+            },
+            {
+              "type": "text",
+              "text": {
+                "content": "(Added)",
+                "link": nil
+              },
+              "plain_text": "(Added)",
+              "href": nil
+            },
+          ],
+          "icon": {
+            "type": "emoji",
+            "emoji": "🎉",
           }
+        }],
+        add_property: [created_database_id, 200, {
+          "properties" => {
+            "added number property" => {
+              "number" => {
+                "format" => "euro",
+              },
+            },
+            "added url property" => {
+              "url" => {},
+            },
+          },
+        }],
+        rename_properties: [created_database_id, 200, {
+          "properties" => {
+            "added number property" => {"name" => "renamed number property"},
+            "added url property" => {"name" => "renamed url property"},
+          },
+        }],
+        remove_properties: [created_database_id, 200, {
+          "properties" => {
+            "renamed number property" => nil,
+            "renamed url property" => nil,
+          },
         }]
       }
     end
+
 
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
@@ -299,6 +465,10 @@ module NotionRubyMapping
       @config["unpermitted_database"]
     end
 
+    def created_database_id
+      @config["created_database"]
+    end
+
     def h1block
       @config["h1block"]
     end
@@ -331,9 +501,61 @@ module NotionRubyMapping
 end
 
 module RSpec
+  shared_examples_for :dry_run do |method, path_method, id: nil, use_id: false, json: nil, json_method: nil, use_query: false|
+    it do
+      json ||= if json_method
+                 target.send(json_method)
+               elsif use_query
+                 query.query_json
+               else
+                 nil
+               end
+      path = if use_id
+               @tc.nc.send(path_method, target.id)
+             elsif id
+               @tc.nc.send(path_method, id)
+             else
+               @tc.nc.send(path_method)
+             end
+      shell = [
+        "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
+        "  -H 'Notion-Version: 2022-02-22'",
+        "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
+      ]
+      shell << "  -H 'Content-Type: application/json'" unless path == :get
+      shell << "  --data '#{JSON.generate json}'" if json
+      expect(dry_run).to eq shell.join("\\ \n")
+    end
+  end
+
+  shared_examples_for :raw_json do |key, json|
+    it do
+      expect(target.send(key)).to eq json
+    end
+  end
+
   shared_examples_for :property_values_json do |json|
     it do
       expect(target.property_values_json).to eq json
+    end
+  end
+
+  shared_examples_for :update_property_schema_json do |json|
+    it do
+      expect(target.update_property_schema_json).to eq json
+    end
+  end
+
+  shared_examples_for :property_schema_json do |json|
+    it do
+      expect(target.property_schema_json).to eq json
+    end
+  end
+
+  shared_examples_for :assert_different_property do |method, args = nil|
+    it method do
+      proc = -> { args.nil? ? target.send(method) : target.send(method, *args) }
+      expect { proc.call }.to raise_error(StandardError)
     end
   end
 

@@ -1,0 +1,24 @@
+{
+  "id": "zE%7C%3F",
+  "name": "SelectTitle",
+  "type": "select",
+  "select": {
+    "options": [
+      {
+        "id": "0fed8e50-c917-4b56-96d9-9691a5132fc4",
+        "name": "Select 1",
+        "color": "brown"
+      },
+      {
+        "id": "0b71c5a8-ea82-4b21-970e-b155e7c68a7e",
+        "name": "Select 2",
+        "color": "default"
+      },
+      {
+        "id": "b32c83bb-c9af-49e8-9b88-122139affdb7",
+        "name": "Select 3",
+        "color": "purple"
+      }
+    ]
+  }
+}

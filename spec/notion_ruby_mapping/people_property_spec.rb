@@ -5,65 +5,113 @@ module NotionRubyMapping
     tc = TestConnection.instance
     p12 = {"type" => "people", "people" => (%w[P1 P2].map { |id| {"object" => "user", "id" => id} })}
 
-    it_behaves_like :filter_test, PeopleProperty, %w[contains does_not_contain], value: "abc"
-    it_behaves_like :filter_test, PeopleProperty, %w[is_empty is_not_empty]
+    context "Database property" do
+      context "created by new" do
+        let(:target) { PeopleProperty.new "pp", base_type: :database }
+        it_behaves_like :has_name_as, "pp"
+        it_behaves_like :filter_test, PeopleProperty, %w[contains does_not_contain], value: true
+        it_behaves_like :filter_test, PeopleProperty, %w[is_empty is_not_empty]
+        it_behaves_like :raw_json, :people, {}
+        it_behaves_like :property_schema_json, {"pp" => {"people" => {}}}
 
-    describe "a select property with parameters" do
-      let(:target) { PeopleProperty.new "pp", people: %w[P1 P2] }
-      it_behaves_like :property_values_json, {"pp" => p12}
-      it_behaves_like :will_not_update
-
-      describe "people=" do
-        context "a value" do
-          before { target.people = "P1" }
-          it_behaves_like :property_values_json, {
-            "pp" => {
-              "type" => "people",
-              "people" => [{"object" => "user", "id" => "P1"}],
-            },
-          }
-          it_behaves_like :will_update
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("people_property_object")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {}
+          it_behaves_like :raw_json, :people, {}
         end
 
-        context "an array value" do
-          before { target.people = %w[P1 P2] }
-          it_behaves_like :property_values_json, {"pp" => p12}
+        describe "new_name=" do
+          before { target.new_name = "new_name" }
           it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"pp" => {"name" => "new_name"}}
+        end
+
+        describe "remove" do
+          before { target.remove }
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {"pp" => nil}
         end
       end
 
-      describe "update_from_json" do
-        before { target.update_from_json(tc.read_json("people_property_item")) }
+      context "created from json" do
+        let(:target) { Property.create_from_json "pp", tc.read_json("people_property_object"), :database }
+        it_behaves_like :has_name_as, "pp"
+        it_behaves_like :will_not_update
+        it_behaves_like :assert_different_property, :property_values_json
+        it_behaves_like :update_property_schema_json, {}
+        it_behaves_like :raw_json, :people, {}
+      end
+    end
+
+    context "Page property" do
+      context "created by new" do
+        let(:target) { PeopleProperty.new "pp" }
+        it_behaves_like :property_values_json, {"pp" => {"type" => "people", "people" => []}}
+        it_behaves_like :will_not_update
+        it { expect(target.people).to eq [] }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        describe "people=" do
+          context "a value" do
+            before { target.people = "P1" }
+            it_behaves_like :property_values_json, {
+              "pp" => {
+                "type" => "people",
+                "people" => [{"object" => "user", "id" => "P1"}],
+              },
+            }
+            it_behaves_like :will_update
+          end
+
+          context "an array value" do
+            before { target.people = %w[P1 P2] }
+            it_behaves_like :property_values_json, {"pp" => p12}
+            it_behaves_like :will_update
+            it_behaves_like :assert_different_property, :update_property_schema_json
+          end
+        end
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("people_property_item")) }
+          it_behaves_like :will_not_update
+          it_behaves_like :property_values_json, {
+            "pp" => {
+              "type" => "people",
+              "people" => [
+                {
+                  "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+                  "object" => "user",
+                },
+              ],
+            },
+          }
+          it { expect(target.people.first).to be_an_instance_of(UserObject) }
+          it_behaves_like :assert_different_property, :update_property_schema_json
+        end
+      end
+
+      context "created from json" do
+        let(:target) { Property.create_from_json "pp", tc.read_json("people_property_item") }
+        it_behaves_like :has_name_as, "pp"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {
           "pp" => {
             "type" => "people",
             "people" => [
               {
-                "object" => "user",
                 "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+                "object" => "user",
               },
             ],
           },
         }
+        it { expect(target.people.first).to be_an_instance_of(UserObject) }
+        it_behaves_like :assert_different_property, :update_property_schema_json
       end
-    end
-
-    describe "a people property from property_item_json" do
-      let(:target) { Property.create_from_json "pp", tc.read_json("people_property_item") }
-      it_behaves_like :has_name_as, "pp"
-      it_behaves_like :will_not_update
-      it_behaves_like :property_values_json, {
-        "pp" => {
-          "type" => "people",
-          "people" => [
-            {
-              "object" => "user",
-              "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-            },
-          ],
-        },
-      }
     end
   end
 end

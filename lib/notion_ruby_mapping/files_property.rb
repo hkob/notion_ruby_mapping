@@ -6,13 +6,49 @@ module NotionRubyMapping
     include IsEmptyIsNotEmpty
     TYPE = "files"
 
+    ### Public announced methods
+
+    ## Common methods
+
+    # @return [Hash]
+    def files
+      @json
+    end
+
+    ## Page property only methods
+
+    def files=(files = [])
+      @will_update = true
+      @json = Array(files).map { |url| url_to_hash url }
+    end
+
+    ### Not public announced methods
+
+    ## Common methods
+
     # @param [String] name Property name
     # @param [String] files files value (optional)
-    def initialize(name, will_update: false, json: nil, files: [])
-      super name, will_update: will_update
-      @files = json || Array(files).map { |url| url_to_hash url } || []
+    def initialize(name, will_update: false, base_type: :page, json: nil, files: [])
+      super name, will_update: will_update, base_type: base_type
+      if database?
+        @json = json || {}
+      else
+        @json = json || []
+        @json = Array(files).map { |url| url_to_hash url } unless files.empty?
+      end
     end
-    attr_reader :files
+
+    # @return [Hash]
+    def property_values_json
+      assert_page_property __method__
+      if @json.map { |f| f["type"] }.include? "file"
+        {}
+      else
+        {@name => {"files" => @json, "type" => "files"}}
+      end
+    end
+
+    protected
 
     # @param [String] url
     # @return [Hash]
@@ -24,26 +60,6 @@ module NotionRubyMapping
           "url" => url,
         },
       }
-    end
-
-    # @param [Hash] json
-    def update_from_json(json)
-      @will_update = false
-      @files = json["files"]
-    end
-
-    # @return [Hash]
-    def property_values_json
-      if @files.map { |f| f["type"] }.include? "file"
-        {}
-      else
-        {@name => {"files" => @files, "type" => "files"}}
-      end
-    end
-
-    def files=(files = [])
-      @will_update = true
-      @files = Array(files).map { |url| url_to_hash url } || []
     end
   end
 end

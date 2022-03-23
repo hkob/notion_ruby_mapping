@@ -14,7 +14,6 @@ module NotionRubyMapping
     attr_reader :text, :will_update
 
     # @param [String, RichTextObject] value
-    # @return [RichTextObject] self
     def text=(value)
       @will_update = true
       if value.is_a? RichTextObject
@@ -24,7 +23,6 @@ module NotionRubyMapping
         @text = value
         @options["plain_text"] = value
       end
-      self
     end
 
     protected
