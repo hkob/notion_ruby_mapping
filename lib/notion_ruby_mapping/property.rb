@@ -91,6 +91,8 @@ module NotionRubyMapping
     def make_filter_query(key, value, rollup = nil, rollup_type = nil)
       if rollup
         Query.new filter: {"property" => @name, rollup => {rollup_type => {key => value}}}
+      elsif @name == "__timestamp__"
+        Query.new filter: {"timestamp" => type, type => {key => value}}
       else
         Query.new filter: {"property" => @name, type => {key => value}}
       end

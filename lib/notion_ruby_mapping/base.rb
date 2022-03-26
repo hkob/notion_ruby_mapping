@@ -41,7 +41,7 @@ module NotionRubyMapping
 
     # @return [NotionRubyMapping::CreatedTimeProperty]
     def created_time
-      @created_time ||= CreatedTimeProperty.new("title")
+      @created_time ||= CreatedTimeProperty.new("__timestamp__")
     end
 
     # @return [TrueClass, FalseClass] true if Database object
@@ -52,6 +52,11 @@ module NotionRubyMapping
     # @return [Hash, nil] obtained Hash
     def icon
       self["icon"]
+    end
+
+    # @return [NotionRubyMapping::LastEditedTimeProperty]
+    def last_edited_time
+      @last_edited_time ||= LastEditedTimeProperty.new("__timestamp__")
     end
 
     # @return [Boolean] true if new record
@@ -189,11 +194,11 @@ module NotionRubyMapping
       shell = [
         "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
         "  -H 'Notion-Version: 2022-02-22'",
-        "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''"
+        "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
       shell << "  -H 'Content-Type: application/json'" unless path == :get
       shell << "  --data '#{JSON.generate json}'" if json
-      shell.join("\\ \n")
+      shell.join(" \\\n")
     end
 
     protected

@@ -176,7 +176,16 @@ module NotionRubyMapping
       let(:query) { np.filter_greater_than(100).and(up.filter_starts_with("https")).ascending(np) }
       let(:dry_run) { target.query_database query, dry_run: true }
       it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
+    end
 
+    describe "created_time and last_edited_time" do
+      let(:target) { Database.new id: tc.database_id }
+      let(:ct) { target.created_time }
+      let(:let) { target.last_edited_time }
+      let(:query) { ct.filter_past_week.and(let.filter_after Date.new(2022, 5, 10)) }
+      let(:dry_run) { target.query_database query, dry_run: true }
+      it { print dry_run; expect(dry_run).to eq "" }
+      it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
     end
 
     describe "create_database" do

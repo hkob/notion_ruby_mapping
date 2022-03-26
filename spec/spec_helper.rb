@@ -603,4 +603,24 @@ module RSpec
       end
     end
   end
+
+  shared_examples_for :timestamp_filter_test do |c, keys, value: nil, value_str: nil|
+    let(:property) { c.new "__timestamp__" }
+    value_str ||= value
+    describe "a #{c.name} property" do
+      it "has name" do
+        expect(property.name).to eq "__timestamp__"
+      end
+
+      context "create filter" do
+        subject { query.filter }
+        keys.each do |key|
+          context key do
+            let(:query) { property.send(*["filter_#{key}", value].compact) }
+            it { is_expected.to eq({"timestamp" => c::TYPE, c::TYPE => {key => value_str || true}}) }
+          end
+        end
+      end
+    end
+  end
 end
