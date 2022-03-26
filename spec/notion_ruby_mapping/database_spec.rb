@@ -169,6 +169,31 @@ module NotionRubyMapping
       end
     end
 
+    describe "create_child_page" do
+      let(:db) { Database.find tc.database_id }
+      context "with assign" do
+        let(:page) { db.create_child_page NumberProperty, "NumberTitle" }
+        context "properties.map(&:name)" do
+          let(:ans) { "NumberTitle" }
+          it { expect(page.properties.map(&:name).sort.join(":")).to eq ans }
+        end
+      end
+
+      context "without assign" do
+        let(:page) { db.create_child_page }
+        context "properties.map(&:name)" do
+          let(:ans) do
+            %w[CheckboxTitle CreatedByTitle CreatedTimeTitle DateTitle
+               File&MediaTitle FormulaTitle LastEditedByTitle
+               LastEditedTimeTitle MailTitle MultiSelectTitle NumberTitle
+               RelationTitle RollupTitle SelectTitle TelTitle TextTitle Title
+               UrlTitle UserTitle]
+          end
+          it { expect(page.properties.map(&:name).sort).to eq ans }
+        end
+      end
+    end
+
     describe "query" do
       let(:target) { Database.new id: tc.database_id, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"] }
       let(:np) { target.properties["NumberTitle"] }
@@ -181,8 +206,8 @@ module NotionRubyMapping
     describe "created_time and last_edited_time" do
       let(:target) { Database.new id: tc.database_id }
       let(:ct) { target.created_time }
-      let(:let) { target.last_edited_time }
-      let(:query) { ct.filter_past_week.and(let.filter_after Date.new(2022, 5, 10)) }
+      let(:lt) { target.last_edited_time }
+      let(:query) { ct.filter_past_week.and(lt.filter_after(Date.new(2022, 5, 10))) }
       let(:dry_run) { target.query_database query, dry_run: true }
       it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
     end
@@ -485,7 +510,6 @@ module NotionRubyMapping
         before { target.save }
         describe "id" do
           it { expect(target.properties["renamed number property"]).to be_an_instance_of NumberProperty }
-
         end
       end
     end
