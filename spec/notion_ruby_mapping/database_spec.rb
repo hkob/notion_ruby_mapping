@@ -184,7 +184,6 @@ module NotionRubyMapping
       let(:let) { target.last_edited_time }
       let(:query) { ct.filter_past_week.and(let.filter_after Date.new(2022, 5, 10)) }
       let(:dry_run) { target.query_database query, dry_run: true }
-      it { print dry_run; expect(dry_run).to eq "" }
       it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
     end
 

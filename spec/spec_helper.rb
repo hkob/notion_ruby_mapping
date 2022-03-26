@@ -524,7 +524,7 @@ module RSpec
       ]
       shell << "  -H 'Content-Type: application/json'" unless path == :get
       shell << "  --data '#{JSON.generate json}'" if json
-      expect(dry_run).to eq shell.join("\\ \n")
+      expect(dry_run).to eq shell.join(" \\\n")
     end
   end
 
