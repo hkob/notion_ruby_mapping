@@ -99,6 +99,7 @@ module NotionRubyMapping
         wrong_format: ["AAA", 400],
         unpermitted_database: [unpermitted_database_id, 404],
         created: [created_database_id, 200],
+        parent: [parent_database_id, 200],
       }
     end
 

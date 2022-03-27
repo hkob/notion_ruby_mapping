@@ -30,8 +30,12 @@ module NotionRubyMapping
     # @param [Array<Property, Class, String>] assign
     # @return [NotionRubyMapping::Base]
     def create_child_page(*assign)
-      assign = properties.map { |p| [p.class, p.name ] }.flatten if assign.empty?
-      Page.new assign: assign, parent: {"database_id" => @id}
+      assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
+      page = Page.new assign: assign, parent: {"database_id" => @id}
+      pp = page.properties
+      pp.clear_will_update
+      yield page, pp if block_given?
+      page
     end
 
     # @return [NotionRubyMapping::RichTextArray]

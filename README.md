@@ -526,11 +526,15 @@ print db.query_database query, dry_run: true
 
 #### 4.2.3 Create child page
 
-`create_child_page` creates a child page object of the database.  After setting some properties, please call `page.save` to send page information to Notion.  Properties of the created child page are automatically assigned using the parent database.
+`create_child_page` creates a child page object of the database.  After setting some properties, please call `page.save` to send page information to Notion.  Properties of the created child page are automatically assigned using the parent database.  if a block is provided, the method will yield the new Page object and the properties (PropertyCache object) to that block for initialization.
 
 ```Ruby
-page = db.create_child_page
-page.properties["Name"] << "New Page"
+page = db.create_child_page do |p, pp|
+  # p is the new Page object
+  # pp is the properties of the new Page object (PropertyCache Object)
+  p.set_icon emoji: "🎉"
+  pp["Name"] << "New Page"
+end
 page.save
 ```
 
@@ -1268,6 +1272,7 @@ textMentionObjects = RichTextArray.new "title", [TextObject.new("A TextObject"),
 
 ## 6. ChangeLog
 
+- 2022/3/27 create_child_page can receive a block for initialization.
 - 2022/3/27 properties of a created child page are automatically assigned using the parent database.
 - 2022/3/25 added create_child_database, update_database, add_property, rename_property and remove_property
 - 2022/3/17 added template_mention objects, tools/an command

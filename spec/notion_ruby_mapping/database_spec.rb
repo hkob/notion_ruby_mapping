@@ -170,26 +170,66 @@ module NotionRubyMapping
     end
 
     describe "create_child_page" do
-      let(:db) { Database.find tc.database_id }
+      let(:db) { Database.find tc.parent_database_id }
       context "with assign" do
-        let(:page) { db.create_child_page NumberProperty, "NumberTitle" }
+        let(:target) { db.create_child_page TitleProperty, "Name" }
+        before { target.properties; target.properties["Name"] << "New Page Title" }
         context "properties.map(&:name)" do
-          let(:ans) { "NumberTitle" }
-          it { expect(page.properties.map(&:name).sort.join(":")).to eq ans }
+          let(:ans) { "Name" }
+          it { expect(target.properties.map(&:name).sort.join(":")).to eq ans }
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
         end
       end
 
-      context "without assign" do
-        let(:page) { db.create_child_page }
+
+      context "without assign (no block)" do
+        let(:target) { db.create_child_page }
+        before { target.properties; target.properties["Name"] << "New Page Title" }
         context "properties.map(&:name)" do
-          let(:ans) do
-            %w[CheckboxTitle CreatedByTitle CreatedTimeTitle DateTitle
-               File&MediaTitle FormulaTitle LastEditedByTitle
-               LastEditedTimeTitle MailTitle MultiSelectTitle NumberTitle
-               RelationTitle RollupTitle SelectTitle TelTitle TextTitle Title
-               UrlTitle UserTitle]
+          let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
+          it { expect(target.properties.map(&:name).sort).to eq ans }
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
+        end
+      end
+
+      context "without assign (with block)" do
+        let(:target) do
+          db.create_child_page do |_, properties|
+            properties["Name"] << "New Page Title"
           end
-          it { expect(page.properties.map(&:name).sort).to eq ans }
+        end
+
+        context "properties.map(&:name)" do
+          let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
+          it { expect(target.properties.map(&:name).sort).to eq ans }
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
         end
       end
     end

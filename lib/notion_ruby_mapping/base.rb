@@ -19,7 +19,10 @@ module NotionRubyMapping
       @property_cache = nil
       @created_time = nil
       @last_edited_time = nil
+      return if assign.empty?
+
       assign.each_slice(2) { |(klass, key)| assign_property(klass, key) }
+      @json ||= {}
     end
     attr_reader :json, :id
 
@@ -173,7 +176,7 @@ module NotionRubyMapping
     # @param [Hash] json
     # @return [NotionRubyMapping::Base]
     def update_json(json)
-      raise StandardError, json.inspect unless json["object"] != "error" && @json.nil? || @json["type"] == json["type"]
+      raise StandardError, json.inspect unless json["object"] != "error" && (@json.nil? || @json["type"] == json["type"])
 
       @json = json
       @id = @nc.hex_id(@json["id"])
