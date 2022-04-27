@@ -23,5 +23,10 @@ module NotionRubyMapping
     describe "databases_path" do
       it { expect(nc.databases_path).to eq "v1/databases" }
     end
+
+    describe "block_children_page_path" do
+      it { expect(nc.block_children_page_path("ABC")).to eq "v1/blocks/ABC/children" }
+      it { expect(nc.block_children_page_path("ABC", "?page_size=100")).to eq "v1/blocks/ABC/children?page_size=100" }
+    end
   end
 end

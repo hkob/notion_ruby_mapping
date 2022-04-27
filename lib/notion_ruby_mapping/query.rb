@@ -53,11 +53,19 @@ module NotionRubyMapping
     # @return [Hash]
     def query_json
       parameters = {}
-      parameters[:filter] = filter unless filter.empty?
-      parameters[:sorts] = sort unless sort.empty?
-      parameters[:start_cursor] = start_cursor if start_cursor
-      parameters[:page_size] = page_size if page_size
+      parameters[:filter] = @filter unless @filter.empty?
+      parameters[:sorts] = @sort unless @sort.empty?
+      parameters[:start_cursor] = @start_cursor if @start_cursor
+      parameters[:page_size] = @page_size if @page_size
       parameters
+    end
+
+    # @return [String (frozen)]
+    def query_string
+      ans = []
+      ans << "page_size=#{@page_size}" if @page_size
+      ans << "start_cursor=#{@start_cursor}" if @start_cursor
+      ans.empty? ? "" : "?#{ans.join("&")}"
     end
   end
 end

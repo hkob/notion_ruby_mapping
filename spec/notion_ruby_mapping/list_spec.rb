@@ -30,5 +30,23 @@ module NotionRubyMapping
         end
       end
     end
+
+    describe "Page#children" do
+      let(:target) { Page.find tc.block_test_page_id }
+      let(:query) { Query.new }
+      describe "dry_run" do
+        let(:dry_run) { target.children dry_run: true }
+        it_should_behave_like :dry_run, :get, :block_children_page_path, use_id: true, use_query: true
+      end
+
+      describe "children" do
+        context "without query" do
+          subject { target.children }
+          it "count page count" do
+            expect(subject.count).to eq 33
+          end
+        end
+      end
+    end
   end
 end

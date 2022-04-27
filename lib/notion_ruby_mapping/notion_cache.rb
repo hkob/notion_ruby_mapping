@@ -71,6 +71,12 @@ module NotionRubyMapping
       "v1/databases/#{database_id}/query"
     end
 
+    # @param [String] page_id
+    # @return [String (frozen)] page_path
+    def block_children_page_path(page_id, query_string = "")
+      "v1/blocks/#{page_id}/children#{query_string}"
+    end
+
     ### Notion API call
 
     # @param [Symbol] method
@@ -145,6 +151,10 @@ module NotionRubyMapping
       request :post, databases_path, payload
     end
 
+    def block_children_request(id, query_string)
+      request :get, block_children_page_path(id, query_string)
+    end
+
     # @param [String] id id string with "-"
     # @return [String] id without "-"
     def hex_id(id)
@@ -177,17 +187,6 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Base] Block object or nil
     def block(id)
       object_for_key(id) { block_request id }
-    end
-
-    # @param [String] id page_id / block_id (with or without "-")
-    # @return [NotionRubyMapping::Base] List object
-    def block_children(id)
-      array = []
-      sleep @wait
-      @client.block_children(block_id: id, sleep_interval: @wait, max_retries: 20) do |page|
-        array.concat page.results
-      end
-      Base.create_from_json({"object" => "list", "results" => array})
     end
 
     # @param [String] id page_id / block_id (with or without "-")

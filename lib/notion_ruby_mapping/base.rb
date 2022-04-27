@@ -144,9 +144,17 @@ module NotionRubyMapping
       property
     end
 
-    # @return [NotionRubyMapping::List]
-    def children
-      @children ||= @nc.block_children(id)
+    # @return [NotionRubyMapping::List, String]
+    def children(query = Query.new, dry_run: false)
+      if dry_run
+        path = @nc.block_children_page_path(id) + query.query_string
+        self.class.dry_run_script :get, path
+      elsif @children
+        @children
+      else
+        response = @nc.block_children_request @id, query.query_string
+        @children = List.new json: response, parent: self, query: query
+      end
     end
 
     # @return [Hash] created json for update page

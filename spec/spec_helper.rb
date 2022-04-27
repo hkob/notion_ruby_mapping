@@ -71,6 +71,7 @@ module NotionRubyMapping
       create_page
       create_database
       update_database
+      retrieve_block_children
     end
 
     # @param [Symbol] method
@@ -79,7 +80,7 @@ module NotionRubyMapping
     # @param [Hash<Array>] array
     def generate_stubs_sub(method, prefix, path_method, array)
       array.each do |key, (id, code, payload)|
-        path = id ? @nc.send(path_method, id) : @nc.send(path_method)
+        path = id ? @nc.send(path_method, *id) : @nc.send(path_method)
         stub method, "#{prefix}_#{key}", path, code, payload
       end
     end
@@ -90,6 +91,7 @@ module NotionRubyMapping
         wrong_format: ["AAA", 400],
         unpermitted_page: [unpermitted_page_id, 404],
         db_first: [db_first_page_id, 200],
+        block_test_page: [block_test_page_id, 200],
       }
     end
 
@@ -430,6 +432,14 @@ module NotionRubyMapping
       }
     end
 
+    def retrieve_block_children
+      generate_stubs_sub :get, __method__, :block_children_page_path, {
+        block_test_page: [[block_test_page_id, "?page_size=100"], 200],
+      }
+
+      "https://api.notion.com/v1/blocks/67cf059ce74646a0b72d481c9ff5d386/children?page_size=100"
+    end
+
 
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
@@ -490,6 +500,10 @@ module NotionRubyMapping
       @config["user_hkob"]
     end
 
+    def block_test_page_id
+      @config["block_test_page"]
+    end
+
     ### TextObject examples
     def to_text
       @to_text ||= TextObject.new "plain_text"
@@ -506,7 +520,7 @@ module RSpec
     it do
       json ||= if json_method
                  target.send(json_method)
-               elsif use_query
+               elsif use_query && method != :get
                  query.query_json
                else
                  nil
@@ -518,6 +532,7 @@ module RSpec
              else
                @tc.nc.send(path_method)
              end
+      path += query.query_string if use_query && method == :get
       shell = [
         "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
         "  -H 'Notion-Version: 2022-02-22'",
