@@ -11,9 +11,9 @@ module NotionRubyMapping
       subject { -> { Page.find page_id } }
 
       context "For an existing top page" do
-        let(:page_id) { tc.top_page_id }
+        let(:page_id) { TestConnection::TOP_PAGE_ID }
         it "receive id" do
-          expect(subject.call.id).to eq nc.hex_id(tc.top_page_id)
+          expect(subject.call.id).to eq nc.hex_id(TestConnection::TOP_PAGE_ID)
         end
 
         it "receive title" do
@@ -35,7 +35,7 @@ module NotionRubyMapping
         end
 
         context "wrong id" do
-          let(:page_id) { tc.unpermitted_page }
+          let(:page_id) { TestConnection::UNPERMITTED_PAGE_ID }
           it "Can't receive page" do
             expect { subject.call }.to raise_error(StandardError)
           end
@@ -48,13 +48,13 @@ module NotionRubyMapping
       subject { -> { page.reload } }
 
       context "For an existing top page" do
-        let(:page_id) { tc.top_page_id }
+        let(:page_id) { TestConnection::TOP_PAGE_ID }
         it "has not json before reload" do
           expect(page.json).to be_nil
         end
 
         it "receive id" do
-          expect(subject.call.id).to eq nc.hex_id(tc.top_page_id)
+          expect(subject.call.id).to eq nc.hex_id(TestConnection::TOP_PAGE_ID)
         end
 
         it "has json after reloading" do
@@ -79,7 +79,7 @@ module NotionRubyMapping
         end
 
         context "wrong id" do
-          let(:page_id) { tc.unpermitted_page_id }
+          let(:page_id) { TestConnection::UNPERMITTED_PAGE_ID }
           it "has not json before reload" do
             expect(page.json).to be_nil
           end
@@ -94,7 +94,7 @@ module NotionRubyMapping
     describe "properties" do
       let(:target) { page.properties[key] }
       context "For an existing top page" do
-        let(:page) { Page.find tc.db_first_page_id }
+        let(:page) { Page.find TestConnection::DB_FIRST_PAGE_ID }
         [
           CheckboxProperty, "CheckboxTitle",
           {
@@ -266,7 +266,7 @@ module NotionRubyMapping
     end
 
     describe "update_icon" do
-      let(:target) { Page.new id: tc.top_page_id }
+      let(:target) { Page.new id: TestConnection::TOP_PAGE_ID }
       before do
         target.set_icon(**params)
       end
@@ -307,7 +307,7 @@ module NotionRubyMapping
 
     describe "update" do
       context "update payload check for loaded object" do
-        let(:target) { Page.find tc.db_first_page_id }
+        let(:target) { Page.find TestConnection::DB_FIRST_PAGE_ID }
         let(:properties) { target.properties }
         {
           "CheckboxTitle" => [
@@ -507,7 +507,7 @@ module NotionRubyMapping
 
       context "update check using API" do
         let(:target) do
-          Page.new id: tc.db_update_page_id, assign: [
+          Page.new id: TestConnection::DB_UPDATE_PAEG_ID, assign: [
             CheckboxProperty, "CheckboxTitle",
             DateProperty, "DateTitle",
             EmailProperty, "MailTitle",
@@ -534,8 +534,8 @@ module NotionRubyMapping
           @mp.email = "hkobhkob@gmail.com"
           @fp.files = "https://img.icons8.com/ios-filled/250/000000/mac-os.png"
           @msp.multi_select = "Multi Select 2"
-          @up.people = tc.user_hkob
-          @rp.relation = tc.parent1_page_id
+          @up.people = TestConnection::USER_HKOB_ID
+          @rp.relation = TestConnection::PARENT1_PAGE_ID
           @np.number = 3.1415926535
           @telp.phone_number = "zz-zzzz-zzzz"
           @sp.select = "Select 3"
@@ -682,7 +682,7 @@ module NotionRubyMapping
 
     describe "create" do
       context "database's children" do
-        let(:parent_db) { Database.new id: tc.parent_database_id }
+        let(:parent_db) { Database.new id: TestConnection::PARENT_DATABASE_ID }
         let(:target) { parent_db.create_child_page TitleProperty, "Name" }
         before { target.properties["Name"] << "New Page Title" }
         it { expect(target.new_record?).to be_truthy }

@@ -8,11 +8,11 @@ module NotionRubyMapping
     let!(:nc) { tc.nc }
 
     context "For H1 block" do
-      let(:h1block) { Block.find @tc.h1block }
+      let(:h1block) { Block.find TestConnection::H1_BLOCK_ID }
 
       describe "a block" do
         it "receive id" do
-          expect(h1block.id).to eq nc.hex_id(@tc.h1block)
+          expect(h1block.id).to eq nc.hex_id(TestConnection::H1_BLOCK_ID)
         end
       end
     end

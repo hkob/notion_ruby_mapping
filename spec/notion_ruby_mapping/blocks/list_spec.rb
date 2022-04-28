@@ -7,7 +7,7 @@ module NotionRubyMapping
     tc = TestConnection.instance
 
     describe "query" do
-      let(:database) { Database.new id: tc.database_id }
+      let(:database) { Database.new id: TestConnection::DATABASE_ID }
       subject { database.query_database query }
       context "limit 2" do
         let(:query) { Query.new page_size: 2 }
@@ -32,7 +32,7 @@ module NotionRubyMapping
     end
 
     describe "Page#children" do
-      let(:target) { Page.find tc.block_test_page_id }
+      let(:target) { Page.find TestConnection::BLOCK_TEST_PAGE_ID }
       let(:query) { Query.new }
       describe "dry_run" do
         let(:dry_run) { target.children dry_run: true }

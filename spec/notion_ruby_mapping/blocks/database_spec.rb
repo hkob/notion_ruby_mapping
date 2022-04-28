@@ -11,9 +11,9 @@ module NotionRubyMapping
       subject { -> { Database.find database_id } }
 
       context "For an existing database" do
-        let(:database_id) { tc.database_id }
+        let(:database_id) { TestConnection::DATABASE_ID }
         it "receive id" do
-          expect(subject.call.id).to eq nc.hex_id(tc.database_id)
+          expect(subject.call.id).to eq nc.hex_id(TestConnection::DATABASE_ID)
         end
 
         describe "database_title" do
@@ -37,7 +37,7 @@ module NotionRubyMapping
         end
 
         context "wrong id" do
-          let(:database_id) { tc.unpermitted_database }
+          let(:database_id) { TestConnection::UNPERMITTED_DATABASE_ID }
           it "Can't receive database" do
             expect { subject.call }.to raise_error(StandardError)
           end
@@ -50,13 +50,13 @@ module NotionRubyMapping
       subject { -> { database.reload } }
 
       context "For an existing database" do
-        let(:database_id) { tc.database_id }
+        let(:database_id) { TestConnection::DATABASE_ID }
         it "has not json before reload" do
           expect(database.json).to be_nil
         end
 
         it "receive id" do
-          expect(subject.call.id).to eq nc.hex_id(tc.database_id)
+          expect(subject.call.id).to eq nc.hex_id(TestConnection::DATABASE_ID)
         end
 
         it "has json after reloading" do
@@ -77,7 +77,7 @@ module NotionRubyMapping
         end
 
         context "wrong id" do
-          let(:database_id) { tc.unpermitted_database_id }
+          let(:database_id) { TestConnection::UNPERMITTED_DATABASE_ID }
           it "raise exception" do
             expect { subject.call }.to raise_error(StandardError)
           end
@@ -89,7 +89,7 @@ module NotionRubyMapping
       let(:properties) { database.properties }
 
       context "loaded database" do
-        let(:database) { Database.find tc.database_id }
+        let(:database) { Database.find TestConnection::DATABASE_ID }
         [
           ["Title", TitleProperty],
           ["NumberTitle", NumberProperty],
@@ -113,7 +113,7 @@ module NotionRubyMapping
       end
 
       context "unloaded database" do
-        let(:database) { Database.new id: tc.database_id }
+        let(:database) { Database.new id: TestConnection::DATABASE_ID }
         context "obtain properties after autoloading" do
           [
             ["Title", TitleProperty],
@@ -158,7 +158,7 @@ module NotionRubyMapping
       end
 
       context "unloaded database with assign" do
-        let(:database) { Database.new id: tc.database_id, assign: [NumberProperty, "NumberTitle"] }
+        let(:database) { Database.new id: TestConnection::DATABASE_ID, assign: [NumberProperty, "NumberTitle"] }
         it "has NumberProperty without API access" do
           expect(properties["NumberTitle"]).to be_a NumberProperty
         end
@@ -170,7 +170,7 @@ module NotionRubyMapping
     end
 
     describe "create_child_page" do
-      let(:db) { Database.find tc.parent_database_id }
+      let(:db) { Database.find TestConnection::PARENT_DATABASE_ID }
       context "with assign" do
         let(:target) { db.create_child_page TitleProperty, "Name" }
         before { target.properties; target.properties["Name"] << "New Page Title" }
@@ -235,7 +235,7 @@ module NotionRubyMapping
     end
 
     describe "query" do
-      let(:target) { Database.new id: tc.database_id, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"] }
+      let(:target) { Database.new id: TestConnection::DATABASE_ID, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"] }
       let(:np) { target.properties["NumberTitle"] }
       let(:up) { target.properties["UrlTitle"] }
       let(:query) { np.filter_greater_than(100).and(up.filter_starts_with("https")).ascending(np) }
@@ -244,7 +244,7 @@ module NotionRubyMapping
     end
 
     describe "created_time and last_edited_time" do
-      let(:target) { Database.new id: tc.database_id }
+      let(:target) { Database.new id: TestConnection::DATABASE_ID }
       let(:ct) { target.created_time }
       let(:lt) { target.last_edited_time }
       let(:query) { ct.filter_past_week.and(lt.filter_after(Date.new(2022, 5, 10))) }
@@ -253,7 +253,7 @@ module NotionRubyMapping
     end
 
     describe "create_database" do
-      let(:parent_page) { Page.new id: tc.top_page_id }
+      let(:parent_page) { Page.new id: TestConnection::TOP_PAGE_ID }
       let(:target) do
         parent_page.create_child_database "New database title",
                                           CheckboxProperty, "Checkbox",
@@ -283,7 +283,7 @@ module NotionRubyMapping
         msp.add_multi_select_options name: "MS1", color: "orange"
         msp.add_multi_select_options name: "MS2", color: "green"
         np.format = "yen"
-        rp.replace_relation_database database_id: tc.database_id
+        rp.replace_relation_database database_id: TestConnection::DATABASE_ID
         rup.relation_property_name = "Relation"
         rup.rollup_property_name = "NumberTitle"
         rup.function = "sum"
@@ -383,7 +383,7 @@ module NotionRubyMapping
         fp.formula_expression = "pi"
         msp.add_multi_select_options name: "MS3", color: "blue"
         np.format = "percent"
-        rp.replace_relation_database database_id: tc.database_id, synced_property_name: "Renamed table"
+        rp.replace_relation_database database_id: TestConnection::DATABASE_ID, synced_property_name: "Renamed table"
         rup.function = "average"
         sp.add_select_options name: "S3", color: "red"
         target.set_icon emoji: "🎉"

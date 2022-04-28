@@ -509,7 +509,7 @@ query13 = tp.filter_starts_with("A").ascending(tp)
 This is a sample script for query database.  If dry_run flag is set, you can see the verification shell script.
 
 ```Ruby
-db = Database.new id: tc.database_id, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"]
+db = Database.new id: TestConnection::DATABASE_ID, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"]
 np, up = target.properties.values_at "NumberTitle", "UrlTitle"
 query = np.filter_greater_than(100).and(up.filter_starts_with("https")).ascending(np)
 print db.query_database query, dry_run: true
@@ -580,7 +580,7 @@ fp.formula_expression = "now()"
 msp.add_multi_select_options name: "MS1", color: "orange"
 msp.add_multi_select_options name: "MS2", color: "green"
 np.format = "yen"
-rp.replace_relation_database database_id: tc.database_id
+rp.replace_relation_database database_id: TestConnection::DATABASE_ID
 rup.relation_property_name = "Relation"
 rup.rollup_property_name = "NumberTitle"
 rup.function = "sum"
@@ -600,7 +600,7 @@ fp, msp, np, rp, rup, sp = db.properties.values_at "Formula", "MultiSelect", "Nu
 fp.formula_expression = "pi"
 msp.add_multi_select_options name: "MS3", color: "blue"
 np.format = "percent"
-rp.replace_relation_database database_id: tc.database_id, synced_property_name: "Renamed table"
+rp.replace_relation_database database_id: TestConnection::DATABASE_ID, synced_property_name: "Renamed table"
 rup.function = "average"
 sp.add_select_options name: "S3", color: "red"
 db.set_icon emoji: "🎉"

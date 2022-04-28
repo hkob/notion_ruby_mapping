@@ -23,6 +23,24 @@ end
 module NotionRubyMapping
   class TestConnection
     include Singleton
+    # page_id
+    TOP_PAGE_ID = "c01166c613ae45cbb96818b4ef2f5a77"
+    UNPERMITTED_PAGE_ID = "4a6eb31244204fecb488da11f3caf871"
+    DB_FIRST_PAGE_ID = "dcdc805c85fa4155a55c20fc28771af7"
+    DB_SECOND_PAGE_ID = "6601e719a39a460c908e8909467fcccf"
+    DB_UPDATE_PAEG_ID = "206ffaa277744a99baf593e28730240c"
+    PARENT1_PAGE_ID = "860753bb6d1f48de96211fa6e0e31f82"
+    BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
+    # database_id
+    DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
+    UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
+    PARENT_DATABASE_ID = "1d6b1040a9fb48d99a3d041429816e9f"
+    CREATED_DATABASE_ID = "c7697137d49f49c2bbcdd6a665c4f921"
+    # block_id
+    H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
+    UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
+    # user_id
+    USER_HKOB_ID = "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
 
     def initialize
       @config = YAML.load_file "env.yml"
@@ -87,49 +105,49 @@ module NotionRubyMapping
 
     def retrieve_page
       generate_stubs_sub :get, __method__, :page_path, {
-        top: [top_page_id, 200],
+        top: [TOP_PAGE_ID, 200],
         wrong_format: ["AAA", 400],
-        unpermitted_page: [unpermitted_page_id, 404],
-        db_first: [db_first_page_id, 200],
-        block_test_page: [block_test_page_id, 200],
+        unpermitted_page: [UNPERMITTED_PAGE_ID, 404],
+        db_first: [DB_FIRST_PAGE_ID, 200],
+        block_test_page: [BLOCK_TEST_PAGE_ID, 200],
       }
     end
 
     def retrieve_database
       generate_stubs_sub :get, __method__, :database_path, {
-        database: [database_id, 200],
+        database: [DATABASE_ID, 200],
         wrong_format: ["AAA", 400],
-        unpermitted_database: [unpermitted_database_id, 404],
-        created: [created_database_id, 200],
-        parent: [parent_database_id, 200],
+        unpermitted_database: [UNPERMITTED_DATABASE_ID, 404],
+        created: [CREATED_DATABASE_ID, 200],
+        parent: [PARENT_DATABASE_ID, 200],
       }
     end
 
     def retrieve_block
       generate_stubs_sub :get, __method__, :block_path, {
-        h1block: [h1block, 200],
+        h1block: [H1_BLOCK_ID, 200],
         wrong_format: ["AAA", 400],
-        unpermitted_block: [unpermitted_block_id, 404],
+        unpermitted_block: [UNPERMITTED_BLOCK_ID, 404],
       }
     end
 
     def query_database
       generate_stubs_sub :post, __method__, :query_database_path, {
-        limit2: [database_id, 200, {"page_size" => 2}],
-        next2: [database_id, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
-        last2: [database_id, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
+        limit2: [DATABASE_ID, 200, {"page_size" => 2}],
+        next2: [DATABASE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
+        last2: [DATABASE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
       }
     end
 
     def update_page
       generate_stubs_sub :patch, __method__, :page_path, {
-        set_icon_emoji: [top_page_id, 200, {
+        set_icon_emoji: [TOP_PAGE_ID, 200, {
           "icon" => {
             "type" => "emoji",
             "emoji" => "😀",
           },
         }],
-        set_link_icon: [top_page_id, 200, {
+        set_link_icon: [TOP_PAGE_ID, 200, {
           "icon" => {
             "type" => "external",
             "external" => {
@@ -137,7 +155,7 @@ module NotionRubyMapping
             },
           },
         }],
-        all: [db_update_page_id, 200, {
+        all: [DB_UPDATE_PAEG_ID, 200, {
           "properties" => {
             "CheckboxTitle" => {
               "checkbox" => true,
@@ -335,7 +353,7 @@ module NotionRubyMapping
 
     def update_database
       generate_stubs_sub :patch, __method__, :database_path, {
-        created: [created_database_id, 200, {
+        created: [CREATED_DATABASE_ID, 200, {
           "properties": {
             "Select": {
               "select": {
@@ -405,7 +423,7 @@ module NotionRubyMapping
             "emoji": "🎉",
           }
         }],
-        add_property: [created_database_id, 200, {
+        add_property: [CREATED_DATABASE_ID, 200, {
           "properties" => {
             "added number property" => {
               "number" => {
@@ -417,13 +435,13 @@ module NotionRubyMapping
             },
           },
         }],
-        rename_properties: [created_database_id, 200, {
+        rename_properties: [CREATED_DATABASE_ID, 200, {
           "properties" => {
             "added number property" => {"name" => "renamed number property"},
             "added url property" => {"name" => "renamed url property"},
           },
         }],
-        remove_properties: [created_database_id, 200, {
+        remove_properties: [CREATED_DATABASE_ID, 200, {
           "properties" => {
             "renamed number property" => nil,
             "renamed url property" => nil,
@@ -434,7 +452,7 @@ module NotionRubyMapping
 
     def retrieve_block_children
       generate_stubs_sub :get, __method__, :block_children_page_path, {
-        block_test_page: [[block_test_page_id, "?page_size=100"], 200],
+        block_test_page: [[BLOCK_TEST_PAGE_ID, "?page_size=100"], 200],
       }
 
       "https://api.notion.com/v1/blocks/67cf059ce74646a0b72d481c9ff5d386/children?page_size=100"
@@ -450,58 +468,6 @@ module NotionRubyMapping
     ### read ids from env.yml
     def notion_token
       @config["notion_token"]
-    end
-
-    def top_page_id
-      @config["top_page"]
-    end
-
-    def unpermitted_page_id
-      @config["unpermitted_page"]
-    end
-
-    def db_first_page_id
-      @config["db_first_page"]
-    end
-
-    def db_update_page_id
-      @config["db_update_page"]
-    end
-
-    def database_id
-      @config["database"]
-    end
-
-    def unpermitted_database_id
-      @config["unpermitted_database"]
-    end
-
-    def created_database_id
-      @config["created_database"]
-    end
-
-    def h1block
-      @config["h1block"]
-    end
-
-    def unpermitted_block_id
-      @config["unpermitted_block"]
-    end
-
-    def parent1_page_id
-      @config["parent1_page"]
-    end
-
-    def parent_database_id
-      @config["parent_database"]
-    end
-
-    def user_hkob
-      @config["user_hkob"]
-    end
-
-    def block_test_page_id
-      @config["block_test_page"]
     end
 
     ### TextObject examples
