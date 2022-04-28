@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "../spec_helper"
+require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe NotionCache do
