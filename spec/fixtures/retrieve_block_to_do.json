@@ -1,0 +1,22 @@
+{
+  "object": "block",
+  "id": "676129de-8eac-42c9-9449-c15893775cae",
+  "created_time": "2022-04-23T21:47:00.000Z",
+  "last_edited_time": "2022-04-23T21:47:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "to_do",
+  "to_do": {
+    "rich_text": [],
+    "checked": false,
+    "color": "default"
+  }
+}

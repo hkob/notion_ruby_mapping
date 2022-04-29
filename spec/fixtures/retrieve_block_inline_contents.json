@@ -1,0 +1,172 @@
+{
+  "object": "block",
+  "id": "2515e2f2-a53f-40c3-a2ea-1b5d47afee09",
+  "created_time": "2022-04-23T21:09:00.000Z",
+  "last_edited_time": "2022-04-23T21:11:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "paragraph",
+  "paragraph": {
+    "rich_text": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Inline contents: ",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "Inline contents: ",
+        "href": null
+      },
+      {
+        "type": "mention",
+        "mention": {
+          "type": "user",
+          "user": {
+            "object": "user",
+            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+            "name": "Hiroyuki KOBAYASHI",
+            "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/11fe08d7-dc6c-4953-b778-d09c25b6a981/1ea5da4c6b0b10c5ed42b763c162fcd9.png",
+            "type": "person",
+            "person": {
+              "email": "hkob@metro-cit.ac.jp"
+            }
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "@Hiroyuki KOBAYASHI",
+        "href": null
+      },
+      {
+        "type": "text",
+        "text": {
+          "content": ", ",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": ", ",
+        "href": null
+      },
+      {
+        "type": "mention",
+        "mention": {
+          "type": "page",
+          "page": {
+            "id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "notion_ruby_mapping_test_data",
+        "href": "https://www.notion.so/c01166c613ae45cbb96818b4ef2f5a77"
+      },
+      {
+        "type": "text",
+        "text": {
+          "content": ", ",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": ", ",
+        "href": null
+      },
+      {
+        "type": "mention",
+        "mention": {
+          "type": "date",
+          "date": {
+            "start": "2022-04-24",
+            "end": null,
+            "time_zone": null
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "2022-04-24 → ",
+        "href": null
+      },
+      {
+        "type": "text",
+        "text": {
+          "content": ", 🧱, ",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": ", 🧱, ",
+        "href": null
+      },
+      {
+        "type": "equation",
+        "equation": {
+          "expression": "y = f(x)"
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "y = f(x)",
+        "href": null
+      }
+    ],
+    "color": "default"
+  }
+}

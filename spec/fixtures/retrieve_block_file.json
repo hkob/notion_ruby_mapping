@@ -1,0 +1,25 @@
+{
+  "object": "block",
+  "id": "0da49a8b-963e-42e6-a9ee-0deb765d5b40",
+  "created_time": "2022-04-23T21:32:00.000Z",
+  "last_edited_time": "2022-04-23T21:43:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "file",
+  "file": {
+    "caption": [],
+    "type": "file",
+    "file": {
+      "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c55cf49f-fcb4-497e-9645-d484f03bf1d5/sample.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220426%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220426T132600Z&X-Amz-Expires=3600&X-Amz-Signature=0a6b8b6a0d6ae1ca7ec024d357b2c3eb52ed6f0ce14bcead00da1961ad03a6de&X-Amz-SignedHeaders=host&x-id=GetObject",
+      "expiry_time": "2022-04-26T14:26:00.536Z"
+    }
+  }
+}

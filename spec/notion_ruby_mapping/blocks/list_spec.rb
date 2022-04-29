@@ -43,7 +43,7 @@ module NotionRubyMapping
         context "without query" do
           subject { target.children }
           it "count page count" do
-            expect(subject.count).to eq 33
+            expect(subject.count).to eq 36
           end
         end
       end
