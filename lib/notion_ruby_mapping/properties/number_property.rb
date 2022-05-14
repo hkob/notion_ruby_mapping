@@ -13,6 +13,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [Numeric, Hash]
+    # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#571b41dd33ae42039e6b982a502b7ac7
     def number
       @json
     end
@@ -20,6 +21,7 @@ module NotionRubyMapping
     ## Database property only methods
 
     # @return [String] new or settled format
+    # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#5e3682ed9e124d518f735b236787d7a7
     def format
       assert_database_property __method__
       @json["format"]
@@ -27,6 +29,7 @@ module NotionRubyMapping
 
     # @param [String] format
     # @return [String] settled format
+    # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#89695432078643e48307c348e2983456
     def format=(format)
       assert_database_property __method__
       @will_update = true
@@ -37,6 +40,7 @@ module NotionRubyMapping
 
     # @param [Numeric] num
     # @return [Numeric] settled number
+    # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#a3f28cc7029046878dfd694b5b33e8d8
     def number=(num)
       assert_page_property __method__
       @will_update = true

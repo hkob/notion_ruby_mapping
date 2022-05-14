@@ -1,0 +1,29 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "block",
+      "id": "3ece4c8f-b02b-4da5-a1e1-8803d6c088e9",
+      "created_time": "2022-05-12T04:28:00.000Z",
+      "last_edited_time": "2022-05-12T04:28:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+      },
+      "has_children": true,
+      "archived": false,
+      "type": "synced_block",
+      "synced_block": {
+        "synced_from": null
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "block",
+  "block": {}
+}

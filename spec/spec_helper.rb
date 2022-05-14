@@ -31,6 +31,7 @@ module NotionRubyMapping
     DB_UPDATE_PAEG_ID = "206ffaa277744a99baf593e28730240c"
     PARENT1_PAGE_ID = "860753bb6d1f48de96211fa6e0e31f82"
     BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
+    BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
@@ -46,7 +47,9 @@ module NotionRubyMapping
       bulleted_list_item: "8a0d35c5-145e-41fd-89ac-e46deb85d24f",
       callout: "715a6550-c737-444f-ac99-4be7822c88d3",
       child_database: "ea525a78-4669-470d-b425-8c4d7cb95667",
+      child_page: "0f3e5073-22d8-48eb-926b-e808df84c169",
       code: "c9a46c89-109b-486a-8105-6ca82f4f6515",
+      column: "29a966bb-81eb-43e5-aae1-b44992525775",
       column_list: "93195eab-21f7-4419-bf44-0e4c07092573",
       divider: "e34f7164-4535-48fd-9c49-1d320f77bda2",
       embed_twitter: "e4c0811c-7154-4fed-9e8c-02d885c898ef",
@@ -62,11 +65,13 @@ module NotionRubyMapping
       link_to_page: "b921ff3c-b13c-43c2-b53a-d9d1ba19b8c1",
       numbered_list_item: "1860edbc-410d-408b-87f6-1e37e07352a2",
       paragraph: "79ddb5ed-15c7-4a40-9cf6-a018d23ceb19",
+      pdf: "878fd86e-be37-482f-b637-d09fb63eaee8",
       quote: "8eba490b-cc83-4384-9cb0-9a739a4be91c",
       synced_block_copy: "ea7b5183-eea2-4d30-b019-010921e93b2c",
       synced_block_original: "4815032e-6f24-43e4-bc8c-9bdc6299b090",
       table: "ba612e8b-c858-4569-9822-ccca7ab4c709",
       table_of_contents: "0de608aa-c31b-4c5c-a84a-ae48d8ea05b8",
+      table_row: "57fc378c-9db1-4fef-8d74-72c1b2084df1",
       template: "12fe0347-f8c4-4da0-ace9-9c8992b5827f",
       to_do: "676129de-8eac-42c9-9449-c15893775cae",
       toggle: "005923da-b39f-4af6-bbd1-1be98150d2b2",
@@ -75,6 +80,7 @@ module NotionRubyMapping
       toggle_heading_3: "115fb937-ab6d-4a2e-9079-921b03e50756",
       video: "bed3abe0-2009-4aa9-9056-4844f981b07a",
     }.freeze
+    BLOCK_CREATE_TEST_BLOCK_ID = "82314687163e41baaf300a8a2bec57c2"
     # user_id
     USER_HKOB_ID = "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
 
@@ -126,6 +132,8 @@ module NotionRubyMapping
       create_database
       update_database
       retrieve_block_children
+      append_block_children_page
+      append_block_children_block
     end
 
     # @param [Symbol] method
@@ -214,11 +222,11 @@ module NotionRubyMapping
             "File&MediaTitle" => {
               "files" => [
                 {
-                  "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                   "type" => "external",
                   "external" => {
                     "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                   },
+                  "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                 },
               ],
               "type" => "files",
@@ -395,10 +403,10 @@ module NotionRubyMapping
           "properties": {
             "Select": {
               "select": {
-                "options":[
+                "options": [
                   {"id": "56a526e1-0cec-4b85-b9db-fc68d00e50c6", "name": "S1", "color": "yellow"},
                   {"id": "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", "name": "S2", "color": "default"},
-                  {"name": "S3","color": "red"}
+                  {"name": "S3","color": "red"},
                 ],
               },
             },
@@ -419,7 +427,7 @@ module NotionRubyMapping
             "Number": {"number": {"format": "percent"}},
             "MultiSelect": {
               "multi_select": {
-                "options":[
+                "options": [
                   {"id": "98aaa1c0-4634-47e2-bfae-d739a8c5e564", "name": "MS1", "color": "orange"},
                   {"id": "71756a93-cfd8-4675-b508-facb1c31af2c", "name": "MS2", "color": "green"},
                   {"name": "MS3", "color": "blue"},
@@ -433,16 +441,16 @@ module NotionRubyMapping
               "type": "text",
               "text": {
                 "content": "New database title",
-                "link": nil
+                "link": nil,
               },
               "plain_text": "New database title",
               "href": nil,
               "annotations": {
-                "bold":false,
-                "italic":false,
-                "strikethrough":false,
-                "underline":false,
-                "code":false,
+                "bold": false,
+                "italic": false,
+                "strikethrough": false,
+                "underline": false,
+                "code": false,
                 "color": "default",
               },
             },
@@ -450,16 +458,16 @@ module NotionRubyMapping
               "type": "text",
               "text": {
                 "content": "(Added)",
-                "link": nil
+                "link": nil,
               },
               "plain_text": "(Added)",
-              "href": nil
+              "href": nil,
             },
           ],
           "icon": {
             "type": "emoji",
             "emoji": "🎉",
-          }
+          },
         }],
         add_property: [CREATED_DATABASE_ID, 200, {
           "properties" => {
@@ -484,7 +492,7 @@ module NotionRubyMapping
             "renamed number property" => nil,
             "renamed url property" => nil,
           },
-        }]
+        }],
       }
     end
 
@@ -494,6 +502,1166 @@ module NotionRubyMapping
       }
     end
 
+    def append_block_children_hash(id)
+      {
+        bookmark: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "bookmark",
+                "object" => "block",
+                "bookmark" => {
+                  "caption" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Google",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Google",
+                      "href" => nil,
+                    },
+                  ],
+                  "url" => "https://www.google.com",
+                },
+              },
+            ],
+          }
+        ],
+        breadcrumb: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "breadcrumb",
+                "object" => "block",
+                "breadcrumb" => {},
+              },
+            ],
+          }
+        ],
+        bulleted_list_item: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "bulleted_list_item",
+                "object" => "block",
+                "bulleted_list_item" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Bullet list item",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Bullet list item",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "green",
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        callout_emoji: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "callout",
+                "object" => "block",
+                "callout" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Emoji callout",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Emoji callout",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "blue",
+                  "icon" => {
+                    "type" => "emoji",
+                    "emoji" => "✅",
+                  },
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        callout_url: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "callout",
+                "object" => "block",
+                "callout" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Url callout",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Url callout",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "default",
+                  "icon" => {
+                    "type" => "external",
+                    "external" => {
+                      "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                    },
+                  },
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        code: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "code",
+                "object" => "block",
+                "code" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "% ls -l",
+                        "link" => nil,
+                      },
+                      "plain_text" => "% ls -l",
+                      "href" => nil,
+                    },
+                  ],
+                  "caption" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "List files",
+                        "link" => nil,
+                      },
+                      "plain_text" => "List files",
+                      "href" => nil,
+                    },
+                  ],
+                  "language" => "shell",
+                },
+              },
+            ],
+          }
+        ],
+        column_list: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "column_list",
+                "object" => "block",
+                "column_list" => {
+                  "children" => [
+                    {
+                      "type" => "column",
+                      "object" => "block",
+                      "column" => {
+                        "children" => [
+                          {
+                            "type" => "callout",
+                            "object" => "block",
+                            "callout" => {
+                              "rich_text" => [
+                                {
+                                  "type" => "text",
+                                  "text" => {
+                                    "content" => "Emoji callout",
+                                    "link" => nil,
+                                  },
+                                  "plain_text" => "Emoji callout",
+                                  "href" => nil,
+                                },
+                              ],
+                              "color" => "default",
+                              "icon" => {
+                                "type" => "emoji",
+                                "emoji" => "✅",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      "type" => "column",
+                      "object" => "block",
+                      "column" => {
+                        "children" => [
+                          {
+                            "type" => "callout",
+                            "object" => "block",
+                            "callout" => {
+                              "rich_text" => [
+                                {
+                                  "type" => "text",
+                                  "text" => {
+                                    "content" => "Url callout",
+                                    "link" => nil,
+                                  },
+                                  "plain_text" => "Url callout",
+                                  "href" => nil,
+                                },
+                              ],
+                              "color" => "default",
+                              "icon" => {
+                                "type" => "external",
+                                "external" => {
+                                  "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                                },
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        divider: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "divider",
+                "object" => "block",
+                "divider" => {},
+              },
+            ],
+          }
+        ],
+        embed: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "embed",
+                "object" => "block",
+                "embed" => {
+                  "caption" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "NotionRubyMapping開発記録(21)",
+                        "link" => nil,
+                      },
+                      "plain_text" => "NotionRubyMapping開発記録(21)",
+                      "href" => nil,
+                    },
+                  ],
+                  "url" => "https://twitter.com/hkob/status/1507972453095833601",
+                },
+              },
+            ],
+          }
+        ],
+        equation: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "equation",
+                "object" => "block",
+                "equation" => {
+                  "expression" => "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
+                },
+              },
+            ],
+          }
+        ],
+        file: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "file",
+                "object" => "block",
+                "file" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                  },
+                  "caption" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "macOS icon",
+                        "link" => nil,
+                      },
+                      "plain_text" => "macOS icon",
+                      "href" => nil,
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        heading_1: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_1",
+                "object" => "block",
+                "heading_1" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 1",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Heading 1",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "orange_background",
+                },
+              },
+            ],
+          }
+        ],
+        heading_2: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_2",
+                "object" => "block",
+                "heading_2" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 2",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Heading 2",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "blue_background",
+                },
+              },
+            ],
+          }
+        ],
+        heading_3: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_3",
+                "object" => "block",
+                "heading_3" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 3",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Heading 3",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "gray_background",
+                },
+              },
+            ],
+          }
+        ],
+        image: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "image",
+                "object" => "block",
+                "image" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
+                  },
+                  "caption" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Notion logo",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Notion logo",
+                      "href" => nil,
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        link_to_page_page: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "link_to_page",
+                "object" => "block",
+                "link_to_page" => {
+                  "type" => "page_id",
+                  "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
+                },
+              },
+            ],
+          }
+        ],
+        link_to_page_database: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "link_to_page",
+                "object" => "block",
+                "link_to_page" => {
+                  "type" => "database_id",
+                  "database_id" => "c7697137d49f49c2bbcdd6a665c4f921",
+                },
+              },
+            ],
+          }
+        ],
+        numbered_list_item: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "numbered_list_item",
+                "object" => "block",
+                "numbered_list_item" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Numbered list item",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Numbered list item",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "red",
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        paragraph: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "paragraph",
+                "object" => "block",
+                "paragraph" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample paragraph",
+                        "link" => nil,
+                      },
+                      "plain_text" => "A sample paragraph",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "yellow_background",
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        pdf: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "pdf",
+                "object" => "block",
+                "pdf" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://github.com/onocom/sample-files-for-demo-use/raw/151dd797d54d7e0ae0dc50e8e19d7965b387e202/sample-pdf.pdf",
+                  },
+                },
+              },
+            ],
+          },
+        ],
+        quote: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "quote",
+                "object" => "block",
+                "quote" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample quote",
+                        "link" => nil,
+                      },
+                      "plain_text" => "A sample quote",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "purple",
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        synced_block_original: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "synced_block",
+                "object" => "block",
+                "synced_block" => {
+                  "synced_from" => nil,
+                  "children" => [
+                    {
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "Synced block",
+                              "link" => nil,
+                            },
+                            "plain_text" => "Synced block",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                    {
+                      "type" => "divider",
+                      "object" => "block",
+                      "divider" => {},
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        synced_block_copy: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "synced_block",
+                "object" => "block",
+                "synced_block" => {
+                  "synced_from" => {
+                    "type" => "block_id",
+                    "block_id" => "4815032e-6f24-43e4-bc8c-9bdc6299b090",
+                  },
+                },
+              },
+            ],
+          }
+        ],
+        table_of_contents: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "table_of_contents",
+                "object" => "block",
+                "table_of_contents" => {
+                  "color" => "pink",
+                },
+              },
+            ],
+          }
+        ],
+        template: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "template",
+                "object" => "block",
+                "template" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample template",
+                        "link" => nil,
+                      },
+                      "plain_text" => "A sample template",
+                      "href" => nil,
+                    },
+                  ],
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        to_do: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "to_do",
+                "object" => "block",
+                "to_do" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample To-Do",
+                        "link" => nil,
+                      },
+                      "plain_text" => "A sample To-Do",
+                      "href" => nil,
+                    },
+                  ],
+                  "checked" => false,
+                  "color" => "brown_background",
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        toggle: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "toggle",
+                "object" => "block",
+                "toggle" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample toggle",
+                        "link" => nil,
+                      },
+                      "plain_text" => "A sample toggle",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "yellow_background",
+                  "children" => [
+                    {
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
+                            },
+                            "plain_text" => "with children",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        toggle_heading_1: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_1",
+                "object" => "block",
+                "heading_1" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 1",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Toggle Heading 1",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "orange_background",
+                  "children" => [
+                    {
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 1",
+                              "link" => nil,
+                            },
+                            "plain_text" => "inside Toggle Heading 1",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        toggle_heading_2: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_2",
+                "object" => "block",
+                "heading_2" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 2",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Toggle Heading 2",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "blue_background",
+                  "children" => [
+                    {
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 2",
+                              "link" => nil,
+                            },
+                            "plain_text" => "inside Toggle Heading 2",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        toggle_heading_3: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_3",
+                "object" => "block",
+                "heading_3" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 3",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Toggle Heading 3",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "gray_background",
+                  "children" => [
+                    {
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 3",
+                              "link" => nil,
+                            },
+                            "plain_text" => "inside Toggle Heading 3",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          }
+        ],
+        video: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "video",
+                "object" => "block",
+                "video" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://download.samplelib.com/mp4/sample-5s.mp4",
+                  },
+                },
+              },
+            ],
+          }
+        ],
+        table: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "table",
+                "object" => "block",
+                "table" => {
+                  "has_column_header" => true,
+                  "has_row_header" => true,
+                  "table_width" => 2,
+                  "children" => [
+                    {
+                      "type" => "table_row",
+                      "object" => "block",
+                      "table_row" => {
+                        "cells" => [
+                          [
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "Services",
+                                "link" => nil,
+                              },
+                              "plain_text" => "Services",
+                              "href" => nil,
+                            }
+                          ],
+                          [
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "Account",
+                                "link" => nil,
+                              },
+                              "plain_text" => "Account",
+                              "href" => nil,
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    {
+                      "type" => "table_row",
+                      "object" => "block",
+                      "table_row" => {
+                        "cells" => [
+                          [
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "Twitter",
+                                "link" => nil,
+                              },
+                              "plain_text" => "Twitter",
+                              "href" => nil,
+                            }
+                          ],
+                          [
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "hkob\n",
+                                "link" => nil,
+                              },
+                              "plain_text" => "hkob\n",
+                              "href" => nil,
+                            },
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "profile",
+                                "link" => {
+                                  "url" => "https://twitter.com/hkob/"
+                                }
+                              },
+                              "plain_text" => "profile",
+                              "href" => "https://twitter.com/hkob/"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    {
+                      "type" => "table_row",
+                      "object" => "block",
+                      "table_row" => {
+                        "cells" => [
+                          [
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "GitHub",
+                                "link" => nil,
+                              },
+                              "plain_text" => "GitHub",
+                              "href" => nil,
+                            }
+                          ],
+                          [
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "hkob\n",
+                                "link" => nil,
+                              },
+                              "plain_text" => "hkob\n",
+                              "href" => nil,
+                            },
+                            {
+                              "type" => "text",
+                              "text" => {
+                                "content" => "repositories",
+                                "link" => {
+                                  "url" => "https://github.com/hkob/"
+                                }
+                              },
+                              "plain_text" => "repositories",
+                              "href" => "https://github.com/hkob/"
+                            }
+                          ]
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    end
+
+    def append_block_children_page
+      generate_stubs_sub :patch, __method__, :append_block_children_page_path,
+                         append_block_children_hash(BLOCK_CREATE_TEST_PAGE_ID)
+    end
+
+    def append_block_children_block
+      generate_stubs_sub :patch, __method__, :append_block_children_block_path,
+                         append_block_children_hash(BLOCK_CREATE_TEST_BLOCK_ID)
+    end
 
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json

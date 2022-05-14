@@ -1,0 +1,48 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "block",
+      "id": "ea528b3d-1831-4f07-b807-034b5b9f0f46",
+      "created_time": "2022-05-10T08:26:00.000Z",
+      "last_edited_time": "2022-05-10T08:26:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+      },
+      "last_edited_by": {
+        "object": "user",
+        "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+      },
+      "has_children": false,
+      "archived": false,
+      "type": "bookmark",
+      "bookmark": {
+        "caption": [
+          {
+            "type": "text",
+            "text": {
+              "content": "Google",
+              "link": null
+            },
+            "annotations": {
+              "bold": false,
+              "italic": false,
+              "strikethrough": false,
+              "underline": false,
+              "code": false,
+              "color": "default"
+            },
+            "plain_text": "Google",
+            "href": null
+          }
+        ],
+        "url": "https://www.google.com"
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "block",
+  "block": {}
+}

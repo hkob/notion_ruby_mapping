@@ -1,0 +1,16 @@
+{
+  "type": "equation",
+  "equation": {
+    "expression": "y = f(x)"
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "y = f(x)",
+  "href": null
+}

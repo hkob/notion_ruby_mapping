@@ -13,18 +13,22 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [Hash]
+    # @see https://www.notion.so/hkob/FormulaProperty-d6b22ca70822407a9fef0bac8925cd0d#4fda982987a141ec962e4cd76cb81f76
     def formula
       @json
     end
 
     ## Database property only methods
 
+    # @return [String] formula_expression
+    # @see https://www.notion.so/hkob/FormulaProperty-d6b22ca70822407a9fef0bac8925cd0d#a24d2a7b99254d2a9226c00153f1d516
     def formula_expression
       assert_database_property __method__
       @json["expression"]
     end
 
     # @param [String] formula
+    # @see https://www.notion.so/hkob/FormulaProperty-d6b22ca70822407a9fef0bac8925cd0d#fdb3aaa8d0474440b7ed941673ee13b7
     def formula_expression=(f_e)
       assert_database_property __method__
       @will_update = true

@@ -50,5 +50,14 @@ module NotionRubyMapping
         }
       end
     end
+
+    describe "user_id=" do
+      let(:target) { UserObject.user_object "user_id" }
+      before { target.user_id = "new_user_id" }
+      it_behaves_like :property_values_json, {
+        "object" => "user",
+        "id" => "new_user_id",
+      }
+    end
   end
 end

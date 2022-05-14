@@ -14,22 +14,11 @@ module NotionRubyMapping
 
     # @param [Query] other_query other query
     # @return [NotionRubyMapping::Query] updated self (Query object)
-    def and(other_query)
+    def and(another_query)
       if @filter.key? "and"
-        @filter["and"] << other_query.filter
+        @filter["and"] << another_query.filter
       else
-        @filter = {"and" => [@filter, other_query.filter]}
-      end
-      self
-    end
-
-    # @param [Query] other_query other query
-    # @return [NotionRubyMapping::Query] updated self (Query object)
-    def or(other_query)
-      if @filter.key? "or"
-        @filter["or"] << other_query.filter
-      else
-        @filter = {"or" => [@filter, other_query.filter]}
+        @filter = {"and" => [@filter, another_query.filter]}
       end
       self
     end
@@ -47,6 +36,17 @@ module NotionRubyMapping
     def descending(property)
       key = property.is_a?(LastEditedTimeProperty) || property.is_a?(CreatedTimeProperty) ? "timestamp" : "property"
       @sort << {key => property.name, "direction" => "descending"}
+      self
+    end
+
+    # @param [Query] other_query other query
+    # @return [NotionRubyMapping::Query] updated self (Query object)
+    def or(other_query)
+      if @filter.key? "or"
+        @filter["or"] << other_query.filter
+      else
+        @filter = {"or" => [@filter, other_query.filter]}
+      end
       self
     end
 

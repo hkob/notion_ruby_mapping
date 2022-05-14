@@ -8,7 +8,6 @@ module NotionRubyMapping
     def initialize(text, options = {})
       super "text", {"plain_text" => text}.merge(options)
       @text = text
-      @type = "text"
       @will_update = false
     end
     attr_reader :text, :will_update

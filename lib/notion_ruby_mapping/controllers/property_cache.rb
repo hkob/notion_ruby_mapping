@@ -13,22 +13,20 @@ module NotionRubyMapping
 
     # @param [String] key
     # @return [Property] Property for key
+    # @see https://www.notion.so/hkob/PropertyCache-2451fa64a814432db4809831cc77ba25#9709e2b2a7a0479f9951291a501f65c8
     def [](key)
       @properties[key] ||= Property.create_from_json key, @json[key], @base_type
     end
 
-    # @param [Array] key
-    # @return [Array]
-    def values_at(*key)
-      generate_all_properties
-      @properties.values_at(*key)
+    # @param [Property] property added Property
+    def add_property(property)
+      @properties[property.name] = property
+      self
     end
 
-    def generate_all_properties
-      if @json.empty?
-        @properties.values
-      else
-        @json.keys.map { |key| self[key] }
+    def clear_will_update
+      @properties.each do |_, property|
+        property.clear_will_update
       end
     end
 
@@ -39,16 +37,11 @@ module NotionRubyMapping
       generate_all_properties.each(&block)
     end
 
-    # @param [Property] property added Property
-    def add_property(property)
-      @properties[property.name] = property
-      self
-    end
-
-
-    def clear_will_update
-      @properties.each do |_, property|
-        property.clear_will_update
+    def generate_all_properties
+      if @json.empty?
+        @properties.values
+      else
+        @json.keys.map { |key| self[key] }
       end
     end
 
@@ -80,6 +73,14 @@ module NotionRubyMapping
           ans["properties"].merge! property.update_property_schema_json
         end
       end
+    end
+
+    # @param [Array] key
+    # @return [Array]
+    # @see https://www.notion.so/hkob/PropertyCache-2451fa64a814432db4809831cc77ba25#6eb10d1d85784063a30feb225f47ede3
+    def values_at(*key)
+      generate_all_properties
+      @properties.values_at(*key)
     end
   end
 end

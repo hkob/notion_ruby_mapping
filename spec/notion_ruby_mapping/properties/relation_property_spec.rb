@@ -87,17 +87,42 @@ module NotionRubyMapping
         it_behaves_like :assert_different_property, :update_property_schema_json
         it_behaves_like :assert_different_property, :property_schema_json
 
+        describe "add_relation=" do
+          [
+            "a_id", %w[page_id a_id],
+            {"id" => "b_id"}, %w[page_id b_id],
+          ].each_slice(2) do |(input, page_ids)|
+            context input do
+              before { target.add_relation input }
+              it_behaves_like :property_values_json, {
+                "rp" => {
+                  "type" => "relation",
+                  "relation" => Array(page_ids).map { |id| {"id" => id} }
+                },
+              }
+              it_behaves_like :will_update
+            end
+          end
+        end
+
         describe "relation=" do
-          before { target.relation = ["new_page_id"] }
-          it_behaves_like :property_values_json, {
-            "rp" => {
-              "type" => "relation",
-              "relation" => [
-                {"id" => "new_page_id"},
-              ],
-            },
-          }
-          it_behaves_like :will_update
+          [
+            "a_id", "a_id",
+            %w[a_id b_id], %w[a_id b_id],
+            {"id" => "a_id"}, "a_id",
+            [{"id" => "a_id"}, {"id" => "b_id"}], %w[a_id b_id],
+          ].each_slice(2) do |(input, page_ids)|
+            context input do
+              before { target.relation = input }
+              it_behaves_like :property_values_json, {
+                "rp" => {
+                  "type" => "relation",
+                  "relation" => Array(page_ids).map { |id| {"id" => id} }
+                },
+              }
+              it_behaves_like :will_update
+            end
+          end
         end
 
         describe "update_from_json" do

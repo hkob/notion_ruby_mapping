@@ -74,6 +74,7 @@ module NotionRubyMapping
           it_behaves_like :assert_different_property, :property_values_json
           it_behaves_like :update_property_schema_json, {"rp" => nil}
         end
+
       end
 
       context "created from json" do
@@ -89,6 +90,29 @@ module NotionRubyMapping
           "rollup_property_id" => ":>Fq",
           "rollup_property_name" => "Tags",
         }
+        describe "relation_property_name" do
+          it { expect(target.relation_property_name).to eq "RelationTitle" }
+          context "relation_property_name=" do
+            before { target.relation_property_name = "new RelationTitle" }
+            it { expect(target.relation_property_name).to eq "new RelationTitle" }
+          end
+        end
+
+        describe "rollup_property_name" do
+          it { expect(target.rollup_property_name).to eq "Tags" }
+          context "rollup_property_name=" do
+            before { target.rollup_property_name = "new Tags" }
+            it { expect(target.rollup_property_name).to eq "new Tags" }
+          end
+        end
+
+        describe "function" do
+          it { expect(target.function).to eq "show_original" }
+          context "function =" do
+            before { target.function  = "average" }
+            it { expect(target.function).to eq "average" }
+          end
+        end
       end
     end
 

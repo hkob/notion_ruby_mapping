@@ -6,20 +6,17 @@ module NotionRubyMapping
     include IsEmptyIsNotEmpty
     TYPE = "files"
 
+    attr_reader :files
+
     ### Public announced methods
-
-    ## Common methods
-
-    # @return [Hash]
-    def files
-      @json
-    end
 
     ## Page property only methods
 
     def files=(files = [])
+      assert_page_property __method__
       @will_update = true
-      @json = Array(files).map { |url| url_to_hash url }
+      @files = Array(files).map { |url| FileObject.file_object url }
+      @file_names = Array(files)
     end
 
     ### Not public announced methods
@@ -31,21 +28,37 @@ module NotionRubyMapping
     def initialize(name, will_update: false, base_type: :page, json: nil, files: [])
       super name, will_update: will_update, base_type: base_type
       if database?
-        @json = json || {}
+        @files = json || {}
+      elsif json
+        @files = json.map { |sub_json| FileObject.new json: sub_json }
+        @file_names = json.map { |sub_json| sub_json["name"] }
+      elsif !files.empty?
+        @files = Array(files).map { |url| FileObject.file_object url }
+        @file_names = Array(files)
       else
-        @json = json || []
-        @json = Array(files).map { |url| url_to_hash url } unless files.empty?
+        @files = []
       end
     end
 
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      if @json.map { |f| f["type"] }.include? "file"
+      if @files.map(&:type).include? "file"
         {}
       else
-        {@name => {"files" => @json, "type" => "files"}}
+        files = @files.map(&:property_values_json)
+        @file_names.each_with_index { |name, i| files[i]["name"] = name } if @file_names
+        {@name => {"files" => files, "type" => "files"}}
       end
+    end
+
+    def update_from_json(json)
+      return if database?
+
+      @files = json["files"].map { |sub_json| FileObject.new json: sub_json }
+      @file_names = json["files"].map { |sub_json| sub_json["name"] }
+      @will_update = false
+      p self
     end
 
     protected

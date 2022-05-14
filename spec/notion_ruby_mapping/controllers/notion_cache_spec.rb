@@ -12,6 +12,14 @@ module NotionRubyMapping
       end
     end
 
+    describe "append_block_children_block_path" do
+      it { expect(nc.append_block_children_block_path("ABC")).to eq "v1/blocks/ABC/children" }
+    end
+
+    describe "append_block_children_page_path" do
+      it { expect(nc.append_block_children_page_path("ABC")).to eq "v1/blocks/ABC/children" }
+    end
+
     describe "page_path" do
       it { expect(nc.page_path("ABC")).to eq "v1/pages/ABC" }
     end

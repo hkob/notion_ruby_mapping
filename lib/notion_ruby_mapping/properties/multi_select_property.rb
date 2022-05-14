@@ -3,8 +3,6 @@
 module NotionRubyMapping
   # MultiSelect property
   class MultiSelectProperty < MultiProperty
-    include ContainsDoesNotContain
-    include IsEmptyIsNotEmpty
     TYPE = "multi_select"
 
     ### Public announced methods
@@ -27,7 +25,8 @@ module NotionRubyMapping
     # @param [String] name
     # @param [String] color
     # @return [Array] added array
-    def add_multi_select_options(name:, color:)
+    # @see https://www.notion.so/hkob/MultiSelectProperty-b90bba1c55d540ba97131bb013d4ca74#bcac830b00e04cb6bf7dbbb110d95667
+    def add_multi_select_option(name:, color:)
       edit_multi_select_options << {"name" => name, "color" => color}
     end
 

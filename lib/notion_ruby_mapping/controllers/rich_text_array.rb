@@ -19,6 +19,32 @@ module NotionRubyMapping
                            end
       @will_update = will_update
     end
+    attr_writer :will_update
+
+    def self.rich_text_array(key, text_objects = nil)
+      if text_objects.nil?
+        RichTextArray.new key
+      elsif text_objects.is_a? RichTextArray
+        text_objects
+      else
+        RichTextArray.new key, text_objects: text_objects
+      end
+    end
+
+    # @param [String, RichTextObject] to
+    # @return [NotionRubyMapping::RichTextObject] added RichTextObject
+    def <<(to)
+      @will_update = true
+      rto = RichTextObject.text_object(to)
+      @rich_text_objects << rto
+      rto
+    end
+
+    # @param [Numeric] index index number
+    # @return [RichTextObject] selected RichTextObject
+    def [](index)
+      @rich_text_objects[index]
+    end
 
     # @param [Array] json
     # @return [Array] RichTextArray
@@ -61,21 +87,6 @@ module NotionRubyMapping
     # @return [TrueClass, FalseClass] true if it will update
     def will_update
       @will_update || @rich_text_objects.map(&:will_update).any?
-    end
-
-    # @param [String, RichTextObject] to
-    # @return [NotionRubyMapping::RichTextObject] added RichTextObject
-    def <<(to)
-      @will_update = true
-      rto = RichTextObject.text_object(to)
-      @rich_text_objects << rto
-      rto
-    end
-
-    # @param [Numeric] index index number
-    # @return [RichTextObject] selected RichTextObject
-    def [](index)
-      @rich_text_objects[index]
     end
   end
 end

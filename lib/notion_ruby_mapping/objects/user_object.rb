@@ -14,11 +14,11 @@ module NotionRubyMapping
 
     # @param [UserObject, String] uo
     # @return [UserObject] self or created UserObject
-    def self.user_object(user_id_or_user)
-      if user_id_or_user.is_a? UserObject
-        user_id_or_user
+    def self.user_object(user_id_or_uo)
+      if user_id_or_uo.is_a? UserObject
+        user_id_or_uo
       else
-        UserObject.new user_id: user_id_or_user
+        UserObject.new user_id: user_id_or_uo
       end
     end
 
@@ -33,6 +33,11 @@ module NotionRubyMapping
         "object" => "user",
         "id" => @user_id,
       }
+    end
+
+    def user_id=(new_user_id)
+      @user_id = new_user_id
+      @will_update = true
     end
   end
 end

@@ -22,6 +22,7 @@ module NotionRubyMapping
 
     # @param [String] str
     def email=(email)
+      assert_page_property __method__
       @will_update = true
       @json = email
     end

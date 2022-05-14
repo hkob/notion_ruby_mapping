@@ -41,7 +41,7 @@ module NotionRubyMapping
         end
 
         describe "multi_select_options=" do
-          before { target.add_multi_select_options name: "Multi Select 4", color: "orange" }
+          before { target.add_multi_select_option name: "Multi Select 4", color: "orange" }
           it_behaves_like :will_update
           it_behaves_like :assert_different_property, :property_values_json
           it_behaves_like :update_property_schema_json, {

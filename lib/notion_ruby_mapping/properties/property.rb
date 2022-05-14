@@ -91,6 +91,8 @@ module NotionRubyMapping
     def make_filter_query(key, value, rollup = nil, rollup_type = nil)
       if rollup
         Query.new filter: {"property" => @name, rollup => {rollup_type => {key => value}}}
+      elsif rollup_type
+        Query.new filter: {"property" => @name, rollup_type => {key => value}}
       elsif @name == "__timestamp__"
         Query.new filter: {"timestamp" => type, type => {key => value}}
       else
@@ -169,13 +171,19 @@ module NotionRubyMapping
     ### Public announced methods
 
     # @param [String, Number] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#5f07c4ebc4744986bfc99a43827349fc
     def filter_equals(value, rollup = nil, rollup_type = nil)
       make_filter_query "equals", value, rollup, rollup_type
     end
 
     # @param [String, Number] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#a44a1875c3ef49f2b4f817291953a1d4
     def filter_does_not_equal(value, rollup = nil, rollup_type = nil)
       make_filter_query "does_not_equal", value, rollup, rollup_type
     end
@@ -186,13 +194,19 @@ module NotionRubyMapping
     ### Public announced methods
 
     # @param [String] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#271a2ebaa1ec48acae732ca98920feab
     def filter_contains(value, rollup = nil, rollup_type = nil)
       make_filter_query "contains", value, rollup, rollup_type
     end
 
     # @param [String] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#b0328e3b146f48a4ad4c9c2ee5363486
     def filter_does_not_contain(value, rollup = nil, rollup_type = nil)
       make_filter_query "does_not_contain", value, rollup, rollup_type
     end
@@ -203,12 +217,17 @@ module NotionRubyMapping
     ### Public announced methods
 
     # @param [String] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/EmailProperty-39aeb5df56ea4cc1b9380574e4fdeec0#d3e098b2f38c4c8c9d3e815516cfd953
     def filter_starts_with(value, rollup = nil, rollup_type = nil)
       make_filter_query "starts_with", value, rollup, rollup_type
     end
 
     # @param [String] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_ends_with(value, rollup = nil, rollup_type = nil)
       make_filter_query "ends_with", value, rollup, rollup_type
@@ -219,12 +238,18 @@ module NotionRubyMapping
   module IsEmptyIsNotEmpty
     ### Public announced methods
 
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#38749dfae0854c68b4c55095d3efbff1
     def filter_is_empty(rollup = nil, rollup_type = nil)
       make_filter_query "is_empty", true, rollup, rollup_type
     end
 
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#515659ea52b54fb48c81b813f3b705f6
     def filter_is_not_empty(rollup = nil, rollup_type = nil)
       make_filter_query "is_not_empty", true, rollup, rollup_type
     end
@@ -235,24 +260,32 @@ module NotionRubyMapping
     ### Public announced methods
 
     # @param [Number] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_greater_than(value, rollup = nil, rollup_type = nil)
       make_filter_query "greater_than", value, rollup, rollup_type
     end
 
     # @param [Number] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_less_than(value, rollup = nil, rollup_type = nil)
       make_filter_query "less_than", value, rollup, rollup_type
     end
 
     # @param [Number] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_greater_than_or_equal_to(value, rollup = nil, rollup_type = nil)
       make_filter_query "greater_than_or_equal_to", value, rollup, rollup_type
     end
 
     # @param [Number] value Query value
+    # @param [String] rollup Rollup name
+    # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_less_than_or_equal_to(value, rollup = nil, rollup_type = nil)
       make_filter_query "less_than_or_equal_to", value, rollup, rollup_type

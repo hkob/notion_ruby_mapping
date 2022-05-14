@@ -169,11 +169,11 @@ module NotionRubyMapping
       end
     end
 
-    describe "create_child_page" do
+    describe "build_child_page" do
       let(:db) { Database.find TestConnection::PARENT_DATABASE_ID }
       context "with assign" do
-        let(:target) { db.create_child_page TitleProperty, "Name" }
-        before { target.properties; target.properties["Name"] << "New Page Title" }
+        let(:target) { db.build_child_page TitleProperty, "Name" }
+        before { target.properties["Name"] << "New Page Title" }
         context "properties.map(&:name)" do
           let(:ans) { "Name" }
           it { expect(target.properties.map(&:name).sort.join(":")).to eq ans }
@@ -190,10 +190,9 @@ module NotionRubyMapping
         end
       end
 
-
       context "without assign (no block)" do
-        let(:target) { db.create_child_page }
-        before { target.properties; target.properties["Name"] << "New Page Title" }
+        let(:target) { db.build_child_page }
+        before { target.properties["Name"] << "New Page Title" }
         context "properties.map(&:name)" do
           let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
           it { expect(target.properties.map(&:name).sort).to eq ans }
@@ -212,7 +211,7 @@ module NotionRubyMapping
 
       context "without assign (with block)" do
         let(:target) do
-          db.create_child_page do |_, properties|
+          db.build_child_page do |_, properties|
             properties["Name"] << "New Page Title"
           end
         end
@@ -235,7 +234,9 @@ module NotionRubyMapping
     end
 
     describe "query" do
-      let(:target) { Database.new id: TestConnection::DATABASE_ID, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"] }
+      let(:target) do
+        Database.new id: TestConnection::DATABASE_ID, assign: [NumberProperty, "NumberTitle", UrlProperty, "UrlTitle"]
+      end
       let(:np) { target.properties["NumberTitle"] }
       let(:up) { target.properties["UrlTitle"] }
       let(:query) { np.filter_greater_than(100).and(up.filter_starts_with("https")).ascending(np) }
@@ -252,44 +253,42 @@ module NotionRubyMapping
       it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
     end
 
-    describe "create_database" do
+    describe "build_database" do
       let(:parent_page) { Page.new id: TestConnection::TOP_PAGE_ID }
       let(:target) do
-        parent_page.create_child_database "New database title",
-                                          CheckboxProperty, "Checkbox",
-                                          CreatedByProperty, "CreatedBy",
-                                          CreatedTimeProperty, "CreatedTime",
-                                          DateProperty, "Date",
-                                          EmailProperty, "Email",
-                                          FilesProperty, "Files",
-                                          FormulaProperty, "Formula",
-                                          LastEditedByProperty, "LastEditedBy",
-                                          LastEditedTimeProperty, "LastEditedTime",
-                                          MultiSelectProperty, "MultiSelect",
-                                          NumberProperty, "Number",
-                                          PeopleProperty, "People",
-                                          PhoneNumberProperty, "PhoneNumber",
-                                          RelationProperty, "Relation",
-                                          RollupProperty, "Rollup",
-                                          RichTextProperty, "RichText",
-                                          SelectProperty, "Select",
-                                          TitleProperty, "Title",
-                                          UrlProperty, "Url"
-      end
-      before do
-        fp, msp, np, rp, rup, sp = target.properties.values_at "Formula", "MultiSelect", "Number", "Relation",
-                                                               "Rollup", "Select"
-        fp.formula_expression = "now()"
-        msp.add_multi_select_options name: "MS1", color: "orange"
-        msp.add_multi_select_options name: "MS2", color: "green"
-        np.format = "yen"
-        rp.replace_relation_database database_id: TestConnection::DATABASE_ID
-        rup.relation_property_name = "Relation"
-        rup.rollup_property_name = "NumberTitle"
-        rup.function = "sum"
-        sp.add_select_options name: "S1", color: "yellow"
-        sp.add_select_options name: "S2", color: "default"
-        target.set_icon emoji: "🎉"
+        parent_page.build_child_database "New database title",
+                                         CheckboxProperty, "Checkbox",
+                                         CreatedByProperty, "CreatedBy",
+                                         CreatedTimeProperty, "CreatedTime",
+                                         DateProperty, "Date",
+                                         EmailProperty, "Email",
+                                         FilesProperty, "Files",
+                                         FormulaProperty, "Formula",
+                                         LastEditedByProperty, "LastEditedBy",
+                                         LastEditedTimeProperty, "LastEditedTime",
+                                         MultiSelectProperty, "MultiSelect",
+                                         NumberProperty, "Number",
+                                         PeopleProperty, "People",
+                                         PhoneNumberProperty, "PhoneNumber",
+                                         RelationProperty, "Relation",
+                                         RollupProperty, "Rollup",
+                                         RichTextProperty, "RichText",
+                                         SelectProperty, "Select",
+                                         TitleProperty, "Title",
+                                         UrlProperty, "Url" do |db, ps|
+          fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
+          fp.formula_expression = "now()"
+          msp.add_multi_select_option name: "MS1", color: "orange"
+          msp.add_multi_select_option name: "MS2", color: "green"
+          np.format = "yen"
+          rp.replace_relation_database database_id: TestConnection::DATABASE_ID
+          rup.relation_property_name = "Relation"
+          rup.rollup_property_name = "NumberTitle"
+          rup.function = "sum"
+          sp.add_select_option name: "S1", color: "yellow"
+          sp.add_select_option name: "S2", color: "default"
+          db.set_icon emoji: "🎉"
+        end
       end
 
       describe "title.full_text" do
@@ -374,6 +373,66 @@ module NotionRubyMapping
       end
     end
 
+    describe "create_database" do
+      let(:parent_page) { Page.new id: TestConnection::TOP_PAGE_ID }
+      context "not dry_run" do
+        let(:target) do
+          parent_page.create_child_database "New database title",
+                                            CheckboxProperty, "Checkbox",
+                                            CreatedByProperty, "CreatedBy",
+                                            CreatedTimeProperty, "CreatedTime",
+                                            DateProperty, "Date",
+                                            EmailProperty, "Email",
+                                            FilesProperty, "Files",
+                                            FormulaProperty, "Formula",
+                                            LastEditedByProperty, "LastEditedBy",
+                                            LastEditedTimeProperty, "LastEditedTime",
+                                            MultiSelectProperty, "MultiSelect",
+                                            NumberProperty, "Number",
+                                            PeopleProperty, "People",
+                                            PhoneNumberProperty, "PhoneNumber",
+                                            RelationProperty, "Relation",
+                                            RollupProperty, "Rollup",
+                                            RichTextProperty, "RichText",
+                                            SelectProperty, "Select",
+                                            TitleProperty, "Title",
+                                            UrlProperty, "Url" do |db, ps|
+            fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
+            fp.formula_expression = "now()"
+            msp.add_multi_select_option name: "MS1", color: "orange"
+            msp.add_multi_select_option name: "MS2", color: "green"
+            np.format = "yen"
+            rp.replace_relation_database database_id: TestConnection::DATABASE_ID
+            rup.relation_property_name = "Relation"
+            rup.rollup_property_name = "NumberTitle"
+            rup.function = "sum"
+            sp.add_select_option name: "S1", color: "yellow"
+            sp.add_select_option name: "S2", color: "default"
+            db.set_icon emoji: "🎉"
+          end
+        end
+
+        describe "id" do
+          it { expect(target.id).to eq "c7697137d49f49c2bbcdd6a665c4f921" }
+        end
+      end
+
+      context "dry_run" do
+        let(:target) do
+          parent_page.build_child_database "New database title", NumberProperty, "Number" do |_, pc|
+            pc["Number"].format = "percent"
+          end
+        end
+        let(:dry_run) {
+          parent_page.create_child_database "New database title", NumberProperty, "Number", dry_run: true do |_, pc|
+            pc["Number"].format = "percent"
+          end
+        }
+
+        it_behaves_like :dry_run, :post, :databases_path, json_method: :update_property_schema_json
+      end
+    end
+
     describe "update_database" do
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
       before do
@@ -381,11 +440,11 @@ module NotionRubyMapping
         fp, msp, np, rp, rup, sp = target.properties.values_at "Formula", "MultiSelect", "Number", "Relation",
                                                                "Rollup", "Select"
         fp.formula_expression = "pi"
-        msp.add_multi_select_options name: "MS3", color: "blue"
+        msp.add_multi_select_option name: "MS3", color: "blue"
         np.format = "percent"
         rp.replace_relation_database database_id: TestConnection::DATABASE_ID, synced_property_name: "Renamed table"
         rup.function = "average"
-        sp.add_select_options name: "S3", color: "red"
+        sp.add_select_option name: "S3", color: "red"
         target.set_icon emoji: "🎉"
         target.database_title << "(Added)"
       end
@@ -522,14 +581,11 @@ module NotionRubyMapping
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
       before do
         tc.clear_object_hash
-        target.add_property NumberProperty, "added number property" do |np|
-          np.format = "euro"
-        end
+        target.add_property(NumberProperty, "added number property") { |np| np.format = "euro" }
         target.add_property UrlProperty, "added url property"
         target.save
-        properties = target.properties
-        properties["added number property"].new_name = "renamed number property"
-        properties["added url property"].new_name = "renamed url property"
+        target.rename_property "added number property", "renamed number property"
+        target.rename_property "added url property", "renamed url property"
       end
       let(:ans) do
         {

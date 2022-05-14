@@ -10,6 +10,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [Date, Hash]
+    # @see https://www.notion.so/hkob/CreatedTimeProperty-bb979ff02dc04efa9733da1003efa871#f1e80400878346c3a9ba8e32b824ed2b
     def created_time
       @json
     end

@@ -11,6 +11,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [Boolean, Hash]
+    # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#20da1bf0cbcc4d4eb22d9125386522c2
     def checkbox
       @json
     end
@@ -19,7 +20,9 @@ module NotionRubyMapping
 
     # @param [Boolean] flag
     # @return [TrueClass, FalseClass] settled value
+    # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#f167c85c1d2d40dfb8b3b6ce582e0f15
     def checkbox=(flag)
+      assert_page_property __method__
       @will_update = true
       @json = flag
     end

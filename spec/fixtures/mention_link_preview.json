@@ -1,0 +1,19 @@
+{
+  "type": "mention",
+  "mention": {
+    "type": "link_preview",
+    "link_preview": {
+      "url": "https://github.com/hkob/notion_ruby_mapping"
+    }
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "https://github.com/hkob/notion_ruby_mapping",
+  "href": "https://github.com/hkob/notion_ruby_mapping"
+}

@@ -550,6 +550,7 @@ module NotionRubyMapping
         end
 
         it "updates properties" do
+          print target.save dry_run: true
           target.save # update page and reload properties
           aggregate_failures do
             {
@@ -681,10 +682,14 @@ module NotionRubyMapping
     end
 
     describe "create" do
-      context "database's children" do
-        let(:parent_db) { Database.new id: TestConnection::PARENT_DATABASE_ID }
-        let(:target) { parent_db.create_child_page TitleProperty, "Name" }
-        before { target.properties["Name"] << "New Page Title" }
+      let(:parent_db) { Database.new id: TestConnection::PARENT_DATABASE_ID }
+      context "build_child_database" do
+        let(:target) do
+          parent_db.build_child_page TitleProperty, "Name" do |_, ps|
+            ps["Name"] << "New Page Title"
+          end
+        end
+
         it { expect(target.new_record?).to be_truthy }
         it_behaves_like :property_values_json, {
           "parent" => {
@@ -720,6 +725,35 @@ module NotionRubyMapping
           it { expect(target.new_record?).to be_falsey }
         end
       end
+
+      context "create_child_database" do
+        context "not dry_run" do
+          let(:target) do
+            parent_db.create_child_page TitleProperty, "Name" do |_, ps|
+              ps["Name"] << "New Page Title"
+            end
+          end
+
+          it_behaves_like :property_values_json, {}
+          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
+          it { expect(target.new_record?).to be_falsey }
+        end
+
+        context "dry_run" do
+          let(:target) do
+            parent_db.build_child_page TitleProperty, "Name" do |_, ps|
+              ps["Name"] << "New Page Title"
+            end
+          end
+          let(:dry_run) do
+            parent_db.create_child_page TitleProperty, "Name", dry_run: true do |_, ps|
+              ps["Name"] << "New Page Title"
+            end
+          end
+          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+        end
+      end
     end
   end
 end
+

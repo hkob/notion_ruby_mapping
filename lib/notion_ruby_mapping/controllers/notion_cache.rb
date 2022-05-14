@@ -11,6 +11,8 @@ module NotionRubyMapping
 
     ### initialize
 
+
+    # @see https://www.notion.so/hkob/NotionCache-65e1599864d6425686d495a5a4b3a623#dca210788f114cf59464090782c073bf
     def initialize
       @object_hash = {}
       @client = Faraday::Connection.new "https://api.notion.com" do |builder|
@@ -25,6 +27,61 @@ module NotionRubyMapping
     attr_reader :object_hash
     attr_writer :client # for test only
 
+    # @param [String] page_id
+    # @return [String (frozen)] block_path
+    def append_block_children_block_path(block_id)
+      "v1/blocks/#{block_id}/children"
+    end
+
+    # @param [String] page_id
+    # @return [String (frozen)] page_path
+    def append_block_children_page_path(page_id)
+      "v1/blocks/#{page_id}/children"
+    end
+    
+    # @param [String] id
+    # @param [Hash] payload
+    # @return [Hash]
+    def append_block_children_request(id, payload)
+      request :patch, append_block_children_block_path(id), payload
+    end
+
+    # @param [String] id block_id (with or without "-")
+    # @return [NotionRubyMapping::Base] Block object or nil
+    def block(id)
+      object_for_key(id) { block_request id }
+    end
+
+    # @param [String] page_id
+    # @return [String (frozen)] page_path
+    def block_children_page_path(page_id, query_string = "")
+      "v1/blocks/#{page_id}/children#{query_string}"
+    end
+
+    # @param [String] id
+    # @param [String] query_string
+    # @return [Hash]
+    def block_children_request(id, query_string)
+      request :get, block_children_page_path(id, query_string)
+    end
+
+    # @param [String] block_id
+    # @return [String (frozen)] page_path
+    def block_path(block_id)
+      "v1/blocks/#{block_id}"
+    end
+
+    # @param [String] block_id
+    # @return [Hash] response
+    def block_request(block_id)
+      request :get, block_path(block_id)
+    end
+
+    # @return [Hash]
+    def clear_object_hash
+      @object_hash = {}
+    end
+
     # @param [String] notion_token
     # @return [NotionRubyMapping::NotionCache] self (NotionCache.instance)
     def create_client(notion_token, wait: 0.3333, debug: false)
@@ -34,12 +91,45 @@ module NotionRubyMapping
       self
     end
 
-    ### create path methods
+    # @param [Hash] payload
+    # @return [Hash] response
+    def create_database_request(payload)
+      request :post, databases_path, payload
+    end
+
+    # @param [Hash] payload
+    # @return [Hash] response
+    def create_page_request(payload)
+      request :post, "v1/pages", payload
+    end
+
+    # @param [String] id database_id (with or without "-")
+    # @return [NotionRubyMapping::Base] Database object or nil
+    def database(id)
+      object_for_key(id) { database_request id }
+    end
 
     # @param [String] database_id
     # @return [String (frozen)] page_path
     def database_path(database_id)
       "v1/databases/#{database_id}"
+    end
+
+    # @param [String] id page_id / block_id (with or without "-")
+    # @param [NotionRubyMapping::Query] query query object
+    # @return [NotionRubyMapping::Base] List object
+    def database_query(id, query)
+      Base.create_from_json database_query_request(id, query.query_json)
+    end
+
+    def database_query_request(database_id, payload)
+      request :post, "v1/databases/#{database_id}/query", payload
+    end
+
+    # @param [String] database_id
+    # @return [Hash] response
+    def database_request(database_id)
+      request :get, database_path(database_id)
     end
 
     # @param [String] database_id
@@ -48,10 +138,42 @@ module NotionRubyMapping
       "v1/databases"
     end
 
+    def inspect
+      "NotionCache"
+    end
+
+    # @param [String] id id string with "-"
+    # @return [String] id without "-"
+    def hex_id(id)
+      id&.gsub "-", ""
+    end
+
+    # @param [String] id id (with or without "-")
+    # @return [NotionRubyMapping::Base]
+    def object_for_key(id)
+      key = hex_id(id)
+      return @object_hash[key] if @object_hash.key? key
+
+      json = yield(@client)
+      @object_hash[key] = Base.create_from_json json
+    end
+
+    # @param [String] id page_id (with or without "-")
+    # @return [NotionRubyMapping::Base] Page object or nil
+    def page(id)
+      object_for_key(id) { page_request id }
+    end
+
     # @param [String] page_id
     # @return [String (frozen)] page_path
     def page_path(page_id)
       "v1/pages/#{page_id}"
+    end
+
+    # @param [String] page_id
+    # @return [Hash] response
+    def page_request(page_id)
+      request :get, page_path(page_id)
     end
 
     # @return [String (frozen)] page_path
@@ -59,25 +181,11 @@ module NotionRubyMapping
       "v1/pages"
     end
 
-    # @param [String] block_id
-    # @return [String (frozen)] page_path
-    def block_path(block_id)
-      "v1/blocks/#{block_id}"
-    end
-
     # @param [String] database_id
     # @return [String (frozen)] page_path
     def query_database_path(database_id)
       "v1/databases/#{database_id}/query"
     end
-
-    # @param [String] page_id
-    # @return [String (frozen)] page_path
-    def block_children_page_path(page_id, query_string = "")
-      "v1/blocks/#{page_id}/children#{query_string}"
-    end
-
-    ### Notion API call
 
     # @param [Symbol] method
     # @param [String] path
@@ -106,26 +214,11 @@ module NotionRubyMapping
       response.body
     end
 
-    # @param [String] page_id
-    # @return [Hash] response
-    def page_request(page_id)
-      request :get, page_path(page_id)
-    end
-
-    # @param [String] database_id
-    # @return [Hash] response
-    def database_request(database_id)
-      request :get, database_path(database_id)
-    end
-
-    def database_query_request(database_id, payload)
-      request :post, "v1/databases/#{database_id}/query", payload
-    end
-
-    # @param [String] block_id
-    # @return [Hash] response
-    def block_request(block_id)
-      request :get, block_path(block_id)
+    # @param [String] id page_id (with or without "-")
+    # @param [Hash] payload
+    def update_database(id, payload)
+      sleep @wait
+      @client.update_database payload.merge({database_id: id})
     end
 
     # @param [String] database_id
@@ -141,71 +234,5 @@ module NotionRubyMapping
       request :patch, "v1/pages/#{page_id}", payload
     end
 
-    # @param [Hash] payload
-    # @return [Hash] response
-    def create_page_request(payload)
-      request :post, "v1/pages", payload
-    end
-
-    def create_database_request(payload)
-      request :post, databases_path, payload
-    end
-
-    def block_children_request(id, query_string)
-      request :get, block_children_page_path(id, query_string)
-    end
-
-    # @param [String] id id string with "-"
-    # @return [String] id without "-"
-    def hex_id(id)
-      id&.gsub "-", ""
-    end
-
-    # @param [String] id id (with or without "-")
-    # @return [NotionRubyMapping::Base]
-    def object_for_key(id)
-      key = hex_id(id)
-      return @object_hash[key] if @object_hash.key? key
-
-      json = yield(@client)
-      @object_hash[key] = Base.create_from_json json
-    end
-
-    # @param [String] id page_id (with or without "-")
-    # @return [NotionRubyMapping::Base] Page object or nil
-    def page(id)
-      object_for_key(id) { page_request id }
-    end
-
-    # @param [String] id database_id (with or without "-")
-    # @return [NotionRubyMapping::Base] Database object or nil
-    def database(id)
-      object_for_key(id) { database_request id }
-    end
-
-    # @param [String] id block_id (with or without "-")
-    # @return [NotionRubyMapping::Base] Block object or nil
-    def block(id)
-      object_for_key(id) { block_request id }
-    end
-
-    # @param [String] id page_id / block_id (with or without "-")
-    # @param [NotionRubyMapping::Query] query query object
-    # @return [NotionRubyMapping::Base] List object
-    def database_query(id, query)
-      Base.create_from_json database_query_request(id, query.query_json)
-    end
-
-    # @param [String] id page_id (with or without "-")
-    # @param [Hash] payload
-    def update_database(id, payload)
-      sleep @wait
-      @client.update_database payload.merge({database_id: id})
-    end
-
-    # @return [Hash]
-    def clear_object_hash
-      @object_hash = {}
-    end
   end
 end

@@ -14,13 +14,18 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [String, Hash, nil] url (Page), {} (Database)
+    # @see https://www.notion.so/hkob/UrlProperty-8a0094fdf6494151983cb4694f6626cc#8342eef7df3c43eaad10c48d4757b4ae
     def url
       @json
     end
 
     ## Page property only methods
 
+
+    # @param [String] url
+    # @see https://www.notion.so/hkob/UrlProperty-8a0094fdf6494151983cb4694f6626cc#cfa5463a121b4002b250b38d7d0a0d34
     def url=(url)
+      assert_page_property __method__
       @will_update = true
       @json = url
     end

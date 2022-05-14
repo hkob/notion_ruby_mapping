@@ -22,6 +22,8 @@ module NotionRubyMapping
       case type
       when "text"
         TextObject.new json["plain_text"], options
+      when "equation"
+        EquationObject.new json["equation"]["expression"], options
       when "mention"
         mention = json["mention"]
         case mention["type"]
@@ -41,6 +43,8 @@ module NotionRubyMapping
           else
             MentionObject.new options.merge({"template_mention" => template_mention["template_mention_user"]})
           end
+        when "link_preview"
+          MentionObject.new options.merge({"link_preview" => mention["link_preview"]["url"]})
         else
           raise StandardError, "Unknown mention type: #{mention["type"]}"
         end
@@ -67,6 +71,13 @@ module NotionRubyMapping
         "plain_text" => @options["plain_text"],
         "href" => @options["href"],
       }.merge annotations_json
+    end
+
+    # @param [String, RichTextObject] value
+    # @return [String] input text
+    def href=(url)
+      @will_update = true
+      @options["href"] = url
     end
 
     # @param [String, RichTextObject] value

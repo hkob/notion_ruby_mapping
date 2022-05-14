@@ -130,14 +130,27 @@ module NotionRubyMapping
           },
           "@Me",
         ],
+        "link_preview" => [
+          {
+            "link_preview" => url,
+          },
+          {
+            "type" => "link_preview",
+            "link_preview" => {
+              "url" => url,
+            },
+          },
+          url,
+        ],
       }.each do |key, (arg, mention, plain_text)|
+        link = key == "link_preview" ? url : nil
         context "mention to #{key}" do
           let(:target) { MentionObject.new arg }
           it_behaves_like :property_values_json, {
             "type" => "mention",
             "mention" => mention,
             "plain_text" => plain_text,
-            "href" => nil,
+            "href" => link,
           }
 
           context "annotations" do
@@ -149,7 +162,7 @@ module NotionRubyMapping
                   "mention" => mention,
                   "annotations" => {an => true},
                   "plain_text" => plain_text,
-                  "href" => nil,
+                  "href" => link,
                 }
               end
             end
@@ -328,6 +341,28 @@ module NotionRubyMapping
             },
             "plain_text" => "@Me",
             "href" => nil,
+          },
+        ],
+        "mention_link_preview" => [
+          "mention_link_preview",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "link_preview",
+              "link_preview" => {
+                "url" => "https://github.com/hkob/notion_ruby_mapping",
+              },
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
+            },
+            "plain_text" => "https://github.com/hkob/notion_ruby_mapping",
+            "href" => "https://github.com/hkob/notion_ruby_mapping",
           },
         ],
       }.each do |key, (fname, answer)|

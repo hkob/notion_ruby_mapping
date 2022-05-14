@@ -17,8 +17,9 @@ module NotionRubyMapping
     end
     attr_reader :has_more
 
-    ### Public announced methods
 
+    # @return [NotionRubyMapping::List, Enumerator]
+    # @see https://www.notion.so/hkob/List-9a0b32335e0d48849a785ce5e162c760#12e1c261a0944a4095776b7515bef4a1
     def each
       return enum_for(:each) unless block_given?
 
@@ -81,6 +82,7 @@ module NotionRubyMapping
           end
         end
       end
+      self
     end
 
     private

@@ -10,6 +10,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [NotionRubyMapping::UserObject, Hash]
+    # @see https://www.notion.so/hkob/LastEditedByProperty-18379cbaebda495393445e4152076d66#278312b8cece457aa1f4bdbb9a7af063
     def last_edited_by
       @json
     end

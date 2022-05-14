@@ -6,6 +6,10 @@ module NotionRubyMapping
     # @return [MentionObject]
     def initialize(options = {})
       super "mention", options
+      return unless (url = options["link_preview"])
+
+      @options["href"] = url
+      @options["plain_text"] = url
     end
 
     # @return [String (frozen)]
@@ -65,6 +69,13 @@ module NotionRubyMapping
         {
           "type" => "template_mention",
           "template_mention" => sub,
+        }
+      elsif @options.key? "link_preview"
+        {
+          "type" => "link_preview",
+          "link_preview" => {
+            "url" => @options["link_preview"],
+          },
         }
       else
         raise StandardError, "Irregular mention type: #{@options.keys}"

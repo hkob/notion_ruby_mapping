@@ -111,7 +111,7 @@ module NotionRubyMapping
     end
 
     context "create from text_objects" do
-      let(:target) { RichTextArray.new "title", text_objects: text_objects }
+      let(:target) { RichTextArray.rich_text_array "title", text_objects }
       subject { target.full_text }
       context "a single string" do
         let(:text_objects) { "A string" }
@@ -136,6 +136,13 @@ module NotionRubyMapping
           ]
         end
         it { is_expected.to eq "A TextObject" }
+      end
+
+      context "A RichTextArray" do
+        let(:text_objects) do
+          RichTextArray.new "title", text_objects: "ABC"
+        end
+        it { is_expected.to eq "ABC" }
       end
     end
 

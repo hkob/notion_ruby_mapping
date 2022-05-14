@@ -1,0 +1,8 @@
+{
+  "name": "nr.png",
+  "type": "file",
+  "file": {
+    "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220309%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220309T235624Z&X-Amz-Expires=3600&X-Amz-Signature=1e86183da3411466cead5f144b5a955ea5be1844ec06c6893689a3fb86c369e2&X-Amz-SignedHeaders=host&x-id=GetObject",
+    "expiry_time": "2022-03-10T00:56:24.105Z"
+  }
+}
