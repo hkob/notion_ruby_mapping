@@ -4,7 +4,6 @@ module NotionRubyMapping
   # Notion Base object (Parent of Page / Database / List)
   # The Public API method has a link to the API references.
   class Base
-
     # @param [Hash, nil] json
     # @param [String, nil] id
     # @param [Array<Property, Class, String>] assign
@@ -52,7 +51,7 @@ module NotionRubyMapping
         "  -H 'Notion-Version: 2022-02-22'",
         "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
-      shell << "  -H 'Content-Type: application/json'" unless path == :get
+      shell << "  -H 'Content-Type: application/json'" if %i[post patch].include?(method)
       shell << "  --data '#{JSON.generate json}'" if json
       shell.join(" \\\n")
     end
@@ -73,8 +72,8 @@ module NotionRubyMapping
       end
     end
 
-    # @param [String] url
-    # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] caption
+    # @param [Array<Block>] blocks
+    # @param [Boolean] dry_run
     # @return [NotionRubyMapping::Block, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#44bbf83d852c419485c5efe9fe1558fb
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#2c47f7fedae543cf8566389ba1677132
@@ -86,7 +85,7 @@ module NotionRubyMapping
         "children" => Array(blocks).map do |block|
           assert_parent_children_pair block
           block.block_json
-        end
+        end,
       }
       if dry_run
         path = @nc.append_block_children_page_path(id)
@@ -112,7 +111,7 @@ module NotionRubyMapping
       raise StandardError, "Internal file block can not append." if bt == "file"
 
       raise StandardError, "Column block can only append column_list block" unless bt == "column" &&
-        block? && self.type == "columu_list"
+                                                                                   block? && type == "columu_list"
     end
 
     # @param [NotionRubyMapping::Property] klass
@@ -170,6 +169,11 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e13d526bd709451e9b06fd32e8d07fcd
     def icon
       self["icon"]
+    end
+
+    # @return [String (frozen)]
+    def inspect
+      "#{self.class.name}-#{@id}"
     end
 
     # @return [Hash] json properties
@@ -231,6 +235,7 @@ module NotionRubyMapping
       self
     end
 
+    # @param [Boolean] dry_run
     # @return [NotionRubyMapping::Base, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#277085c8439841c798a4b94eae9a7326
     def save(dry_run: false)
@@ -254,8 +259,9 @@ module NotionRubyMapping
       self
     end
 
-    def description
-      "#{self.class.name}-#{@id}"
+    # @return [FalseClass] return false except block
+    def synced_block_original?
+      false
     end
 
     # @param [Hash] json

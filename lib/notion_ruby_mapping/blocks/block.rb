@@ -13,10 +13,15 @@ module NotionRubyMapping
     attr_reader :can_have_children, :can_append, :type
 
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#298916c7c379424682f39ff09ee38544
-    # @param [String] key
+    # @param [String] id
     # @return [NotionRubyMapping::Block]
-    def self.find(key)
-      NotionCache.instance.block key
+    def self.find(id, dry_run: false)
+      nc = NotionCache.instance
+      if dry_run
+        Base.dry_run_script :get, nc.block_path(id)
+      else
+        nc.block id
+      end
     end
 
     # @return [Hash{String (frozen)->String (frozen) | Array}, nil]
@@ -68,9 +73,11 @@ module NotionRubyMapping
       when "link_preview"
         ans[@type] = {"url" => @url}
       when "link_to_page"
-        ans[@type] = @page_id ?
-                       {"type" => "page_id", "page_id" => @page_id} :
+        ans[@type] = if @page_id
+                       {"type" => "page_id", "page_id" => @page_id}
+                     else
                        {"type" => "database_id", "database_id" => @database_id}
+                     end
       when "synced_block"
         ans[@type] = {"synced_from" => @block_id ? {"type" => "block_id", "block_id" => @block_id} : nil}
         ans[@type]["children"] = @sub_blocks.map(&:block_json) if @sub_blocks
@@ -80,13 +87,11 @@ module NotionRubyMapping
           "has_row_header" => @has_row_header,
           "table_width" => @table_width,
         }
-        if @table_rows
-          ans[@type]["children"] = @table_rows.map(&:block_json)
-        end
+        ans[@type]["children"] = @table_rows.map(&:block_json) if @table_rows
       when "table_of_contents"
         ans[@type] = {"color" => @color}
       when "table_row"
-        ans[@type] = {"cells" => @cells.map { |cell| Array(cell).map { |to| to.property_values_json } } }
+        ans[@type] = {"cells" => @cells.map { |cell| Array(cell).map(&:property_values_json) }}
       when "template"
         @rich_text_array.will_update = true
         ans[@type] = @rich_text_array.update_property_schema_json
@@ -269,6 +274,16 @@ module NotionRubyMapping
       @rich_text_array = RichTextArray.new "rich_text", json: @json[@type]["rich_text"]
     end
 
+    # @param [Boolean] dry_run
+    # @return [NotionRubyMapping::Base, String]
+    def destroy(dry_run: false)
+      if dry_run
+        Base.dry_run_script :delete, @nc.block_path(@id)
+      else
+        @nc.destroy_block id
+      end
+    end
+
     # @return [NotionRubyMapping::Block]
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#fe58d26468e04b38b8ae730e4f0c74ae
     def divider
@@ -415,6 +430,11 @@ module NotionRubyMapping
       self
     end
 
+    # @return [Boolean] true if synced_block & block_id is nil
+    def synced_block_original?
+      @type == "synced_block" && @block_id.nil?
+    end
+
     def table(table_width:, has_column_header: false, has_row_header: false, table_rows: nil)
       @type = __method__.to_s
       @table_width = table_width
@@ -520,7 +540,6 @@ module NotionRubyMapping
     end
 
     # @param [String] url
-    # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] caption
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#7aad77515ce14e3bbc7e0a7a5427820b
     def video(url)
       @type = __method__.to_s
@@ -536,7 +555,6 @@ module NotionRubyMapping
     end
 
     # @param [String] type
-    # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] caption
     # @param [String] color
     def rich_text_array_and_color(type, text_info, color = "default")
       @rich_text_array = RichTextArray.rich_text_array type, text_info

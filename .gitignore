@@ -13,3 +13,4 @@ env.yml
 # rspec failure tracking
 .rspec_status
 .idea
+tools/tu.rb

@@ -816,27 +816,26 @@ module NotionRubyMapping
           end
         end
       end
+    end
 
-      # describe "paragraph block" do
-      #   before do
-      #     target.paragraph "Text", color: "red"
-      #   end
-      #   it_behaves_like :raw_json, :block_json, {
-      #     "type" => "paragraph",
-      #     "paragraph" => [
-      #       {
-      #         "text" => {
-      #           "content" => "Text",
-      #           "link" => nil,
-      #         },
-      #         "type" => "text",
-      #         "href" => nil,
-      #         "plain_text" => "Text",
-      #       },
-      #     ],
-      #     "color" => "red",
-      #   }
-      # end
+    describe "destroy" do
+      let(:id) { TestConnection::DESTROY_BLOCK_ID }
+      let(:target) { Block.new id: id }
+      context "dry_run" do
+        let(:dry_run) { target.destroy dry_run: true }
+        it_behaves_like :dry_run, :delete, :block_path, use_id: true
+      end
+
+      context "delete" do
+        let(:deleted_item) { target.destroy }
+        it "receive id" do
+          expect(deleted_item.id).to eq nc.hex_id(id)
+        end
+
+        it "should be archived" do
+          expect(deleted_item["archived"]).to be_truthy
+        end
+      end
     end
   end
 end

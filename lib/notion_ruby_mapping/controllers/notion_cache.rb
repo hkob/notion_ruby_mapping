@@ -38,7 +38,7 @@ module NotionRubyMapping
     def append_block_children_page_path(page_id)
       "v1/blocks/#{page_id}/children"
     end
-    
+
     # @param [String] id
     # @param [Hash] payload
     # @return [Hash]
@@ -136,6 +136,16 @@ module NotionRubyMapping
     # @return [String (frozen)] page_path
     def databases_path
       "v1/databases"
+    end
+
+    # @return [NotionRubyMapping::Base]
+    def destroy_block(id)
+      Base.create_from_json destroy_block_request(id)
+    end
+
+    # @param [Hash] response
+    def destroy_block_request(id)
+      request :delete, block_path(id)
     end
 
     def inspect

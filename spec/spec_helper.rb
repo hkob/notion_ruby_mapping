@@ -81,6 +81,7 @@ module NotionRubyMapping
       video: "bed3abe0-2009-4aa9-9056-4844f981b07a",
     }.freeze
     BLOCK_CREATE_TEST_BLOCK_ID = "82314687163e41baaf300a8a2bec57c2"
+    DESTROY_BLOCK_ID = "7306e4c4bc5b48d78948e59ec0059afd"
     # user_id
     USER_HKOB_ID = "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
 
@@ -134,6 +135,7 @@ module NotionRubyMapping
       retrieve_block_children
       append_block_children_page
       append_block_children_block
+      destroy_block
     end
 
     # @param [Symbol] method
@@ -1663,6 +1665,12 @@ module NotionRubyMapping
                          append_block_children_hash(BLOCK_CREATE_TEST_BLOCK_ID)
     end
 
+    def destroy_block
+      generate_stubs_sub :delete, __method__, :block_path, {
+        by_id: [DESTROY_BLOCK_ID, 200],
+      }
+    end
+
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
     def read_json(json_file)
@@ -1708,7 +1716,7 @@ module RSpec
         "  -H 'Notion-Version: 2022-02-22'",
         "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
-      shell << "  -H 'Content-Type: application/json'" unless path == :get
+      shell << "  -H 'Content-Type: application/json'" if %i[post patch].include?(method)
       shell << "  --data '#{JSON.generate json}'" if json
       expect(dry_run).to eq shell.join(" \\\n")
     end
