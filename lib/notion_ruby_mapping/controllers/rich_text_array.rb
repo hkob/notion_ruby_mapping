@@ -72,6 +72,17 @@ module NotionRubyMapping
       map(&:text).join ""
     end
 
+    def rich_text_objects=(text_info)
+      @will_update = true
+      @rich_text_objects = if text_info.is_a? RichTextArray
+                             text_info.filter { true }
+                           else
+                             Array(text_info).map do |to|
+                               RichTextObject.text_object to
+                             end
+                           end
+    end
+
     def property_values_json
       will_update ? @rich_text_objects.map(&:property_values_json) : []
     end
@@ -80,8 +91,8 @@ module NotionRubyMapping
       will_update ? {@key => @rich_text_objects.map(&:property_values_json)} : {}
     end
 
-    def update_property_schema_json
-      will_update ? {@key => @rich_text_objects.map(&:property_values_json)} : {}
+    def update_property_schema_json(flag = false)
+      flag || will_update ? {@key => @rich_text_objects.map(&:property_values_json)} : {}
     end
 
     # @return [TrueClass, FalseClass] true if it will update

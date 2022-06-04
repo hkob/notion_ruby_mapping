@@ -146,6 +146,48 @@ module NotionRubyMapping
       end
     end
 
+    context "rich_text_objects=" do
+      let(:target) { RichTextArray.rich_text_array "title" }
+      before { target.rich_text_objects = text_objects }
+      subject { target.full_text }
+      context "a single string" do
+        let(:text_objects) { "A string" }
+        it { is_expected.to eq "A string" }
+        it { expect(target.will_update).to be_truthy }
+      end
+
+      context "two strings" do
+        let(:text_objects) { %W[ABC\n DEF] }
+        it { is_expected.to eq "ABC\nDEF" }
+        it { expect(target.will_update).to be_truthy }
+      end
+
+      context "A TextObject" do
+        let(:text_objects) { TextObject.new "A TextObject" }
+        it { is_expected.to eq "A TextObject" }
+        it { expect(target.will_update).to be_truthy }
+      end
+
+      context "A TextObject and A MentionObject" do
+        let(:text_objects) do
+          [
+            TextObject.new("A TextObject"),
+            MentionObject.new(user_id: "ABC"),
+          ]
+        end
+        it { is_expected.to eq "A TextObject" }
+        it { expect(target.will_update).to be_truthy }
+      end
+
+      context "A RichTextArray" do
+        let(:text_objects) do
+          RichTextArray.new "title", text_objects: "ABC"
+        end
+        it { is_expected.to eq "ABC" }
+        it { expect(target.will_update).to be_truthy }
+      end
+    end
+
     context "create without arguments" do
       let(:target) { RichTextArray.new "title" }
 

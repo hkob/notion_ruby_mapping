@@ -22,9 +22,9 @@ db.query_database.each do |page|
 end
 ```
 
-|Before execution|After execution|
-|---|---|
-|![Before execution](../images/pre_set_icon.png)|![After execution](../images/post_set_icon.png)|
+| Before execution                                | After execution                                 |
+|-------------------------------------------------|-------------------------------------------------|
+| ![Before execution](../images/pre_set_icon.png) | ![After execution](../images/post_set_icon.png) |
 
 ---
-[Return to README.md](../README.md#2-example-code)
+[Return to README.md](../README.md)

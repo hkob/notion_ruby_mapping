@@ -27,7 +27,7 @@ module NotionRubyMapping
       @json["expression"]
     end
 
-    # @param [String] formula
+    # @param [String] f_e
     # @see https://www.notion.so/hkob/FormulaProperty-d6b22ca70822407a9fef0bac8925cd0d#fdb3aaa8d0474440b7ed941673ee13b7
     def formula_expression=(f_e)
       assert_database_property __method__

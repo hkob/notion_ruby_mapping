@@ -17,6 +17,12 @@ module NotionRubyMapping
       end
     end
 
+    # @param [String] key
+    # @return [NotionRubyMapping::PropertyCache, Hash] obtained Page value or PropertyCache
+    def [](key)
+      get key
+    end
+
     # @param [Class] klass
     # @param [String] title
     # @return [NotionRubyMapping::Property]
@@ -76,7 +82,7 @@ module NotionRubyMapping
       if dry_run
         Base.dry_run_script :post, @nc.query_database_path(@id), query.query_json
       else
-        response = @nc.database_query @id, query
+        response = @nc.database_query_request @id, query
         List.new json: response, database: self, query: query
       end
     end

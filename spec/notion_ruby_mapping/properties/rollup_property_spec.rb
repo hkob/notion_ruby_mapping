@@ -74,7 +74,6 @@ module NotionRubyMapping
           it_behaves_like :assert_different_property, :property_values_json
           it_behaves_like :update_property_schema_json, {"rp" => nil}
         end
-
       end
 
       context "created from json" do
@@ -109,7 +108,7 @@ module NotionRubyMapping
         describe "function" do
           it { expect(target.function).to eq "show_original" }
           context "function =" do
-            before { target.function  = "average" }
+            before { target.function = "average" }
             it { expect(target.function).to eq "average" }
           end
         end

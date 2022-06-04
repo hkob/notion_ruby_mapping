@@ -12,7 +12,7 @@ module NotionRubyMapping
     attr_reader :filter, :sort, :page_size
     attr_accessor :start_cursor
 
-    # @param [Query] other_query other query
+    # @param [Query] another_query other query
     # @return [NotionRubyMapping::Query] updated self (Query object)
     def and(another_query)
       if @filter.key? "and"

@@ -423,11 +423,11 @@ module NotionRubyMapping
             pc["Number"].format = "percent"
           end
         end
-        let(:dry_run) {
+        let(:dry_run) do
           parent_page.create_child_database "New database title", NumberProperty, "Number", dry_run: true do |_, pc|
             pc["Number"].format = "percent"
           end
-        }
+        end
 
         it_behaves_like :dry_run, :post, :databases_path, json_method: :update_property_schema_json
       end

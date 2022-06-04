@@ -8,6 +8,7 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
 
 - [notion_ruby_mapping](#notion_ruby_mapping)
   - [Table of Contents](#table-of-contents)
+  - [0. Changes in v0.5.0](#0-changes-in-v050)
   - [1. Installation](#1-installation)
   - [2. How to use](#2-how-to-use)
     - [2.1 Create a New Integration](#21-create-a-new-integration)
@@ -19,7 +20,11 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
   - [4. Contributing](#4-contributing)
   - [5. License](#5-license)
   - [6. Code of Conduct](#6-code-of-conduct)
-  - [7. Acknowledgements](#7-acknowledgements)
+
+## 0. Changes in v0.5.0
+
+NotionRubyMapping v.0.5.0 now supports block updates.
+For efficiency, subclasses are provided under Block class. As a result, they are no longer compatible with the scripts used in v0.4.0.
 
 ## 1. Installation
 
@@ -60,6 +65,7 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 1. [Database and page access sample](https://www.notion.so/hkob/Database-and-page-access-sample-d30033e707194faf995741167eb2b6f8)
 1. [Append block children sample](https://www.notion.so/hkob/Append-block-children-sample-3867910a437340be931cf7f2c06443c6)
+1. [Update block sample](https://www.notion.so/hkob/update-block-sample-5568c1c36fe84f12b83edfe2dda83028)
 
 ### 2.4. Another example code (Use case)
 
@@ -73,17 +79,17 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 ## 3. ChangeLog
 
-- added append_block_children
-- added retrieve_block spec
-- 2022/4/29 Change directory structure, TEST_IDs are moved from env.yml to TestConnection's constants
+- 2022/6/4 [v0.5.0]  added subclasses of the block class and update_block API support
+- 2022/5/19 [v0.4.1] added delete_block
+- 2022/4/29 [v0.4.0] Change directory structure, TEST_IDs are moved from env.yml to TestConnection's constants, added retrieve_block spec, added append_block_children
 - 2022/4/27 added Base#children
-- 2022/3/27 create_child_page can receive a block for initialization.
-- 2022/3/27 properties of a created child page are automatically assigned using the parent database.
-- 2022/3/25 added create_child_database, update_database, add_property, rename_property and remove_property
-- 2022/3/17 added template_mention objects, tools/an command
-- 2022/3/16 added database.create_child_page and base.save instead of base.update/create
+- 2022/3/27 [v0.3.3] create_child_page can receive a block for initialization.
+- 2022/3/27 [v0.3.2] properties of a created child page are automatically assigned using the parent database.
+- 2022/3/25 [v0.3.0] added create_child_database, update_database, add_property, rename_property and remove_property
+- 2022/3/17 [v0.2.3] added template_mention objects, tools/an command
+- 2022/3/16 [v0.2.2] added database.create_child_page and base.save instead of base.update/create
 - 2022/3/15 Fixed not to reload from API when all contents are loaded
-- 2022/3/14 Exclude notion-ruby-client, update Property values, update for Notion-Version 2022-02-22
+- 2022/3/14 [v0.2.0] Exclude notion-ruby-client, update Property values, update for Notion-Version 2022-02-22
 - 2022/2/25 add_property_for_update -> assign_property, update README.md
 - 2022/2/20 add support for MultiSelectProperty
 - 2022/2/19 add support for SelectProperty
@@ -105,7 +111,3 @@ The gem is available as open source under the terms of the [MIT License](https:/
 ## 6. Code of Conduct
 
 Everyone interacting in the NotionRubyMapping project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/notion_ruby_mapping/blob/main/CODE_OF_CONDUCT.md).
-
-## 7. Acknowledgements
-
-The code depends on [notion-ruby-client](https://github.com/orbit-love/notion-ruby-client).

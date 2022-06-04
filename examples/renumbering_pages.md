@@ -12,9 +12,9 @@ db.query_database(tp.filter_is_not_empty.ascending(tp)).each.with_index(1) do |p
 end
 ```
 
-| After execution                               |
-|-----------------------------------------------|
+| After execution                                  |
+|--------------------------------------------------|
 | ![After exuecution](../images/serial_number.png) |
 
 ---
-[Return to README.md](../README.md#2-example-code)
+[Return to README.md](../README.md)

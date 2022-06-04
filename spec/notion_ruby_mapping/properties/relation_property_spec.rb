@@ -90,14 +90,14 @@ module NotionRubyMapping
         describe "add_relation=" do
           [
             "a_id", %w[page_id a_id],
-            {"id" => "b_id"}, %w[page_id b_id],
+            {"id" => "b_id"}, %w[page_id b_id]
           ].each_slice(2) do |(input, page_ids)|
             context input do
               before { target.add_relation input }
               it_behaves_like :property_values_json, {
                 "rp" => {
                   "type" => "relation",
-                  "relation" => Array(page_ids).map { |id| {"id" => id} }
+                  "relation" => Array(page_ids).map { |id| {"id" => id} },
                 },
               }
               it_behaves_like :will_update
@@ -110,14 +110,14 @@ module NotionRubyMapping
             "a_id", "a_id",
             %w[a_id b_id], %w[a_id b_id],
             {"id" => "a_id"}, "a_id",
-            [{"id" => "a_id"}, {"id" => "b_id"}], %w[a_id b_id],
+            [{"id" => "a_id"}, {"id" => "b_id"}], %w[a_id b_id]
           ].each_slice(2) do |(input, page_ids)|
             context input do
               before { target.relation = input }
               it_behaves_like :property_values_json, {
                 "rp" => {
                   "type" => "relation",
-                  "relation" => Array(page_ids).map { |id| {"id" => id} }
+                  "relation" => Array(page_ids).map { |id| {"id" => id} },
                 },
               }
               it_behaves_like :will_update

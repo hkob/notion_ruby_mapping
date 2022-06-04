@@ -21,7 +21,6 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-
     # @param [String] url
     # @see https://www.notion.so/hkob/UrlProperty-8a0094fdf6494151983cb4694f6626cc#cfa5463a121b4002b250b38d7d0a0d34
     def url=(url)
@@ -35,7 +34,6 @@ module NotionRubyMapping
     ## Common methods
 
     # @param [String] name Property name
-    # @param [String] url url value (optional)
     def initialize(name, will_update: false, base_type: :page, json: nil)
       super name, will_update: will_update, base_type: base_type
       @json = json || (database? ? {} : nil)

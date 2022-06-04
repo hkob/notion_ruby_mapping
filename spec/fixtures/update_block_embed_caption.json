@@ -1,0 +1,39 @@
+{
+  "object": "block",
+  "id": "7ba68fa8-f57f-456c-bd7c-73fa37f7f3ea",
+  "created_time": "2022-05-23T11:30:00.000Z",
+  "last_edited_time": "2022-05-23T11:45:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "embed",
+  "embed": {
+    "caption": [
+      {
+        "type": "text",
+        "text": {
+          "content": "NotionRubyMapping v0.4.0",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "NotionRubyMapping v0.4.0",
+        "href": null
+      }
+    ],
+    "url": "https://twitter.com/hkob/status/1507972453095833601"
+  }
+}

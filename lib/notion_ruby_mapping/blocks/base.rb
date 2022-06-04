@@ -10,7 +10,9 @@ module NotionRubyMapping
     def initialize(json: nil, id: nil, assign: [], parent: nil)
       @nc = NotionCache.instance
       @json = json
-      @id = @nc.hex_id(id || json && @json["id"])
+      @id = @nc.hex_id(id || @json && @json["id"])
+      @archived = @json && @json["archived"]
+      @has_children = @json && @json["has_children"]
       @new_record = true unless parent.nil?
       raise StandardError, "Unknown id" if !is_a?(List) && !is_a?(Block) && @id.nil? && parent.nil?
 
@@ -36,7 +38,7 @@ module NotionRubyMapping
       when "list"
         List.new json: json
       when "block"
-        Block.new(json: json).decode_block
+        Block.decode_block json
       else
         raise StandardError, json.inspect
       end
@@ -58,7 +60,7 @@ module NotionRubyMapping
 
     # @param [String] key
     # @return [NotionRubyMapping::PropertyCache, Hash] obtained Page value or PropertyCache
-    def [](key)
+    def get(key)
       unless @json
         raise StandardError, "Unknown id" if @id.nil?
 
@@ -111,7 +113,7 @@ module NotionRubyMapping
       raise StandardError, "Internal file block can not append." if bt == "file"
 
       raise StandardError, "Column block can only append column_list block" unless bt == "column" &&
-                                                                                   block? && type == "columu_list"
+                                                                                   block? && type == "column_list"
     end
 
     # @param [NotionRubyMapping::Property] klass
@@ -146,13 +148,6 @@ module NotionRubyMapping
         response = @nc.block_children_request @id, query.query_string
         @children = List.new json: response, parent: self, query: query
       end
-    end
-
-    # @return [NotionRubyMapping::Block]
-    def create_child_breadcrumb
-      raise StandardError unless page? || (block? && can_have_children)
-
-      Block.new(parent: self).breadcrumb
     end
 
     # @return [NotionRubyMapping::CreatedTimeProperty]
@@ -243,7 +238,7 @@ module NotionRubyMapping
         @new_record ? create(dry_run: true) : update(dry_run: true)
       else
         @new_record ? create : update
-        @property_cache.clear_will_update
+        @property_cache.clear_will_update unless block?
         @payload.clear
         self
       end
@@ -267,7 +262,10 @@ module NotionRubyMapping
     # @param [Hash] json
     # @return [NotionRubyMapping::Base]
     def update_json(json)
-      raise StandardError, json.inspect unless json["object"] != "error" && (@json.nil? || @json["type"] == json["type"])
+      unless json["object"] != "error" && (@json.nil? || @json["type"] == json["type"])
+        raise StandardError,
+              json.inspect
+      end
 
       @json = json
       @id = @nc.hex_id(@json["id"])

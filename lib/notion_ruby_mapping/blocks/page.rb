@@ -17,6 +17,12 @@ module NotionRubyMapping
       end
     end
 
+    # @param [String] key
+    # @return [NotionRubyMapping::PropertyCache, Hash] obtained Page value or PropertyCache
+    def [](key)
+      get key
+    end
+
     # @param [String] title
     # @param [Array<String, Property>] assigns
     # @return [NotionRubyMapping::Database]

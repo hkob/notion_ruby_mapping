@@ -42,48 +42,74 @@ module NotionRubyMapping
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
     PARAGRAPH_BLOCK_ID = "79ddb5ed15c74a409cf6a018d23ceb19"
     BLOCK_ID_HASH = {
-      bookmark: "aa1c25bc-b172-4a36-898d-3ce5e1f572b7",
-      breadcrumb: "6d2ed6f3-8f74-4e83-8766-747b6d7995f6",
-      bulleted_list_item: "8a0d35c5-145e-41fd-89ac-e46deb85d24f",
-      callout: "715a6550-c737-444f-ac99-4be7822c88d3",
-      child_database: "ea525a78-4669-470d-b425-8c4d7cb95667",
-      child_page: "0f3e5073-22d8-48eb-926b-e808df84c169",
-      code: "c9a46c89-109b-486a-8105-6ca82f4f6515",
-      column: "29a966bb-81eb-43e5-aae1-b44992525775",
-      column_list: "93195eab-21f7-4419-bf44-0e4c07092573",
-      divider: "e34f7164-4535-48fd-9c49-1d320f77bda2",
-      embed_twitter: "e4c0811c-7154-4fed-9e8c-02d885c898ef",
-      equation: "6a1f76eb-337e-4169-a77b-cb8b1d79a88e",
-      file: "0da49a8b-963e-42e6-a9ee-0deb765d5b40",
-      heading_1: "0a58761e-f3b4-429f-b86e-0ad9ff815fe1",
-      heading_2: "d34096c9-62ba-4633-9294-db488ca7b8cc",
-      heading_3: "fef62d73-8d83-4791-b2da-681816f56389",
-      image_external: "ae7be035-7ad1-418a-bb8e-f0f2d039220c",
-      image_file: "293ace37-42f5-45a6-b8ff-1352f4b3e7c6",
-      inline_contents: "2515e2f2-a53f-40c3-a2ea-1b5d47afee09",
-      link_preview_dropbox: "7b391df0-1dc5-430e-aae0-1bc0392cdcb5",
-      link_to_page: "b921ff3c-b13c-43c2-b53a-d9d1ba19b8c1",
-      numbered_list_item: "1860edbc-410d-408b-87f6-1e37e07352a2",
-      paragraph: "79ddb5ed-15c7-4a40-9cf6-a018d23ceb19",
-      pdf: "878fd86e-be37-482f-b637-d09fb63eaee8",
-      quote: "8eba490b-cc83-4384-9cb0-9a739a4be91c",
-      synced_block_copy: "ea7b5183-eea2-4d30-b019-010921e93b2c",
-      synced_block_original: "4815032e-6f24-43e4-bc8c-9bdc6299b090",
-      table: "ba612e8b-c858-4569-9822-ccca7ab4c709",
-      table_of_contents: "0de608aa-c31b-4c5c-a84a-ae48d8ea05b8",
-      table_row: "57fc378c-9db1-4fef-8d74-72c1b2084df1",
-      template: "12fe0347-f8c4-4da0-ace9-9c8992b5827f",
-      to_do: "676129de-8eac-42c9-9449-c15893775cae",
-      toggle: "005923da-b39f-4af6-bbd1-1be98150d2b2",
-      toggle_heading_1: "82daa282-435d-4f9f-8f3b-b8c0328a963f",
-      toggle_heading_2: "e5f16356-8adc-49c5-9f17-228589d071ac",
-      toggle_heading_3: "115fb937-ab6d-4a2e-9079-921b03e50756",
-      video: "bed3abe0-2009-4aa9-9056-4844f981b07a",
+      bookmark: "aa1c25bcb1724a36898d3ce5e1f572b7",
+      breadcrumb: "6d2ed6f38f744e838766747b6d7995f6",
+      bulleted_list_item: "8a0d35c5145e41fd89ace46deb85d24f",
+      callout: "715a6550c737444fac994be7822c88d3",
+      child_database: "ea525a784669470db4258c4d7cb95667",
+      child_page: "0f3e507322d848eb926be808df84c169",
+      code: "c9a46c89109b486a81056ca82f4f6515",
+      column: "29a966bb81eb43e5aae1b44992525775",
+      column_list: "93195eab21f74419bf440e4c07092573",
+      divider: "e34f7164453548fd9c491d320f77bda2",
+      embed_twitter: "e4c0811c71544fed9e8c02d885c898ef",
+      equation: "6a1f76eb337e4169a77bcb8b1d79a88e",
+      file: "0da49a8b963e42e6a9ee0deb765d5b40",
+      heading_1: "0a58761ef3b4429fb86e0ad9ff815fe1",
+      heading_2: "d34096c962ba46339294db488ca7b8cc",
+      heading_3: "fef62d738d834791b2da681816f56389",
+      image_external: "ae7be0357ad1418abb8ef0f2d039220c",
+      image_file: "293ace3742f545a6b8ff1352f4b3e7c6",
+      inline_contents: "2515e2f2a53f40c3a2ea1b5d47afee09",
+      link_preview_dropbox: "7b391df01dc5430eaae01bc0392cdcb5",
+      link_to_page: "b921ff3cb13c43c2b53ad9d1ba19b8c1",
+      numbered_list_item: "1860edbc410d408b87f61e37e07352a2",
+      paragraph: "79ddb5ed15c74a409cf6a018d23ceb19",
+      pdf: "878fd86ebe37482fb637d09fb63eaee8",
+      quote: "8eba490bcc8343849cb09a739a4be91c",
+      synced_block_copy: "ea7b5183eea24d30b019010921e93b2c",
+      synced_block_original: "4815032e6f2443e4bc8c9bdc6299b090",
+      table: "ba612e8bc85845699822ccca7ab4c709",
+      table_of_contents: "0de608aac31b4c5ca84aae48d8ea05b8",
+      table_row: "57fc378c9db14fef8d7472c1b2084df1",
+      template: "12fe0347f8c44da0ace99c8992b5827f",
+      to_do: "676129de8eac42c99449c15893775cae",
+      toggle: "005923dab39f4af6bbd11be98150d2b2",
+      toggle_heading_1: "82daa282435d4f9f8f3bb8c0328a963f",
+      toggle_heading_2: "e5f163568adc49c59f17228589d071ac",
+      toggle_heading_3: "115fb937ab6d4a2e9079921b03e50756",
+      video: "bed3abe020094aa990564844f981b07a",
     }.freeze
     BLOCK_CREATE_TEST_BLOCK_ID = "82314687163e41baaf300a8a2bec57c2"
     DESTROY_BLOCK_ID = "7306e4c4bc5b48d78948e59ec0059afd"
+    UPDATE_BLOCK_ID_HASH = {
+      bookmark: "899e342cec84415f9ff86225704cbb75",
+      bulleted_list_item: "ab51d1c7094649b5b9007ef0109b33c4",
+      callout: "05386a91dfa24296b6b2ac4676006bdb",
+      code: "5568c1c36fe84f12b83edfe2dda83028",
+      embed: "7ba68fa8f57f456cbd7c73fa37f7f3ea",
+      equation: "db334fcf9f6d4f179edbe534229b1f87",
+      file: "bed94c76d41849599143d345ef48a11e",
+      heading_1: "0ae3399d5599419e84af80433e1290b4",
+      heading_2: "a7873498c1cc4032bc4e975b80ec1a1b",
+      heading_3: "2bf3a507d066433fad10ed77b342664c",
+      toggle_heading_1: "a9b7ff827c5b41dba01374b1af8fb516",
+      toggle_heading_2: "00ce5fe04b5b485ba157914ae048b780",
+      toggle_heading_3: "e16aa38d136e4fcaa54c3a18f6140350",
+      image: "9e78e7714adf4055b78b3a1528b956d6",
+      numbered_list_item: "da9929d35cd849d7990e2ee361239810",
+      paragraph: "7de3e4c08c5f4082992268d154f9aefc",
+      pdf: "ca7317b3b5d44a75880611264155dd48",
+      quote: "56e80c562281487281f4bf34d8db02bc",
+      synced_block: "1798b85f12ec4e28b13e47c591bc0ec5",
+      table_of_contents: "b3c6fe0a5885498aa5cb4c4b3080f4cf",
+      template: "704d8961e0fd42c9b5b08a086c84f100",
+      to_do: "683ef29efbb84d78a411c541d68ccb06",
+      toggle: "5b7373a8ac82456684a02e761aabf6fc",
+      video: "8c49d0d66f9b45fb9bea6253997c87ba",
+    }.freeze
     # user_id
-    USER_HKOB_ID = "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    USER_HKOB_ID = "2200a9116a9644bbbd386bfb1e01b9f6"
 
     def initialize
       @config = YAML.load_file "env.yml"
@@ -136,14 +162,17 @@ module NotionRubyMapping
       append_block_children_page
       append_block_children_block
       destroy_block
+      update_block
     end
 
     # @param [Symbol] method
     # @param [Symbol, nil] prefix
     # @param [Symbol] path_method
-    # @param [Hash<Array>] array
+    # @param [Hash<Array>] hash
     def generate_stubs_sub(method, prefix, path_method, hash)
       hash.each do |key, (id, code, payload)|
+        raise StandardError, "code is missing" unless code.is_a? Integer
+
         path = id ? @nc.send(path_method, *id) : @nc.send(path_method)
         stub method, "#{prefix}_#{key}", path, code, payload
       end
@@ -175,7 +204,7 @@ module NotionRubyMapping
         wrong_format: ["AAA", 400],
         unpermitted_block: [UNPERMITTED_BLOCK_ID, 404],
       }
-      hash = BLOCK_ID_HASH.map { |k, id| [k, [id, 200]] }.to_h
+      hash = BLOCK_ID_HASH.transform_values { |id| [id, 200] }
       generate_stubs_sub :get, __method__, :block_path, hash
     end
 
@@ -246,7 +275,7 @@ module NotionRubyMapping
               "people" => [
                 {
                   "object" => "user",
-                  "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+                  "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
                 },
               ],
             },
@@ -408,7 +437,7 @@ module NotionRubyMapping
                 "options": [
                   {"id": "56a526e1-0cec-4b85-b9db-fc68d00e50c6", "name": "S1", "color": "yellow"},
                   {"id": "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", "name": "S2", "color": "default"},
-                  {"name": "S3","color": "red"},
+                  {"name": "S3", "color": "red"},
                 ],
               },
             },
@@ -1115,10 +1144,11 @@ module NotionRubyMapping
                   "external" => {
                     "url" => "https://github.com/onocom/sample-files-for-demo-use/raw/151dd797d54d7e0ae0dc50e8e19d7965b387e202/sample-pdf.pdf",
                   },
+                  "caption" => [],
                 },
               },
             ],
-          },
+          }
         ],
         quote: [
           id, 200,
@@ -1214,7 +1244,7 @@ module NotionRubyMapping
                 "synced_block" => {
                   "synced_from" => {
                     "type" => "block_id",
-                    "block_id" => "4815032e-6f24-43e4-bc8c-9bdc6299b090",
+                    "block_id" => "4815032e6f2443e4bc8c9bdc6299b090",
                   },
                 },
               },
@@ -1298,7 +1328,6 @@ module NotionRubyMapping
                       "href" => nil,
                     },
                   ],
-                  "checked" => false,
                   "color" => "brown_background",
                   "children" => [
                     {
@@ -1320,6 +1349,7 @@ module NotionRubyMapping
                       },
                     },
                   ],
+                  "checked" => false,
                 },
               },
             ],
@@ -1517,6 +1547,7 @@ module NotionRubyMapping
                   "external" => {
                     "url" => "https://download.samplelib.com/mp4/sample-5s.mp4",
                   },
+                  "caption" => [],
                 },
               },
             ],
@@ -1548,7 +1579,7 @@ module NotionRubyMapping
                               },
                               "plain_text" => "Services",
                               "href" => nil,
-                            }
+                            },
                           ],
                           [
                             {
@@ -1559,10 +1590,10 @@ module NotionRubyMapping
                               },
                               "plain_text" => "Account",
                               "href" => nil,
-                            }
-                          ]
-                        ]
-                      }
+                            },
+                          ],
+                        ],
+                      },
                     },
                     {
                       "type" => "table_row",
@@ -1578,7 +1609,7 @@ module NotionRubyMapping
                               },
                               "plain_text" => "Twitter",
                               "href" => nil,
-                            }
+                            },
                           ],
                           [
                             {
@@ -1595,15 +1626,15 @@ module NotionRubyMapping
                               "text" => {
                                 "content" => "profile",
                                 "link" => {
-                                  "url" => "https://twitter.com/hkob/"
-                                }
+                                  "url" => "https://twitter.com/hkob/",
+                                },
                               },
                               "plain_text" => "profile",
-                              "href" => "https://twitter.com/hkob/"
-                            }
-                          ]
-                        ]
-                      }
+                              "href" => "https://twitter.com/hkob/",
+                            },
+                          ],
+                        ],
+                      },
                     },
                     {
                       "type" => "table_row",
@@ -1619,7 +1650,7 @@ module NotionRubyMapping
                               },
                               "plain_text" => "GitHub",
                               "href" => nil,
-                            }
+                            },
                           ],
                           [
                             {
@@ -1636,22 +1667,22 @@ module NotionRubyMapping
                               "text" => {
                                 "content" => "repositories",
                                 "link" => {
-                                  "url" => "https://github.com/hkob/"
-                                }
+                                  "url" => "https://github.com/hkob/",
+                                },
                               },
                               "plain_text" => "repositories",
-                              "href" => "https://github.com/hkob/"
-                            }
-                          ]
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+                              "href" => "https://github.com/hkob/",
+                            },
+                          ],
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
           }
-        ]
+        ],
       }
     end
 
@@ -1671,10 +1702,759 @@ module NotionRubyMapping
       }
     end
 
+    def update_block
+      generate_stubs_sub :patch, __method__, :block_path, {
+        bookmark_url: [
+          UPDATE_BLOCK_ID_HASH[:bookmark], 200,
+          {
+            "bookmark" => {
+              "url" => "https://www.apple.com/",
+            },
+          }
+        ],
+        bookmark_caption: [
+          UPDATE_BLOCK_ID_HASH[:bookmark], 200,
+          {
+            "bookmark" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Apple",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Apple",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        bulleted_list_item_rta: [
+          UPDATE_BLOCK_ID_HASH[:bulleted_list_item], 200,
+          {
+            "bulleted_list_item" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        bulleted_list_item_color: [
+          UPDATE_BLOCK_ID_HASH[:bulleted_list_item], 200,
+          {
+            "bulleted_list_item" => {
+              "color" => "orange_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "old text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        callout_color: [
+          UPDATE_BLOCK_ID_HASH[:callout], 200,
+          {
+            "callout" => {
+              "color" => "orange_background",
+            },
+          }
+        ],
+        callout_rta: [
+          UPDATE_BLOCK_ID_HASH[:callout], 200,
+          {
+            "callout" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        callout_file_url: [
+          UPDATE_BLOCK_ID_HASH[:callout], 200,
+          {
+            "callout" => {
+              "icon" => {
+                "type" => "external",
+                "external" => {
+                  "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                },
+              },
+            },
+          }
+        ],
+        callout_emoji: [
+          UPDATE_BLOCK_ID_HASH[:callout], 200,
+          {
+            "callout" => {
+              "icon" => {
+                "type" => "emoji",
+                "emoji" => "💡",
+              },
+            },
+          }
+        ],
+        code_language: [
+          UPDATE_BLOCK_ID_HASH[:code], 200,
+          {
+            "code" => {
+              "language" => "ruby",
+            },
+          }
+        ],
+        code_caption: [
+          UPDATE_BLOCK_ID_HASH[:code], 200,
+          {
+            "code" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "set an array",
+                    "link" => nil,
+                  },
+                  "plain_text" => "set an array",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        code_rta: [
+          UPDATE_BLOCK_ID_HASH[:code], 200,
+          {
+            "code" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "array = %w[ABC DEF]",
+                    "link" => nil,
+                  },
+                  "plain_text" => "array = %w[ABC DEF]",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        embed_caption: [
+          UPDATE_BLOCK_ID_HASH[:embed], 200,
+          {
+            "embed" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "NotionRubyMapping v0.4.0",
+                    "link" => nil,
+                  },
+                  "plain_text" => "NotionRubyMapping v0.4.0",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        embed_url: [
+          UPDATE_BLOCK_ID_HASH[:embed], 200,
+          {
+            "embed" => {
+              "url" => "https://twitter.com/hkob/status/1525470656447811586",
+            },
+          }
+        ],
+        equation_expression: [
+          UPDATE_BLOCK_ID_HASH[:equation], 200,
+          {
+            "equation" => {
+              "expression" => "X(z) = \\sum_{n=-\\infty}^{\\infty}x[n]z^{-n}",
+            },
+          }
+        ],
+        file_url: [
+          UPDATE_BLOCK_ID_HASH[:file], 200,
+          {
+            "file" => {
+              "external" => {
+                "url" => "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
+              },
+            },
+          }
+        ],
+        file_caption: [
+          UPDATE_BLOCK_ID_HASH[:file], 200,
+          {
+            "file" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Notion logo",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Notion logo",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading1_color: [
+          UPDATE_BLOCK_ID_HASH[:heading_1], 200,
+          {
+            "heading_1" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 1",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Heading 1",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading1_rta: [
+          UPDATE_BLOCK_ID_HASH[:heading_1], 200,
+          {
+            "heading_1" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 1",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 1",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading2_color: [
+          UPDATE_BLOCK_ID_HASH[:heading_2], 200,
+          {
+            "heading_2" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 2",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Heading 2",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading2_rta: [
+          UPDATE_BLOCK_ID_HASH[:heading_2], 200,
+          {
+            "heading_2" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 2",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 2",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading3_color: [
+          UPDATE_BLOCK_ID_HASH[:heading_3], 200,
+          {
+            "heading_3" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 3",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Heading 3",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading3_rta: [
+          UPDATE_BLOCK_ID_HASH[:heading_3], 200,
+          {
+            "heading_3" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 3",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 3",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        image_url: [
+          UPDATE_BLOCK_ID_HASH[:image], 200,
+          {
+            "image" => {
+              "external" => {
+                "url" => "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
+              },
+            },
+          }
+        ],
+        image_caption: [
+          UPDATE_BLOCK_ID_HASH[:image], 200,
+          {
+            "image" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "macOS logo",
+                    "link" => nil,
+                  },
+                  "plain_text" => "macOS logo",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        numbered_list_item_color: [
+          UPDATE_BLOCK_ID_HASH[:numbered_list_item], 200,
+          {
+            "numbered_list_item" => {
+              "color" => "orange_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "old text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        numbered_list_item_rta: [
+          UPDATE_BLOCK_ID_HASH[:numbered_list_item], 200,
+          {
+            "numbered_list_item" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        paragraph_color: [
+          UPDATE_BLOCK_ID_HASH[:paragraph], 200,
+          {
+            "paragraph" => {
+              "color" => "orange_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old paragraph text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "old paragraph text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        paragraph_rta: [
+          UPDATE_BLOCK_ID_HASH[:paragraph], 200,
+          {
+            "paragraph" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new paragraph text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new paragraph text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        pdf_caption: [
+          UPDATE_BLOCK_ID_HASH[:pdf], 200,
+          {
+            "pdf" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new caption",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new caption",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        pdf_url: [
+          UPDATE_BLOCK_ID_HASH[:pdf], 200,
+          {
+            "pdf" => {
+              "external" => {
+                "url" => "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+              },
+            },
+          }
+        ],
+        quote_color: [
+          UPDATE_BLOCK_ID_HASH[:quote], 200,
+          {
+            "quote" => {
+              "color" => "orange_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "old text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        quote_rta: [
+          UPDATE_BLOCK_ID_HASH[:quote], 200,
+          {
+            "quote" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new text",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        table_of_contents_color: [
+          UPDATE_BLOCK_ID_HASH[:table_of_contents], 200,
+          {
+            "table_of_contents" => {
+              "color" => "orange_background",
+            },
+          }
+        ],
+        template_rta: [
+          UPDATE_BLOCK_ID_HASH[:template], 200,
+          {
+            "template" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New template",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New template",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        to_do_checked: [
+          UPDATE_BLOCK_ID_HASH[:to_do], 200,
+          {
+            "to_do" => {
+              "checked" => true,
+            },
+          }
+        ],
+        to_do_color: [
+          UPDATE_BLOCK_ID_HASH[:to_do], 200,
+          {
+            "to_do" => {
+              "color" => "orange_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old To Do",
+                    "link" => nil,
+                  },
+                  "plain_text" => "old To Do",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        to_do_rta: [
+          UPDATE_BLOCK_ID_HASH[:to_do], 200,
+          {
+            "to_do" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new To Do",
+                    "link" => nil,
+                  },
+                  "plain_text" => "new To Do",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_color: [
+          UPDATE_BLOCK_ID_HASH[:toggle], 200,
+          {
+            "toggle" => {
+              "color" => "orange_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Old Toggle",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Old Toggle",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_rta: [
+          UPDATE_BLOCK_ID_HASH[:toggle], 200,
+          {
+            "toggle" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Toggle",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Toggle",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading1_color: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_1], 200,
+          {
+            "heading_1" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 1",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Toggle Heading 1",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading1_rta: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_1], 200,
+          {
+            "heading_1" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 1",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 1",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading2_color: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_2], 200,
+          {
+            "heading_2" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 2",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Toggle Heading 2",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading2_rta: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_2], 200,
+          {
+            "heading_2" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 2",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 2",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading3_color: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_3], 200,
+          {
+            "heading_3" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 3",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Toggle Heading 3",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading3_rta: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_3], 200,
+          {
+            "heading_3" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 3",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 3",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        video_caption: [
+          UPDATE_BLOCK_ID_HASH[:video], 200,
+          {
+            "video" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New caption",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New caption",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        video_url: [
+          UPDATE_BLOCK_ID_HASH[:video], 200,
+          {
+            "video" => {
+              "external" => {
+                "url" => "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
+              },
+            },
+          }
+        ],
+      }
+    end
+
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
     def read_json(json_file)
-      File.open("spec/fixtures/#{json_file}.json") { |f| JSON.load f }
+      File.open("spec/fixtures/#{json_file}.json") { |f| JSON.parse f.read }
     end
 
     ### read ids from env.yml
@@ -1694,14 +2474,14 @@ module NotionRubyMapping
 end
 
 module RSpec
+  include NotionRubyMapping
+
   shared_examples_for :dry_run do |method, path_method, id: nil, use_id: false, json: nil, json_method: nil, use_query: false|
     it do
       json ||= if json_method
                  target.send(json_method)
                elsif use_query && method != :get
                  query.query_json
-               else
-                 nil
                end
       path = if use_id
                @tc.nc.send(path_method, target.id)
@@ -1815,6 +2595,172 @@ module RSpec
           end
         end
       end
+    end
+  end
+
+  shared_examples_for :retrieve_block do |klass, id, have_children, json|
+    describe "#{klass} block" do
+      let(:target) { klass.find id }
+
+      it "receive id" do
+        expect(target.id).to eq id
+      end
+
+      it_behaves_like :raw_json, :block_json, json
+
+      it "can #{klass} have children?" do
+        expect(target.can_have_children).to eq have_children
+      end
+    end
+  end
+
+  shared_examples_for :create_child_block do |klass, block_page_id, block_block_id|
+    describe "create child block" do
+      page_id = NotionRubyMapping::TestConnection::BLOCK_CREATE_TEST_PAGE_ID
+      block_id = NotionRubyMapping::TestConnection::BLOCK_CREATE_TEST_BLOCK_ID
+      let(:org_page) { Page.new id: page_id }
+      let(:org_block) { CalloutBlock.new "ABC", id: block_id, emoji: "💡" }
+      %i[page block].each do |pb|
+        is_page = pb == :page
+        ans_block_id = is_page ? block_page_id : block_block_id
+        context "for #{pb}" do
+          context "dry_run" do
+            let(:dry_run) { (is_page ? org_page : org_block).append_block_children target, dry_run: true }
+            it_behaves_like :dry_run, :patch, :append_block_children_page_path,
+                            id: (is_page ? page_id : block_id), json_method: :children_block_json
+            # When the corresponding json files are not exist, create a retrieve script for obtaining json files.
+            unless ans_block_id
+              it "write shell script" do
+                File.open "spec/fixtures/append_block_children_#{pb}_#{klass}.sh", "w" do |f|
+                  f.print dry_run
+                end
+                expect(true).to be_falsey
+              end
+            end
+          end
+          if ans_block_id
+            context "create" do
+              let(:block) { (is_page ? org_page : org_block).append_block_children target }
+              it { expect(block.id).to eq ans_block_id }
+            end
+          end
+        end
+      end
+    end
+  end
+
+  shared_examples_for :update_block_url do |type, url|
+    before { target.url = url }
+    it { expect(target.update_block_json).to eq({type => {"url" => url}}) }
+    context "dry_run" do
+      let(:dry_run) { target.save dry_run: true }
+      it_behaves_like :dry_run, :patch, :block_path, use_id: true, json_method: :update_block_json
+    end
+
+    context "save" do
+      it { expect(target.save.url).to eq url }
+    end
+  end
+
+  shared_examples_for :update_block_caption do |type, new_caption|
+    before { target.caption.rich_text_objects = new_caption }
+    let(:json) do
+      {
+        type => {
+          "caption" => [
+            {
+              "type" => "text",
+              "text" => {
+                "content" => new_caption,
+                "link" => nil,
+              },
+              "plain_text" => new_caption,
+              "href" => nil,
+            },
+          ],
+        },
+      }
+    end
+    it { expect(target.update_block_json).to eq json }
+
+    context "dry_run" do
+      let(:dry_run) { target.save dry_run: true }
+      it_behaves_like :dry_run, :patch, :block_path, use_id: true, json_method: :update_block_json
+    end
+
+    context "save" do
+      it { expect(target.save.caption.full_text).to eq new_caption }
+    end
+  end
+
+  shared_examples_for :update_block_rich_text_array do |type, new_text|
+    before { target.rich_text_array.rich_text_objects = new_text }
+    let(:json) do
+      {
+        type => {
+          "rich_text" => [
+            {
+              "type" => "text",
+              "text" => {
+                "content" => new_text,
+                "link" => nil,
+              },
+              "plain_text" => new_text,
+              "href" => nil,
+            },
+          ],
+        },
+      }
+    end
+    it { expect(target.update_block_json).to eq json }
+
+    context "dry_run" do
+      let(:dry_run) { target.save dry_run: true }
+      it_behaves_like :dry_run, :patch, :block_path, use_id: true, json_method: :update_block_json
+    end
+
+    context "save" do
+      it { expect(target.save.rich_text_array.full_text).to eq new_text }
+    end
+  end
+
+  shared_examples_for :update_block_color do |type, new_color, with_rta = false|
+    before { target.color = new_color }
+    let(:json) do
+      if with_rta
+        {type => {"color" => new_color}.merge(target.rich_text_array.update_property_schema_json(true))}
+      else
+        {type => {"color" => new_color}}
+      end
+    end
+    it { expect(target.update_block_json).to eq json }
+    context "dry_run" do
+      let(:dry_run) { target.save dry_run: true }
+      it_behaves_like :dry_run, :patch, :block_path, use_id: true, json_method: :update_block_json
+    end
+
+    context "save" do
+      it { expect(target.save.color).to eq new_color }
+    end
+  end
+
+  shared_examples_for :update_block_file do |type, new_url, json = nil|
+    before { target.url = new_url }
+    json ||= {
+      type => {
+        "external" => {
+          "url" => new_url,
+        },
+      },
+    }
+    it { expect(target.update_block_json).to eq json }
+    context "dry_run" do
+      let(:dry_run) { target.save dry_run: true }
+      it_behaves_like :dry_run, :patch, :block_path, use_id: true, json_method: :update_block_json
+    end
+
+    context "save" do
+      it { expect(target.save.url).to eq new_url }
     end
   end
 end

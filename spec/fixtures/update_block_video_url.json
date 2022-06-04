@@ -1,0 +1,42 @@
+{
+  "object": "block",
+  "id": "8c49d0d6-6f9b-45fb-9bea-6253997c87ba",
+  "created_time": "2022-06-03T03:41:00.000Z",
+  "last_edited_time": "2022-06-03T03:44:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "video",
+  "video": {
+    "caption": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Old caption",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "Old caption",
+        "href": null
+      }
+    ],
+    "type": "external",
+    "external": {
+      "url": "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4"
+    }
+  }
+}

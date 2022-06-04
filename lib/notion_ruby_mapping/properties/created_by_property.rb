@@ -10,6 +10,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @return [NotionRubyMapping::UserObject, Hash]
+    # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#d9c4a8d19b9b4ec5952dc86c9e4a25a8
     def created_by
       @json
     end

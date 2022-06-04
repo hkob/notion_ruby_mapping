@@ -7,6 +7,28 @@ module NotionRubyMapping
   class DateBaseProperty < Property
     include IsEmptyIsNotEmpty
 
+    # @param [Date, Time, DateTime, String, nil] obj
+    # @return [String, nil] iso8601 format string
+    def self.value_str(obj)
+      case obj
+      when Date
+        obj.iso8601
+      when Time
+        obj.strftime("%Y-%m-%dT%H:%M:%S%:z")
+      when DateTime
+        obj.iso8601
+      else
+        obj
+      end
+    end
+
+    # @param [Date, Time, DateTime, String, nil] obj
+    # @return [Date, nil] iso8601 format string
+    def self.date_from_obj(obj)
+      str = value_str obj
+      Date.parse str if str
+    end
+
     # @param [String] rollup Rollup name
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
@@ -105,18 +127,9 @@ module NotionRubyMapping
     protected
 
     # @param [Date, Time, DateTime, String, nil] obj
-    # @return [String] iso8601 format string
+    # @return [String, nil] iso8601 format string
     def value_str(obj)
-      case obj
-      when Date
-        obj.iso8601
-      when Time
-        obj.strftime("%Y-%m-%dT%H:%M:%S%:z")
-      when DateTime
-        obj.iso8601
-      else
-        obj
-      end
+      self.class.value_str(obj)
     end
   end
 end

@@ -17,7 +17,6 @@ module NotionRubyMapping
     end
     attr_reader :has_more
 
-
     # @return [NotionRubyMapping::List, Enumerator]
     # @see https://www.notion.so/hkob/List-9a0b32335e0d48849a785ce5e162c760#12e1c261a0944a4095776b7515bef4a1
     def each
@@ -56,7 +55,7 @@ module NotionRubyMapping
         unless @has_content # re-exec
           unless @load_all_contents
             @query.start_cursor = nil
-            @json = @database.query_database @query
+            @json = @nc.database_query_request @database.id, @query
             @has_more = @json["has_more"]
           end
           @index = 0
@@ -71,7 +70,7 @@ module NotionRubyMapping
           elsif @has_more
             if @database
               @query.start_cursor = @json["next_cursor"]
-              @json = @database.query_database @query
+              @json = @nc.database_query_request @database.id, @query
               @index = 0
               @has_more = @json["has_more"]
             else

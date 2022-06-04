@@ -23,4 +23,4 @@ page.save # API access
 print page.title # -> JKL
 ```
 ---
-[Return to README.md](../README.md#2-example-code)
+[Return to README.md](../README.md)

@@ -1,0 +1,39 @@
+{
+  "object": "block",
+  "id": "a7873498-c1cc-4032-bc4e-975b80ec1a1b",
+  "created_time": "2022-05-27T03:41:00.000Z",
+  "last_edited_time": "2022-05-27T03:43:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "heading_2",
+  "heading_2": {
+    "rich_text": [
+      {
+        "type": "text",
+        "text": {
+          "content": "Heading 2",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "Heading 2",
+        "href": null
+      }
+    ],
+    "color": "green_background"
+  }
+}

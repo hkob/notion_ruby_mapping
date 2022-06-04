@@ -292,7 +292,7 @@ module NotionRubyMapping
         let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
         let(:params) { {url: url} }
         describe "dry_run" do
-          let(:dry_run) { target.save dry_run: true}
+          let(:dry_run) { target.save dry_run: true }
           it_behaves_like :dry_run, :patch, :page_path, use_id: true, json_method: :property_values_json
         end
 
@@ -756,4 +756,3 @@ module NotionRubyMapping
     end
   end
 end
-

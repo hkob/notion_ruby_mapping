@@ -4,7 +4,7 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe List do
-    tc = TestConnection.instance
+    # tc = TestConnection.instance
 
     describe "query" do
       let(:database) { Database.new id: TestConnection::DATABASE_ID }

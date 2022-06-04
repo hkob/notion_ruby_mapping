@@ -20,7 +20,7 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [String] str
+    # @param [String] email
     def email=(email)
       assert_page_property __method__
       @will_update = true
@@ -32,7 +32,6 @@ module NotionRubyMapping
     ## Common methods
 
     # @param [String] name Property name
-    # @param [String] email email value (optional)
     def initialize(name, will_update: false, base_type: :page, json: nil)
       super name, will_update: will_update, base_type: base_type
       @json = json || {}

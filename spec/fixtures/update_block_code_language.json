@@ -1,0 +1,58 @@
+{
+  "object": "block",
+  "id": "930e8f09-d7c2-4f5e-bccd-b5853bac5eb6",
+  "created_time": "2022-05-23T07:47:00.000Z",
+  "last_edited_time": "2022-05-23T08:37:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "code",
+  "code": {
+    "caption": [
+      {
+        "type": "text",
+        "text": {
+          "content": "list files",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "list files",
+        "href": null
+      }
+    ],
+    "rich_text": [
+      {
+        "type": "text",
+        "text": {
+          "content": "% ls -l",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "% ls -l",
+        "href": null
+      }
+    ],
+    "language": "ruby"
+  }
+}

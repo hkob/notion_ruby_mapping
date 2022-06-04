@@ -38,6 +38,7 @@ module NotionRubyMapping
     end
 
     # @return [Array]
+    # @see https://www.notion.so/hkob/MultiSelectProperty-b90bba1c55d540ba97131bb013d4ca74#5ff6ec299cf64049bde2416f61b30fa9
     def multi_select_options
       assert_database_property __method__
       @json["options"] || []
@@ -48,6 +49,7 @@ module NotionRubyMapping
     # @param [Hash] multi_select
     # @return [Array, nil] settled array
     def multi_select=(multi_select)
+      assert_page_property __method__
       @will_update = true
       @json = multi_select ? Array(multi_select).map { |ms| {"name" => ms} } : []
     end

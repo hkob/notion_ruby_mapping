@@ -11,7 +11,6 @@ module NotionRubyMapping
 
     ### initialize
 
-
     # @see https://www.notion.so/hkob/NotionCache-65e1599864d6425686d495a5a4b3a623#dca210788f114cf59464090782c073bf
     def initialize
       @object_hash = {}
@@ -27,7 +26,7 @@ module NotionRubyMapping
     attr_reader :object_hash
     attr_writer :client # for test only
 
-    # @param [String] page_id
+    # @param [String] block_id
     # @return [String (frozen)] block_path
     def append_block_children_block_path(block_id)
       "v1/blocks/#{block_id}/children"
@@ -118,12 +117,14 @@ module NotionRubyMapping
     # @param [String] id page_id / block_id (with or without "-")
     # @param [NotionRubyMapping::Query] query query object
     # @return [NotionRubyMapping::Base] List object
-    def database_query(id, query)
-      Base.create_from_json database_query_request(id, query.query_json)
-    end
+    # def database_query(id, query)
+    #   Base.create_from_json database_query_request(id, query.query_json)
+    # end
 
-    def database_query_request(database_id, payload)
-      request :post, "v1/databases/#{database_id}/query", payload
+    # @param [String] database_id (with or without "-")
+    # @param [NotionRubyMapping::Query] query query object
+    def database_query_request(database_id, query)
+      request :post, "v1/databases/#{database_id}/query", query.query_json
     end
 
     # @param [String] database_id
@@ -132,30 +133,32 @@ module NotionRubyMapping
       request :get, database_path(database_id)
     end
 
-    # @param [String] database_id
     # @return [String (frozen)] page_path
     def databases_path
       "v1/databases"
     end
 
+    # @param [String] id
     # @return [NotionRubyMapping::Base]
     def destroy_block(id)
       Base.create_from_json destroy_block_request(id)
     end
 
-    # @param [Hash] response
+    # @param [String] id
+    # @return [Hash]
     def destroy_block_request(id)
       request :delete, block_path(id)
     end
 
-    def inspect
-      "NotionCache"
-    end
-
     # @param [String] id id string with "-"
     # @return [String] id without "-"
+    # @see https://www.notion.so/hkob/NotionCache-65e1599864d6425686d495a5a4b3a623#a2d70a2e019c4c17898aaa1a36580f1d
     def hex_id(id)
       id&.gsub "-", ""
+    end
+
+    def inspect
+      "NotionCache"
     end
 
     # @param [String] id id (with or without "-")
@@ -224,25 +227,28 @@ module NotionRubyMapping
       response.body
     end
 
+    def update_block_request(block_id, payload)
+      request :patch, block_path(block_id), payload
+    end
+
     # @param [String] id page_id (with or without "-")
     # @param [Hash] payload
-    def update_database(id, payload)
-      sleep @wait
-      @client.update_database payload.merge({database_id: id})
-    end
+    # def update_database(id, payload)
+    #   sleep @wait
+    #   @client.update_database payload.merge({database_id: id})
+    # end
 
     # @param [String] database_id
     # @return [Hash] response
     def update_database_request(database_id, payload)
-      request :patch, "v1/databases/#{database_id}", payload
+      request :patch, database_path(database_id), payload
     end
 
     # @param [String] page_id
     # @param [Hash] payload
     # @return [Hash] response
     def update_page_request(page_id, payload)
-      request :patch, "v1/pages/#{page_id}", payload
+      request :patch, page_path(page_id), payload
     end
-
   end
 end

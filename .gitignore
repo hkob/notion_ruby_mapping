@@ -14,3 +14,4 @@ env.yml
 .rspec_status
 .idea
 tools/tu.rb
+spec/fixtures/.vscode

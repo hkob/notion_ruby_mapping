@@ -60,8 +60,9 @@ module NotionRubyMapping
     ## Page property only methods
 
     # @param [String] select
-    # @return [Hash] settled value
+    # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#3bd195bf5c0a498ebf850409f7deb67a
     def select=(select)
+      assert_page_property __method__
       @will_update = true
       @json = {"name" => select}
     end

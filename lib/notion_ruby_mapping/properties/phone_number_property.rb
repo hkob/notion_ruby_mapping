@@ -34,7 +34,6 @@ module NotionRubyMapping
     ## Common methods
 
     # @param [String] name Property name
-    # @param [String] phone_number phone_number value (optional)
     def initialize(name, will_update: false, base_type: :page, json: nil)
       super name, will_update: will_update, base_type: base_type
       @json = database? ? {} : json

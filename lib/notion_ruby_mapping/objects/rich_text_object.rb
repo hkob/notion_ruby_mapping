@@ -14,7 +14,7 @@ module NotionRubyMapping
       @type = type
       @options = options
     end
-    attr_reader :will_update
+    attr_reader :will_update, :options
 
     def self.create_from_json(json)
       type = json["type"]
@@ -73,7 +73,7 @@ module NotionRubyMapping
       }.merge annotations_json
     end
 
-    # @param [String, RichTextObject] value
+    # @param [String] url
     # @return [String] input text
     def href=(url)
       @will_update = true
@@ -129,9 +129,6 @@ module NotionRubyMapping
     end
 
     protected
-
-    # @return [Hash] options
-    attr_reader :options
 
     # @return [Hash, Hash{String (frozen)->Hash}]
     def annotations_json
