@@ -79,6 +79,7 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 ## 3. ChangeLog
 
+- 2022/6/5 [v0.5.1] bug fix for append_block_children.  added synced_block_original to SyncedBlock
 - 2022/6/4 [v0.5.0]  added subclasses of the block class and update_block API support
 - 2022/5/19 [v0.4.1] added delete_block
 - 2022/4/29 [v0.4.0] Change directory structure, TEST_IDs are moved from env.yml to TestConnection's constants, added retrieve_block spec, added append_block_children

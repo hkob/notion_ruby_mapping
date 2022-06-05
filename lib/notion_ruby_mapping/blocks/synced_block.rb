@@ -28,12 +28,17 @@ module NotionRubyMapping
 
     # @return [Boolean] true if synced_block & block_id is nil
     def synced_block_original?
-      @type == "synced_block" && @block_id.nil?
+      @block_id.nil?
+    end
+
+    # @return [NotionRubyMapping::SyncedBlock]
+    def synced_block_original
+      @block_id && Block.find(@block_id)
     end
 
     # @return [String, nil]
     def synced_block_original_id
-      @type == "synced_block" && @block_id
+      @block_id
     end
 
     # @return [String (frozen)]

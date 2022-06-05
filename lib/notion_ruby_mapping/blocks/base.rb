@@ -96,7 +96,7 @@ module NotionRubyMapping
         response = @nc.append_block_children_request @id, json
         raise StandardError, response unless response["results"]
 
-        answers = response["results"].map { |sub_json| Block.new json: sub_json }
+        answers = response["results"].map { |sub_json| Block.create_from_json sub_json }
         only_one ? answers.first : answers
       end
     end
