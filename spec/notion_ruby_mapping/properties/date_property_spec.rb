@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe DateProperty do
     tc = TestConnection.instance
-
     context "Database property" do
       context "created by new" do
         let(:target) { DateProperty.new "dp", base_type: :database }

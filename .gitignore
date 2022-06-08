@@ -15,3 +15,4 @@ env.yml
 .idea
 tools/tu.rb
 spec/fixtures/.vscode
+.vscode

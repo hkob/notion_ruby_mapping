@@ -22,6 +22,13 @@ module NotionRubyMapping
       end
     end
 
+    # @param [Date] date
+    def self.start_end_time(date)
+      ds = date.iso8601
+      tz = Time.now.strftime "%:z"
+      %w[00:00:00 23:59:59].map {|t| [ds, "T", t, tz].join("") }
+    end
+
     # @param [Date, Time, DateTime, String, nil] obj
     # @return [Date, nil] iso8601 format string
     def self.date_from_obj(obj)
@@ -34,14 +41,34 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#5f07c4ebc4744986bfc99a43827349fc
     def filter_equals(date, rollup = nil, rollup_type = nil)
-      make_filter_query "equals", value_str(date), rollup, rollup_type
+      if date.is_a? Date
+        start_date, end_date = self.class.start_end_time date
+        if rollup
+          filter_after(start_date, rollup, rollup_type)
+            .and(filter_before(end_date, rollup, rollup_type))
+        else
+          filter_after(start_date).and(filter_before end_date)
+        end
+      else
+        make_filter_query "equals", value_str(date), rollup, rollup_type
+      end
     end
 
     # @param [String] rollup Rollup name
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_does_not_equal(date, rollup = nil, rollup_type = nil)
-      make_filter_query "does_not_equal", value_str(date), rollup, rollup_type
+      if date.is_a? Date
+        start_date, end_date = self.class.start_end_time date
+        if rollup
+          filter_before(start_date, rollup, rollup_type)
+            .or(filter_after(end_date, rollup, rollup_type))
+        else
+          filter_before(start_date).or(filter_after(end_date))
+        end
+      else
+        make_filter_query "does_not_equal", value_str(date), rollup, rollup_type
+      end
     end
 
     # @param [String] rollup Rollup name

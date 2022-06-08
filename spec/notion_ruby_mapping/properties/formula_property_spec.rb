@@ -15,8 +15,12 @@ module NotionRubyMapping
             ["time", Time.new(2022, 2, 12, 1, 23, 45, "+09:00"), "2022-02-12T01:23:45+09:00"],
           ].each do |(title, d, ds)|
             context "on parameter #{title}" do
-              it_behaves_like :filter_test, FormulaProperty, %w[equals before after on_or_before on_or_after],
-                              value: d, value_str: ds
+              it_behaves_like :filter_test, FormulaProperty, %w[before after on_or_before on_or_after], value: d, value_str: ds
+              if title == "time"
+                it_behaves_like :filter_test, FormulaProperty, %w[equals does_not_equal], value: d, value_str: ds
+              else
+                it_behaves_like :date_equal_filter_test, FormulaProperty, %w[equals does_not_equal], d
+              end
             end
           end
 

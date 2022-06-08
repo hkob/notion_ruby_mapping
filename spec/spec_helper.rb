@@ -2578,6 +2578,43 @@ module RSpec
     end
   end
 
+  shared_examples_for :date_equal_filter_test do |c, keys, date, rollup: nil, rollup_type: nil|
+    let(:property) { c.new "property_name" }
+    start_str, end_str = DateProperty.start_end_time date
+    describe "a #{c.name} property" do
+      it "has name" do
+        expect(property.name).to eq "property_name"
+      end
+
+      context "create filter" do
+        subject { query.filter }
+        keys.each do |key|
+          context key do
+            let(:query) { property.send(*["filter_#{key}", date].compact) }
+            it {
+              answer = if key == "equals"
+                         if rollup
+                           property.filter_after(start_str, rollup: rollup, rollup_type: rollup_type)
+                                   .and(filter_before(end_str, rollup: rollup, rollup_type: rollup_type))
+                         else
+                           property.filter_after(start_str).and(property.filter_before(end_str))
+                         end
+                       else
+                         if rollup
+                           property.filter_before(start_str, rollup: rollup, rollup_type: rollup_type)
+                                   .or(property.filter_after(end_str, rollup: rollup, rollup_type: rollup_type))
+                         else
+                           property.filter_before(start_str).or(property.filter_after(end_str))
+                         end
+                       end
+              is_expected.to eq answer.filter
+            }
+          end
+        end
+      end
+    end
+  end
+
   shared_examples_for :timestamp_filter_test do |c, keys, value: nil, value_str: nil|
     let(:property) { c.new "__timestamp__" }
     value_str ||= value
@@ -2592,6 +2629,32 @@ module RSpec
           context key do
             let(:query) { property.send(*["filter_#{key}", value].compact) }
             it { is_expected.to eq({"timestamp" => c::TYPE, c::TYPE => {key => value_str || true}}) }
+          end
+        end
+      end
+    end
+  end
+
+  shared_examples_for :date_equal_timestamp_filter_test do |c, keys, date|
+    let(:property) { c.new "__timestamp__" }
+    start_str, end_str = DateProperty.start_end_time date
+    describe "a #{c.name} property" do
+      it "has name" do
+        expect(property.name).to eq "__timestamp__"
+      end
+
+      context "create filter" do
+        subject { query.filter }
+        keys.each do |key|
+          context key do
+            let(:query) { property.send(*["filter_#{key}", date].compact) }
+            it {
+              if key == "equals"
+                is_expected.to eq property.filter_after(start_str).and(property.filter_before(end_str)).filter
+              else
+                is_expected.to eq property.filter_before(start_str).or(property.filter_after(end_str)).filter
+              end
+            }
           end
         end
       end
