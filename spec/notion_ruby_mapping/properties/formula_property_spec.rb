@@ -11,11 +11,24 @@ module NotionRubyMapping
         context "create query" do
           subject { query.filter }
           [
-            ["date", Date.new(2022, 2, 12), "2022-02-12"],
-            ["time", Time.new(2022, 2, 12, 1, 23, 45, "+09:00"), "2022-02-12T01:23:45+09:00"],
-          ].each do |(title, d, ds)|
+            [
+              "date",
+              Date.new(2022, 2, 12),
+              "2022-02-12",
+              "2022-02-12T00:00:00+09:00",
+              "2022-02-12T23:59:59+09:00",
+          ],
+            [
+              "time",
+              Time.new(2022, 2, 12, 1, 23, 45, "+09:00"),
+              "2022-02-12T01:23:45+09:00",
+              "2022-02-12T01:23:45+09:00",
+              "2022-02-12T01:23:45+09:00",
+            ],
+          ].each do |(title, d, ds, dss, des)|
             context "on parameter #{title}" do
-              it_behaves_like :filter_test, FormulaProperty, %w[before after on_or_before on_or_after], value: d, value_str: ds
+              it_behaves_like :filter_test, FormulaProperty, %w[before on_or_after], value: d, value_str: dss
+              it_behaves_like :filter_test, FormulaProperty, %w[after on_or_before], value: d, value_str: des
               if title == "time"
                 it_behaves_like :filter_test, FormulaProperty, %w[equals does_not_equal], value: d, value_str: ds
               else

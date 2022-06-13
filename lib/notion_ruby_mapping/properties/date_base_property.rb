@@ -9,10 +9,18 @@ module NotionRubyMapping
 
     # @param [Date, Time, DateTime, String, nil] obj
     # @return [String, nil] iso8601 format string
-    def self.value_str(obj)
+    def self.value_str(obj, start_time: false, end_time: false)
       case obj
       when Date
-        obj.iso8601
+        tz = Time.now.strftime "%:z"
+        ds = obj.iso8601
+        if start_time
+          "#{ds}T00:00:00#{tz}"
+        elsif end_time
+          "#{ds}T23:59:59#{tz}"
+        else
+          ds
+        end
       when Time
         obj.strftime("%Y-%m-%dT%H:%M:%S%:z")
       when DateTime
@@ -76,7 +84,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedTimeProperty-bb979ff02dc04efa9733da1003efa871#841815bfaf684964bebf3fa6712ae26c
     def filter_before(date, rollup = nil, rollup_type = nil)
-      make_filter_query "before", value_str(date), rollup, rollup_type
+      make_filter_query "before", value_str(date, start_time: true), rollup, rollup_type
     end
 
     # @param [String] rollup Rollup name
@@ -84,7 +92,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedTimeProperty-bb979ff02dc04efa9733da1003efa871#c0ea140866ea46f9a746b24773dc821c
     def filter_after(date, rollup = nil, rollup_type = nil)
-      make_filter_query "after", value_str(date), rollup, rollup_type
+      make_filter_query "after", value_str(date, end_time: true), rollup, rollup_type
     end
 
     # @param [String] rollup Rollup name
@@ -92,7 +100,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedTimeProperty-bb979ff02dc04efa9733da1003efa871#6a20ade0ee964aad81aae4c08ea29d6b
     def filter_on_or_before(date, rollup = nil, rollup_type = nil)
-      make_filter_query "on_or_before", value_str(date), rollup, rollup_type
+      make_filter_query "on_or_before", value_str(date, end_time: true), rollup, rollup_type
     end
 
     # @param [String] rollup Rollup name
@@ -100,7 +108,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedTimeProperty-bb979ff02dc04efa9733da1003efa871#1469e3fb3068426a8ea8492d191d1563
     def filter_on_or_after(date, rollup = nil, rollup_type = nil)
-      make_filter_query "on_or_after", value_str(date), rollup, rollup_type
+      make_filter_query "on_or_after", value_str(date, start_time: true), rollup, rollup_type
     end
 
     # @param [String] rollup Rollup name
@@ -151,12 +159,10 @@ module NotionRubyMapping
       make_filter_query "next_year", {}, rollup, rollup_type
     end
 
-    protected
-
     # @param [Date, Time, DateTime, String, nil] obj
     # @return [String, nil] iso8601 format string
-    def value_str(obj)
-      self.class.value_str(obj)
+    def value_str(obj, start_time: false, end_time: false)
+      self.class.value_str(obj, start_time: start_time, end_time: end_time)
     end
   end
 end
