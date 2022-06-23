@@ -19,6 +19,14 @@ module NotionRubyMapping
       @file_names = Array(files)
     end
 
+    def file_names=(file_names = [])
+      array_file_names = Array(file_names)
+      raise StandardError, "files and file_names must be the same sizes." unless @files.length == array_file_names.length
+
+      @will_update = true
+      @file_names = array_file_names
+    end
+
     ### Not public announced methods
 
     ## Common methods

@@ -99,6 +99,61 @@ module NotionRubyMapping
             end
           end
 
+          describe "file_names=" do
+            context "a file" do
+              let(:files) { "f3" }
+              it { expect { target.file_names = %w[A B] }.to raise_error(StandardError) }
+              context "success" do
+                before { target.file_names = "fn3" }
+                it_behaves_like :property_values_json, {
+                  "fp" => {
+                    "type" => "files",
+                    "files" => [
+                      {
+                        "type" => "external",
+                        "name" => "fn3",
+                        "external" => {
+                          "url" => "f3",
+                        },
+                      },
+                    ],
+                  },
+                }
+                it_behaves_like :will_update
+              end
+            end
+
+            context "2 files" do
+              let(:files) { %w[f3 f4] }
+              it { expect { target.file_names = "A" }.to raise_error(StandardError) }
+              context "success" do
+                before { target.file_names = %w[fn3 fn4] }
+                it_behaves_like :property_values_json, {
+                  "fp" => {
+                    "type" => "files",
+                    "files" => [
+                      {
+                        "type" => "external",
+                        "name" => "fn3",
+                        "external" => {
+                          "url" => "f3",
+                        },
+                      },
+                      {
+                        "type" => "external",
+                        "name" => "fn4",
+                        "external" => {
+                          "url" => "f4",
+                        },
+                      },
+                    ],
+                  },
+                }
+                it_behaves_like :will_update
+              end
+            end
+          end
+
           describe "update_from_json(internal)" do
             before { target.update_from_json(tc.read_json("files_property_internal_item")) }
             let(:files) { "f1" }
