@@ -72,6 +72,7 @@ module NotionRubyMapping
       map(&:text).join ""
     end
 
+    # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] text_info
     def rich_text_objects=(text_info)
       @will_update = true
       @rich_text_objects = if text_info.is_a? RichTextArray

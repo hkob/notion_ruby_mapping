@@ -12,6 +12,31 @@ module NotionRubyMapping
     end
 
     subject { payload.property_values_json }
+    describe "description=" do
+      before { payload.description = "Title" }
+      let(:ans) {
+        {
+          "description" => [
+            {
+              "href" => nil,
+              "plain_text" => "Title",
+              "text" => {
+                "content" => "Title",
+                "link" => nil,
+              },
+              "type" => "text",
+            },
+          ],
+        }
+      }
+      it { is_expected.to eq ans }
+    end
+
+    describe "is_inline=" do
+      before { payload.is_inline = true }
+      it { is_expected.to eq({"is_inline" => true}) }
+    end
+
     describe "set_icon" do
       before { payload.set_icon(**params) }
       context "for emoji icon" do

@@ -18,6 +18,16 @@ module NotionRubyMapping
       @json = {}
     end
 
+    def description=(text_objects)
+      rta = RichTextArray.rich_text_array "description", text_objects
+      @json.merge!(rta.update_property_schema_json true)
+    end
+
+    # @param [Boolean] flag
+    def is_inline=(flag)
+      @json["is_inline"] = flag
+    end
+
     # @param [Hash] json
     def merge_property(json)
       @json["properties"] ||= {}

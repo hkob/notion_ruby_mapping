@@ -65,6 +65,26 @@ module NotionRubyMapping
       @database_title ||= RichTextArray.new "title", json: (self["title"]), will_update: new_record?
     end
 
+    # @return [NotionRubyMapping::RichTextArray]
+    def description
+      RichTextArray.new "description", json: self["description"]
+    end
+
+    # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] text_info
+    def description=(text_info)
+      @payload.description = text_info
+    end
+
+    # @return [Boolean]
+    def is_inline
+      self["is_inline"]
+    end
+
+    # @param [Boolean] flag
+    def is_inline=(flag)
+      @payload.is_inline = flag
+    end
+
     # @return [Hash] created json for property schemas (for create database)
     def property_schema_json
       @payload.property_schema_json @property_cache, database_title
