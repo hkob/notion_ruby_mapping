@@ -1,6 +1,7 @@
 {
-  "id": "zE%7C%3F",
+  "object": "property_item",
   "type": "select",
+  "id": "zE%7C%3F",
   "select": {
     "id": "b32c83bb-c9af-49e8-9b88-122139affdb7",
     "name": "Select 3",

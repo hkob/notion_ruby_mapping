@@ -25,7 +25,7 @@ module NotionRubyMapping
         described_class.new "https://img.icons8.com/ios-filled/250/000000/mac-os.png", caption: "macOS icon"
       end
       it_behaves_like :create_child_block, described_class,
-                      "ae7e9e7f2a0244e794ad366a1e8b6d96", "ada860b09d6041f5b284b2e892cf0d03"
+                      "0f020fb9bff74dffb0083e829aa86930", "138b0ee0924d4eafa6a0cad92b50f1fc"
     end
 
     describe "save (update)" do

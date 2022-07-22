@@ -46,6 +46,13 @@ module NotionRubyMapping
       @rich_text_objects[index]
     end
 
+    # @return [FalseClass]
+    def clear_will_update
+      @will_update = false
+      @rich_text_objects.each(&:clear_will_update)
+      false
+    end
+
     # @param [Array] json
     # @return [Array] RichTextArray
     def create_from_json(json = [])

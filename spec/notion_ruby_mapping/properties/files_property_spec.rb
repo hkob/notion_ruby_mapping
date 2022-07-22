@@ -3,6 +3,11 @@
 module NotionRubyMapping
   RSpec.describe FilesProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "qEdK"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:second_page_id) { TestConnection::DB_SECOND_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
+    let(:property_cache_second) { PropertyCache.new base_type: :page, page_id: second_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -45,6 +50,21 @@ module NotionRubyMapping
     end
 
     context "Page property" do
+      external_json = {
+        "fp" => {
+          "type" => "files",
+          "files" => [
+            {
+              "type" => "external",
+              "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+              "external" => {
+                "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+              },
+            },
+          ],
+        },
+      }
+
       context "created by new" do
         let(:target) { FilesProperty.new "fp", files: files }
 
@@ -155,14 +175,14 @@ module NotionRubyMapping
           end
 
           describe "update_from_json(internal)" do
-            before { target.update_from_json(tc.read_json("files_property_internal_item")) }
+            before { target.update_from_json(tc.read_json("retrieve_property_files_internal")) }
             let(:files) { "f1" }
             it_behaves_like :will_not_update
             it_behaves_like :property_values_json, {}
           end
 
           describe "update_from_json(external)" do
-            before { target.update_from_json(tc.read_json("files_property_external_item")) }
+            before { target.update_from_json(tc.read_json("retrieve_property_files_external")) }
             let(:files) { "f1" }
             it_behaves_like :will_not_update
             it_behaves_like :property_values_json, {
@@ -232,31 +252,42 @@ module NotionRubyMapping
 
       context "created from json" do
         describe "an internal files property from property_item_json (not update)" do
-          let(:target) { Property.create_from_json "fp", tc.read_json("files_property_internal_item") }
+          let(:target) { Property.create_from_json "fp", tc.read_json("retrieve_property_files_internal") }
           it_behaves_like :has_name_as, "fp"
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {}
         end
 
         describe "an external files property from property_item_json" do
-          let(:target) { Property.create_from_json "fp", tc.read_json("files_property_external_item") }
+          let(:target) { Property.create_from_json "fp", tc.read_json("retrieve_property_files_external") }
           it_behaves_like :has_name_as, "fp"
           it_behaves_like :will_not_update
-          it_behaves_like :property_values_json, {
-            "fp" => {
-              "type" => "files",
-              "files" => [
-                {
-                  "type" => "external",
-                  "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
-                  "external" => {
-                    "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
-                  },
-                },
-              ],
-            },
-          }
+          it_behaves_like :property_values_json, external_json
         end
+      end
+
+      context "created from json (no content:external)" do
+        let(:target) { Property.create_from_json "fp", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "fp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / created_by to retrieve a property item
+        it_behaves_like :property_values_json, external_json
+        it { expect(target.files.map(&:url)).to eq ["https://img.icons8.com/ios-filled/250/000000/mac-os.png"] }
+      end
+
+      context "created from json (no content:internal)" do
+        let(:target) { Property.create_from_json "fp", no_content_json, :page, property_cache_second }
+        it_behaves_like :has_name_as, "fp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / created_by to retrieve a property item
+        it_behaves_like :property_values_json, {}
+        it { expect(target.files.map(&:url)).to eq ["https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220717%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220717T054417Z&X-Amz-Expires=3600&X-Amz-Signature=1703140069e048011a95decc0eb88a86fda832f8ab884dd5dfa2a6bedee18f8d&X-Amz-SignedHeaders=host&x-id=GetObject"] }
       end
     end
   end

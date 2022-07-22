@@ -3,6 +3,8 @@
 module NotionRubyMapping
   RSpec.describe RollupProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "STe_"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
 
     context "Database property" do
       context "created by new" do
@@ -141,7 +143,7 @@ module NotionRubyMapping
         it_behaves_like :assert_different_property, :property_schema_json
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("rollup_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_rollup")) }
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {}
           it_behaves_like :assert_different_property, :update_property_schema_json
@@ -150,7 +152,7 @@ module NotionRubyMapping
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "rp", tc.read_json("rollup_property_item") }
+        let(:target) { Property.create_from_json "rp", tc.read_json("retrieve_property_rollup") }
         it_behaves_like :has_name_as, "rp"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {}

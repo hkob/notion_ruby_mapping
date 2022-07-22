@@ -1,0 +1,128 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": " \n",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": " \n",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": "高専HP",
+          "link": {
+            "url": "https://www.metro-cit.ac.jp"
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "高専HP",
+        "href": "https://www.metro-cit.ac.jp"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": "\n",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "\n",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "mention",
+        "mention": {
+          "type": "database",
+          "database": {
+            "id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253"
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "Sample table",
+        "href": "https://www.notion.so/c37a2c66e3aa4a0da44773de3b80c253"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": " ",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": " ",
+        "href": null
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "property_item",
+  "property_item": {
+    "id": "flUp",
+    "next_url": null,
+    "type": "rich_text",
+    "rich_text": {}
+  }
+}

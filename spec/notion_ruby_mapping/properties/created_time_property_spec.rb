@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe CreatedTimeProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "WsEj"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -53,7 +56,7 @@ module NotionRubyMapping
         it_behaves_like :assert_different_property, :update_property_schema_json
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("created_time_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_created_time")) }
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {}
           it { expect(target.created_time).to eq "2022-02-07T21:29:00.000Z" }
@@ -62,12 +65,24 @@ module NotionRubyMapping
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "ctp", tc.read_json("created_time_property_item") }
+        let(:target) { Property.create_from_json "ctp", tc.read_json("retrieve_property_created_time") }
         it_behaves_like :has_name_as, "ctp"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {}
         it { expect(target.created_time).to eq "2022-02-07T21:29:00.000Z" }
         it_behaves_like :assert_different_property, :update_property_schema_json
+      end
+
+      context "created from json (no content)" do
+        let(:target) { Property.create_from_json "ctp", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "ctp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / created_time to retrieve a property item
+        it_behaves_like :property_values_json, {}
+        it { expect(target.created_time).to eq "2022-02-07T21:29:00.000Z" }
       end
     end
   end

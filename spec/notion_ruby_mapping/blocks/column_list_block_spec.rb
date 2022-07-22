@@ -20,7 +20,7 @@ module NotionRubyMapping
         ]
       end
       it_behaves_like :create_child_block, described_class,
-                      "157e2b067a06474c94e99529c0dc1ea6", "fbad10e3131d49848f4ea9f4ce8779aa"
+                      "6012c23196b64361ac6751caab8ac6e5", "a5f42a9e7d2f47dea3ab5fd431527699"
     end
   end
 end

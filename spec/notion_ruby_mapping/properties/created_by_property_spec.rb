@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe CreatedByProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "eR%3D~"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -53,7 +56,7 @@ module NotionRubyMapping
         it_behaves_like :assert_different_property, :update_property_schema_json
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("created_by_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_created_by")) }
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {}
           it { expect(target.created_by.name).to eq "Hiroyuki KOBAYASHI" }
@@ -62,7 +65,7 @@ module NotionRubyMapping
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "cbp", tc.read_json("created_by_property_item") }
+        let(:target) { Property.create_from_json "cbp", tc.read_json("retrieve_property_created_by") }
         it_behaves_like :has_name_as, "cbp"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {}
@@ -70,20 +73,33 @@ module NotionRubyMapping
         it_behaves_like :assert_different_property, :update_property_schema_json
       end
     end
+
+    context "created from json (no content)" do
+      let(:target) { Property.create_from_json "cbp", no_content_json, :page, property_cache_first }
+      it_behaves_like :has_name_as, "cbp"
+      it_behaves_like :will_not_update
+      it { expect(target.contents?).to be_falsey }
+      it_behaves_like :assert_different_property, :update_property_schema_json
+
+      # hook property_values_json / created_by to retrieve a property item
+      it_behaves_like :property_values_json, {}
+      it { expect(target.created_by.name).to eq "Hiroyuki KOBAYASHI" }
+    end
+
     describe "a created_by property with parameters" do
       let(:target) { CreatedByProperty.new "ctp", user_id: "user_id" }
 
       it_behaves_like :property_values_json, {}
       it_behaves_like :will_not_update
       describe "update_from_json" do
-        before { target.update_from_json(tc.read_json("created_by_property_item")) }
+        before { target.update_from_json(tc.read_json("retrieve_property_created_by")) }
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {}
       end
     end
 
     describe "a created_by property from property_item_json" do
-      let(:target) { Property.create_from_json "ctp", tc.read_json("created_by_property_item") }
+      let(:target) { Property.create_from_json "ctp", tc.read_json("retrieve_property_created_by") }
       it_behaves_like :has_name_as, "ctp"
       it_behaves_like :will_not_update
       it_behaves_like :property_values_json, {}

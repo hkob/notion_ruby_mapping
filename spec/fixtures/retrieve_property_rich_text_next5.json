@@ -1,0 +1,134 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "mention",
+        "mention": {
+          "type": "page",
+          "page": {
+            "id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "notion_ruby_mapping_test_data",
+        "href": "https://www.notion.so/c01166c613ae45cbb96818b4ef2f5a77"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": " \n",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": " \n",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "mention",
+        "mention": {
+          "type": "date",
+          "date": {
+            "start": "2022-02-21",
+            "end": null,
+            "time_zone": null
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "2022-02-21 → ",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": " \n",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": " \n",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "mention",
+        "mention": {
+          "type": "date",
+          "date": {
+            "start": "2022-02-22T09:00:00.000+09:00",
+            "end": null,
+            "time_zone": null
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "2022-02-22T09:00:00.000+09:00 → ",
+        "href": null
+      }
+    }
+  ],
+  "next_cursor": "xQVa1H",
+  "has_more": true,
+  "type": "property_item",
+  "property_item": {
+    "id": "flUp",
+    "next_url": "https://api.notion.com/v1/pages/6601e719a39a460c908e8909467fcccf/properties/flUp?start_cursor=xQVa1H&page_size=5",
+    "type": "rich_text",
+    "rich_text": {}
+  }
+}

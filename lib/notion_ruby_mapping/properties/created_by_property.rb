@@ -22,8 +22,8 @@ module NotionRubyMapping
     # @param [String] name Property name
     # @param [String] user_id user_id (optional)
     # @param [Hash] json json (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, user_id: nil)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, base_type: :page, json: nil, user_id: nil, property_cache: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache
       @json = if database?
                 json || {}
               else
@@ -36,6 +36,13 @@ module NotionRubyMapping
       @will_update = false
       cb = json["created_by"]
       @json = database? ? cb : UserObject.new(json: cb)
+    end
+
+    ## Page property only methods
+    # @return [Hash]
+    def property_values_json
+      assert_page_property __method__
+      {}
     end
   end
 end

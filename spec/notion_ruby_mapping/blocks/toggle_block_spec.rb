@@ -37,7 +37,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { ToggleBlock.new "A sample toggle", color: "yellow_background", sub_blocks: sub_block }
       it_behaves_like :create_child_block, described_class,
-                      "7c0ea95102814379b01a5d51860b6a8b", "64bfa7fec52547b29e0ffa3c3d461c89"
+                      "1824d99c9b624b1e992f5fbf58acdddc", "fbf7fc8e90744af6b8edfa7f117b535e"
     end
 
     describe "save (update)" do

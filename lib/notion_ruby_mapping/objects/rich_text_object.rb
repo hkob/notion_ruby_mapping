@@ -73,6 +73,11 @@ module NotionRubyMapping
       }.merge annotations_json
     end
 
+    # @return [FalseClass]
+    def clear_will_update
+      @will_update = false
+    end
+
     # @param [String] url
     # @return [String] input text
     def href=(url)

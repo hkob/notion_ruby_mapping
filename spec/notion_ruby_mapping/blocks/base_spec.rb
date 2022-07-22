@@ -99,5 +99,61 @@ module NotionRubyMapping
         }
       end
     end
+
+    describe "parent" do
+      let(:ans) do
+        [
+          "#!/bin/sh\n",
+          "curl  'https://api.notion.com/v1/",
+          klass,
+          "/parent_id' \\\n",
+          "  -H 'Notion-Version: 2022-06-28' \\\n",
+          "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
+        ].join ""
+      end
+      subject { target.parent dry_run: true }
+
+      context "Database - page_id" do
+        let(:target) { Database.new json: {"id" => "ABC", "parent" => {"type" => "page_id", "page_id" => "parent_id"}} }
+        let(:klass) { "pages" }
+        it { is_expected.to eq ans }
+      end
+
+      context "Database - block_id" do
+        let(:target) { Database.new json: {"id" => "ABC", "parent" => {"type" => "block_id", "block_id" => "parent_id"}} }
+        let(:klass) { "blocks" }
+        it { is_expected.to eq ans }
+      end
+
+      context "Page - database_id" do
+        let(:target) { Page.new json: {"id" => "ABC", "parent" => {"type" => "database_id", "database_id" => "parent_id"}} }
+        let(:klass) { "databases" }
+        it { is_expected.to eq ans }
+      end
+
+      context "Page - page_id" do
+        let(:target) { Page.new json: {"id" => "ABC", "parent" => {"type" => "page_id", "page_id" => "parent_id"}} }
+        let(:klass) { "pages" }
+        it { is_expected.to eq ans }
+      end
+
+      context "Page - block_id" do
+        let(:target) { Page.new json: {"id" => "ABC", "parent" => {"type" => "block_id", "block_id" => "parent_id"}} }
+        let(:klass) { "blocks" }
+        it { is_expected.to eq ans }
+      end
+
+      context "Block - page_id" do
+        let(:target) { Block.new json: {"id" => "ABC", "parent" => {"type" => "page_id", "page_id" => "parent_id"}} }
+        let(:klass) { "pages" }
+        it { is_expected.to eq ans }
+      end
+
+      context "Block - block_id" do
+        let(:target) { Block.new json: {"id" => "ABC", "parent" => {"type" => "block_id", "block_id" => "parent_id"}} }
+        let(:klass) { "blocks" }
+        it { is_expected.to eq ans }
+      end
+    end
   end
 end

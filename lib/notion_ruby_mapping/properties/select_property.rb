@@ -74,8 +74,8 @@ module NotionRubyMapping
     # @param [String] name Property name
     # @param [Hash] json
     # @param [String] select String value (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, select: nil)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, base_type: :page, json: nil, select: nil, property_cache: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache
       @json = if database?
                 json || {"options" => []}
               else

@@ -10,11 +10,13 @@ module NotionRubyMapping
         it "can create an object" do
           expect(property_cache).not_to be_nil
         end
+
+        it("does not have a page_id") { expect(property_cache.page_id).to be_nil }
       end
 
       context "with json" do
         let(:json) { {"np" => {"type" => "number", "number" => 123}} }
-        let(:property_cache) { PropertyCache.new json }
+        let(:property_cache) { PropertyCache.new json, page_id: "abc" }
         context "without json" do
           it "can create an object" do
             expect(property_cache).not_to be_nil
@@ -23,21 +25,24 @@ module NotionRubyMapping
           it "has a NumberProperty" do
             expect(property_cache["np"]).to be_an_instance_of(NumberProperty)
           end
+
+          it("has a page_id") { expect(property_cache.page_id).to eq "abc" }
         end
       end
     end
 
     describe "add_property (Page)" do
-      subject { PropertyCache.new }
+      subject { PropertyCache.new page_id: "def" }
       let(:np) { NumberProperty.new "np", json: 123 }
+      let(:target) { subject["np"] }
       before { subject.add_property np }
       context "no update" do
         it "has the NumberProperty" do
-          expect(subject["np"]).to eq np
+          expect(target).to eq np
         end
 
         it "the NumberProperty will not update" do
-          expect(subject["np"].will_update).to be_falsey
+          expect(target.will_update).to be_falsey
         end
       end
 

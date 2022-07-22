@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe RichTextProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "flUp"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -42,6 +45,30 @@ module NotionRubyMapping
     end
 
     describe "Page property" do
+      retrieve_rich_text = {
+        "rtp" => {
+          "type" => "rich_text",
+          "rich_text" => [
+            {
+              "type" => "text",
+              "text" => {
+                "content" => "def",
+                "link" => nil,
+              },
+              "annotations" => {
+                "bold" => false,
+                "italic" => false,
+                "strikethrough" => false,
+                "underline" => false,
+                "code" => false,
+                "color" => "default",
+              },
+              "plain_text" => "def",
+              "href" => nil,
+            },
+          ],
+        },
+      }
       describe "a rich_text property with parameters" do
         [
           [
@@ -104,33 +131,21 @@ module NotionRubyMapping
       end
 
       describe "a rich_text property from property_item_json" do
-        let(:target) { Property.create_from_json "rtp", tc.read_json("rich_text_property_item") }
+        let(:target) { Property.create_from_json "rtp", tc.read_json("retrieve_property_rich_text") }
         it_behaves_like :has_name_as, "rtp"
         it_behaves_like :will_not_update
-        it_behaves_like :property_values_json, {
-          "rtp" => {
-            "type" => "rich_text",
-            "rich_text" => [
-              {
-                "type" => "text",
-                "text" => {
-                  "content" => "def",
-                  "link" => nil,
-                },
-                "annotations" => {
-                  "bold" => false,
-                  "italic" => false,
-                  "strikethrough" => false,
-                  "underline" => false,
-                  "code" => false,
-                  "color" => "default",
-                },
-                "plain_text" => "def",
-                "href" => nil,
-              },
-            ],
-          },
-        }
+        it_behaves_like :property_values_json, retrieve_rich_text
+      end
+
+      context "created from json (no content)" do
+        let(:target) { Property.create_from_json "rtp", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "rtp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / title to retrieve a property item
+        it_behaves_like :property_values_json, retrieve_rich_text
       end
     end
   end

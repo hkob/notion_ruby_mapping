@@ -15,9 +15,9 @@
   },
   "last_edited_by": {
     "object": "user",
-    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
   },
-  "last_edited_time": "2022-03-16T12:46:00.000Z",
+  "last_edited_time": "2022-07-12T07:28:00.000Z",
   "title": [
     {
       "type": "text",
@@ -37,6 +37,8 @@
       "href": null
     }
   ],
+  "description": [],
+  "is_inline": true,
   "properties": {
     "RelationTitle": {
       "id": "%3CnJT",
@@ -44,8 +46,11 @@
       "type": "relation",
       "relation": {
         "database_id": "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
-        "synced_property_name": "Related to Sample table (Column)",
-        "synced_property_id": "jZZ>"
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "Related to Sample table (Column)",
+          "synced_property_id": "jZZ%3E"
+        }
       }
     },
     "MultiSelectTitle": {
@@ -114,6 +119,19 @@
       "type": "last_edited_time",
       "last_edited_time": {}
     },
+    "Related to New database title(Added) (Relation)": {
+      "id": "%5CaqD",
+      "name": "Related to New database title(Added) (Relation)",
+      "type": "relation",
+      "relation": {
+        "database_id": "c7697137-d49f-49c2-bbcd-d6a665c4f921",
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "Relation",
+          "synced_property_id": "N%60OG"
+        }
+      }
+    },
     "FormulaTitle": {
       "id": "%5D~iZ",
       "name": "FormulaTitle",
@@ -128,6 +146,19 @@
       "type": "people",
       "people": {}
     },
+    "Related to New database title (Relation) 1": {
+      "id": "%60%3ATr",
+      "name": "Related to New database title (Relation) 1",
+      "type": "relation",
+      "relation": {
+        "database_id": "3cdba55f-f21f-4b68-8dd9-ae4c41f7b3a0",
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "Relation",
+          "synced_property_id": "%3A~%5C%5C"
+        }
+      }
+    },
     "CreatedByTitle": {
       "id": "eR%3D~",
       "name": "CreatedByTitle",
@@ -139,6 +170,29 @@
       "name": "TextTitle",
       "type": "rich_text",
       "rich_text": {}
+    },
+    "Related to Database created by API (Relation)": {
+      "id": "iijV",
+      "name": "Related to Database created by API (Relation)",
+      "type": "relation",
+      "relation": {
+        "database_id": "d25d3500-044d-4959-8564-10198038d651",
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "Relation",
+          "synced_property_id": "nLjJ"
+        }
+      }
+    },
+    "Related to New database title (Relation)": {
+      "id": "mfBo",
+      "name": "Related to New database title (Relation)",
+      "type": "relation",
+      "relation": {
+        "database_id": "c7697137-d49f-49c2-bbcd-d6a665c4f921",
+        "type": "single_property",
+        "single_property": {}
+      }
     },
     "MailTitle": {
       "id": "p%7Ci%3F",

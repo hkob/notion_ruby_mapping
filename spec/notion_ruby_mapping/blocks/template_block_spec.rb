@@ -36,7 +36,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { TemplateBlock.new "A sample template", sub_blocks: sub_block }
       it_behaves_like :create_child_block, described_class,
-                      "7bebb5b59d9447229e9b8ea92f8f4e35", "451f47fd15384207b258878fc0f18d18"
+                      "b1b91ac671d9495fa88fc10a98d08ce0", "34f1c3ad434b4662ae44edd14fd754f2"
     end
 
     describe "save (update)" do

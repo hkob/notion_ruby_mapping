@@ -1,5 +1,6 @@
 {
-  "id": "%7CNHO",
+  "object": "property_item",
   "type": "phone_number",
+  "id": "%7CNHO",
   "phone_number": "xx-xxxx-xxxx"
 }

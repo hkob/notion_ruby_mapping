@@ -1,0 +1,30 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "multi_select",
+      "id": "%3A%3EFq",
+      "multi_select": [
+        {
+          "id": "e81a52e0-b168-451e-b23b-1c35e57037b2",
+          "name": "Tag 1",
+          "color": "brown"
+        }
+      ]
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "property_item",
+  "property_item": {
+    "id": "STe_",
+    "next_url": null,
+    "type": "rollup",
+    "rollup": {
+      "type": "array",
+      "array": [],
+      "function": "show_original"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "people",
+      "id": "_x%3E%3D",
+      "people": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+        "name": "Hiroyuki KOBAYASHI",
+        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/11fe08d7-dc6c-4953-b778-d09c25b6a981/1ea5da4c6b0b10c5ed42b763c162fcd9.png",
+        "type": "person",
+        "person": {
+          "email": "hkob@metro-cit.ac.jp"
+        }
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "property_item",
+  "property_item": {
+    "id": "_x%3E%3D",
+    "next_url": null,
+    "type": "people",
+    "people": {}
+  }
+}

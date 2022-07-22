@@ -1,0 +1,22 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%3CnJT",
+      "relation": {
+        "id": "860753bb-6d1f-48de-9621-1fa6e0e31f82"
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "property_item",
+  "property_item": {
+    "id": "%3CnJT",
+    "next_url": null,
+    "type": "relation",
+    "relation": {}
+  }
+}

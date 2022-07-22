@@ -1,13 +1,30 @@
 # frozen_string_literal: true
+#
+require "forwardable"
 
 module NotionRubyMapping
   # abstract class for property
   class Property
+    extend Forwardable
+
     ### Public announced methods
 
     ## Common methods
 
-    attr_reader :name, :will_update
+    attr_reader :name, :will_update, :property_id
+    attr_accessor :property_cache
+
+    def_delegators :retrieve_page_property, :<<, :[], :add_person, :add_relation, :checkbox, :checkbox=, :created_by,
+                   :created_time, :date, :each, :email, :email=, :end_date, :end_date=, :files, :files=, :filter_after,
+                   :filter_before, :filter_contains, :filter_does_not_contain, :filter_does_not_equal,
+                   :filter_ends_with, :filter_equals, :filter_greater_than, :filter_greater_than_or_equal_to,
+                   :filter_is_empty, :filter_is_not_empty, :filter_less_than, :filter_less_than_or_equal_to,
+                   :filter_next_month, :filter_next_week, :filter_next_year, :filter_on_or_after, :filter_on_or_before,
+                   :filter_past_month, :filter_past_week, :filter_past_year, :filter_starts_with, :formula, :full_text,
+                   :last_edited_by, :last_edited_time, :multi_select, :multi_select=, :multi_select_names, :number,
+                   :number=, :people, :people=, :phone_number, :phone_number=, :property_values_json, :relation=,
+                   :rollup, :start_date, :start_date=, :time_zone, :time_zone=, :select, :select=, :select_name, :url,
+                   :url=
 
     ## Database property only methods
 
@@ -32,7 +49,7 @@ module NotionRubyMapping
 
     # @param [String] name Property name
     # @return [Property] generated Property object
-    def initialize(name, will_update: false, base_type: :page)
+    def initialize(name, will_update: false, base_type: :page, property_id: nil, property_cache: nil, query: nil)
       @name = name
       @will_update = will_update
       @base_type = base_type
@@ -40,39 +57,64 @@ module NotionRubyMapping
       @remove = false
       @new_name = nil
       @json = nil
+      @property_id = property_id
+      @property_cache = property_cache
+      @query = query
     end
 
     # @param [String] name
     # @param [Hash] input_json
     # @return [NotionRubyMapping::Property, nil] generated Property object
-    def self.create_from_json(name, input_json, base_type = :page)
+    # @param [Symbol] base_type :page or :database
+    # @param [String, nil] page_id
+    def self.create_from_json(name, input_json, base_type = :page, property_cache = nil, query = nil)
       raise StandardError, "Property not found: #{name}:#{input_json}" if input_json.nil?
 
       type = input_json["type"]
-      klass = {
-        "checkbox" => CheckboxProperty,
-        "created_time" => CreatedTimeProperty,
-        "date" => DateProperty,
-        "formula" => FormulaProperty,
-        "last_edited_time" => LastEditedTimeProperty,
-        "rollup" => RollupProperty,
-        "email" => EmailProperty,
-        "files" => FilesProperty,
-        "created_by" => CreatedByProperty,
-        "last_edited_by" => LastEditedByProperty,
-        "multi_select" => MultiSelectProperty,
-        "people" => PeopleProperty,
-        "relation" => RelationProperty,
-        "number" => NumberProperty,
-        "phone_number" => PhoneNumberProperty,
-        "select" => SelectProperty,
-        "title" => TitleProperty,
-        "rich_text" => RichTextProperty,
-        "url" => UrlProperty,
-      }[type]
-      raise StandardError, "Irregular property type: #{type}" unless klass
+      if type.nil?
+        new name, property_id: input_json["id"], base_type: base_type, property_cache: property_cache, query: query
+      elsif type == "property_item"
+        tmp = new name, property_id: input_json["property_item"]["id"], base_type: base_type,
+                  property_cache: property_cache, query: query
+        objects = List.new(json: input_json, property: tmp, query: query).select { true }
+        case input_json["property_item"]["type"]
+        when "people"
+          PeopleProperty.new name, people: objects, base_type: base_type, property_cache: property_cache, query: query
+        when "relation"
+          RelationProperty.new name, relation: objects, base_type: base_type, property_cache: property_cache, query: query
+        when "rich_text"
+          RichTextProperty.new name, text_objects: objects, base_type: base_type, property_cache: property_cache, query: query
+        when "rollup"
+          RollupProperty.new name, json: objects, base_type: base_type, property_cache: property_cache, query: query
+        when "title"
+          TitleProperty.new name, text_objects: objects, base_type: base_type, property_cache: property_cache, query: query
+        end
+      else
+        klass = {
+          "checkbox" => CheckboxProperty,
+          "created_time" => CreatedTimeProperty,
+          "date" => DateProperty,
+          "formula" => FormulaProperty,
+          "last_edited_time" => LastEditedTimeProperty,
+          "rollup" => RollupProperty,
+          "email" => EmailProperty,
+          "files" => FilesProperty,
+          "created_by" => CreatedByProperty,
+          "last_edited_by" => LastEditedByProperty,
+          "multi_select" => MultiSelectProperty,
+          "relation" => RelationProperty,
+          "number" => NumberProperty,
+          "people" => PeopleProperty,
+          "phone_number" => PhoneNumberProperty,
+          "select" => SelectProperty,
+          "title" => TitleProperty,
+          "rich_text" => RichTextProperty,
+          "url" => UrlProperty,
+        }[type]
+        raise StandardError, "Irregular property type: #{type}" unless klass
 
-      klass.new name, json: input_json[type], base_type: base_type
+        klass.new name, json: input_json[type], base_type: base_type, property_cache: property_cache
+      end
     end
 
     # @return [FalseClass]
@@ -83,6 +125,11 @@ module NotionRubyMapping
     # @return [TrueClass, FalseClass] true if database property
     def database?
       @base_type == :database
+    end
+
+    # @return [TrueClass, FalseClass] true if it has Property contents
+    def contents?
+      !instance_of? Property
     end
 
     # @param [String] key query parameter
@@ -108,7 +155,9 @@ module NotionRubyMapping
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
-      @json = json[type]
+      return unless contents?
+
+      @json = json[type] if json[type] && json[type] != "property_item"
     end
 
     # @return [Symbol] property type
@@ -148,12 +197,16 @@ module NotionRubyMapping
       raise StandardError, "#{method} can execute only Page property." unless @base_type == :page
     end
 
-    ## Page property only methods
-
-    # @return [Hash] {} created_time cannot be updated
-    def property_values_json
+    # @return [NotionRubyMapping::Property, Array<UserObject>, nil]
+    def retrieve_page_property
       assert_page_property __method__
-      {}
+      raise StandardError, "property_cache.page_id is empty" if @property_cache.page_id.nil?
+
+      json = NotionCache.instance.page_property_request @property_cache.page_id, @property_id,
+                                                        (@query&.query_json || {})
+      new_property = self.class.create_from_json @name, json, :page, @property_cache, @query
+      @property_cache.add_property new_property
+      new_property
     end
 
     protected

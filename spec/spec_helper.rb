@@ -96,7 +96,7 @@ module NotionRubyMapping
       toggle_heading_1: "a9b7ff827c5b41dba01374b1af8fb516",
       toggle_heading_2: "00ce5fe04b5b485ba157914ae048b780",
       toggle_heading_3: "e16aa38d136e4fcaa54c3a18f6140350",
-      image: "9e78e7714adf4055b78b3a1528b956d6",
+      image: "585aa9761ce143c2b9dba3e4503d78c2",
       numbered_list_item: "da9929d35cd849d7990e2ee361239810",
       paragraph: "7de3e4c08c5f4082992268d154f9aefc",
       pdf: "ca7317b3b5d44a75880611264155dd48",
@@ -163,6 +163,7 @@ module NotionRubyMapping
       append_block_children_block
       destroy_block
       update_block
+      retrieve_property
     end
 
     # @param [Symbol] method
@@ -211,8 +212,8 @@ module NotionRubyMapping
     def query_database
       generate_stubs_sub :post, __method__, :query_database_path, {
         limit2: [DATABASE_ID, 200, {"page_size" => 2}],
-        next2: [DATABASE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
-        last2: [DATABASE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
+        next2: [DATABASE_ID, 200, {"start_cursor" => "206ffaa2-7774-4a99-baf5-93e28730240c", "page_size" => 2}],
+        last2: [DATABASE_ID, 200, {"start_cursor" => "986ebb25-e23f-4f05-99d6-2a531d8928c9", "page_size" => 2}],
       }
     end
 
@@ -2451,6 +2452,35 @@ module NotionRubyMapping
       }
     end
 
+    def retrieve_property
+      generate_stubs_sub :get, __method__, :page_property_path, {
+        checkbox: [[DB_FIRST_PAGE_ID, "Lbi%5D"], 200],
+        created_by: [[DB_FIRST_PAGE_ID, "eR%3D~"], 200],
+        created_time: [[DB_FIRST_PAGE_ID, "WsEj"], 200],
+        date: [[DB_FIRST_PAGE_ID, "SPrp"], 200],
+        email: [[DB_FIRST_PAGE_ID, "p%7Ci%3F"], 200],
+        files_external: [[DB_FIRST_PAGE_ID, "qEdK"], 200],
+        files_internal: [[DB_SECOND_PAGE_ID, "qEdK"], 200],
+        formula: [[DB_FIRST_PAGE_ID, "%5D~iZ"], 200],
+        last_edited_by: [[DB_FIRST_PAGE_ID, "LQGa"], 200],
+        last_edited_time: [[DB_FIRST_PAGE_ID, "X%3E%40X"], 200],
+        multi_select: [[DB_FIRST_PAGE_ID, "Kjx%7D"], 200],
+        number: [[DB_FIRST_PAGE_ID, "swq%5C"], 200],
+        people: [[DB_FIRST_PAGE_ID, "_x%3E%3D"], 200],
+        phone_number: [[DB_FIRST_PAGE_ID, "%7CNHO"], 200],
+        relation: [[DB_FIRST_PAGE_ID, "%3CnJT"], 200],
+        rich_text: [[DB_FIRST_PAGE_ID, "flUp"], 200],
+        rich_text_limit5: [[DB_SECOND_PAGE_ID, "flUp?page_size=5"], 200],
+        rich_text_next5: [[DB_SECOND_PAGE_ID, "flUp?page_size=5&start_cursor=PLuaRX"], 200],
+        rich_text_last5: [[DB_SECOND_PAGE_ID, "flUp?page_size=5&start_cursor=xQVa1H"], 200],
+        rollup: [[DB_FIRST_PAGE_ID, "STe_"], 200],
+        select: [[DB_FIRST_PAGE_ID, "zE%7C%3F"], 200],
+        title: [[DB_FIRST_PAGE_ID, "title"], 200],
+        title_top: [[TOP_PAGE_ID, "title"], 200],
+        url: [[DB_FIRST_PAGE_ID, "tvis"], 200],
+      }
+    end
+
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
     def read_json(json_file)
@@ -2493,7 +2523,7 @@ module RSpec
       path += query.query_string if use_query && method == :get
       shell = [
         "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
-        "  -H 'Notion-Version: 2022-02-22'",
+        "  -H 'Notion-Version: 2022-06-28'",
         "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
       shell << "  -H 'Content-Type: application/json'" if %i[post patch].include?(method)

@@ -39,17 +39,21 @@ module NotionRubyMapping
 
     ## Common methods
 
+    def self.people_from_json(json)
+      List.new(json: json, property: self).select { true }
+    end
+
     # @param [String] name
     # @param [Hash] json
     # @param [Array] people ids for people
-    def initialize(name, will_update: false, base_type: :page, json: nil, people: nil)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, base_type: :page, json: nil, people: nil, property_cache: nil, query: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache, query: query
       @json = if database?
                 {}
               elsif people
                 Array(people).map { |uo| UserObject.user_object(uo) }
               elsif json
-                json.map { |p| UserObject.new json: p }
+                PeopleProperty.people_from_json json
               else
                 []
               end
@@ -72,7 +76,7 @@ module NotionRubyMapping
     # @return [Hash, Array]
     def update_from_json(json)
       @will_update = false
-      @json = database? ? {} : json["people"].map { |p_json| UserObject.new json: p_json }
+      @json = database? ? {} : PeopleProperty.people_from_json(json)
     end
   end
 end

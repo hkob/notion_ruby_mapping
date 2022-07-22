@@ -26,7 +26,7 @@ module NotionRubyMapping
     # @param [String] title
     # @param [Array<String, Property>] assigns
     # @return [NotionRubyMapping::Database]
-    # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#2e8ca5408afb4f83a92b7b84c0dc9903
+    # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#71f680d59b874930bf9f488a7cd6a49e
     def build_child_database(title, *assigns)
       db = Database.new json: {"title" => [TextObject.new(title).property_values_json]},
                         assign: assigns, parent: {"type" => "page_id", "page_id" => @id}
@@ -34,18 +34,19 @@ module NotionRubyMapping
       db
     end
 
+    # @param [String] title
+    # @param [Array<String, Property>] assigns
+    # @return [NotionRubyMapping::Database]
+    # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e3f1d21e0f724f589e48431468772eed
     def create_child_database(title, *assigns, dry_run: false)
-      build_child_database title, *assigns
-      db = Database.new json: {"title" => [TextObject.new(title).property_values_json]},
-                        assign: assigns, parent: {"type" => "page_id", "page_id" => @id}
-      yield db, db.properties
-      db.save dry_run: dry_run
+      build_child_database(title, *assigns).save dry_run: dry_run
     end
 
     # @return [String] title
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#2ff7209055f346fbbda454cdbb40b1c8
     def title
-      properties.select { |p| p.is_a? TitleProperty }.map(&:full_text).join ""
+      tp = properties.select { |p| (p.is_a?(TitleProperty)) || (p.is_a?(Property) && p.property_id == "title") }
+      tp.map(&:full_text).join ""
     end
 
     protected

@@ -9,17 +9,29 @@ module NotionRubyMapping
 
     ## Common methods
 
+    def self.rich_text_array_from_json(json)
+      rich_text_objects = List.new(json: json, property: self).select { true }
+      RichTextArray.rich_text_array "title", rich_text_objects
+    end
+
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
       if database?
         @json = json || {}
       else
-        @text_objects = RichTextArray.new "rich_text", json: json["title"]
+        @text_objects = TitleProperty.rich_text_array_from_json json
       end
     end
 
     ## Page property only methods
+
+    # @return [FalseClass]
+    def clear_will_update
+      super
+      @text_objects.clear_will_update
+      false
+    end
 
     # @return [Hash] created json
     def property_values_json

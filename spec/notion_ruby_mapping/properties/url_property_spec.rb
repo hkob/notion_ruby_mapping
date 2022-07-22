@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe UrlProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "tvis"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -64,7 +67,7 @@ module NotionRubyMapping
         end
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("url_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_url")) }
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {"up" => {"type" => "url", "url" => "https://hkob.hatenablog.com/"}}
           it { expect(target.url).to eq "https://hkob.hatenablog.com/" }
@@ -73,12 +76,24 @@ module NotionRubyMapping
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "up", tc.read_json("url_property_item") }
+        let(:target) { Property.create_from_json "up", tc.read_json("retrieve_property_url") }
         it_behaves_like :has_name_as, "up"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {"up" => {"type" => "url", "url" => "https://hkob.hatenablog.com/"}}
         it { expect(target.url).to eq "https://hkob.hatenablog.com/" }
         it_behaves_like :assert_different_property, :update_property_schema_json
+      end
+
+      context "created from json (no content)" do
+        let(:target) { Property.create_from_json "up", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "up"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / created_by to retrieve a property item
+        it_behaves_like :property_values_json, {"up" => {"type" => "url", "url" => "https://hkob.hatenablog.com/"}}
+        it { expect(target.url).to eq "https://hkob.hatenablog.com/"}
       end
     end
   end

@@ -15,6 +15,7 @@ module NotionRubyMapping
 
     # @return [Hash] {}
     def clear
+      @update_block_key = []
       @json = {}
     end
 

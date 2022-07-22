@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe PeopleProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "_x%3E%3D"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
     p12 = {"type" => "people", "people" => (%w[P1 P2].map { |id| {"object" => "user", "id" => id} })}
 
     context "Database property" do
@@ -48,6 +51,17 @@ module NotionRubyMapping
     end
 
     context "Page property" do
+      retrieve_user = {
+        "pp" => {
+          "type" => "people",
+          "people" => [
+            {
+              "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+              "object" => "user",
+            },
+          ],
+        },
+      }
       context "created by new" do
         let(:target) { PeopleProperty.new "pp" }
         it_behaves_like :property_values_json, {"pp" => {"type" => "people", "people" => []}}
@@ -76,41 +90,32 @@ module NotionRubyMapping
         end
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("people_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_people")) }
           it_behaves_like :will_not_update
-          it_behaves_like :property_values_json, {
-            "pp" => {
-              "type" => "people",
-              "people" => [
-                {
-                  "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-                  "object" => "user",
-                },
-              ],
-            },
-          }
+          it_behaves_like :property_values_json, retrieve_user
           it { expect(target.people.first).to be_an_instance_of(UserObject) }
           it_behaves_like :assert_different_property, :update_property_schema_json
         end
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "pp", tc.read_json("people_property_item") }
+        let(:target) { Property.create_from_json "pp", tc.read_json("retrieve_property_people") }
         it_behaves_like :has_name_as, "pp"
         it_behaves_like :will_not_update
-        it_behaves_like :property_values_json, {
-          "pp" => {
-            "type" => "people",
-            "people" => [
-              {
-                "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-                "object" => "user",
-              },
-            ],
-          },
-        }
+        it_behaves_like :property_values_json, retrieve_user
         it { expect(target.people.first).to be_an_instance_of(UserObject) }
         it_behaves_like :assert_different_property, :update_property_schema_json
+      end
+
+      context "created from json (no content)" do
+        let(:target) { Property.create_from_json "pp", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "pp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / created_by to retrieve a property item
+        it_behaves_like :property_values_json, retrieve_user
       end
     end
   end

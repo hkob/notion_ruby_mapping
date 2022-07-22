@@ -41,8 +41,8 @@ module NotionRubyMapping
 
     # @param [String] name
     # @param [Hash] json
-    def initialize(name, will_update: false, base_type: :page, json: nil, formula: nil)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, base_type: :page, json: nil, formula: nil, property_cache: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache
       @json = json || {}
       return unless database?
 
@@ -60,6 +60,13 @@ module NotionRubyMapping
       ans[@name] ||= {}
       ans[@name]["formula"] = @json
       ans
+    end
+
+    ## Page property only methods
+    # @return [Hash]
+    def property_values_json
+      assert_page_property __method__
+      {}
     end
 
     protected

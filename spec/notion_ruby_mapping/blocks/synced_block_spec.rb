@@ -38,14 +38,14 @@ module NotionRubyMapping
           ]
         end
         it_behaves_like :create_child_block, described_class,
-                        "3ece4c8fb02b4da5a1e18803d6c088e9", "a2a14594e2a24ea0bcc6067f0b0a3a97"
+                        "3e233ded2ad84cf4b1275409e5bc9cb5", "c471e88f01b347bebab4c30eb6b09cc2"
       end
     end
 
     context "synced_block_reference" do
       let(:target) { SyncedBlock.new block_id: "4815032e-6f24-43e4-bc8c-9bdc6299b090" }
       it_behaves_like :create_child_block, described_class,
-                      "51431432c91e4a45a951d12cf53bb0e8", "a8a432be8a3d4fb8b67afefb7ed98c66"
+                      "5fbed0c64273474b8124e66fedfad64d", "bb7ced572c8e4b38b6fbaa0f27c32d43"
     end
   end
 end

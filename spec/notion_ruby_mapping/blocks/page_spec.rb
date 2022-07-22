@@ -257,7 +257,7 @@ module NotionRubyMapping
           context klass do
             let(:key) { title }
             it "should be an object of #{klass}" do
-              expect(target).to be_is_a klass
+              expect(target).to be_is_a Property
             end
             it_behaves_like :property_values_json, ans
           end
@@ -550,7 +550,7 @@ module NotionRubyMapping
         end
 
         it "updates properties" do
-          print target.save dry_run: true
+          # print target.save dry_run: true
           target.save # update page and reload properties
           aggregate_failures do
             {
@@ -586,8 +586,6 @@ module NotionRubyMapping
                 "type" => "multi_select",
                 "multi_select" => [
                   {
-                    "color" => "default",
-                    "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
                     "name" => "Multi Select 2",
                   },
                 ],
@@ -596,7 +594,7 @@ module NotionRubyMapping
                 "people" => [
                   {
                     "object" => "user",
-                    "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+                    "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
                   },
                 ],
                 "type" => "people",
@@ -605,7 +603,7 @@ module NotionRubyMapping
                 "type" => "relation",
                 "relation" => [
                   {
-                    "id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82",
+                    "id" => "860753bb6d1f48de96211fa6e0e31f82",
                   },
                 ],
               },
@@ -620,8 +618,6 @@ module NotionRubyMapping
               @sp => {
                 "type" => "select",
                 "select" => {
-                  "color" => "purple",
-                  "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
                   "name" => "Select 3",
                 },
               },
@@ -629,14 +625,6 @@ module NotionRubyMapping
                 "type" => "rich_text",
                 "rich_text" => [
                   {
-                    "annotations" => {
-                      "bold" => false,
-                      "code" => false,
-                      "color" => "default",
-                      "italic" => false,
-                      "strikethrough" => false,
-                      "underline" => false,
-                    },
                     "href" => nil,
                     "plain_text" => "new text",
                     "text" => {
@@ -651,14 +639,6 @@ module NotionRubyMapping
                 "type" => "title",
                 "title" => [
                   {
-                    "annotations" => {
-                      "bold" => false,
-                      "code" => false,
-                      "color" => "default",
-                      "italic" => false,
-                      "strikethrough" => false,
-                      "underline" => false,
-                    },
                     "href" => nil,
                     "plain_text" => "MNO",
                     "text" => {
@@ -674,7 +654,9 @@ module NotionRubyMapping
                 "url" => "https://www.google.com/",
               },
             }.each do |p, json|
-              expect(p.property_values_json[p.name]).to eq(json)
+              expect(p.property_values_json[p.name]).to eq json
+              expect(target.property_values_json).to eq({})
+
             end
           end
         end
@@ -682,6 +664,23 @@ module NotionRubyMapping
     end
 
     describe "create" do
+      create_page_title = {
+        "properties" => {
+          "Name" => {
+            "title" => [
+              {
+                "href" => nil,
+                "plain_text" => "New Page Title",
+                "text" => {
+                  "content" => "New Page Title",
+                  "link" => nil},
+                "type" => "text",
+              },
+            ],
+            "type" => "title",
+          },
+        },
+      }
       let(:parent_db) { Database.new id: TestConnection::PARENT_DATABASE_ID }
       context "build_child_database" do
         let(:target) do
@@ -695,23 +694,7 @@ module NotionRubyMapping
           "parent" => {
             "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
           },
-          "properties" => {
-            "Name" => {
-              "title" => [
-                {
-                  "href" => nil,
-                  "type" => "text",
-                  "text" => {
-                    "content" => "New Page Title",
-                    "link" => nil,
-                  },
-                  "plain_text" => "New Page Title",
-                },
-              ],
-              "type" => "title",
-            },
-          },
-        }
+        }.merge(create_page_title)
 
         describe "dry_run" do
           let(:dry_run) { target.save dry_run: true }
@@ -721,7 +704,7 @@ module NotionRubyMapping
         describe "create" do
           before { target.save }
           it_behaves_like :property_values_json, {}
-          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
+          it { expect(target.id).to eq "bbc516a1e2784de8b5bd121e572f09f0" }
           it { expect(target.new_record?).to be_falsey }
         end
       end
@@ -735,7 +718,7 @@ module NotionRubyMapping
           end
 
           it_behaves_like :property_values_json, {}
-          it { expect(target.id).to eq "40d6dc22988942f38540ba5b6ab8d858" }
+          it { expect(target.id).to eq "bbc516a1e2784de8b5bd121e572f09f0" }
           it { expect(target.new_record?).to be_falsey }
         end
 

@@ -8,7 +8,9 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
 
 - [notion_ruby_mapping](#notion_ruby_mapping)
   - [Table of Contents](#table-of-contents)
-  - [0. Changes in v0.5.0](#0-changes-in-v050)
+  - [0. Changes](#0-changes)
+    - [0.1 Changes in v0.6.0](#01-changes-in-v060)
+    - [0.2 Changes in v0.5.0](#02-changes-in-v050)
   - [1. Installation](#1-installation)
   - [2. How to use](#2-how-to-use)
     - [2.1 Create a New Integration](#21-create-a-new-integration)
@@ -21,9 +23,18 @@ Development note is here. → [Idea note of "notion_ruby_mapping"](https://www.n
   - [5. License](#5-license)
   - [6. Code of Conduct](#6-code-of-conduct)
 
-## 0. Changes in v0.5.0
+## 0. Changes
 
-NotionRubyMapping v.0.5.0 now supports block updates.
+### 0.1 Changes in v0.6.0
+
+NotionRubyMapping v0.6.0 now supports Notion-Version 2022-06-28.
+In 2022-06-28, property values are no longer returned when retrieving pages.
+NotionRubyMapping temporarily creates a Property Object and calls the retrieve a property item API when a value is needed.
+Therefore, users do not need to be aware of any differences, and existing scripts should work as they are.
+
+### 0.2 Changes in v0.5.0
+
+NotionRubyMapping v0.5.0 now supports block updates.
 For efficiency, subclasses are provided under Block class. As a result, they are no longer compatible with the scripts used in v0.4.0.
 
 ## 1. Installation
@@ -79,6 +90,11 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 ## 3. ChangeLog
 
+- 2022/7/22 [v0.6.0] updates for Notion-Version 2022-06-28 (lazy retrieve property values, retrieve page/database/block parent, single_property/dual_property for RelationProperty)
+- 2022/6/24 [v0.5.5] add file_names= to FileProperty
+- 2022/6/23 [v0.5.4] add update 'is_inline' and 'description' for database object
+- 2022/6/14 [v0.5.3] add time zone for query database by Date (before, after, on_or_before, on_or_after)
+- 2022/6/8 [v0.5.2] Change query database filter for date with time zone
 - 2022/6/5 [v0.5.1] bug fix for append_block_children.  added synced_block_original to SyncedBlock
 - 2022/6/4 [v0.5.0]  added subclasses of the block class and update_block API support
 - 2022/5/19 [v0.4.1] added delete_block

@@ -15,7 +15,7 @@
     "object": "user",
     "id": "019a87c7-d197-44a4-b19a-baa684400f81"
   },
-  "last_edited_time": "2022-03-24T12:30:00.000Z",
+  "last_edited_time": "2022-07-12T07:30:00.000Z",
   "title": [
     {
       "type": "text",
@@ -52,6 +52,8 @@
       "href": null
     }
   ],
+  "description": [],
+  "is_inline": false,
   "properties": {
     "Select": {
       "id": "%3Abg~",
@@ -77,6 +79,12 @@
         ]
       }
     },
+    "added url property": {
+      "id": "%3FSX%3B",
+      "name": "added url property",
+      "type": "url",
+      "url": {}
+    },
     "Url": {
       "id": "Bdec",
       "name": "Url",
@@ -88,6 +96,14 @@
       "name": "CreatedTime",
       "type": "created_time",
       "created_time": {}
+    },
+    "added number property": {
+      "id": "GBUZ",
+      "name": "added number property",
+      "type": "number",
+      "number": {
+        "format": "euro"
+      }
     },
     "LastEditedTime": {
       "id": "HrEw",
@@ -113,12 +129,17 @@
         "function": "average"
       }
     },
-    "added number property": {
-      "id": "Qg%3Cq",
-      "name": "added number property",
-      "type": "number",
-      "number": {
-        "format": "euro"
+    "Relation": {
+      "id": "N%60OG",
+      "name": "Relation",
+      "type": "relation",
+      "relation": {
+        "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "Related to New database title(Added) (Relation)",
+          "synced_property_id": "%5CaqD"
+        }
       }
     },
     "Files": {
@@ -194,12 +215,6 @@
       "name": "Checkbox",
       "type": "checkbox",
       "checkbox": {}
-    },
-    "added url property": {
-      "id": "%7BpCH",
-      "name": "added url property",
-      "type": "url",
-      "url": {}
     },
     "Formula": {
       "id": "%7C%3Aii",

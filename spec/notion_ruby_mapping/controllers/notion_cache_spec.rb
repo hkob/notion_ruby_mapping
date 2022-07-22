@@ -36,5 +36,9 @@ module NotionRubyMapping
       it { expect(nc.block_children_page_path("ABC")).to eq "v1/blocks/ABC/children" }
       it { expect(nc.block_children_page_path("ABC", "?page_size=100")).to eq "v1/blocks/ABC/children?page_size=100" }
     end
+
+    describe "page_property_path" do
+      it { expect(nc.page_property_path("ABC", "DEF")).to eq "v1/pages/ABC/properties/DEF" }
+    end
   end
 end

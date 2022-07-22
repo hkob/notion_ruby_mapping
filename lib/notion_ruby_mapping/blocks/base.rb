@@ -50,7 +50,7 @@ module NotionRubyMapping
     def self.dry_run_script(method, path, json = nil)
       shell = [
         "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
-        "  -H 'Notion-Version: 2022-02-22'",
+        "  -H 'Notion-Version: 2022-06-28'",
         "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
       shell << "  -H 'Content-Type: application/json'" if %i[post patch].include?(method)
@@ -120,11 +120,13 @@ module NotionRubyMapping
     # @param [String] title
     # @return [NotionRubyMapping::Property] generated property
     def assign_property(klass, title)
-      @property_cache ||= PropertyCache.new({}, base_type: database? ? :database : :page)
+      @property_cache ||= PropertyCache.new({},
+                                            base_type: database? ? :database : :page,
+                                            page_id: page? ? @id : nil)
       property = if database?
                    klass.new(title, will_update: new_record?, base_type: :database)
                  else
-                   klass.new(title, will_update: true, base_type: :page)
+                   klass.new(title, will_update: true, base_type: :page, property_cache: @property_cache)
                  end
       @property_cache.add_property property
       property
@@ -192,6 +194,24 @@ module NotionRubyMapping
       is_a? Page
     end
 
+    def parent(dry_run: false)
+      parent_json = @json && @json["parent"]
+      raise StandardError, "Unknown parent" if parent_json.nil?
+
+      type = parent_json["type"]
+      klass = case type
+              when "database_id"
+                Database
+              when "page_id"
+                Page
+              when "block_id"
+                Block
+              else
+                raise StandardError, "List does not have any parent"
+              end
+      klass.find parent_json[type], dry_run: dry_run
+    end
+
     # @return [NotionRubyMapping::PropertyCache] get or created PropertyCache object
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#8f0b28e09dd74e2a9ff06126c48d64d4
     def properties
@@ -201,7 +221,9 @@ module NotionRubyMapping
 
           reload
         end
-        @property_cache = PropertyCache.new json_properties, base_type: database? ? :database : :page
+        @property_cache = PropertyCache.new json_properties,
+                                            base_type: database? ? :database : :page,
+                                            page_id: page? ? @id : nil
       end
       @property_cache
     end
@@ -225,20 +247,28 @@ module NotionRubyMapping
       return unless is_a?(Page) || is_a?(Database)
 
       ps.each do |key, json|
-        properties[key].update_from_json json
+        if json["type"]
+          properties[key].update_from_json json
+        else
+          properties[key]&.clear_will_update
+        end
       end
       self
     end
 
     # @param [Boolean] dry_run
-    # @return [NotionRubyMapping::Base, String]
+    # @return [NotionRubyMapping::Base, NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#277085c8439841c798a4b94eae9a7326
     def save(dry_run: false)
       if dry_run
         @new_record ? create(dry_run: true) : update(dry_run: true)
       else
         @new_record ? create : update
-        @property_cache.clear_will_update unless block?
+        if block?
+
+        else
+          @property_cache.clear_will_update
+        end
         @payload.clear
         self
       end

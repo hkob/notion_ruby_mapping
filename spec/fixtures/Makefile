@@ -5,5 +5,6 @@ SOURCES=$(wildcard *.sh)
 
 .sh.json:
 	sh $? > $@
+	sleep 1
 
 exec: $(TARGETS)

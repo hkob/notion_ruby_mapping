@@ -3,6 +3,10 @@
 module NotionRubyMapping
   RSpec.describe DateProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "SPrp"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
+
     context "Database property" do
       context "created by new" do
         let(:target) { DateProperty.new "dp", base_type: :database }
@@ -36,7 +40,7 @@ module NotionRubyMapping
 
     describe "update_from_json" do
       let(:target) { DateProperty.new "dp", start_date: Date.today }
-      before { target.update_from_json(tc.read_json("date_property_item")) }
+      before { target.update_from_json(tc.read_json("retrieve_property_date")) }
       it_behaves_like :property_values_json, {
         "dp" => {
           "type" => "date",
@@ -257,8 +261,31 @@ module NotionRubyMapping
       end
     end
 
+    context "created from json (no content)" do
+      let(:target) { Property.create_from_json "dp", no_content_json, :page, property_cache_first }
+      it_behaves_like :has_name_as, "dp"
+      it_behaves_like :will_not_update
+      it { expect(target.contents?).to be_falsey }
+      it_behaves_like :assert_different_property, :update_property_schema_json
+
+      # hook property_values_json / start_time to retrieve a property item
+      it_behaves_like :property_values_json, {
+        "dp" => {
+          "type" => "date",
+          "date" => {
+            "start" => "2022-02-25T01:23:00.000+09:00",
+            "end" => nil,
+            "time_zone" => nil,
+          },
+        },
+      }
+      it { expect(target.start_date).to eq "2022-02-25T01:23:00.000+09:00" }
+      it { expect(target.end_date).to eq nil }
+      it { expect(target.time_zone).to eq nil }
+    end
+
     describe "a date property from property_item_json" do
-      let(:target) { Property.create_from_json "dp", tc.read_json("date_property_item") }
+      let(:target) { Property.create_from_json "dp", tc.read_json("retrieve_property_date") }
       it_behaves_like :has_name_as, "dp"
       it_behaves_like :will_not_update
       it_behaves_like :property_values_json, {

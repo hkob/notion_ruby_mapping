@@ -5,12 +5,13 @@ module NotionRubyMapping
   class List < Base
     include Enumerable
 
-    def initialize(json: nil, id: nil, database: nil, parent: nil, query: nil)
+    def initialize(json: nil, id: nil, database: nil, parent: nil, property: nil, query: nil)
       super(json: json, id: id)
       @has_more = @json["has_more"]
       @load_all_contents = !@has_more
       @database = database
       @parent = parent
+      @property = property
       @query = query
       @index = 0
       @has_content = true
@@ -71,6 +72,38 @@ module NotionRubyMapping
             if @database
               @query.start_cursor = @json["next_cursor"]
               @json = @nc.database_query_request @database.id, @query
+              @index = 0
+              @has_more = @json["has_more"]
+            else
+              @has_content = false
+            end
+          else
+            @has_content = false
+          end
+        end
+      elsif @property
+        while @has_content
+          if @index < results.length
+            json = results[@index]
+            object = case json["type"]
+                     when "people"
+                       UserObject.new json: json["people"]
+                     when "relation"
+                       json["relation"]["id"]
+                     when "rich_text"
+                       RichTextObject.create_from_json json["rich_text"]
+                     when "title"
+                       RichTextObject.create_from_json json["title"]
+                     else
+                       json
+                     end
+            @index += 1
+            yield object
+          elsif @has_more
+            if @property
+              @query ||= Query.new
+              @query.start_cursor = @json["next_cursor"]
+              @json = NotionCache.instance.page_property_request @property.property_cache.page_id, @property.property_id, @query.query_json
               @index = 0
               @has_more = @json["has_more"]
             else

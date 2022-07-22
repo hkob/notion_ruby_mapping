@@ -21,7 +21,7 @@ module NotionRubyMapping
           described_class.new page_id: TestConnection::TOP_PAGE_ID
         end
         it_behaves_like :create_child_block, described_class,
-                        "4b8f1a98591648079bfc80c902472f29", "f3e70de893374d99bf0765f2688ffecf"
+                        "b55e143604f74b118f04b50831eeed15", "2e802947b5f34003ae7b4e8c7ee6205f"
       end
 
       context "link_to_page for database" do
@@ -29,7 +29,7 @@ module NotionRubyMapping
           described_class.new database_id: TestConnection::CREATED_DATABASE_ID
         end
         it_behaves_like :create_child_block, described_class,
-                        "094da086f2ac4e309d82facfc04bf67f", "81956e6c3d93430cb10ddc2c77c9d4c8"
+                        "e989f5928c7344059ec035304380be24", "669c622118c04bf4b09ba85eefb2b958"
       end
     end
   end

@@ -21,10 +21,17 @@ module NotionRubyMapping
 
     # @param [String] name Property name
     # @param [String] json last_edited_time value (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, base_type: :page, json: nil, property_cache: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache
       @json = json
       @json ||= {} if database?
+    end
+
+    ## Page property only methods
+    # @return [Hash]
+    def property_values_json
+      assert_page_property __method__
+      {}
     end
   end
 end

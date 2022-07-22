@@ -21,7 +21,7 @@ module NotionRubyMapping
                             caption: "NotionRubyMapping開発記録(21)"
       end
       it_behaves_like :create_child_block, described_class,
-                      "65de2ce6b95d426a8c5db4d673a0e236", "4575a8ad994545bd80451607eaa56599"
+                      "eca4b3fb6ef84ca88ff79311ca775009", "1ff6be7e4997455ca88ce41646ec7440"
     end
 
     describe "save (update)" do

@@ -4,23 +4,26 @@ module NotionRubyMapping
   # PropertyCache class
   class PropertyCache
     include Enumerable
-    def initialize(json = {}, base_type: :page)
+    def initialize(json = {}, base_type: :page, page_id: nil)
       @properties = {}
       @json = json
       @base_type = base_type
+      @page_id = page_id
     end
     attr_writer :json
+    attr_reader :page_id
 
     # @param [String] key
     # @return [Property] Property for key
     # @see https://www.notion.so/hkob/PropertyCache-2451fa64a814432db4809831cc77ba25#9709e2b2a7a0479f9951291a501f65c8
     def [](key)
-      @properties[key] ||= Property.create_from_json key, @json[key], @base_type
+      @properties[key] ||= Property.create_from_json key, @json[key], @base_type, self
     end
 
     # @param [Property] property added Property
     def add_property(property)
       @properties[property.name] = property
+      property.property_cache = self
       self
     end
 

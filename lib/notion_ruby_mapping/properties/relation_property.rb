@@ -54,10 +54,11 @@ module NotionRubyMapping
     # @param [String] database_id
     # @param [String] synced_property_name
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#7f5029fb7f6e4c009f22888b233e6f64
-    def replace_relation_database(database_id: nil, synced_property_name: nil)
+    def replace_relation_database(database_id: nil, type: "dual_property", synced_property_name: nil)
       assert_database_property __method__
       @will_update = true
       @json["database_id"] = database_id if database_id
+      @json["type"] = type
       @json["synced_property_name"] = synced_property_name if synced_property_name
       @json
     end
@@ -69,8 +70,8 @@ module NotionRubyMapping
     # @param [String] name
     # @param [Hash, Array] json
     # @param [String, Array] relation
-    def initialize(name, will_update: false, json: nil, relation: nil, base_type: :page)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, json: nil, relation: nil, base_type: :page, property_cache: nil, query: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache, query: query
       @json = if database?
                 json || {}
               elsif relation

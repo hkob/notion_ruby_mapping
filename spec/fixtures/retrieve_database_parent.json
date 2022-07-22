@@ -32,6 +32,8 @@
       "href": null
     }
   ],
+  "description": [],
+  "is_inline": true,
   "properties": {
     "Tags": {
       "id": "%3A%3EFq",
@@ -69,8 +71,11 @@
       "type": "relation",
       "relation": {
         "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
-        "synced_property_name": "RelationTitle",
-        "synced_property_id": "<nJT"
+        "type": "dual_property",
+        "dual_property": {
+          "synced_property_name": "RelationTitle",
+          "synced_property_id": "%3CnJT"
+        }
       }
     },
     "Name": {

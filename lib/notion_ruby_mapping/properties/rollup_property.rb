@@ -71,8 +71,8 @@ module NotionRubyMapping
 
     # @param [String] name
     # @param [Hash] json
-    def initialize(name, will_update: false, json: nil, base_type: :page)
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, json: nil, base_type: :page, property_cache: nil, query: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache, query: query
       @json = json || {}
     end
 
@@ -90,6 +90,13 @@ module NotionRubyMapping
       ans[@name]["rollup"]["relation_property_name"] = relation_property_name
       ans[@name]["rollup"]["rollup_property_name"] = rollup_property_name
       ans
+    end
+
+    ## Page property only methods
+
+    def property_values_json
+      assert_page_property __method__
+      {}
     end
 
     protected

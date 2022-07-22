@@ -3,16 +3,16 @@
   "results": [
     {
       "object": "page",
-      "id": "6601e719-a39a-460c-908e-8909467fcccf",
-      "created_time": "2022-02-07T21:29:00.000Z",
-      "last_edited_time": "2022-03-12T06:51:00.000Z",
+      "id": "206ffaa2-7774-4a99-baf5-93e28730240c",
+      "created_time": "2022-03-10T04:13:00.000Z",
+      "last_edited_time": "2022-07-12T07:31:00.000Z",
       "created_by": {
         "object": "user",
         "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
       },
       "last_edited_by": {
         "object": "user",
-        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+        "id": "019a87c7-d197-44a4-b19a-baa684400f81"
       },
       "cover": null,
       "icon": null,
@@ -23,438 +23,82 @@
       "archived": false,
       "properties": {
         "RelationTitle": {
-          "id": "%3CnJT",
-          "type": "relation",
-          "relation": [
-            {
-              "id": "e4d75736-2ea5-4501-9d05-a3b477b8e76b"
-            }
-          ]
+          "id": "%3CnJT"
         },
         "MultiSelectTitle": {
-          "id": "Kjx%7D",
-          "type": "multi_select",
-          "multi_select": [
-            {
-              "id": "5f554552-b77a-474b-b5c7-4ae819966e32",
-              "name": "Multi Select 2",
-              "color": "default"
-            }
-          ]
+          "id": "Kjx%7D"
         },
         "LastEditedByTitle": {
-          "id": "LQGa",
-          "type": "last_edited_by",
-          "last_edited_by": {
-            "object": "user",
-            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-            "name": "Hiroyuki KOBAYASHI",
-            "avatar_url": null,
-            "type": "person",
-            "person": {
-              "email": "hkob@metro-cit.ac.jp"
-            }
-          }
+          "id": "LQGa"
         },
         "CheckboxTitle": {
-          "id": "Lbi%5D",
-          "type": "checkbox",
-          "checkbox": false
+          "id": "Lbi%5D"
         },
         "DateTitle": {
-          "id": "SPrp",
-          "type": "date",
-          "date": {
-            "start": "2022-02-11",
-            "end": "2022-02-12",
-            "time_zone": null
-          }
+          "id": "SPrp"
         },
         "RollupTitle": {
-          "id": "STe_",
-          "type": "rollup",
-          "rollup": {
-            "type": "array",
-            "array": [
-              {
-                "type": "multi_select",
-                "multi_select": [
-                  {
-                    "id": "e0b4e485-b083-414a-8635-a4f9de897474",
-                    "name": "Tag 2",
-                    "color": "pink"
-                  }
-                ]
-              }
-            ],
-            "function": "show_original"
-          }
+          "id": "STe_"
         },
         "CreatedTimeTitle": {
-          "id": "WsEj",
-          "type": "created_time",
-          "created_time": "2022-02-07T21:29:00.000Z"
+          "id": "WsEj"
         },
         "LastEditedTimeTitle": {
-          "id": "X%3E%40X",
-          "type": "last_edited_time",
-          "last_edited_time": "2022-03-12T06:51:00.000Z"
+          "id": "X%3E%40X"
+        },
+        "Related to New database title(Added) (Relation)": {
+          "id": "%5CaqD"
         },
         "FormulaTitle": {
-          "id": "%5D~iZ",
-          "type": "formula",
-          "formula": {
-            "type": "date",
-            "date": {
-              "start": "2022-03-12T13:14:00.000+00:00",
-              "end": null,
-              "time_zone": null
-            }
-          }
+          "id": "%5D~iZ"
         },
         "UserTitle": {
-          "id": "_x%3E%3D",
-          "type": "people",
-          "people": []
+          "id": "_x%3E%3D"
+        },
+        "Related to New database title (Relation) 1": {
+          "id": "%60%3ATr"
         },
         "CreatedByTitle": {
-          "id": "eR%3D~",
-          "type": "created_by",
-          "created_by": {
-            "object": "user",
-            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-            "name": "Hiroyuki KOBAYASHI",
-            "avatar_url": null,
-            "type": "person",
-            "person": {
-              "email": "hkob@metro-cit.ac.jp"
-            }
-          }
+          "id": "eR%3D~"
         },
         "TextTitle": {
-          "id": "flUp",
-          "type": "rich_text",
-          "rich_text": [
-            {
-              "type": "text",
-              "text": {
-                "content": "abc\n",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "abc\n",
-              "href": null
-            },
-            {
-              "type": "mention",
-              "mention": {
-                "type": "user",
-                "user": {
-                  "object": "user",
-                  "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-                  "name": "Hiroyuki KOBAYASHI",
-                  "avatar_url": null,
-                  "type": "person",
-                  "person": {
-                    "email": "hkob@metro-cit.ac.jp"
-                  }
-                }
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "@Hiroyuki KOBAYASHI",
-              "href": null
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": " \n",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": " \n",
-              "href": null
-            },
-            {
-              "type": "mention",
-              "mention": {
-                "type": "page",
-                "page": {
-                  "id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
-                }
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "notion_ruby_mapping_test_data",
-              "href": "https://www.notion.so/c01166c613ae45cbb96818b4ef2f5a77"
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": " \n",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": " \n",
-              "href": null
-            },
-            {
-              "type": "mention",
-              "mention": {
-                "type": "date",
-                "date": {
-                  "start": "2022-02-21",
-                  "end": null,
-                  "time_zone": null
-                }
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "2022-02-21 → ",
-              "href": null
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": " \n",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": " \n",
-              "href": null
-            },
-            {
-              "type": "mention",
-              "mention": {
-                "type": "date",
-                "date": {
-                  "start": "2022-02-22T09:00:00.000+09:00",
-                  "end": null,
-                  "time_zone": null
-                }
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "2022-02-22T09:00:00.000+09:00 → ",
-              "href": null
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": " \n",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": " \n",
-              "href": null
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": "高専HP",
-                "link": {
-                  "url": "https://www.metro-cit.ac.jp"
-                }
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "高専HP",
-              "href": "https://www.metro-cit.ac.jp"
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": "\n",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "\n",
-              "href": null
-            },
-            {
-              "type": "mention",
-              "mention": {
-                "type": "database",
-                "database": {
-                  "id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253"
-                }
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "Sample table",
-              "href": "https://www.notion.so/c37a2c66e3aa4a0da44773de3b80c253"
-            },
-            {
-              "type": "text",
-              "text": {
-                "content": " ",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": " ",
-              "href": null
-            }
-          ]
+          "id": "flUp"
+        },
+        "Related to Database created by API (Relation)": {
+          "id": "iijV"
+        },
+        "Related to New database title (Relation)": {
+          "id": "mfBo"
         },
         "MailTitle": {
-          "id": "p%7Ci%3F",
-          "type": "email",
-          "email": null
+          "id": "p%7Ci%3F"
         },
         "File&MediaTitle": {
-          "id": "qEdK",
-          "type": "files",
-          "files": [
-            {
-              "name": "nr.png",
-              "type": "file",
-              "file": {
-                "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220312%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220312T131435Z&X-Amz-Expires=3600&X-Amz-Signature=cbf05036f45dd3f5e12700fe8cf0f71a2e27598aa9c0dea7ee4e74428591ee36&X-Amz-SignedHeaders=host&x-id=GetObject",
-                "expiry_time": "2022-03-12T14:14:35.902Z"
-              }
-            }
-          ]
+          "id": "qEdK"
         },
         "NumberTitle": {
-          "id": "swq%5C",
-          "type": "number",
-          "number": 2
+          "id": "swq%5C"
         },
         "UrlTitle": {
-          "id": "tvis",
-          "type": "url",
-          "url": null
+          "id": "tvis"
         },
         "SelectTitle": {
-          "id": "zE%7C%3F",
-          "type": "select",
-          "select": {
-            "id": "0b71c5a8-ea82-4b21-970e-b155e7c68a7e",
-            "name": "Select 2",
-            "color": "default"
-          }
+          "id": "zE%7C%3F"
         },
         "TelTitle": {
-          "id": "%7CNHO",
-          "type": "phone_number",
-          "phone_number": null
+          "id": "%7CNHO"
         },
         "Title": {
-          "id": "title",
-          "type": "title",
-          "title": [
-            {
-              "type": "text",
-              "text": {
-                "content": "DEF",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "DEF",
-              "href": null
-            }
-          ]
+          "id": "title"
         }
       },
-      "url": "https://www.notion.so/DEF-6601e719a39a460c908e8909467fcccf"
+      "url": "https://www.notion.so/MNO-206ffaa277744a99baf593e28730240c"
     },
     {
       "object": "page",
-      "id": "986ebb25-e23f-4f05-99d6-2a531d8928c9",
+      "id": "6601e719-a39a-460c-908e-8909467fcccf",
       "created_time": "2022-02-07T21:29:00.000Z",
-      "last_edited_time": "2022-03-10T04:13:00.000Z",
+      "last_edited_time": "2022-03-17T12:43:00.000Z",
       "created_by": {
         "object": "user",
         "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
@@ -472,152 +116,79 @@
       "archived": false,
       "properties": {
         "RelationTitle": {
-          "id": "%3CnJT",
-          "type": "relation",
-          "relation": []
+          "id": "%3CnJT"
         },
         "MultiSelectTitle": {
-          "id": "Kjx%7D",
-          "type": "multi_select",
-          "multi_select": []
+          "id": "Kjx%7D"
         },
         "LastEditedByTitle": {
-          "id": "LQGa",
-          "type": "last_edited_by",
-          "last_edited_by": {
-            "object": "user",
-            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-            "name": "Hiroyuki KOBAYASHI",
-            "avatar_url": null,
-            "type": "person",
-            "person": {
-              "email": "hkob@metro-cit.ac.jp"
-            }
-          }
+          "id": "LQGa"
         },
         "CheckboxTitle": {
-          "id": "Lbi%5D",
-          "type": "checkbox",
-          "checkbox": false
+          "id": "Lbi%5D"
         },
         "DateTitle": {
-          "id": "SPrp",
-          "type": "date",
-          "date": null
+          "id": "SPrp"
         },
         "RollupTitle": {
-          "id": "STe_",
-          "type": "rollup",
-          "rollup": {
-            "type": "array",
-            "array": [],
-            "function": "show_original"
-          }
+          "id": "STe_"
         },
         "CreatedTimeTitle": {
-          "id": "WsEj",
-          "type": "created_time",
-          "created_time": "2022-02-07T21:29:00.000Z"
+          "id": "WsEj"
         },
         "LastEditedTimeTitle": {
-          "id": "X%3E%40X",
-          "type": "last_edited_time",
-          "last_edited_time": "2022-03-10T04:13:00.000Z"
+          "id": "X%3E%40X"
+        },
+        "Related to New database title(Added) (Relation)": {
+          "id": "%5CaqD"
         },
         "FormulaTitle": {
-          "id": "%5D~iZ",
-          "type": "formula",
-          "formula": {
-            "type": "date",
-            "date": {
-              "start": "2022-03-12T13:14:00.000+00:00",
-              "end": null,
-              "time_zone": null
-            }
-          }
+          "id": "%5D~iZ"
         },
         "UserTitle": {
-          "id": "_x%3E%3D",
-          "type": "people",
-          "people": []
+          "id": "_x%3E%3D"
+        },
+        "Related to New database title (Relation) 1": {
+          "id": "%60%3ATr"
         },
         "CreatedByTitle": {
-          "id": "eR%3D~",
-          "type": "created_by",
-          "created_by": {
-            "object": "user",
-            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-            "name": "Hiroyuki KOBAYASHI",
-            "avatar_url": null,
-            "type": "person",
-            "person": {
-              "email": "hkob@metro-cit.ac.jp"
-            }
-          }
+          "id": "eR%3D~"
         },
         "TextTitle": {
-          "id": "flUp",
-          "type": "rich_text",
-          "rich_text": []
+          "id": "flUp"
+        },
+        "Related to Database created by API (Relation)": {
+          "id": "iijV"
+        },
+        "Related to New database title (Relation)": {
+          "id": "mfBo"
         },
         "MailTitle": {
-          "id": "p%7Ci%3F",
-          "type": "email",
-          "email": null
+          "id": "p%7Ci%3F"
         },
         "File&MediaTitle": {
-          "id": "qEdK",
-          "type": "files",
-          "files": []
+          "id": "qEdK"
         },
         "NumberTitle": {
-          "id": "swq%5C",
-          "type": "number",
-          "number": null
+          "id": "swq%5C"
         },
         "UrlTitle": {
-          "id": "tvis",
-          "type": "url",
-          "url": null
+          "id": "tvis"
         },
         "SelectTitle": {
-          "id": "zE%7C%3F",
-          "type": "select",
-          "select": null
+          "id": "zE%7C%3F"
         },
         "TelTitle": {
-          "id": "%7CNHO",
-          "type": "phone_number",
-          "phone_number": null
+          "id": "%7CNHO"
         },
         "Title": {
-          "id": "title",
-          "type": "title",
-          "title": [
-            {
-              "type": "text",
-              "text": {
-                "content": "GHI",
-                "link": null
-              },
-              "annotations": {
-                "bold": false,
-                "italic": false,
-                "strikethrough": false,
-                "underline": false,
-                "code": false,
-                "color": "default"
-              },
-              "plain_text": "GHI",
-              "href": null
-            }
-          ]
+          "id": "title"
         }
       },
-      "url": "https://www.notion.so/GHI-986ebb25e23f4f0599d62a531d8928c9"
+      "url": "https://www.notion.so/DEF-6601e719a39a460c908e8909467fcccf"
     }
   ],
-  "next_cursor": "dcdc805c-85fa-4155-a55c-20fc28771af7",
+  "next_cursor": "986ebb25-e23f-4f05-99d6-2a531d8928c9",
   "has_more": true,
   "type": "page",
   "page": {}

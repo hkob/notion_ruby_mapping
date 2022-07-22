@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe MultiSelectProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "Kjx%7D"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -121,6 +124,23 @@ module NotionRubyMapping
     end
 
     context "Page property" do
+      retrieve_multi_select = {
+        "msp" => {
+          "multi_select" => [
+            {
+              "color" => "default",
+              "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
+              "name" => "Multi Select 2",
+            },
+            {
+              "color" => "yellow",
+              "id" => "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
+              "name" => "Multi Select 1",
+            },
+          ],
+          "type" => "multi_select",
+        },
+      }
       context "created by new" do
         let(:target) { MultiSelectProperty.new "msp", multi_select: "Multi Select 2" }
 
@@ -152,53 +172,33 @@ module NotionRubyMapping
         end
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("multi_select_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_multi_select")) }
           it_behaves_like :will_not_update
-          it_behaves_like :property_values_json, {
-            "msp" => {
-              "multi_select" => [
-                {
-                  "color" => "default",
-                  "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
-                  "name" => "Multi Select 2",
-                },
-                {
-                  "color" => "yellow",
-                  "id" => "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
-                  "name" => "Multi Select 1",
-                },
-              ],
-              "type" => "multi_select",
-            },
-          }
+          it_behaves_like :property_values_json, retrieve_multi_select
           it_behaves_like :assert_different_property, :update_property_schema_json
           it_behaves_like :assert_different_property, :property_schema_json
         end
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "msp", tc.read_json("multi_select_property_item") }
+        let(:target) { Property.create_from_json "msp", tc.read_json("retrieve_property_multi_select") }
         it_behaves_like :has_name_as, "msp"
         it_behaves_like :will_not_update
-        it_behaves_like :property_values_json, {
-          "msp" => {
-            "multi_select" => [
-              {
-                "color" => "default",
-                "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
-                "name" => "Multi Select 2",
-              },
-              {
-                "color" => "yellow",
-                "id" => "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
-                "name" => "Multi Select 1",
-              },
-            ],
-            "type" => "multi_select",
-          },
-        }
+        it_behaves_like :property_values_json, retrieve_multi_select
         it_behaves_like :assert_different_property, :update_property_schema_json
         it_behaves_like :assert_different_property, :property_schema_json
+      end
+
+      context "created from json (no content)" do
+        let(:target) { Property.create_from_json "msp", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "msp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / multi_select to retrieve a property item
+        it_behaves_like :property_values_json, retrieve_multi_select
+        it { expect(target.multi_select).to eq retrieve_multi_select["msp"]["multi_select"] }
       end
     end
   end

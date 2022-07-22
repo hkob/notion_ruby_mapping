@@ -1,0 +1,133 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": "abc",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "abc",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": "\n",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "green"
+        },
+        "plain_text": "\n",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "mention",
+        "mention": {
+          "type": "user",
+          "user": {
+            "object": "user",
+            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+            "name": "Hiroyuki KOBAYASHI",
+            "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/11fe08d7-dc6c-4953-b778-d09c25b6a981/1ea5da4c6b0b10c5ed42b763c162fcd9.png",
+            "type": "person",
+            "person": {
+              "email": "hkob@metro-cit.ac.jp"
+            }
+          }
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "green"
+        },
+        "plain_text": "@Hiroyuki KOBAYASHI",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": " ",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "green"
+        },
+        "plain_text": " ",
+        "href": null
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "rich_text",
+      "id": "flUp",
+      "rich_text": {
+        "type": "text",
+        "text": {
+          "content": "\n",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "\n",
+        "href": null
+      }
+    }
+  ],
+  "next_cursor": "PLuaRX",
+  "has_more": true,
+  "type": "property_item",
+  "property_item": {
+    "id": "flUp",
+    "next_url": "https://api.notion.com/v1/pages/6601e719a39a460c908e8909467fcccf/properties/flUp?start_cursor=PLuaRX&page_size=5",
+    "type": "rich_text",
+    "rich_text": {}
+  }
+}

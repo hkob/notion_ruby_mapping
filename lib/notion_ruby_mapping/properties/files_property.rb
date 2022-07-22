@@ -33,8 +33,8 @@ module NotionRubyMapping
 
     # @param [String] name Property name
     # @param [String] files files value (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, files: [])
-      super name, will_update: will_update, base_type: base_type
+    def initialize(name, will_update: false, base_type: :page, json: nil, files: [], property_cache: nil)
+      super name, will_update: will_update, base_type: base_type, property_cache: property_cache
       if database?
         @files = json || {}
       elsif json
@@ -66,7 +66,7 @@ module NotionRubyMapping
       @files = json["files"].map { |sub_json| FileObject.new json: sub_json }
       @file_names = json["files"].map { |sub_json| sub_json["name"] }
       @will_update = false
-      p self
+      self
     end
 
     protected

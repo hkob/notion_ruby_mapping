@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe FormulaProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "%5D~iZ"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -17,7 +20,7 @@ module NotionRubyMapping
               "2022-02-12",
               "2022-02-12T00:00:00+09:00",
               "2022-02-12T23:59:59+09:00",
-          ],
+            ],
             [
               "time",
               Time.new(2022, 2, 12, 1, 23, 45, "+09:00"),
@@ -93,17 +96,32 @@ module NotionRubyMapping
       it_behaves_like :property_values_json, {}
       it_behaves_like :will_not_update
       describe "update_from_json" do
-        before { target.update_from_json(tc.read_json("formula_property_item")) }
+        before { target.update_from_json(tc.read_json("retrieve_property_formula")) }
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {}
       end
     end
 
     describe "a formula property from property_item_json" do
-      let(:target) { Property.create_from_json "fp", tc.read_json("formula_property_item") }
+      let(:target) { Property.create_from_json "fp", tc.read_json("retrieve_property_formula") }
       it_behaves_like :has_name_as, "fp"
       it_behaves_like :will_not_update
       it_behaves_like :property_values_json, {}
+    end
+
+    context "created from json (no content)" do
+      let(:target) { Property.create_from_json "fp", no_content_json, :page, property_cache_first }
+      it_behaves_like :has_name_as, "fp"
+      it_behaves_like :will_not_update
+      it { expect(target.contents?).to be_falsey }
+      it_behaves_like :assert_different_property, :update_property_schema_json
+
+      # hook property_values_json / formula to retrieve a property item
+      it_behaves_like :property_values_json, {}
+      it {
+        expect(target.formula).to eq({"type" => "date", "date" => {"start" => "2022-07-18T09:48:00.000+00:00",
+                                                                   "end" => nil, "time_zone" => nil}})
+      }
     end
   end
 end

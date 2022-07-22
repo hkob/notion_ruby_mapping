@@ -24,7 +24,7 @@ module NotionRubyMapping
         described_class.new url
       end
       it_behaves_like :create_child_block, described_class,
-                      "878fd86ebe37482fb637d09fb63eaee8", "1784ba549f7c4e7bbecbbf8119a6c993"
+                      "ab4d74b33e924d6cb77c7e4777d78d02", "d330d4496bc34c03a8be5db02bd8aae0"
     end
 
     describe "save (update)" do

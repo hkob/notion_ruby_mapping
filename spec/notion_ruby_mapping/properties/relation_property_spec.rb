@@ -3,6 +3,9 @@
 module NotionRubyMapping
   RSpec.describe RelationProperty do
     tc = TestConnection.instance
+    let(:no_content_json) { {"id" => "%3CnJT"} }
+    let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
+    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
     context "Database property" do
       context "created by new" do
@@ -29,7 +32,7 @@ module NotionRubyMapping
           }
         end
 
-        describe "replace_relation_database" do
+        describe "replace_relation_database (dual_property)" do
           before { target.replace_relation_database database_id: "new_database_id", synced_property_name: "new name" }
           it_behaves_like :will_update
           it_behaves_like :assert_different_property, :property_values_json
@@ -38,6 +41,26 @@ module NotionRubyMapping
               "relation" => {
                 "database_id" => "new_database_id",
                 "synced_property_name" => "new name",
+                "type" => "dual_property",
+              },
+            },
+          }
+        end
+
+        describe "replace_relation_database (single_property)" do
+          before do
+            target.replace_relation_database database_id: "new_database_id",
+                                             synced_property_name: "new name",
+                                             type: "single_property"
+          end
+          it_behaves_like :will_update
+          it_behaves_like :assert_different_property, :property_values_json
+          it_behaves_like :update_property_schema_json, {
+            "rp" => {
+              "relation" => {
+                "database_id" => "new_database_id",
+                "synced_property_name" => "new name",
+                "type" => "single_property",
               },
             },
           }
@@ -73,6 +96,14 @@ module NotionRubyMapping
     end
 
     context "Page property" do
+      retrieve_relation = {
+        "rp" => {
+          "relation" => [
+            {"id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82"},
+          ],
+          "type" => "relation",
+        },
+      }
       context "created by new" do
         let(:target) { RelationProperty.new "rp", json: [{"id" => "page_id"}] }
         it_behaves_like :property_values_json, {
@@ -126,12 +157,12 @@ module NotionRubyMapping
         end
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("relation_property_item")) }
+          before { target.update_from_json(tc.read_json("retrieve_property_relation")) }
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {
             "rp" => {
               "relation" => [
-                {"id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82"},
+                {"id" => "page_id"},
               ],
               "type" => "relation",
             },
@@ -142,19 +173,23 @@ module NotionRubyMapping
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "rp", tc.read_json("relation_property_item") }
+        let(:target) { Property.create_from_json "rp", tc.read_json("retrieve_property_relation") }
         it_behaves_like :has_name_as, "rp"
         it_behaves_like :will_not_update
-        it_behaves_like :property_values_json, {
-          "rp" => {
-            "relation" => [
-              {"id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82"},
-            ],
-            "type" => "relation",
-          },
-        }
+        it_behaves_like :property_values_json, retrieve_relation
         it_behaves_like :assert_different_property, :update_property_schema_json
         it_behaves_like :assert_different_property, :property_schema_json
+      end
+
+      context "created from json (no content)" do
+        let(:target) { Property.create_from_json "rp", no_content_json, :page, property_cache_first }
+        it_behaves_like :has_name_as, "rp"
+        it_behaves_like :will_not_update
+        it { expect(target.contents?).to be_falsey }
+        it_behaves_like :assert_different_property, :update_property_schema_json
+
+        # hook property_values_json / title to retrieve a property item
+        it_behaves_like :property_values_json, retrieve_relation
       end
     end
   end

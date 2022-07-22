@@ -23,7 +23,7 @@ module NotionRubyMapping
         described_class.new "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg", caption: "Notion logo"
       end
       it_behaves_like :create_child_block, described_class,
-                      "bd83ff96c8004f0bb0c9ddc783f0b2d4", "75f4887696e84d61bcab9fd5946002c9"
+                      "275fa516f3b04d0f8b883f766028572a", "49b46c3ecb094de882b93f6294994211"
     end
 
     describe "save (update)" do

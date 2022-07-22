@@ -1,6 +1,7 @@
 {
-  "id": "SPrp",
+  "object": "property_item",
   "type": "date",
+  "id": "SPrp",
   "date": {
     "start": "2022-02-25T01:23:00.000+09:00",
     "end": null,

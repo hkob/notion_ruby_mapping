@@ -184,6 +184,20 @@ module NotionRubyMapping
     end
 
     # @param [String] page_id
+    # @param [String] property_id
+    # @return [String (frozen)] page_property_path
+    def page_property_path(page_id, property_id)
+      [page_path(page_id), "properties/#{property_id}"].join "/"
+    end
+
+    # @param [String] page_id
+    # @param [String] property_id
+    # @return [Hash] response
+    def page_property_request(page_id, property_id, query = {})
+      request :get, page_property_path(page_id, property_id), query
+    end
+
+    # @param [String] page_id
     # @return [Hash] response
     def page_request(page_id)
       request :get, page_path(page_id)
