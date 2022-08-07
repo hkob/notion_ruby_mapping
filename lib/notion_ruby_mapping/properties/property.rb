@@ -107,6 +107,7 @@ module NotionRubyMapping
           "people" => PeopleProperty,
           "phone_number" => PhoneNumberProperty,
           "select" => SelectProperty,
+          "status" => StatusProperty,
           "title" => TitleProperty,
           "rich_text" => RichTextProperty,
           "url" => UrlProperty,

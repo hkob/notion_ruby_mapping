@@ -23,6 +23,16 @@ module NotionRubyMapping
       get key
     end
 
+    def append_comment(text_objects, dry_run: false)
+      rto = RichTextArray.new "rich_text", text_objects: text_objects, will_update: true
+      json = rto.property_schema_json.merge({"parent" => {"page_id" => @id}})
+      if dry_run
+        self.class.dry_run_script :post, @nc.comments_path, json
+      else
+        CommentObject.new json: (@nc.append_comment_request json)
+      end
+    end
+
     # @param [String] title
     # @param [Array<String, Property>] assigns
     # @return [NotionRubyMapping::Database]

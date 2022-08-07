@@ -32,11 +32,13 @@ module NotionRubyMapping
     PARENT1_PAGE_ID = "860753bb6d1f48de96211fa6e0e31f82"
     BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
     BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
+    STATUS_PAGE_ID = "68ff12a08dc04f94ae2e0931344eb153"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
     PARENT_DATABASE_ID = "1d6b1040a9fb48d99a3d041429816e9f"
     CREATED_DATABASE_ID = "c7697137d49f49c2bbcdd6a665c4f921"
+    STATUS_DATABASE_ID = "71f892a3bf1744918d8e8f125c55bf43"
     # block_id
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
@@ -164,6 +166,8 @@ module NotionRubyMapping
       destroy_block
       update_block
       retrieve_property
+      retrieve_comments
+      append_comment
     end
 
     # @param [Symbol] method
@@ -2475,9 +2479,58 @@ module NotionRubyMapping
         rich_text_last5: [[DB_SECOND_PAGE_ID, "flUp?page_size=5&start_cursor=xQVa1H"], 200],
         rollup: [[DB_FIRST_PAGE_ID, "STe_"], 200],
         select: [[DB_FIRST_PAGE_ID, "zE%7C%3F"], 200],
+        status: [[STATUS_PAGE_ID, "Qy~%3E"], 200],
         title: [[DB_FIRST_PAGE_ID, "title"], 200],
         title_top: [[TOP_PAGE_ID, "title"], 200],
         url: [[DB_FIRST_PAGE_ID, "tvis"], 200],
+      }
+    end
+
+    def retrieve_comments
+      generate_stubs_sub :get, __method__, :retrieve_comments_path, {
+        top_page: [TOP_PAGE_ID, 200],
+        h1_block: [H1_BLOCK_ID, 200],
+      }
+    end
+
+    def append_comment
+      generate_stubs_sub :post, __method__, :comments_path, {
+        top_page: [
+          nil, 200,
+          {
+            "rich_text" => [
+              {
+                "type" => "text",
+                "text" => {
+                  "content" => "test comment",
+                  "link" => nil,
+                },
+                "plain_text" => "test comment",
+                "href" => nil,
+              },
+            ],
+            "parent" => {
+              "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
+            },
+          },
+        ],
+        discussion_id: [
+          nil, 200,
+          {
+            "rich_text" => [
+              {
+                "type" => "text",
+                "text" => {
+                  "content" => "test comment to discussion",
+                  "link" => nil,
+                },
+                "plain_text" => "test comment to discussion",
+                "href" => nil,
+              },
+            ],
+            "discussion_id" => "4475361640994a5f97c653eb758e7a9d",
+          },
+        ],
       }
     end
 

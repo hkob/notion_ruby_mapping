@@ -58,6 +58,24 @@ module NotionRubyMapping
       shell.join(" \\\n")
     end
 
+    def comments(query = nil, dry_run: false)
+      if page? || block?
+        if dry_run
+          self.class.dry_run_script :get, @nc.retrieve_comments_path(@id)
+        else
+          ans = {}
+          List.new(comment_parent: self,
+                   json: @nc.retrieve_comments_request(@id, query),
+                   query: query).each do |comment|
+            dt_id = comment.discussion_id
+            dt = ans[dt_id] ||= DiscussionThread.new dt_id
+            dt.comments << comment
+          end
+          ans
+        end
+      end
+    end
+
     # @param [String] key
     # @return [NotionRubyMapping::PropertyCache, Hash] obtained Page value or PropertyCache
     def get(key)
@@ -264,11 +282,7 @@ module NotionRubyMapping
         @new_record ? create(dry_run: true) : update(dry_run: true)
       else
         @new_record ? create : update
-        if block?
-
-        else
-          @property_cache.clear_will_update
-        end
+        @property_cache.clear_will_update if page?
         @payload.clear
         self
       end

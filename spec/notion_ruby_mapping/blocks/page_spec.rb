@@ -737,5 +737,31 @@ module NotionRubyMapping
         end
       end
     end
+
+    describe "append_comment" do
+      let(:page) { Page.find TestConnection::TOP_PAGE_ID }
+      context "dry_run: false" do
+        let(:target) { page.append_comment "test comment" }
+        it { expect(target.discussion_id).to eq "4475361640994a5f97c653eb758e7a9d" }
+      end
+
+      context "dry_run: true" do
+        let(:dry_run) { page.append_comment "test comment", dry_run: true }
+        it_behaves_like :dry_run, :post, :comments_path, json: {
+          "rich_text": [
+            {
+              "type" => "text",
+              "text" => {
+                "content" => "test comment",
+                "link" => nil,
+              },
+              "plain_text" => "test comment",
+              "href" => nil,
+            }
+          ],
+          "parent": {"page_id" => TestConnection::TOP_PAGE_ID},
+        }
+      end
+    end
   end
 end

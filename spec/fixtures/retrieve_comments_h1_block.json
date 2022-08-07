@@ -1,0 +1,111 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "comment",
+      "id": "93c4cb87-e93c-47c5-b621-2806d47fd3eb",
+      "parent": {
+        "type": "block_id",
+        "block_id": "0250fb6d-6001-42ec-a4c7-4efb8794fc6b"
+      },
+      "discussion_id": "d5946de2-5da2-4be6-adc5-5b1436585c60",
+      "created_time": "2022-08-03T11:31:00.000Z",
+      "last_edited_time": "2022-08-03T11:31:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+      },
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Comment for a Heading1 block",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Comment for a Heading1 block",
+          "href": null
+        }
+      ]
+    },
+    {
+      "object": "comment",
+      "id": "67d03ea1-a767-406b-81f1-6af893929211",
+      "parent": {
+        "type": "block_id",
+        "block_id": "0250fb6d-6001-42ec-a4c7-4efb8794fc6b"
+      },
+      "discussion_id": "02faa2c0-f7e2-43ae-9a0a-56546cbe34f0",
+      "created_time": "2022-08-03T12:14:00.000Z",
+      "last_edited_time": "2022-08-03T12:14:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+      },
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Another thread",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Another thread",
+          "href": null
+        }
+      ]
+    },
+    {
+      "object": "comment",
+      "id": "ed4f16ce-1ca3-4b84-8c44-2974127710bb",
+      "parent": {
+        "type": "block_id",
+        "block_id": "0250fb6d-6001-42ec-a4c7-4efb8794fc6b"
+      },
+      "discussion_id": "d5946de2-5da2-4be6-adc5-5b1436585c60",
+      "created_time": "2022-08-03T12:15:00.000Z",
+      "last_edited_time": "2022-08-03T12:15:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+      },
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Reply comment",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Reply comment",
+          "href": null
+        }
+      ]
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "comment",
+  "comment": {}
+}

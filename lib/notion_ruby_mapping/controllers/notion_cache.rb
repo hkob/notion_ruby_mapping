@@ -45,6 +45,10 @@ module NotionRubyMapping
       request :patch, append_block_children_block_path(id), payload
     end
 
+    def append_comment_request(json)
+      request :post, comments_path, json
+    end
+
     # @param [String] id block_id (with or without "-")
     # @return [NotionRubyMapping::Base] Block object or nil
     def block(id)
@@ -79,6 +83,11 @@ module NotionRubyMapping
     # @return [Hash]
     def clear_object_hash
       @object_hash = {}
+    end
+
+    # @return [String (frozen)]
+    def comments_path
+      "v1/comments"
     end
 
     # @param [String] notion_token
@@ -212,6 +221,17 @@ module NotionRubyMapping
     # @return [String (frozen)] page_path
     def query_database_path(database_id)
       "v1/databases/#{database_id}/query"
+    end
+
+    # @param [String] block_id
+    def retrieve_comments_path(block_id)
+      "v1/comments?block_id=#{block_id}"
+    end
+
+    # @param [String] block_id
+    # @param [NotionRubyMapping::Query, NilClass] query
+    def retrieve_comments_request(block_id, query)
+      request :get, retrieve_comments_path(block_id), (query&.query_json || {})
     end
 
     # @param [Symbol] method

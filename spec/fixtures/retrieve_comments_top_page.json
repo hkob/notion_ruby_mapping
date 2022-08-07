@@ -1,0 +1,77 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "comment",
+      "id": "4a815db3-cc21-4f34-88b9-6c60d9da5261",
+      "parent": {
+        "type": "page_id",
+        "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+      },
+      "discussion_id": "44753616-4099-4a5f-97c6-53eb758e7a9d",
+      "created_time": "2022-08-03T11:30:00.000Z",
+      "last_edited_time": "2022-08-03T11:30:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+      },
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Comment to a page",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Comment to a page",
+          "href": null
+        }
+      ]
+    },
+    {
+      "object": "comment",
+      "id": "be6ce3f1-7d2d-497c-a47b-48c2c3cc5c66",
+      "parent": {
+        "type": "page_id",
+        "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+      },
+      "discussion_id": "44753616-4099-4a5f-97c6-53eb758e7a9d",
+      "created_time": "2022-08-03T11:31:00.000Z",
+      "last_edited_time": "2022-08-03T11:31:00.000Z",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+      },
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": "Comment thread",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "Comment thread",
+          "href": null
+        }
+      ]
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "comment",
+  "comment": {}
+}

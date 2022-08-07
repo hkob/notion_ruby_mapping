@@ -36,7 +36,7 @@ until dbs.empty?
   append_database(text, db)
   db.properties.select { |p| p.is_a? RelationProperty }.each_with_index do |p, i|
     new_db = Database.find p.relation_database_id
-    text << "#{db_title db} ||--o{ #{db_title new_db} : r#{i}"
+    text << "#{db_title db} |o--o{ #{db_title new_db} : r#{i}"
     dbs << new_db unless finished[new_db]
   end
   text << ""
