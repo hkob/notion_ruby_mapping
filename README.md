@@ -84,9 +84,11 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 1. [Renumbering pages](examples/renumbering_pages.md)
 1. [Change title](examples/change_title.md)
 1. [Create erDiagram from Notion database](tools/createErDiagram.rb)
+
 ```shell
 Usage:
   ruby tools/createErDiagram.rb database_id code_block_id
+  ruby tools/createErDiagram.rb "database_url" "code_block_url"
 ```
 
 ### 2.5 API reference
@@ -95,6 +97,7 @@ Usage:
 
 ## 3. ChangeLog
 
+- 2022/8/9 [v0.6.4] url can be entered instead of page_id, block_id and database_id
 - 2022/8/9 [v0.6.3] update createErDiagram.rb (Fixed a bug with non-ASCII database titles)
 - 2022/8/7 [v0.6.2] add comment_object support
 - 2022/7/28 [v0.6.1] added createErDiagram.rb

@@ -155,5 +155,44 @@ module NotionRubyMapping
         it { is_expected.to eq ans }
       end
     end
+
+    describe "self.database_id" do
+      subject { Base.database_id str }
+      context "full url" do
+        let(:str) { TestConnection::DATABASE_URL }
+        it { is_expected.to eq TestConnection::DATABASE_ID }
+      end
+
+      context "id only" do
+        let(:str) { TestConnection::DATABASE_ID }
+        it { is_expected.to eq TestConnection::DATABASE_ID }
+      end
+    end
+
+    describe "self.page_id" do
+      subject { Base.page_id str }
+      context "full url" do
+        let(:str) { TestConnection::TOP_PAGE_URL }
+        it { is_expected.to eq TestConnection::TOP_PAGE_ID }
+      end
+
+      context "id only" do
+        let(:str) { TestConnection::TOP_PAGE_ID }
+        it { is_expected.to eq TestConnection::TOP_PAGE_ID }
+      end
+    end
+
+    describe "self.block_id" do
+      subject { Base.block_id str }
+      context "full url" do
+        let(:str) { TestConnection::H1_BLOCK_URL }
+        it { is_expected.to eq TestConnection::H1_BLOCK_ID }
+      end
+
+      context "id only" do
+        let(:str) { TestConnection::H1_BLOCK_ID }
+        it { is_expected.to eq TestConnection::H1_BLOCK_ID }
+      end
+    end
   end
 end

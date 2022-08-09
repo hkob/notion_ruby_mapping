@@ -63,5 +63,11 @@ module NotionRubyMapping
         end
       end
     end
+
+    describe "find" do
+      let(:url) { TestConnection::H1_BLOCK_URL }
+      let(:block) { Block.find url }
+      it { expect(block.id).to eq "0250fb6d600142eca4c74efb8794fc6b" }
+    end
   end
 end

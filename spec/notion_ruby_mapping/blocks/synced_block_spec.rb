@@ -47,5 +47,15 @@ module NotionRubyMapping
       it_behaves_like :create_child_block, described_class,
                       "5fbed0c64273474b8124e66fedfad64d", "bb7ced572c8e4b38b6fbaa0f27c32d43"
     end
+
+    context "synced_block_reference (url)" do
+      let(:url) {
+        "https://www.notion.so/hkob/Block-test-page-67cf059ce74646a0b72d481c9ff5d386#4815032e6f2443e4bc8c9bdc6299b090"
+      }
+      let(:target) { SyncedBlock.new block_id: url }
+
+      it_behaves_like :create_child_block, described_class,
+                      "5fbed0c64273474b8124e66fedfad64d", "bb7ced572c8e4b38b6fbaa0f27c32d43"
+    end
   end
 end

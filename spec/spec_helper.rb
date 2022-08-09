@@ -23,6 +23,11 @@ end
 module NotionRubyMapping
   class TestConnection
     include Singleton
+    # url
+    TOP_PAGE_URL = "https://www.notion.so/hkob/notion_ruby_mapping_test_data-c01166c613ae45cbb96818b4ef2f5a77"
+    DATABASE_URL = "https://www.notion.so/hkob/c37a2c66e3aa4a0da44773de3b80c253?v=fa12b70484b143e5b6a27948c2e074f9"
+    CREATED_DATABASE_URL = "https://www.notion.so/hkob/c7697137d49f49c2bbcdd6a665c4f921?v=2292771d3c964fa7b270fd64c031d868"
+    H1_BLOCK_URL = "https://www.notion.so/hkob/notion_ruby_mapping_test_data-c01166c613ae45cbb96818b4ef2f5a77#0250fb6d600142eca4c74efb8794fc6b"
     # page_id
     TOP_PAGE_ID = "c01166c613ae45cbb96818b4ef2f5a77"
     UNPERMITTED_PAGE_ID = "4a6eb31244204fecb488da11f3caf871"

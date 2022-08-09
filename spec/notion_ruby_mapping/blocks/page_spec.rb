@@ -26,6 +26,22 @@ module NotionRubyMapping
         end
       end
 
+      context "For an existing top page (url)" do
+        let(:page_id) { TestConnection::TOP_PAGE_URL }
+        it "receive id" do
+          expect(subject.call.id).to eq nc.hex_id(TestConnection::TOP_PAGE_ID)
+        end
+
+        it "receive title" do
+          expect(subject.call.title).to eq "notion_ruby_mapping_test_data"
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { Page.find "page_id", dry_run: true }
+          it_behaves_like :dry_run, :get, :page_path, id: "page_id"
+        end
+      end
+
       context "Wrong page" do
         context "wrong format id" do
           let(:page_id) { "AAA" }

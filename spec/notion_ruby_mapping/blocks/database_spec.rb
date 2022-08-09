@@ -28,6 +28,25 @@ module NotionRubyMapping
         end
       end
 
+      context "For an existing database (url)" do
+        let(:database_id) { TestConnection::DATABASE_URL }
+
+        it "receive id" do
+          expect(subject.call.id).to eq nc.hex_id(TestConnection::DATABASE_ID)
+        end
+
+        describe "database_title" do
+          it {
+            expect(subject.call.database_title.full_text).to eq "Sample table"
+          }
+        end
+
+        describe "dry_run" do
+          let(:dry_run) { Database.find "database_id", dry_run: true }
+          it_behaves_like :dry_run, :get, :database_path, id: "database_id"
+        end
+      end
+
       context "Wrong database" do
         context "wrong format id" do
           let(:database_id) { "AAA" }

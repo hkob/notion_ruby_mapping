@@ -44,6 +44,22 @@ module NotionRubyMapping
       end
     end
 
+    def self.block_id(str)
+      if /^http/.match str
+        /#([\da-f]{32})/.match(str)[1]
+      else
+        NotionCache.instance.hex_id str
+      end
+    end
+
+    def self.database_id(str)
+      if /^http/.match str
+        /([\da-f]{32})\?/.match(str)[1]
+      else
+        NotionCache.instance.hex_id str
+      end
+    end
+
     # @param [Object] method
     # @param [Object] path
     # @param [nil] json
@@ -58,21 +74,29 @@ module NotionRubyMapping
       shell.join(" \\\n")
     end
 
+    def self.page_id(str)
+      if /^http/.match str
+        /([\da-f]{32})$/.match(str)[1]
+      else
+        NotionCache.instance.hex_id str
+      end
+    end
+
     def comments(query = nil, dry_run: false)
-      if page? || block?
-        if dry_run
-          self.class.dry_run_script :get, @nc.retrieve_comments_path(@id)
-        else
-          ans = {}
-          List.new(comment_parent: self,
-                   json: @nc.retrieve_comments_request(@id, query),
-                   query: query).each do |comment|
-            dt_id = comment.discussion_id
-            dt = ans[dt_id] ||= DiscussionThread.new dt_id
-            dt.comments << comment
-          end
-          ans
+      return unless page? || block?
+
+      if dry_run
+        self.class.dry_run_script :get, @nc.retrieve_comments_path(@id)
+      else
+        ans = {}
+        List.new(comment_parent: self,
+                 json: @nc.retrieve_comments_request(@id, query),
+                 query: query).each do |comment|
+          dt_id = comment.discussion_id
+          dt = ans[dt_id] ||= DiscussionThread.new dt_id
+          dt.comments << comment
         end
+        ans
       end
     end
 

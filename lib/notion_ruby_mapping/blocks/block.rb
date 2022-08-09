@@ -67,10 +67,11 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Block]
     def self.find(id, dry_run: false)
       nc = NotionCache.instance
+      block_id = Base.block_id id
       if dry_run
-        Base.dry_run_script :get, nc.block_path(id)
+        Base.dry_run_script :get, nc.block_path(block_id)
       else
-        nc.block id
+        nc.block block_id
       end
     end
 

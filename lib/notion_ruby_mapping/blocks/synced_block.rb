@@ -11,7 +11,7 @@ module NotionRubyMapping
         synced_from = @json[type]["synced_from"]
         @block_id = synced_from && @nc.hex_id(synced_from["block_id"])
       else
-        @block_id = block_id
+        @block_id = Base.block_id block_id
         add_sub_blocks sub_blocks
       end
       @can_have_children = @block_id.nil?

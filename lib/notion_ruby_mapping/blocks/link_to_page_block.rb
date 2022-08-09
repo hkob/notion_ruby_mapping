@@ -25,9 +25,9 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = if @page_id
-                    {"type" => "page_id", "page_id" => @page_id}
+                    {"type" => "page_id", "page_id" => Base.page_id(@page_id)}
                   else
-                    {"type" => "database_id", "database_id" => @database_id}
+                    {"type" => "database_id", "database_id" => Base.database_id(@database_id)}
                   end
       ans
     end

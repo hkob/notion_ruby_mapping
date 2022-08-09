@@ -10,10 +10,11 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#7d868b8b81c3473082bbdc7370813a4a
     def self.find(id, dry_run: false)
       nc = NotionCache.instance
+      page_id = Base.page_id id
       if dry_run
-        Base.dry_run_script :get, nc.page_path(id)
+        Base.dry_run_script :get, nc.page_path(page_id)
       else
-        nc.page id
+        nc.page page_id
       end
     end
 

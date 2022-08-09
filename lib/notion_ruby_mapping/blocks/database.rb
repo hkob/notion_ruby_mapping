@@ -10,10 +10,11 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#58ba9190fd544432a9e2a5823d6c33b7
     def self.find(id, dry_run: false)
       nc = NotionCache.instance
+      database_id = Base.database_id id
       if dry_run
-        dry_run_script :get, nc.database_path(id)
+        dry_run_script :get, nc.database_path(database_id)
       else
-        nc.database id
+        nc.database database_id
       end
     end
 
