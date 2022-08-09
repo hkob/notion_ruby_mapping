@@ -83,6 +83,11 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 1. [Set icon to all icon unsettled pages](examples/set_icon_to_all_icon_unsettled_pages.md)
 1. [Renumbering pages](examples/renumbering_pages.md)
 1. [Change title](examples/change_title.md)
+1. [Create erDiagram from Notion database](tools/createErDiagram.rb)
+```shell
+Usage:
+  ruby tools/createErDiagram.rb database_id code_block_id
+```
 
 ### 2.5 API reference
 
@@ -90,6 +95,9 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 ## 3. ChangeLog
 
+- 2022/8/9 [v0.6.3] update createErDiagram.rb (Fixed a bug with non-ASCII database titles)
+- 2022/8/7 [v0.6.2] add comment_object support
+- 2022/7/28 [v0.6.1] added createErDiagram.rb
 - 2022/7/22 [v0.6.0] updates for Notion-Version 2022-06-28 (lazy retrieve property values, retrieve page/database/block parent, single_property/dual_property for RelationProperty)
 - 2022/6/24 [v0.5.5] add file_names= to FileProperty
 - 2022/6/23 [v0.5.4] add update 'is_inline' and 'description' for database object
