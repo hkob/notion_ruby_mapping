@@ -12,6 +12,11 @@ module NotionRubyMapping
       @options["plain_text"] = url
     end
 
+    # @return [String, NilClass]
+    def page_id
+      @options["page_id"]
+    end
+
     # @return [String (frozen)]
     def text
       ""

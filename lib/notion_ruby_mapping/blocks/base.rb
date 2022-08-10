@@ -25,7 +25,7 @@ module NotionRubyMapping
       assign.each_slice(2) { |(klass, key)| assign_property(klass, key) }
       @json ||= {}
     end
-    attr_reader :json, :id, :archived
+    attr_reader :json, :id, :archived, :has_children
 
     # @param [Hash, Notion::Messages] json
     # @return [NotionRubyMapping::Base]

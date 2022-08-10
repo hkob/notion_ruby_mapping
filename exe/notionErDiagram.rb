@@ -6,13 +6,13 @@ include NotionRubyMapping
 def append_database(text, db, db_titles)
   base_title = db_title db
   normalize_db_title(db, db_titles) if db_titles[db].nil?
-  text << "#{db_titles[db]} {"
-  text << %(  Database title "#{base_title}") unless base_title == db_titles[db]
+  text << "  #{db_titles[db]} {"
+  text << %(    Database title "#{base_title}") unless base_title == db_titles[db]
   db.properties.reject { |p| p.is_a? RelationProperty }.each_with_index do |p, i|
     class_name = p.class.name.split("::").last.sub /Property/, ""
-    text << %(  #{class_name} p#{i} "#{p.name}")
+    text << %(    #{class_name} p#{i} "#{p.name}")
   end
-  text << "}\n"
+  text << "  }\n"
 end
 
 def normalize_db_title(db, db_titles)
@@ -25,7 +25,7 @@ def db_title(db)
 end
 
 if ARGV.length < 2
-  print "Usage: createErDiagram.rb top_database_id code_block_id"
+  print "Usage: notionErDiagram.rb top_database_id code_block_id"
   exit
 end
 database_id, code_block_id = ARGV
@@ -47,11 +47,24 @@ until dbs.empty?
   db.properties.select { |pp| pp.is_a? RelationProperty }.each_with_index do |pp, i|
     new_db = Database.find pp.relation_database_id
     normalize_db_title(new_db, db_titles) if db_titles[new_db].nil?
-    text << "#{db_titles[db]} |o--o{ #{db_titles[new_db]} : r#{i}"
+    text << "  #{db_titles[db]} |o--o{ #{db_titles[new_db]} : r#{i}"
     dbs << new_db unless finished[new_db]
   end
   text << ""
 end
-block.rich_text_array.rich_text_objects = text.join("\n  ")
+
+text_objects = text.each_with_object([]) do |str, ans|
+  strn = "#{str}\n"
+  if (last = ans.last)
+    if last.length + strn.length > 1999
+      ans << strn
+    else
+      ans[-1] += strn
+    end
+  else
+    ans << strn
+  end
+end
+block.rich_text_array.rich_text_objects = text_objects
 block.language = "mermaid"
 block.save

@@ -31,6 +31,11 @@ module NotionRubyMapping
       @will_update = true
     end
 
+    # @return [String (frozen)]
+    def text
+      @expression
+    end
+
     protected
 
     # @return [Hash{String (frozen)->String}]

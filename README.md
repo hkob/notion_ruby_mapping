@@ -75,21 +75,16 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 ### 2.3 Sample codes
 
 1. [Database and page access sample](https://www.notion.so/hkob/Database-and-page-access-sample-d30033e707194faf995741167eb2b6f8)
-1. [Append block children sample](https://www.notion.so/hkob/Append-block-children-sample-3867910a437340be931cf7f2c06443c6)
-1. [Update block sample](https://www.notion.so/hkob/update-block-sample-5568c1c36fe84f12b83edfe2dda83028)
+2. [Append block children sample](https://www.notion.so/hkob/Append-block-children-sample-3867910a437340be931cf7f2c06443c6)
+3. [Update block sample](https://www.notion.so/hkob/update-block-sample-5568c1c36fe84f12b83edfe2dda83028)
 
 ### 2.4. Another example code (Use case)
 
 1. [Set icon to all icon unsettled pages](examples/set_icon_to_all_icon_unsettled_pages.md)
-1. [Renumbering pages](examples/renumbering_pages.md)
-1. [Change title](examples/change_title.md)
-1. [Create erDiagram from Notion database](tools/createErDiagram.rb)
-
-```shell
-Usage:
-  ruby tools/createErDiagram.rb database_id code_block_id
-  ruby tools/createErDiagram.rb "database_url" "code_block_url"
-```
+2. [Renumbering pages](examples/renumbering_pages.md)
+3. [Change title](examples/change_title.md)
+4. [Create ER Diagram from Notion database](https://www.notion.so/hkob/notionErDiagram-Sample-1720c2199c534ca08138cde38f31f710)
+5. [Create Sitemap from Notion pages](https://www.notion.so/hkob/NotionSitemap-sample-14e195c83d024c5382aab09210916c87)
 
 ### 2.5 API reference
 
@@ -97,6 +92,7 @@ Usage:
 
 ## 3. ChangeLog
 
+- 2022/8/10 [v0.6.5] add notionSiteMap.rb, rename createErDiagram to notionErDiagram, and move them to exe directory
 - 2022/8/9 [v0.6.4] url can be entered instead of page_id, block_id and database_id
 - 2022/8/9 [v0.6.3] update createErDiagram.rb (Fixed a bug with non-ASCII database titles)
 - 2022/8/7 [v0.6.2] add comment_object support
