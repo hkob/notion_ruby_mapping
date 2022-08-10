@@ -48,7 +48,8 @@ class Sitemap
   def search_block(page, block)
     case block
     when ChildPageBlock
-      add_child block.children.first.parent
+      child_block = block.children.first
+      add_child child_block.parent if child_block
     when LinkToPageBlock
       add_link page, block.page_id unless @nolink
     else

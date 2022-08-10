@@ -92,7 +92,8 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 ## 3. ChangeLog
 
-- 2022/8/10 [v0.6.5] add notionSiteMap.rb, rename createErDiagram to notionErDiagram, and move them to exe directory
+- 2022/8/10 [v0.6.6] Bug fix(notionSitemap.rb): Skip if child page is empty.
+- 2022/8/10 [v0.6.5] add notionSitemap.rb, rename createErDiagram to notionErDiagram, and move them to exe directory
 - 2022/8/9 [v0.6.4] url can be entered instead of page_id, block_id and database_id
 - 2022/8/9 [v0.6.3] update createErDiagram.rb (Fixed a bug with non-ASCII database titles)
 - 2022/8/7 [v0.6.2] add comment_object support
