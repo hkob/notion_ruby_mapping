@@ -72,6 +72,12 @@ curl https://api.notion.com/v1/pages/206ffaa277744a99baf593e28730240c \
         "name": "Select 3"
       }
     },
+    "StatusTitle": {
+      "type": "status",
+      "status": {
+        "name": "Design"
+      }
+    },
     "TextTitle": {
       "type": "rich_text",
       "rich_text": [

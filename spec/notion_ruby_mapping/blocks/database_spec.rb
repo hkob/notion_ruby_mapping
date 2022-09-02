@@ -205,7 +205,7 @@ module NotionRubyMapping
 
         describe "save" do
           before { target.save }
-          it { expect(target.id).to eq "bbc516a1e2784de8b5bd121e572f09f0" }
+          it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
 
         end
       end

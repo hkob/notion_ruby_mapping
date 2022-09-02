@@ -33,7 +33,7 @@ module NotionRubyMapping
     UNPERMITTED_PAGE_ID = "4a6eb31244204fecb488da11f3caf871"
     DB_FIRST_PAGE_ID = "dcdc805c85fa4155a55c20fc28771af7"
     DB_SECOND_PAGE_ID = "6601e719a39a460c908e8909467fcccf"
-    DB_UPDATE_PAEG_ID = "206ffaa277744a99baf593e28730240c"
+    DB_UPDATE_PAGE_ID = "206ffaa277744a99baf593e28730240c"
     PARENT1_PAGE_ID = "860753bb6d1f48de96211fa6e0e31f82"
     BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
     BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
@@ -88,7 +88,7 @@ module NotionRubyMapping
       video: "bed3abe020094aa990564844f981b07a",
     }.freeze
     BLOCK_CREATE_TEST_BLOCK_ID = "82314687163e41baaf300a8a2bec57c2"
-    DESTROY_BLOCK_ID = "7306e4c4bc5b48d78948e59ec0059afd"
+    DESTROY_BLOCK_ID = "a1949aaefbfa46f3bd1a90687b86bf1a"
     UPDATE_BLOCK_ID_HASH = {
       bookmark: "899e342cec84415f9ff86225704cbb75",
       bulleted_list_item: "ab51d1c7094649b5b9007ef0109b33c4",
@@ -221,8 +221,8 @@ module NotionRubyMapping
     def query_database
       generate_stubs_sub :post, __method__, :query_database_path, {
         limit2: [DATABASE_ID, 200, {"page_size" => 2}],
-        next2: [DATABASE_ID, 200, {"start_cursor" => "206ffaa2-7774-4a99-baf5-93e28730240c", "page_size" => 2}],
-        last2: [DATABASE_ID, 200, {"start_cursor" => "986ebb25-e23f-4f05-99d6-2a531d8928c9", "page_size" => 2}],
+        next2: [DATABASE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
+        last2: [DATABASE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
       }
     end
 
@@ -242,7 +242,7 @@ module NotionRubyMapping
             },
           },
         }],
-        all: [DB_UPDATE_PAEG_ID, 200, {
+        all: [DB_UPDATE_PAGE_ID, 200, {
           "properties" => {
             "CheckboxTitle" => {
               "checkbox" => true,
@@ -310,6 +310,12 @@ module NotionRubyMapping
               "select" => {
                 "name" => "Select 3",
               },
+            },
+            "StatusTitle" => {
+              "status" => {
+                "name" => "Design",
+              },
+              "type" => "status",
             },
             "TextTitle" => {
               "type" => "rich_text",
@@ -939,6 +945,7 @@ module NotionRubyMapping
                     },
                   ],
                   "color" => "orange_background",
+                  "is_toggleable" => false,
                 },
               },
             ],
@@ -964,6 +971,7 @@ module NotionRubyMapping
                     },
                   ],
                   "color" => "blue_background",
+                  "is_toggleable" => false,
                 },
               },
             ],
@@ -989,6 +997,7 @@ module NotionRubyMapping
                     },
                   ],
                   "color" => "gray_background",
+                  "is_toggleable" => false,
                 },
               },
             ],
@@ -1450,6 +1459,7 @@ module NotionRubyMapping
                       },
                     },
                   ],
+                  "is_toggleable" => true,
                 },
               },
             ],
@@ -1495,6 +1505,7 @@ module NotionRubyMapping
                       },
                     },
                   ],
+                  "is_toggleable" => true,
                 },
               },
             ],
@@ -1540,6 +1551,7 @@ module NotionRubyMapping
                       },
                     },
                   ],
+                  "is_toggleable" => true,
                 },
               },
             ],

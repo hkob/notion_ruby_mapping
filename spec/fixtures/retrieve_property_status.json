@@ -2,5 +2,9 @@
   "object": "property_item",
   "type": "status",
   "id": "Qy~%3E",
-  "status": null
+  "status": {
+    "id": "f72c1b31-8799-44d7-b063-1ae923c5be7f",
+    "name": "In progress",
+    "color": "blue"
+  }
 }

@@ -70,8 +70,10 @@ module NotionRubyMapping
     # @param [String] name
     # @param [Hash, Array] json
     # @param [String, Array] relation
-    def initialize(name, will_update: false, json: nil, relation: nil, base_type: :page, property_cache: nil, query: nil)
-      super name, will_update: will_update, base_type: base_type, property_cache: property_cache, query: query
+    def initialize(name, will_update: false, json: nil, relation: nil, base_type: :page, property_id: nil,
+                   property_cache: nil, query: nil)
+      super name, will_update: will_update, base_type: base_type, property_id: property_id,
+                  property_cache: property_cache, query: query
       @json = if database?
                 json || {}
               elsif relation

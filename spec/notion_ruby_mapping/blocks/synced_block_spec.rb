@@ -38,14 +38,14 @@ module NotionRubyMapping
           ]
         end
         it_behaves_like :create_child_block, described_class,
-                        "3e233ded2ad84cf4b1275409e5bc9cb5", "c471e88f01b347bebab4c30eb6b09cc2"
+                        "cffee2b0d26e473d8e01b09275c0b507", "592a5415ba26434e874f5909556b62a8"
       end
     end
 
     context "synced_block_reference" do
       let(:target) { SyncedBlock.new block_id: "4815032e-6f24-43e4-bc8c-9bdc6299b090" }
       it_behaves_like :create_child_block, described_class,
-                      "5fbed0c64273474b8124e66fedfad64d", "bb7ced572c8e4b38b6fbaa0f27c32d43"
+                      "af49674dbe70415f9fe3d605853e5a4b", "4f53a3b52f674dd6aed544fe9e9b9180"
     end
 
     context "synced_block_reference (url)" do
@@ -55,7 +55,7 @@ module NotionRubyMapping
       let(:target) { SyncedBlock.new block_id: url }
 
       it_behaves_like :create_child_block, described_class,
-                      "5fbed0c64273474b8124e66fedfad64d", "bb7ced572c8e4b38b6fbaa0f27c32d43"
+                      "af49674dbe70415f9fe3d605853e5a4b", "4f53a3b52f674dd6aed544fe9e9b9180"
     end
   end
 end

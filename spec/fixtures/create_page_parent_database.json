@@ -1,8 +1,8 @@
 {
   "object": "page",
-  "id": "bbc516a1-e278-4de8-b5bd-121e572f09f0",
-  "created_time": "2022-07-12T07:32:00.000Z",
-  "last_edited_time": "2022-07-12T07:32:00.000Z",
+  "id": "b6e9af02-69cd-4999-bce9-e28593f65070",
+  "created_time": "2022-09-01T23:58:00.000Z",
+  "last_edited_time": "2022-09-01T23:58:00.000Z",
   "created_by": {
     "object": "user",
     "id": "019a87c7-d197-44a4-b19a-baa684400f81"
@@ -20,17 +20,43 @@
   "archived": false,
   "properties": {
     "Tags": {
-      "id": "%3A%3EFq"
+      "id": "%3A%3EFq",
+      "type": "multi_select",
+      "multi_select": []
     },
     "title2": {
-      "id": "S%5C%7B%3C"
+      "id": "S%5C%7B%3C",
+      "type": "rich_text",
+      "rich_text": []
     },
     "Related to Sample table (Column)": {
-      "id": "jZZ%3E"
+      "id": "jZZ%3E",
+      "type": "relation",
+      "relation": []
     },
     "Name": {
-      "id": "title"
+      "id": "title",
+      "type": "title",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "New Page Title",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "New Page Title",
+          "href": null
+        }
+      ]
     }
   },
-  "url": "https://www.notion.so/New-Page-Title-bbc516a1e2784de8b5bd121e572f09f0"
+  "url": "https://www.notion.so/New-Page-Title-b6e9af0269cd4999bce9e28593f65070"
 }

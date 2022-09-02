@@ -13,12 +13,12 @@ module NotionRubyMapping
         let(:query) { Query.new page_size: 2 }
 
         it "count page count" do
-          expect(subject.count).to eq 6
+          expect(subject.count).to eq 5
         end
 
         it "count page count (again)" do
           subject.count
-          expect(subject.count).to eq 6
+          expect(subject.count).to eq 5
         end
 
         it "has_more" do
@@ -27,7 +27,7 @@ module NotionRubyMapping
 
         # it "retrieve each_page" do
         #  expect(subject.map { |page| page.properties["Title"].text_objects.first.text }).to eq %w[JKL MNO DEF GHI ABC]
-        #end
+        # end
       end
     end
 
@@ -64,7 +64,7 @@ module NotionRubyMapping
       let(:target) do
         Property.create_from_json "rtp", no_content_json, :page, property_cache, Query.new(page_size: 5)
       end
-      it { expect(target.full_text).to eq "abc\n \n \n \n \n高専HP\n "}
+      it { expect(target.full_text).to eq "abc\n \n \n \n \n高専HP\n " }
     end
   end
 end

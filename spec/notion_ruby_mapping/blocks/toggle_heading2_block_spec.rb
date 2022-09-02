@@ -30,6 +30,7 @@ module NotionRubyMapping
           },
         ],
         "color" => "default",
+        "is_toggleable" => true,
       },
     }
 
@@ -42,7 +43,7 @@ module NotionRubyMapping
       end
 
       it_behaves_like :create_child_block, described_class,
-                      "560b1bfdb9f94c779c10ed703c18dfac", "db0a7c5155e34af3ae64b1679accb37a"
+                      "56687493a84f49c6b25ae055a7f41c30", "987d691e45704d9bb2b1e0666119fbab"
     end
 
     describe "save (update)" do

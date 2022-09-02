@@ -37,7 +37,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { NumberedListItemBlock.new "Numbered list item", color: "red", sub_blocks: sub_block }
       it_behaves_like :create_child_block, described_class,
-                      "730ff08298c14f30be9b8bcb4a706e4f", "131e53aaddb94bcabc31c7dd1dfce0a1"
+                      "d43ea31e441d430fb46ca4d4a16a5309", "832ebcf9ede848eb978da4008b5a56e9"
     end
 
     describe "save (update)" do

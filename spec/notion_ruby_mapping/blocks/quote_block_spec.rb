@@ -37,7 +37,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { QuoteBlock.new "A sample quote", color: "purple", sub_blocks: sub_block }
       it_behaves_like :create_child_block, described_class,
-                      "828cbd096b4348b880d518884933b6a4", "94632c24ac5648d5a45477e0beef0820"
+                      "a443a7f6a8f34d4880034363ca04381d", "4451e0f902ee4b888e9667761f5a52b2"
     end
 
     describe "save (update)" do

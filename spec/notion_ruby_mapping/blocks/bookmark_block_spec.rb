@@ -18,7 +18,7 @@ module NotionRubyMapping
     describe "create_child_block" do
       let(:target) { described_class.new "https://www.google.com", caption: "Google" }
       it_behaves_like :create_child_block, described_class,
-                      "e4bc8ce47085476da82a1e4819197255", "f2910ffa9ac647d89cb590a1ceb338ad"
+                      "06cabb90d4b74152b8c20b8944f48efc", "e03e349f03604acab4d6de579a6138c5"
     end
 
     describe "save (update)" do

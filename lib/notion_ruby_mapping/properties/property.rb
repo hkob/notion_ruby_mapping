@@ -79,15 +79,20 @@ module NotionRubyMapping
         objects = List.new(json: input_json, property: tmp, query: query).select { true }
         case input_json["property_item"]["type"]
         when "people"
-          PeopleProperty.new name, people: objects, base_type: base_type, property_cache: property_cache, query: query
+          PeopleProperty.new name, people: objects, base_type: base_type,
+                             property_cache: property_cache, query: query
         when "relation"
-          RelationProperty.new name, relation: objects, base_type: base_type, property_cache: property_cache, query: query
+          RelationProperty.new name, relation: objects, base_type: base_type,
+                               property_cache: property_cache, query: query
         when "rich_text"
-          RichTextProperty.new name, text_objects: objects, base_type: base_type, property_cache: property_cache, query: query
+          RichTextProperty.new name, text_objects: objects, base_type: base_type,
+                               property_cache: property_cache, query: query
         when "rollup"
-          RollupProperty.new name, json: objects, base_type: base_type, property_cache: property_cache, query: query
+          RollupProperty.new name, json: objects, base_type: base_type,
+                             property_cache: property_cache, query: query
         when "title"
-          TitleProperty.new name, text_objects: objects, base_type: base_type, property_cache: property_cache, query: query
+          TitleProperty.new name, text_objects: objects, base_type: base_type,
+                            property_cache: property_cache, query: query
         end
       else
         klass = {
@@ -114,7 +119,8 @@ module NotionRubyMapping
         }[type]
         raise StandardError, "Irregular property type: #{type}" unless klass
 
-        klass.new name, json: input_json[type], base_type: base_type, property_cache: property_cache
+        klass.new name, property_id: input_json["id"], json: input_json[type], base_type: base_type,
+                  property_cache: property_cache
       end
     end
 

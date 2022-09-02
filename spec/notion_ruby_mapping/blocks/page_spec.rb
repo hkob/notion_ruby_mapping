@@ -523,7 +523,7 @@ module NotionRubyMapping
 
       context "update check using API" do
         let(:target) do
-          Page.new id: TestConnection::DB_UPDATE_PAEG_ID, assign: [
+          Page.new id: TestConnection::DB_UPDATE_PAGE_ID, assign: [
             CheckboxProperty, "CheckboxTitle",
             DateProperty, "DateTitle",
             EmailProperty, "MailTitle",
@@ -534,6 +534,7 @@ module NotionRubyMapping
             NumberProperty, "NumberTitle",
             PhoneNumberProperty, "TelTitle",
             SelectProperty, "SelectTitle",
+            StatusProperty, "StatusTitle",
             RichTextProperty, "TextTitle",
             TitleProperty, "Title",
             UrlProperty, "UrlTitle"
@@ -543,8 +544,8 @@ module NotionRubyMapping
         before do
           ps = target.properties.values_at "CheckboxTitle", "DateTitle", "MailTitle", "File&MediaTitle",
                                            "MultiSelectTitle", "UserTitle", "RelationTitle", "NumberTitle",
-                                           "TelTitle", "SelectTitle", "TextTitle", "Title", "UrlTitle"
-          @cp, @dp, @mp, @fp, @msp, @up, @rp, @np, @telp, @sp, @tp, @titlep, @urlp = ps
+                                           "TelTitle", "SelectTitle", "TextTitle", "Title", "UrlTitle", "StatusTitle"
+          @cp, @dp, @mp, @fp, @msp, @up, @rp, @np, @telp, @sp, @tp, @titlep, @urlp, @stp = ps
           @cp.checkbox = true
           @dp.start_date = "2022-03-14"
           @mp.email = "hkobhkob@gmail.com"
@@ -558,6 +559,7 @@ module NotionRubyMapping
           @tp << TextObject.new("new text")
           @titlep << "MNO"
           @urlp.url = "https://www.google.com/"
+          @stp.status = "Design"
         end
 
         describe "dry_run" do
@@ -602,7 +604,9 @@ module NotionRubyMapping
                 "type" => "multi_select",
                 "multi_select" => [
                   {
+                    "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
                     "name" => "Multi Select 2",
+                    "color" => "default",
                   },
                 ],
               },
@@ -610,7 +614,7 @@ module NotionRubyMapping
                 "people" => [
                   {
                     "object" => "user",
-                    "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
+                    "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
                   },
                 ],
                 "type" => "people",
@@ -619,7 +623,7 @@ module NotionRubyMapping
                 "type" => "relation",
                 "relation" => [
                   {
-                    "id" => "860753bb6d1f48de96211fa6e0e31f82",
+                    "id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82",
                   },
                 ],
               },
@@ -634,6 +638,8 @@ module NotionRubyMapping
               @sp => {
                 "type" => "select",
                 "select" => {
+                  "color" => "purple",
+                  "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
                   "name" => "Select 3",
                 },
               },
@@ -646,6 +652,14 @@ module NotionRubyMapping
                     "text" => {
                       "content" => "new text",
                       "link" => nil,
+                    },
+                    "annotations" => {
+                      "bold" => false,
+                      "code" => false,
+                      "color" => "default",
+                      "italic" => false,
+                      "strikethrough" => false,
+                      "underline" => false,
                     },
                     "type" => "text",
                   },
@@ -661,6 +675,14 @@ module NotionRubyMapping
                       "content" => "MNO",
                       "link" => nil,
                     },
+                    "annotations" => {
+                      "bold" => false,
+                      "code" => false,
+                      "color" => "default",
+                      "italic" => false,
+                      "strikethrough" => false,
+                      "underline" => false,
+                    },
                     "type" => "text",
                   },
                 ],
@@ -669,10 +691,17 @@ module NotionRubyMapping
                 "type" => "url",
                 "url" => "https://www.google.com/",
               },
-            }.each do |p, json|
-              expect(p.property_values_json[p.name]).to eq json
+              @stp => {
+                "type" => "status",
+                "status" => {
+                  "color" => "purple",
+                  "id" => "F<XA",
+                  "name" => "Design",
+                },
+              },
+            }.each do |pp, json|
+              expect(pp.property_values_json[pp.name]).to eq json
               expect(target.property_values_json).to eq({})
-
             end
           end
         end
@@ -720,7 +749,7 @@ module NotionRubyMapping
         describe "create" do
           before { target.save }
           it_behaves_like :property_values_json, {}
-          it { expect(target.id).to eq "bbc516a1e2784de8b5bd121e572f09f0" }
+          it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
           it { expect(target.new_record?).to be_falsey }
         end
       end
@@ -734,7 +763,7 @@ module NotionRubyMapping
           end
 
           it_behaves_like :property_values_json, {}
-          it { expect(target.id).to eq "bbc516a1e2784de8b5bd121e572f09f0" }
+          it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
           it { expect(target.new_record?).to be_falsey }
         end
 

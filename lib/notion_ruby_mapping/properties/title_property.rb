@@ -10,8 +10,12 @@ module NotionRubyMapping
     ## Common methods
 
     def self.rich_text_array_from_json(json)
-      rich_text_objects = List.new(json: json, property: self).select { true }
-      RichTextArray.rich_text_array "title", rich_text_objects
+      if json["object"] == "list"
+        rich_text_objects = List.new(json: json, property: self).select { true }
+        RichTextArray.rich_text_array "title", rich_text_objects
+      else
+        RichTextArray.new "title", json: json["title"]
+      end
     end
 
     # @param [Hash] json

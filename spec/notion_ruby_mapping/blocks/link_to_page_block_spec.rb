@@ -21,7 +21,7 @@ module NotionRubyMapping
           described_class.new page_id: TestConnection::TOP_PAGE_ID
         end
         it_behaves_like :create_child_block, described_class,
-                        "b55e143604f74b118f04b50831eeed15", "2e802947b5f34003ae7b4e8c7ee6205f"
+                        "943c521713ce408481d2bdc6c4f5fe38", "f6489b0b85234c1793946d996b2cb9f3"
       end
 
       context "link_to_page for page (url)" do
@@ -29,7 +29,7 @@ module NotionRubyMapping
           described_class.new page_id: TestConnection::TOP_PAGE_URL
         end
         it_behaves_like :create_child_block, described_class,
-                        "b55e143604f74b118f04b50831eeed15", "2e802947b5f34003ae7b4e8c7ee6205f"
+                        "943c521713ce408481d2bdc6c4f5fe38", "f6489b0b85234c1793946d996b2cb9f3"
       end
 
       context "link_to_page for database" do
@@ -37,7 +37,7 @@ module NotionRubyMapping
           described_class.new database_id: TestConnection::CREATED_DATABASE_ID
         end
         it_behaves_like :create_child_block, described_class,
-                        "e989f5928c7344059ec035304380be24", "669c622118c04bf4b09ba85eefb2b958"
+                        "2dfb62446fa844b9aaa085e74389a7d8", "7b1a7fe42fd945b18efab54330533d8b"
       end
 
       context "link_to_page for database (url)" do
@@ -45,7 +45,7 @@ module NotionRubyMapping
           described_class.new database_id: TestConnection::CREATED_DATABASE_URL
         end
         it_behaves_like :create_child_block, described_class,
-                        "e989f5928c7344059ec035304380be24", "669c622118c04bf4b09ba85eefb2b958"
+                        "2dfb62446fa844b9aaa085e74389a7d8", "7b1a7fe42fd945b18efab54330533d8b"
       end
     end
   end

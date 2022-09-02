@@ -23,7 +23,7 @@ module NotionRubyMapping
         described_class.new "https://download.samplelib.com/mp4/sample-5s.mp4"
       end
       it_behaves_like :create_child_block, described_class,
-                      "e5f477effa3b4765aca011f6cd8c8478", "3397ed5eda8740d4814219e80c1e967b"
+                      "93a9e7684171437cb6e855d2c922306e", "b264e6b3a6164beca088e5ae86e3d0ae"
     end
 
     describe "save (update)" do

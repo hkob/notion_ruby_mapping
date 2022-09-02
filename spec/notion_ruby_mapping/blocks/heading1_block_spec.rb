@@ -30,6 +30,7 @@ module NotionRubyMapping
           },
         ],
         "color" => "default",
+        "is_toggleable" => false,
       },
     }
 
@@ -37,7 +38,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { described_class.new "Heading 1", color: "orange_background" }
       it_behaves_like :create_child_block, described_class,
-                      "0747afbe6fa247719d7aa7fe3f18d9b9", "d442f898ebef43b492d39bc0f91b4045"
+                      "1462a512a97c4897a0e96f842171660e", "f2f026eebd0e475e9652ab85546d3825"
     end
 
     describe "save (update)" do

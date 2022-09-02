@@ -20,73 +20,283 @@
   "archived": false,
   "properties": {
     "RelationTitle": {
-      "id": "%3CnJT"
+      "id": "%3CnJT",
+      "type": "relation",
+      "relation": []
     },
     "MultiSelectTitle": {
-      "id": "Kjx%7D"
+      "id": "Kjx%7D",
+      "type": "multi_select",
+      "multi_select": []
     },
     "LastEditedByTitle": {
-      "id": "LQGa"
+      "id": "LQGa",
+      "type": "last_edited_by",
+      "last_edited_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+        "name": "Hiroyuki KOBAYASHI",
+        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+        "type": "person",
+        "person": {
+          "email": "hkob@metro-cit.ac.jp"
+        }
+      }
     },
     "CheckboxTitle": {
-      "id": "Lbi%5D"
+      "id": "Lbi%5D",
+      "type": "checkbox",
+      "checkbox": false
+    },
+    "StatusTitle": {
+      "id": "MNV~",
+      "type": "status",
+      "status": null
     },
     "DateTitle": {
-      "id": "SPrp"
+      "id": "SPrp",
+      "type": "date",
+      "date": null
     },
     "RollupTitle": {
-      "id": "STe_"
+      "id": "STe_",
+      "type": "rollup",
+      "rollup": {
+        "type": "array",
+        "array": [],
+        "function": "show_original"
+      }
     },
     "CreatedTimeTitle": {
-      "id": "WsEj"
+      "id": "WsEj",
+      "type": "created_time",
+      "created_time": "2022-03-16T12:46:00.000Z"
     },
     "LastEditedTimeTitle": {
-      "id": "X%3E%40X"
+      "id": "X%3E%40X",
+      "type": "last_edited_time",
+      "last_edited_time": "2022-03-16T13:15:00.000Z"
     },
     "Related to New database title(Added) (Relation)": {
-      "id": "%5CaqD"
+      "id": "%5CaqD",
+      "type": "relation",
+      "relation": []
     },
     "FormulaTitle": {
-      "id": "%5D~iZ"
+      "id": "%5D~iZ",
+      "type": "formula",
+      "formula": {
+        "type": "date",
+        "date": {
+          "start": "2022-09-02T01:12:00.000+00:00",
+          "end": null,
+          "time_zone": null
+        }
+      }
     },
     "UserTitle": {
-      "id": "_x%3E%3D"
+      "id": "_x%3E%3D",
+      "type": "people",
+      "people": []
     },
     "Related to New database title (Relation) 1": {
-      "id": "%60%3ATr"
+      "id": "%60%3ATr",
+      "type": "relation",
+      "relation": []
     },
     "CreatedByTitle": {
-      "id": "eR%3D~"
+      "id": "eR%3D~",
+      "type": "created_by",
+      "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+        "name": "Hiroyuki KOBAYASHI",
+        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+        "type": "person",
+        "person": {
+          "email": "hkob@metro-cit.ac.jp"
+        }
+      }
     },
     "TextTitle": {
-      "id": "flUp"
+      "id": "flUp",
+      "type": "rich_text",
+      "rich_text": [
+        {
+          "type": "mention",
+          "mention": {
+            "type": "template_mention",
+            "template_mention": {
+              "type": "template_mention_date",
+              "template_mention_date": "today"
+            }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "@Today",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": " ",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "mention",
+          "mention": {
+            "type": "template_mention",
+            "template_mention": {
+              "type": "template_mention_date",
+              "template_mention_date": "now"
+            }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "@Now",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": " ",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        },
+        {
+          "type": "mention",
+          "mention": {
+            "type": "template_mention",
+            "template_mention": {
+              "type": "template_mention_user",
+              "template_mention_user": "me"
+            }
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "@Me",
+          "href": null
+        },
+        {
+          "type": "text",
+          "text": {
+            "content": " ",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": " ",
+          "href": null
+        }
+      ]
     },
     "Related to Database created by API (Relation)": {
-      "id": "iijV"
+      "id": "iijV",
+      "type": "relation",
+      "relation": []
     },
     "Related to New database title (Relation)": {
-      "id": "mfBo"
+      "id": "mfBo",
+      "type": "relation",
+      "relation": []
     },
     "MailTitle": {
-      "id": "p%7Ci%3F"
+      "id": "p%7Ci%3F",
+      "type": "email",
+      "email": null
     },
     "File&MediaTitle": {
-      "id": "qEdK"
+      "id": "qEdK",
+      "type": "files",
+      "files": []
     },
     "NumberTitle": {
-      "id": "swq%5C"
+      "id": "swq%5C",
+      "type": "number",
+      "number": null
     },
     "UrlTitle": {
-      "id": "tvis"
+      "id": "tvis",
+      "type": "url",
+      "url": null
     },
     "SelectTitle": {
-      "id": "zE%7C%3F"
+      "id": "zE%7C%3F",
+      "type": "select",
+      "select": null
     },
     "TelTitle": {
-      "id": "%7CNHO"
+      "id": "%7CNHO",
+      "type": "phone_number",
+      "phone_number": null
     },
     "Title": {
-      "id": "title"
+      "id": "title",
+      "type": "title",
+      "title": [
+        {
+          "type": "text",
+          "text": {
+            "content": "template",
+            "link": null
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false,
+            "color": "default"
+          },
+          "plain_text": "template",
+          "href": null
+        }
+      ]
     }
   },
   "url": "https://www.notion.so/template-88f4a106b84b4d359c2d256bcd55901f"

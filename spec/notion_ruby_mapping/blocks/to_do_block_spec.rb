@@ -20,7 +20,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { ToDoBlock.new "A sample To-Do", color: "brown_background", sub_blocks: sub_block }
       it_behaves_like :create_child_block, described_class,
-                      "4b0e406c0d7d4a28877a9e73c5b7bcff", "d397a8ee10954ad4a490574fc9d19103"
+                      "5740ea0a03724a06ba61db99de46f737", "5a3bb51ab3444761b428f965be859529"
     end
 
     describe "save (update)" do

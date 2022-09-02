@@ -158,6 +158,7 @@
             "href": null
           }
         ],
+        "is_toggleable": false,
         "color": "default"
       }
     },
@@ -201,6 +202,7 @@
             "href": null
           }
         ],
+        "is_toggleable": false,
         "color": "default"
       }
     },
@@ -244,6 +246,7 @@
             "href": null
           }
         ],
+        "is_toggleable": false,
         "color": "default"
       }
     },
@@ -586,7 +589,7 @@
                 "object": "user",
                 "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
                 "name": "Hiroyuki KOBAYASHI",
-                "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/11fe08d7-dc6c-4953-b778-d09c25b6a981/1ea5da4c6b0b10c5ed42b763c162fcd9.png",
+                "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
                 "type": "person",
                 "person": {
                   "email": "hkob@metro-cit.ac.jp"
@@ -775,8 +778,8 @@
         "caption": [],
         "type": "file",
         "file": {
-          "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6466d395-db6f-4e61-a73f-e31597d52815/1ea5da4c6b0b10c5ed42b763c162fcd9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220712%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220712T073256Z&X-Amz-Expires=3600&X-Amz-Signature=fcd0f9e453e3201728cccced07f96368267f73e6ccd32cf794fd4a77ced6de42&X-Amz-SignedHeaders=host&x-id=GetObject",
-          "expiry_time": "2022-07-12T08:32:56.682Z"
+          "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/6466d395-db6f-4e61-a73f-e31597d52815/1ea5da4c6b0b10c5ed42b763c162fcd9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220902%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220902T001813Z&X-Amz-Expires=3600&X-Amz-Signature=cb96fe275b9a2b201137630fb3806a609a142d67dff22a14abbf20a255bfbadc&X-Amz-SignedHeaders=host&x-id=GetObject",
+          "expiry_time": "2022-09-02T01:18:13.688Z"
         }
       }
     },
@@ -1025,7 +1028,7 @@
         "page_id": "67cf059c-e746-46a0-b72d-481c9ff5d386"
       },
       "created_time": "2022-04-23T21:19:00.000Z",
-      "last_edited_time": "2022-04-23T21:19:00.000Z",
+      "last_edited_time": "2022-07-13T06:55:00.000Z",
       "created_by": {
         "object": "user",
         "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
@@ -1108,6 +1111,7 @@
             "href": null
           }
         ],
+        "is_toggleable": true,
         "color": "default"
       }
     },
@@ -1151,6 +1155,7 @@
             "href": null
           }
         ],
+        "is_toggleable": true,
         "color": "default"
       }
     },
@@ -1194,6 +1199,7 @@
             "href": null
           }
         ],
+        "is_toggleable": true,
         "color": "default"
       }
     },
@@ -1221,8 +1227,8 @@
         "caption": [],
         "type": "file",
         "file": {
-          "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c55cf49f-fcb4-497e-9645-d484f03bf1d5/sample.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220712%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220712T073256Z&X-Amz-Expires=3600&X-Amz-Signature=ad75cfd4368ed39eba27921064544c8bde20de2265ff581aaeb154b654dbaadc&X-Amz-SignedHeaders=host&x-id=GetObject",
-          "expiry_time": "2022-07-12T08:32:56.676Z"
+          "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c55cf49f-fcb4-497e-9645-d484f03bf1d5/sample.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220902%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220902T001813Z&X-Amz-Expires=3600&X-Amz-Signature=4df29ba22cc8d47519de729f2e696a8ce3155190d5da9166ea1e4ff5e5d8591d&X-Amz-SignedHeaders=host&x-id=GetObject",
+          "expiry_time": "2022-09-02T01:18:13.697Z"
         }
       }
     },
@@ -1281,7 +1287,7 @@
         "page_id": "67cf059c-e746-46a0-b72d-481c9ff5d386"
       },
       "created_time": "2022-04-29T01:58:00.000Z",
-      "last_edited_time": "2022-05-22T08:44:00.000Z",
+      "last_edited_time": "2022-09-01T04:33:00.000Z",
       "created_by": {
         "object": "user",
         "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"

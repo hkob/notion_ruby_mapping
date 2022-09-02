@@ -17,7 +17,7 @@ module NotionRubyMapping
     describe "create_child_block" do
       let(:target) { described_class.new "pink" }
       it_behaves_like :create_child_block, described_class,
-                      "7abcb4bd3b8d4b27a1ebb045ea207eb0", "b5892610e94e496fa79e26f3ba09bf61"
+                      "5fe3d11722b049599390bcd30230bc6e", "44a8a45efffd444bb043ddcd0b881018"
     end
 
     describe "save (update)" do

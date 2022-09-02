@@ -1,6 +1,202 @@
 {
-  "object": "error",
-  "status": 400,
-  "code": "validation_error",
-  "message": "body failed validation. Fix one:\nbody.properties.Relation.relation.single_property should be defined, instead was `undefined`.\nbody.properties.Relation.relation.dual_property should be defined, instead was `undefined`."
+  "object": "database",
+  "id": "eeca3a41-f903-435d-a158-75f9358cad5d",
+  "cover": null,
+  "icon": {
+    "type": "emoji",
+    "emoji": "🎉"
+  },
+  "created_time": "2022-09-01T23:50:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+  },
+  "last_edited_time": "2022-09-01T23:50:00.000Z",
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "New database title",
+        "link": null
+      },
+      "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+      },
+      "plain_text": "New database title",
+      "href": null
+    }
+  ],
+  "description": [],
+  "is_inline": false,
+  "properties": {
+    "Select": {
+      "id": "%3BUIi",
+      "name": "Select",
+      "type": "select",
+      "select": {
+        "options": [
+          {
+            "id": "b7007c3a-a748-4642-8dce-6684cd2c64da",
+            "name": "S1",
+            "color": "yellow"
+          },
+          {
+            "id": "bb7f8f9c-41ba-471d-9776-d6f93606eca5",
+            "name": "S2",
+            "color": "default"
+          }
+        ]
+      }
+    },
+    "MultiSelect": {
+      "id": "%3Cuk%3C",
+      "name": "MultiSelect",
+      "type": "multi_select",
+      "multi_select": {
+        "options": [
+          {
+            "id": "c89f0332-b135-4b6e-b9a7-0c90426d4e61",
+            "name": "MS1",
+            "color": "orange"
+          },
+          {
+            "id": "253f079b-e580-48ad-8f69-9a054b71b5a1",
+            "name": "MS2",
+            "color": "green"
+          }
+        ]
+      }
+    },
+    "Number": {
+      "id": "%3DbH%5B",
+      "name": "Number",
+      "type": "number",
+      "number": {
+        "format": "yen"
+      }
+    },
+    "Checkbox": {
+      "id": "%3EBXc",
+      "name": "Checkbox",
+      "type": "checkbox",
+      "checkbox": {}
+    },
+    "PhoneNumber": {
+      "id": "CID%5B",
+      "name": "PhoneNumber",
+      "type": "phone_number",
+      "phone_number": {}
+    },
+    "Formula": {
+      "id": "ZHT%3C",
+      "name": "Formula",
+      "type": "formula",
+      "formula": {
+        "expression": "now()"
+      }
+    },
+    "Files": {
+      "id": "%5EGl%7B",
+      "name": "Files",
+      "type": "files",
+      "files": {}
+    },
+    "Url": {
+      "id": "cReZ",
+      "name": "Url",
+      "type": "url",
+      "url": {}
+    },
+    "Rollup": {
+      "id": "cUOC",
+      "name": "Rollup",
+      "type": "rollup",
+      "rollup": {
+        "rollup_property_name": "NumberTitle",
+        "relation_property_name": "Relation",
+        "rollup_property_id": "swq\\",
+        "relation_property_id": "zRVh",
+        "function": "sum"
+      }
+    },
+    "CreatedTime": {
+      "id": "cn%5B%5C",
+      "name": "CreatedTime",
+      "type": "created_time",
+      "created_time": {}
+    },
+    "LastEditedTime": {
+      "id": "e%7BN%3A",
+      "name": "LastEditedTime",
+      "type": "last_edited_time",
+      "last_edited_time": {}
+    },
+    "LastEditedBy": {
+      "id": "jHah",
+      "name": "LastEditedBy",
+      "type": "last_edited_by",
+      "last_edited_by": {}
+    },
+    "People": {
+      "id": "q%7Cni",
+      "name": "People",
+      "type": "people",
+      "people": {}
+    },
+    "CreatedBy": {
+      "id": "zD%5Bc",
+      "name": "CreatedBy",
+      "type": "created_by",
+      "created_by": {}
+    },
+    "Relation": {
+      "id": "zRVh",
+      "name": "Relation",
+      "type": "relation",
+      "relation": {
+        "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+        "type": "single_property",
+        "single_property": {}
+      }
+    },
+    "Email": {
+      "id": "%7C%5Dso",
+      "name": "Email",
+      "type": "email",
+      "email": {}
+    },
+    "RichText": {
+      "id": "%7DOk_",
+      "name": "RichText",
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "Date": {
+      "id": "%7D%7D%3AH",
+      "name": "Date",
+      "type": "date",
+      "date": {}
+    },
+    "Title": {
+      "id": "title",
+      "name": "Title",
+      "type": "title",
+      "title": {}
+    }
+  },
+  "parent": {
+    "type": "page_id",
+    "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+  },
+  "url": "https://www.notion.so/eeca3a41f903435da15875f9358cad5d",
+  "archived": false
 }

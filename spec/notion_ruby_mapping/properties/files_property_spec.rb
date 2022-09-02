@@ -287,8 +287,9 @@ module NotionRubyMapping
 
         # hook property_values_json / created_by to retrieve a property item
         it_behaves_like :property_values_json, {}
-        it { expect(target.files.map(&:url)).to eq ["https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220717%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220717T054417Z&X-Amz-Expires=3600&X-Amz-Signature=1703140069e048011a95decc0eb88a86fda832f8ab884dd5dfa2a6bedee18f8d&X-Amz-SignedHeaders=host&x-id=GetObject"] }
+        it { expect(target.files.map(&:url)).to eq ["https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220902%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220902T011420Z&X-Amz-Expires=3600&X-Amz-Signature=f0941c6678b9c2122a8b96ddc884c263451eb45de90c1ce607e82b713096eeb6&X-Amz-SignedHeaders=host&x-id=GetObject"] }
       end
     end
   end
 end
+

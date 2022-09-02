@@ -1,0 +1,113 @@
+{
+  "object": "database",
+  "id": "71f892a3-bf17-4491-8d8e-8f125c55bf43",
+  "cover": null,
+  "icon": null,
+  "created_time": "2022-08-07T10:30:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_time": "2022-09-01T00:34:00.000Z",
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "StatusProperty",
+        "link": null
+      },
+      "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+      },
+      "plain_text": "StatusProperty",
+      "href": null
+    }
+  ],
+  "description": [],
+  "is_inline": false,
+  "properties": {
+    "StatusTitle": {
+      "id": "Qy~%3E",
+      "name": "StatusTitle",
+      "type": "status",
+      "status": {
+        "options": [
+          {
+            "id": "33df6183-a55b-4384-9fde-b07bd8ca7b5a",
+            "name": "Not started",
+            "color": "default"
+          },
+          {
+            "id": "f72c1b31-8799-44d7-b063-1ae923c5be7f",
+            "name": "In progress",
+            "color": "blue"
+          },
+          {
+            "id": "bAJF",
+            "name": "Imprementation",
+            "color": "orange"
+          },
+          {
+            "id": "A:GG",
+            "name": "Design",
+            "color": "purple"
+          },
+          {
+            "id": "241374c0-38a6-4f5e-8063-d568c15894d2",
+            "name": "Done",
+            "color": "green"
+          }
+        ],
+        "groups": [
+          {
+            "id": "15bba3f4-7a01-4536-b994-c6f5a87964c5",
+            "name": "To-do",
+            "color": "gray",
+            "option_ids": [
+              "33df6183-a55b-4384-9fde-b07bd8ca7b5a"
+            ]
+          },
+          {
+            "id": "51a46edb-2706-403f-b23f-53b76e270058",
+            "name": "In progress",
+            "color": "blue",
+            "option_ids": [
+              "bAJF",
+              "A:GG",
+              "f72c1b31-8799-44d7-b063-1ae923c5be7f"
+            ]
+          },
+          {
+            "id": "edbe740f-eb99-482b-b624-10af35b66675",
+            "name": "Complete",
+            "color": "green",
+            "option_ids": [
+              "241374c0-38a6-4f5e-8063-d568c15894d2"
+            ]
+          }
+        ]
+      }
+    },
+    "Name": {
+      "id": "title",
+      "name": "Name",
+      "type": "title",
+      "title": {}
+    }
+  },
+  "parent": {
+    "type": "page_id",
+    "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+  },
+  "url": "https://www.notion.so/71f892a3bf1744918d8e8f125c55bf43",
+  "archived": false
+}

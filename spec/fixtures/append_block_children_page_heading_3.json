@@ -3,13 +3,13 @@
   "results": [
     {
       "object": "block",
-      "id": "8bdb87b8-4a53-4f48-9c21-8ce45bdddbe2",
+      "id": "0f2dcc71-a7bf-4c6e-a3ee-2547684240cb",
       "parent": {
         "type": "page_id",
         "page_id": "3867910a-4373-40be-931c-f7f2c06443c6"
       },
-      "created_time": "2022-07-12T07:28:00.000Z",
-      "last_edited_time": "2022-07-12T07:28:00.000Z",
+      "created_time": "2022-09-01T23:38:00.000Z",
+      "last_edited_time": "2022-09-01T23:38:00.000Z",
       "created_by": {
         "object": "user",
         "id": "019a87c7-d197-44a4-b19a-baa684400f81"
@@ -41,6 +41,7 @@
             "href": null
           }
         ],
+        "is_toggleable": false,
         "color": "gray_background"
       }
     }

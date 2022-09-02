@@ -15,7 +15,7 @@
     "object": "user",
     "id": "019a87c7-d197-44a4-b19a-baa684400f81"
   },
-  "last_edited_time": "2022-07-12T07:30:00.000Z",
+  "last_edited_time": "2022-09-02T01:35:00.000Z",
   "title": [
     {
       "type": "text",
@@ -79,9 +79,17 @@
         ]
       }
     },
-    "added url property": {
+    "added number property": {
+      "id": "%3B%3BAo",
+      "name": "added number property",
+      "type": "number",
+      "number": {
+        "format": "euro"
+      }
+    },
+    "renamed url property": {
       "id": "%3FSX%3B",
-      "name": "added url property",
+      "name": "renamed url property",
       "type": "url",
       "url": {}
     },
@@ -97,13 +105,19 @@
       "type": "created_time",
       "created_time": {}
     },
-    "added number property": {
+    "renamed number property": {
       "id": "GBUZ",
-      "name": "added number property",
+      "name": "renamed number property",
       "type": "number",
       "number": {
         "format": "euro"
       }
+    },
+    "added url property": {
+      "id": "GTkv",
+      "name": "added url property",
+      "type": "url",
+      "url": {}
     },
     "LastEditedTime": {
       "id": "HrEw",

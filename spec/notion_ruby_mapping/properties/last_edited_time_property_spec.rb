@@ -59,7 +59,7 @@ module NotionRubyMapping
           before { target.update_from_json(tc.read_json("retrieve_property_last_edited_time")) }
           it_behaves_like :will_not_update
           it_behaves_like :property_values_json, {}
-          it { expect(target.last_edited_time).to eq "2022-03-12T06:51:00.000Z" }
+          it { expect(target.last_edited_time).to eq "2022-09-01T04:35:00.000Z" }
           it_behaves_like :assert_different_property, :update_property_schema_json
         end
       end
@@ -69,7 +69,7 @@ module NotionRubyMapping
         it_behaves_like :has_name_as, "letp"
         it_behaves_like :will_not_update
         it_behaves_like :property_values_json, {}
-        it { expect(target.last_edited_time).to eq "2022-03-12T06:51:00.000Z" }
+        it { expect(target.last_edited_time).to eq "2022-09-01T04:35:00.000Z" }
         it_behaves_like :assert_different_property, :update_property_schema_json
       end
 
@@ -82,7 +82,7 @@ module NotionRubyMapping
 
         # hook property_values_json / created_by to retrieve a property item
         it_behaves_like :property_values_json, {}
-        it { expect(target.last_edited_time).to eq "2022-03-12T06:51:00.000Z" }
+        it { expect(target.last_edited_time).to eq "2022-09-01T04:35:00.000Z" }
       end
     end
   end

@@ -47,7 +47,7 @@ module NotionRubyMapping
 
     # @param [String] title
     # @param [Array<String, Property>] assigns
-    # @return [NotionRubyMapping::Database]
+    # @return [NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e3f1d21e0f724f589e48431468772eed
     def create_child_database(title, *assigns, dry_run: false)
       build_child_database(title, *assigns).save dry_run: dry_run
@@ -56,7 +56,7 @@ module NotionRubyMapping
     # @return [String] title
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#2ff7209055f346fbbda454cdbb40b1c8
     def title
-      tp = properties.select { |p| (p.is_a?(TitleProperty)) || (p.is_a?(Property) && p.property_id == "title") }
+      tp = properties.select { |p| p.is_a?(TitleProperty) || (p.is_a?(Property) && p.property_id == "title") }
       tp.map(&:full_text).join ""
     end
 

@@ -48,6 +48,10 @@ module NotionRubyMapping
       end
     end
 
+    def inspect
+      "PropertyCache"
+    end
+
     # @return [Hash] created property values json
     def property_values_json
       @properties.each_with_object({}) do |(_, property), ans|

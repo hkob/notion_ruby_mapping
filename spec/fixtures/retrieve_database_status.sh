@@ -1,3 +1,3 @@
-curl 'https://api.notion.com/v1/blocks/0c940186-ab70-4351-bb34-2d16f0635d49' \
+curl 'https://api.notion.com/v1/databases/71f892a3bf1744918d8e8f125c55bf43' \
     -H 'Authorization: Bearer '"$NOTION_API_KEY"'' \
     -H 'Notion-Version: 2022-06-28'

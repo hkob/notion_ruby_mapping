@@ -40,14 +40,22 @@ module NotionRubyMapping
     ## Common methods
 
     def self.people_from_json(json)
-      List.new(json: json, property: self).select { true }
+      if json.is_a? Array
+        json.map { |sub_json| UserObject.new json: sub_json }
+      elsif json["object"] == "list"
+        List.new(json: json, property: self).select { true }
+      else
+        json["people"].map { |sub_json| UserObject.new json: sub_json }
+      end
     end
 
     # @param [String] name
     # @param [Hash] json
     # @param [Array] people ids for people
-    def initialize(name, will_update: false, base_type: :page, json: nil, people: nil, property_cache: nil, query: nil)
-      super name, will_update: will_update, base_type: base_type, property_cache: property_cache, query: query
+    def initialize(name, will_update: false, base_type: :page, json: nil, people: nil, property_id: nil,
+                   property_cache: nil, query: nil)
+      super name, will_update: will_update, base_type: base_type, property_id: property_id,
+                  property_cache: property_cache, query: query
       @json = if database?
                 {}
               elsif people

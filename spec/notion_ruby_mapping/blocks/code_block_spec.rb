@@ -38,7 +38,7 @@ module NotionRubyMapping
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { described_class.new "% ls -l", caption: "List files", language: "shell" }
       it_behaves_like :create_child_block, described_class,
-                      "fec91ca2e4ea459fa5041dc2da704815", "23af282b3bd646ad8546cd4b49a702c8"
+                      "214c3916d0f94152b8941be064c5d6c2", "6f034227d1044052a6a5dc06f577b04a"
     end
 
     describe "save (update)" do

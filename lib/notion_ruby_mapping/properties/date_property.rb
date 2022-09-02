@@ -75,8 +75,10 @@ module NotionRubyMapping
     # @param [Date, Time, DateTime, String, nil] start_date
     # @param [Date, Time, DateTime, String, nil] end_date
     # @param [String, nil] time_zone
-    def initialize(name, will_update: false, base_type: :page, json: nil, start_date: nil, end_date: nil, time_zone: nil, property_cache: nil)
-      super name, will_update: will_update, base_type: base_type, property_cache: property_cache
+    def initialize(name, will_update: false, base_type: :page, json: nil, start_date: nil, end_date: nil,
+                   time_zone: nil, property_id: nil, property_cache: nil)
+      super name, will_update: will_update, base_type: base_type, property_id: property_id,
+                  property_cache: property_cache
       @json = json || {}
       return if database?
 

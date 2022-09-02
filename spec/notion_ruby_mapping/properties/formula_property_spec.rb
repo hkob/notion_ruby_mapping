@@ -119,7 +119,7 @@ module NotionRubyMapping
       # hook property_values_json / formula to retrieve a property item
       it_behaves_like :property_values_json, {}
       it {
-        expect(target.formula).to eq({"type" => "date", "date" => {"start" => "2022-07-18T09:48:00.000+00:00",
+        expect(target.formula).to eq({"type" => "date", "date" => {"start" => "2022-09-02T01:14:00.000+00:00",
                                                                    "end" => nil, "time_zone" => nil}})
       }
     end

@@ -34,6 +34,7 @@
         "href": null
       }
     ],
+    "is_toggleable": false,
     "color": "default"
   }
 }
