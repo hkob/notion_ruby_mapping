@@ -44,19 +44,19 @@ module NotionRubyMapping
                           %w[equals does_not_equal greater_than less_than greater_than_or_equal_to
                              less_than_or_equal_to],
                           value: 100
-          %w[any every none].each do |rollup|
-            context rollup do
+          %w[any every none].each do |condition|
+            context condition do
               it_behaves_like :filter_test, RollupProperty,
                               %w[equals does_not_equal contains does_not_contain starts_with ends_with],
-                              value: "abc", rollup: rollup, rollup_type: "rich_text"
+                              value: "abc", condition: condition, another_type: "rich_text"
               it_behaves_like :filter_test, RollupProperty,
                               %w[equals does_not_equal greater_than less_than greater_than_or_equal_to
-                                 less_than_or_equal_to], value: 100, rollup: rollup, rollup_type: "number"
+                                 less_than_or_equal_to], value: 100, condition: condition, another_type: "number"
               it_behaves_like :filter_test, RollupProperty, %w[is_empty is_not_empty],
-                              rollup: rollup, rollup_type: "number"
-              it_behaves_like :filter_test, RollupProperty,
+                              condition: condition, another_type: "number"
+                            it_behaves_like :filter_test, RollupProperty,
                               %w[past_week past_month past_year next_week next_month next_year],
-                              value_str: {}, rollup: rollup, rollup_type: "date"
+                              value_str: {}, condition: condition, another_type: "date"
             end
           end
         end

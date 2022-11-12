@@ -6,6 +6,7 @@ module NotionRubyMapping
     ### Public announced methods
 
     # @param [String] id
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#58ba9190fd544432a9e2a5823d6c33b7
     def self.find(id, dry_run: false)
@@ -49,6 +50,7 @@ module NotionRubyMapping
     end
 
     # @param [Array<Property, Class, String>] assign
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base]
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
     def create_child_page(*assign, dry_run: false)
@@ -97,6 +99,7 @@ module NotionRubyMapping
     end
 
     # @param [NotionRubyMapping::Query] query object
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::List, String]
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#6bd9acf62c454f64bc555c8828057e6b
     def query_database(query = Query.new, dry_run: false)
@@ -104,7 +107,7 @@ module NotionRubyMapping
         Base.dry_run_script :post, @nc.query_database_path(@id), query.query_json
       else
         response = @nc.database_query_request @id, query
-        List.new json: response, database: self, query: query
+        List.new json: response, type: :database, value: self, query: query
       end
     end
 
@@ -130,6 +133,7 @@ module NotionRubyMapping
 
     protected
 
+    # @param [Boolean] dry_run true if dry_run
     def create(dry_run: false)
       if dry_run
         dry_run_script :post, @nc.databases_path, :property_schema_json
@@ -145,6 +149,7 @@ module NotionRubyMapping
       @nc.database_request @id
     end
 
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base, String]
     def update(dry_run: false)
       if dry_run

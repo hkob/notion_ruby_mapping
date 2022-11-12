@@ -30,12 +30,17 @@ module NotionRubyMapping
             ],
           ].each do |(title, d, ds, dss, des)|
             context "on parameter #{title}" do
-              it_behaves_like :filter_test, FormulaProperty, %w[before on_or_after], value: d, value_str: dss
-              it_behaves_like :filter_test, FormulaProperty, %w[after on_or_before], value: d, value_str: des
+              it_behaves_like :filter_test, FormulaProperty, %w[before on_or_after], value: d, value_str: dss,
+                              another_type: "date"
+              it_behaves_like :filter_test, FormulaProperty, %w[after on_or_before], value: d, value_str: des,
+                              another_type: "date"
               if title == "time"
-                it_behaves_like :filter_test, FormulaProperty, %w[equals does_not_equal], value: d, value_str: ds
+                it_behaves_like :filter_test, FormulaProperty, %w[equals does_not_equal], value: d, value_str: ds,
+                                another_type: "date"
               else
-                it_behaves_like :date_equal_filter_test, FormulaProperty, %w[equals does_not_equal], d
+                it_behaves_like :date_equal_filter_test, FormulaProperty, %w[equals does_not_equal], d,
+                                another_type: "date"
+
               end
             end
           end
@@ -48,7 +53,7 @@ module NotionRubyMapping
                           %w[past_week past_month past_year next_week next_month next_year], value_str: {}
           it_behaves_like :filter_test, FormulaProperty,
                           %w[equals does_not_equal greater_than less_than greater_than_or_equal_to less_than_or_equal_to],
-                          value: 100
+                          value: 100, another_type: "number"
         end
         it { expect(target.formula).to eq({"expression" => "today()"}) }
         it { expect(target.formula_expression).to eq "today()" }

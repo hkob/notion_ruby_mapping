@@ -56,7 +56,7 @@ module NotionRubyMapping
           "type" => "people",
           "people" => [
             {
-              "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+              "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
               "object" => "user",
             },
           ],

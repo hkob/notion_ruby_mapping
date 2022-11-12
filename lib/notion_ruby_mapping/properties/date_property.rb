@@ -29,8 +29,8 @@ module NotionRubyMapping
     def end_date=(edt)
       assert_page_property __method__
       @will_update = true
-      sdt = start_date
-      edt = nil if sdt.class != edt.class || sdt > edt
+      # sdt = start_date
+      # edt = nil if sdt.class != edt.class || sdt > edt
       @json["end"] = edt
     end
 
@@ -46,8 +46,8 @@ module NotionRubyMapping
     def start_date=(sdt)
       assert_page_property __method__
       @will_update = true
-      edt = end_date
-      @json["end"] = nil if sdt.class != edt.class || sdt > edt
+      # edt = end_date
+      # @json["end"] = nil if sdt.class != edt.class || sdt > edt
       @json["start"] = sdt
     end
 

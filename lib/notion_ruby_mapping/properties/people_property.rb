@@ -43,7 +43,7 @@ module NotionRubyMapping
       if json.is_a? Array
         json.map { |sub_json| UserObject.new json: sub_json }
       elsif json["object"] == "list"
-        List.new(json: json, property: self).select { true }
+        List.new(json: json, type: :property, value: self).select { true }
       else
         json["people"].map { |sub_json| UserObject.new json: sub_json }
       end

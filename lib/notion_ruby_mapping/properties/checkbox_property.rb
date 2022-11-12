@@ -10,7 +10,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Boolean, Hash]
+    # @return [Boolean, Hash, nil]
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#20da1bf0cbcc4d4eb22d9125386522c2
     def checkbox
       @json

@@ -284,5 +284,40 @@ module NotionRubyMapping
     def update_page_request(page_id, payload)
       request :patch, page_path(page_id), payload
     end
+
+    # @param [String] id user_id (with or without "-")
+    # @return [NotionRubyMapping::UserObject] UserObject object or nil
+    def user(id)
+      UserObject.new json: user_request(id)
+    end
+
+    # @param [String] user_id
+    # @return [String (frozen)] user_path
+    def user_path(user_id)
+      "v1/users/#{user_id}"
+    end
+
+    # @param [String] user_id
+    # @return [Hash] response
+    def user_request(user_id)
+      request :get, user_path(user_id)
+    end
+
+    # @return [Array<NotionRubyMapping::UserObject>] UserObject array
+    def users
+      List.new json: users_request, type: :user_object, value: true
+    end
+
+    # @return [String (frozen)] user_path
+    def users_path(option = "")
+      "v1/users#{option}"
+    end
+
+    # @param [String] user_id
+    # @param [NotionRubyMapping::Query] query query object
+    # @return [Hash] response
+    def users_request(query = Query.new)
+      request :get, users_path, query.query_json
+    end
   end
 end

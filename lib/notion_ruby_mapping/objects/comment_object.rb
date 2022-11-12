@@ -16,7 +16,7 @@ module NotionRubyMapping
       end
       @will_update = false
     end
-    attr_reader :will_update, :text_objects
+    attr_reader :will_update, :text_objects, :json
 
     def discussion_id
       NotionCache.instance.hex_id @json["discussion_id"]

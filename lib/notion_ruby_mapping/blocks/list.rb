@@ -5,14 +5,23 @@ module NotionRubyMapping
   class List < Base
     include Enumerable
 
-    def initialize(json: nil, id: nil, database: nil, parent: nil, property: nil, comment_parent: nil, query: nil)
+    def initialize(json: nil, id: nil, type: nil, value: nil, query: nil)
       super(json: json, id: id)
       @has_more = @json["has_more"]
       @load_all_contents = !@has_more
-      @database = database
-      @parent = parent
-      @property = property
-      @comment_parent = comment_parent
+
+      case type
+      when :comment_parent
+        @comment_parent = value
+      when :database
+        @database = value
+      when :parent
+        @parent = value
+      when :property
+        @property = value
+      when :user_object
+        @user_object = true
+      end
       @query = query
       @index = 0
       @has_content = true
@@ -59,6 +68,11 @@ module NotionRubyMapping
         each_sub base: @comment_parent,
                  query: -> { @nc.retrieve_comments_request @comment_parent.id, @query },
                  create_object: ->(json) { CommentObject.new json: json },
+                 &block
+      elsif @user_object
+        each_sub base: @user_object,
+                 query: -> { @nc.users_request @query.query_json },
+                 create_object: ->(json) { UserObject.new json: json },
                  &block
       end
       self

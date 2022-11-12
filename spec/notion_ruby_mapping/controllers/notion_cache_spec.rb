@@ -40,5 +40,9 @@ module NotionRubyMapping
     describe "page_property_path" do
       it { expect(nc.page_property_path("ABC", "DEF")).to eq "v1/pages/ABC/properties/DEF" }
     end
+
+    describe "user_path" do
+      it { expect(nc.user_path("ABC")).to eq "v1/users/ABC" }
+    end
   end
 end

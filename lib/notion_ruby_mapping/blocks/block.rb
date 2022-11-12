@@ -64,6 +64,7 @@ module NotionRubyMapping
 
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#298916c7c379424682f39ff09ee38544
     # @param [String] id
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Block]
     def self.find(id, dry_run: false)
       nc = NotionCache.instance
@@ -104,7 +105,7 @@ module NotionRubyMapping
       @rich_text_array = RichTextArray.new "rich_text", json: @json[type]["rich_text"]
     end
 
-    # @param [Boolean] dry_run
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base, String]
     def destroy(dry_run: false)
       if dry_run
@@ -114,6 +115,7 @@ module NotionRubyMapping
       end
     end
 
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base, String]
     def update(dry_run: false)
       if dry_run

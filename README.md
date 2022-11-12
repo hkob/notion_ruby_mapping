@@ -92,6 +92,7 @@ NotionCache.instance.create_client ENV["NOTION_API_TOKEN"] # from environment
 
 ## 3. ChangeLog
 
+- 2022/11/13 [v0.6.8] remove error checking for start and end dates, add Users.all, and change Rollup and Formula query specification
 - 2022/9/2 [v0.6.7] add support for Status property, is_toggleable for headings block, and page property values
 - 2022/8/10 [v0.6.6] Bug fix(notionSitemap.rb): Skip if child page is empty.
 - 2022/8/10 [v0.6.5] add notionSitemap.rb, rename createErDiagram to notionErDiagram, and move them to exe directory

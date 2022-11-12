@@ -102,12 +102,14 @@ module NotionRubyMapping
             ],
             [
               {end_date: Time.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-              {"start" => "2022-02-22", "end" => nil, "time_zone" => nil}, # Different class -> clear end_date
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-22", "end" => "2022-02-24T01:23:45+09:00", "time_zone" => nil},
             ],
             [
               {end_date: Date.new(2022, 2, 20)},
-              {"start" => "2022-02-22", "end" => nil, "time_zone" => nil},
-            ], # Previous date -> clear end_date
+              # (Previous date -> clear end_date) -> not clear
+              {"start" => "2022-02-22", "end" => "2022-02-20", "time_zone" => nil},
+            ],
           ],
           Time.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
             [{}, {"start" => "2022-02-22T01:23:45+09:00", "end" => nil, "time_zone" => nil}],
@@ -120,14 +122,14 @@ module NotionRubyMapping
               {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-24T01:23:45+09:00", "time_zone" => nil},
             ],
             [
-              # Different class -> clear end_date
               {end_date: Date.new(2022, 2, 24)},
-              {"start" => "2022-02-22T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-24", "time_zone" => nil},
             ],
             [
-              # Previous date -> clear end_date
               {end_date: Time.new(2022, 2, 20, 1, 23, 45, "+09:00")},
-              {"start" => "2022-02-22T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              # (Previous date -> clear end_date) -> not clear
+              {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-20T01:23:45+09:00", "time_zone" => nil},
             ],
           ],
           DateTime.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
@@ -141,14 +143,14 @@ module NotionRubyMapping
               {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-24T01:23:45+09:00", "time_zone" => nil},
             ],
             [
-              # Different class -> clear end_date
               {end_date: Date.new(2022, 2, 24)},
-              {"start" => "2022-02-22T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-24", "time_zone" => nil},
             ],
             [
-              # Previous date -> clear end_date
+              # (Previous date -> clear end_date) -> not clear
               {end_date: DateTime.new(2022, 2, 20, 1, 23, 45, "+09:00")},
-              {"start" => "2022-02-22T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-20T01:23:45+09:00", "time_zone" => nil},
             ],
           ],
         }.each do |date, array|
@@ -166,7 +168,7 @@ module NotionRubyMapping
       describe "end=" do
         {
           Date.new(2022, 2, 22) => [
-            [{}, {"start" => nil, "end" => nil, "time_zone" => nil}],
+            [{}, {"start" => nil, "end" => "2022-02-22", "time_zone" => nil}],
             [{start_date: Date.new(2022, 2, 20)}, {"start" => "2022-02-20", "end" => "2022-02-22", "time_zone" => nil}],
             [
               {start_date: Date.new(2022, 2, 21), end_date: Date.new(2022, 2, 22)},
@@ -174,16 +176,17 @@ module NotionRubyMapping
             ],
             [
               {start_date: Time.new(2022, 2, 20, 1, 23, 45, "+09:00")},
-              # Different class -> clear end_date
-              {"start" => "2022-02-20T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-20T01:23:45+09:00", "end" => "2022-02-22", "time_zone" => nil},
             ],
             [
               {start_date: Date.new(2022, 2, 24)},
-              {"start" => "2022-02-24", "end" => nil, "time_zone" => nil},
-            ], # Previous date -> clear end_date
+              # (Previous date -> clear end_date) -> not clear
+              {"start" => "2022-02-24", "end" => "2022-02-22", "time_zone" => nil},
+            ],
           ],
           Time.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-            [{}, {"start" => nil, "end" => nil, "time_zone" => nil}],
+            [{}, {"start" => nil, "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil}],
             [
               {start_date: Time.new(2022, 2, 21, 1, 23, 45, "+09:00")},
               {"start" => "2022-02-21T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
@@ -197,16 +200,17 @@ module NotionRubyMapping
             ],
             [
               {start_date: Date.new(2022, 2, 20)},
-              {"start" => "2022-02-20", "end" => nil, "time_zone" => nil}, # Different class -> clear end_date
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-20", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
             ],
             [
               {start_date: Time.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-              # Previous date -> clear end_date
-              {"start" => "2022-02-24T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              # (Previous date -> clear end_date) -> not clear
+              {"start" => "2022-02-24T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
             ],
           ],
           DateTime.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-            [{}, {"start" => nil, "end" => nil, "time_zone" => nil}],
+            [{}, {"start" => nil, "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil}],
             [
               {start_date: DateTime.new(2022, 2, 21, 1, 23, 45, "+09:00")},
               {"start" => "2022-02-21T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
@@ -220,12 +224,13 @@ module NotionRubyMapping
             ],
             [
               {start_date: Date.new(2022, 2, 20)},
-              {"start" => "2022-02-20", "end" => nil, "time_zone" => nil}, # Different class -> clear end_date
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-20", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
             ],
             [
               {start_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-              # Previous date -> clear end_date
-              {"start" => "2022-02-24T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+              # (Previous date -> clear end_date) -> not clear
+              {"start" => "2022-02-24T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
             ],
           ],
         }.each do |date, array|

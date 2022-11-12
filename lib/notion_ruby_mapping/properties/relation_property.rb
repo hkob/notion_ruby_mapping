@@ -9,7 +9,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Hash, Array]
+    # @return [Hash, Array, nil]
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#6c14207b2d1340d2bbc08d17eee2cb22
     def relation
       @json
@@ -78,10 +78,8 @@ module NotionRubyMapping
                 json || {}
               elsif relation
                 Array(relation).map { |r| {"id" => r} }
-              elsif json
-                json
               else
-                []
+                json || []
               end
     end
 

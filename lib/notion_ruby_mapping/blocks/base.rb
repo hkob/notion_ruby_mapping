@@ -60,7 +60,7 @@ module NotionRubyMapping
       end
     end
 
-    # @param [Object] method
+    # @param [Symbol] method
     # @param [Object] path
     # @param [nil] json
     def self.dry_run_script(method, path, json = nil)
@@ -82,6 +82,7 @@ module NotionRubyMapping
       end
     end
 
+    # @param [Boolean] dry_run true if dry_run
     def comments(query = nil, dry_run: false)
       return unless page? || block?
 
@@ -89,7 +90,7 @@ module NotionRubyMapping
         self.class.dry_run_script :get, @nc.retrieve_comments_path(@id)
       else
         ans = {}
-        List.new(comment_parent: self,
+        List.new(type: :comment_parent, value: self,
                  json: @nc.retrieve_comments_request(@id, query),
                  query: query).each do |comment|
           dt_id = comment.discussion_id
@@ -117,7 +118,7 @@ module NotionRubyMapping
     end
 
     # @param [Array<Block>] blocks
-    # @param [Boolean] dry_run
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Block, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#44bbf83d852c419485c5efe9fe1558fb
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#2c47f7fedae543cf8566389ba1677132
@@ -180,7 +181,7 @@ module NotionRubyMapping
     end
 
     # @param [NotionRubyMapping::Query] query
-    # @param [Boolean] dry_run
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::List, String]
     def children(query = Query.new, dry_run: false)
       if dry_run
@@ -190,7 +191,7 @@ module NotionRubyMapping
         @children
       else
         response = @nc.block_children_request @id, query.query_string
-        @children = List.new json: response, parent: self, query: query
+        @children = List.new json: response, type: :parent, value: self, query: query
       end
     end
 
@@ -236,6 +237,7 @@ module NotionRubyMapping
       is_a? Page
     end
 
+    # @param [Boolean] dry_run true if dry_run
     def parent(dry_run: false)
       parent_json = @json && @json["parent"]
       raise StandardError, "Unknown parent" if parent_json.nil?
@@ -298,7 +300,7 @@ module NotionRubyMapping
       self
     end
 
-    # @param [Boolean] dry_run
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base, NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#277085c8439841c798a4b94eae9a7326
     def save(dry_run: false)

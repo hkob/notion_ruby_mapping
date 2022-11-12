@@ -6,6 +6,7 @@ module NotionRubyMapping
     ### Public announced methods
 
     # @param [String] id
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Page, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#7d868b8b81c3473082bbdc7370813a4a
     def self.find(id, dry_run: false)
@@ -24,6 +25,7 @@ module NotionRubyMapping
       get key
     end
 
+    # @param [Boolean] dry_run true if dry_run
     def append_comment(text_objects, dry_run: false)
       rto = RichTextArray.new "rich_text", text_objects: text_objects, will_update: true
       json = rto.property_schema_json.merge({"parent" => {"page_id" => @id}})
@@ -47,6 +49,7 @@ module NotionRubyMapping
 
     # @param [String] title
     # @param [Array<String, Property>] assigns
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e3f1d21e0f724f589e48431468772eed
     def create_child_database(title, *assigns, dry_run: false)
@@ -62,6 +65,7 @@ module NotionRubyMapping
 
     protected
 
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base, String]
     def create(dry_run: false)
       if dry_run
@@ -77,6 +81,7 @@ module NotionRubyMapping
       @nc.page_request @id
     end
 
+    # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base, String]
     def update(dry_run: false)
       if dry_run

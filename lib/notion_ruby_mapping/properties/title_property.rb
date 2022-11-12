@@ -11,7 +11,7 @@ module NotionRubyMapping
 
     def self.rich_text_array_from_json(json)
       if json["object"] == "list"
-        rich_text_objects = List.new(json: json, property: self).select { true }
+        rich_text_objects = List.new(json: json, type: :property, value: self).select { true }
         RichTextArray.rich_text_array "title", rich_text_objects
       else
         RichTextArray.new "title", json: json["title"]

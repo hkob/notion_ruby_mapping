@@ -12,7 +12,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Numeric, Hash]
+    # @return [Numeric, Hash, nil]
     # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#571b41dd33ae42039e6b982a502b7ac7
     def number
       @json

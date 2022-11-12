@@ -1,0 +1,72 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "user",
+      "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+      "name": "Hiroyuki KOBAYASHI",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+      "type": "person",
+      "person": {
+        "email": "hkob@metro-cit.ac.jp"
+      }
+    },
+    {
+      "object": "user",
+      "id": "1fc8762e-9bed-47fd-86a4-18078d3dbc9e",
+      "name": "bug_report",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/a1b8877d-81c3-43a2-bb2c-ce721acffd4f/20716690701555931396-128.png",
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "9497f745-1d35-4311-b127-f0c757adb870",
+      "name": "API test",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/8b7d2267-e73c-4707-a58f-e1dbccb9554c/toro.png",
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "019a87c7-d197-44a4-b19a-baa684400f81",
+      "name": "notion_ruby_mapping",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/b56f7ece-934d-41af-8892-89a6032fc721/nr.png",
+      "type": "bot",
+      "bot": {
+        "owner": {
+          "type": "workspace",
+          "workspace": true
+        }
+      }
+    },
+    {
+      "object": "user",
+      "id": "04c93780-0258-4792-b532-d932025aea76",
+      "name": "notionしゅふ会",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "40673a87-d8ed-41e0-aa55-7f0e8ace24cd",
+      "name": "input_tasks",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/d1f637eb-7242-43c1-9500-747bac40275a/1ea5da4c6b0b10c5ed42b763c162fcd9.png",
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "827fbc71-59c5-46f7-9eac-91824b6a6cad",
+      "name": "notion_api_book",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/ec8b750f-0351-4d50-b1b1-ec178c116eee/ErSxuLeq.png-medium.png",
+      "type": "bot",
+      "bot": {}
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "user",
+  "user": {}
+}

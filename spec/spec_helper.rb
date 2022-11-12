@@ -117,6 +117,7 @@ module NotionRubyMapping
     }.freeze
     # user_id
     USER_HKOB_ID = "2200a9116a9644bbbd386bfb1e01b9f6"
+    USER_BOT_ID = "019a87c7d19744a4b19abaa684400f81"
 
     def initialize
       @config = YAML.load_file "env.yml"
@@ -173,6 +174,8 @@ module NotionRubyMapping
       retrieve_property
       retrieve_comments
       append_comment
+      retrieve_user
+      retrieve_users
     end
 
     # @param [Symbol] method
@@ -2551,6 +2554,19 @@ module NotionRubyMapping
       }
     end
 
+    def retrieve_user
+      generate_stubs_sub :get, __method__, :user_path, {
+        person_hkob: [USER_HKOB_ID, 200],
+        token_bot: ["me", 200],
+      }
+    end
+
+    def retrieve_users
+      generate_stubs_sub :get, __method__, :users_path, {
+        all: ["?page_size=100", 200],
+      }
+    end
+
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
     def read_json(json_file)
@@ -2651,8 +2667,8 @@ module RSpec
     end
   end
 
-  shared_examples_for :filter_test do |c, keys, value: nil, value_str: nil, rollup: nil, rollup_type: nil|
-    let(:property) { c.new "property_name" }
+  shared_examples_for :filter_test do |c, keys, value: nil, value_str: nil, condition: nil, another_type: nil|
+    property = c.new "property_name"
     value_str ||= value
     describe "a #{c.name} property" do
       it "has name" do
@@ -2663,11 +2679,19 @@ module RSpec
         subject { query.filter }
         keys.each do |key|
           context key do
-            let(:query) { property.send(*["filter_#{key}", value, rollup, rollup_type].compact) }
-            if rollup
+            let(:query) do
+              property.send(*["filter_#{key}", value].compact, **{condition: condition, another_type: another_type})
+            end
+
+            if property.is_a? FormulaProperty
               it {
                 is_expected.to eq({"property" => "property_name",
-                                   rollup => {rollup_type => {key => value_str || true}}})
+                                   "formula" => {another_type => {key => value_str || true}}})
+              }
+            elsif condition
+              it {
+                is_expected.to eq({"property" => "property_name",
+                                   condition => {another_type => {key => value_str || true}}})
               }
             else
               it { is_expected.to eq({"property" => "property_name", c::TYPE => {key => value_str || true}}) }
@@ -2678,8 +2702,8 @@ module RSpec
     end
   end
 
-  shared_examples_for :date_equal_filter_test do |c, keys, date, rollup: nil, rollup_type: nil|
-    let(:property) { c.new "property_name" }
+  shared_examples_for :date_equal_filter_test do |c, keys, date, condition: nil, another_type: nil|
+    property = c.new "property_name"
     start_str, end_str = DateProperty.start_end_time date
     describe "a #{c.name} property" do
       it "has name" do
@@ -2690,21 +2714,31 @@ module RSpec
         subject { query.filter }
         keys.each do |key|
           context key do
-            let(:query) { property.send(*["filter_#{key}", date].compact) }
+            let(:query) do
+              property.send(*["filter_#{key}", date].compact, **{condition: condition, another_type: another_type})
+            end
             it {
               answer = if key == "equals"
-                         if rollup
-                           property.filter_after(start_str, rollup: rollup, rollup_type: rollup_type)
-                                   .and(filter_before(end_str, rollup: rollup, rollup_type: rollup_type))
+                         if property.is_a? FormulaProperty
+                           property.filter_after(start_str, another_type: another_type)
+                                   .and(property.filter_before(end_str, another_type: another_type))
+                         elsif condition
+                           property.filter_after(start_str, condition: condition, another_type: another_type)
+                                   .and(property.filter_before(end_str, condition: condition, another_type: another_type))
                          else
-                           property.filter_after(start_str).and(property.filter_before(end_str))
+                           property.filter_after(start_str, condition: condition, another_type: another_type)
+                                   .and(property.filter_before(end_str, condition: condition, another_type: another_type))
                          end
                        else
-                         if rollup
-                           property.filter_before(start_str, rollup: rollup, rollup_type: rollup_type)
-                                   .or(property.filter_after(end_str, rollup: rollup, rollup_type: rollup_type))
+                         if property.is_a? FormulaProperty
+                           property.filter_before(start_str, another_type: another_type)
+                                   .or(property.filter_after(end_str, another_type: another_type))
+                         elsif condition
+                           property.filter_before(start_str, condition: condition, another_type: another_type)
+                                   .or(property.filter_after(end_str, condition: condition, another_type: another_type))
                          else
-                           property.filter_before(start_str).or(property.filter_after(end_str))
+                           property.filter_before(start_str, condition: condition, another_type: another_type)
+                                   .or(property.filter_after(end_str, condition: condition, another_type: another_type))
                          end
                        end
               is_expected.to eq answer.filter
