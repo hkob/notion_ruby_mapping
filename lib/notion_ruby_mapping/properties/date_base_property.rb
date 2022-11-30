@@ -140,6 +140,14 @@ module NotionRubyMapping
     # @param [String] condition Rollup name
     # @param [String] another_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
+    # @see
+    def filter_this_week(condition: nil, another_type: nil)
+      make_filter_query "this_week", {}, condition: condition, another_type: another_type
+    end
+
+    # @param [String] condition Rollup name
+    # @param [String] another_type Rollup type
+    # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedTimeProperty-bb979ff02dc04efa9733da1003efa871#d9dc189ee8244ba8a6c863259eaa9984
     def filter_next_week(condition: nil, another_type: nil)
       make_filter_query "next_week", {}, condition: condition, another_type: another_type

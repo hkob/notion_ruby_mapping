@@ -12,6 +12,33 @@ module NotionRubyMapping
       end
     end
 
+    describe "NotionRubyMapping.configure" do
+      it "can set notion_token" do
+        save_token = nc.notion_token
+        expect(nc.notion_token).not_to eq "ABC"
+        NotionRubyMapping.configure { |c| c.notion_token = "ABC" }
+        expect(nc.notion_token).to eq "ABC"
+        # restore original
+        NotionRubyMapping.configure { |c| c.notion_token = save_token }
+      end
+
+      it "can set wait" do
+        expect(nc.wait).to eq 0
+        NotionRubyMapping.configure { |c| c.wait = 0.3333 }
+        expect(nc.wait).to eq 0.3333
+        # restore original
+        NotionRubyMapping.configure { |c| c.wait = 0 }
+      end
+
+      it "can set debug" do
+        expect(nc.debug).to be_falsey
+        NotionRubyMapping.configure { |c| c.debug = true }
+        expect(nc.debug).to be_truthy
+        # restore original
+        NotionRubyMapping.configure { |c| c.debug = false }
+      end
+    end
+
     describe "append_block_children_block_path" do
       it { expect(nc.append_block_children_block_path("ABC")).to eq "v1/blocks/ABC/children" }
     end

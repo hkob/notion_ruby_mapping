@@ -52,12 +52,12 @@ module NotionRubyMapping
             end
           end
           it_behaves_like :filter_test, c, %w[is_empty is_not_empty]
-          it_behaves_like :filter_test, c, %w[past_week past_month past_year next_week next_month next_year],
+          it_behaves_like :filter_test, c, %w[past_week past_month past_year this_week next_week next_month next_year],
                           value_str: {}
           unless c == DateProperty
             it_behaves_like :timestamp_filter_test, c, %w[is_empty is_not_empty]
             it_behaves_like :timestamp_filter_test, c,
-                            %w[past_week past_month past_year next_week next_month next_year], value_str: {}
+                            %w[past_week past_month past_year this_week next_week next_month next_year], value_str: {}
           end
         end
       end

@@ -25,3 +25,11 @@ require_relative "notion_ruby_mapping/version"
     require_relative "notion_ruby_mapping/#{key}/#{klass}"
   end
 end
+
+module NotionRubyMapping
+  def configure
+    yield NotionRubyMapping::NotionCache.instance
+  end
+  module_function :configure
+end
+

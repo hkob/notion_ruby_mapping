@@ -20,11 +20,12 @@ module NotionRubyMapping
         builder.adapter Faraday.default_adapter
       end
       @notion_token = nil
-      @wait = 0
+      @wait = 0.3333
       @debug = false
     end
     attr_reader :object_hash
     attr_writer :client # for test only
+    attr_accessor :notion_token, :wait, :debug
 
     # @param [String] block_id
     # @return [String (frozen)] block_path
@@ -239,7 +240,7 @@ module NotionRubyMapping
     # @param [Hash] options
     # @return [Hash] response hash
     def request(method, path, options = {})
-      raise "Please call `NotionCache.create_client' before using other methods" unless @notion_token
+      raise "Please call `NotionRubyMapping.configure' before using other methods" unless @notion_token
 
       sleep @wait
       response = @client.send(method) do |request|
