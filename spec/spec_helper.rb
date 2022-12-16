@@ -2683,17 +2683,17 @@ module RSpec
               property.send(*["filter_#{key}", value].compact, **{condition: condition, another_type: another_type})
             end
 
-            if property.is_a? FormulaProperty
+            if condition
               it {
                 is_expected.to eq({"property" => "property_name",
-                                   "formula" => {another_type => {key => value_str || true}}})
+                                   c::TYPE => {condition => {another_type => {key => value_str || true}}}})
               }
-            elsif condition
+            elsif another_type
               it {
                 is_expected.to eq({"property" => "property_name",
-                                   condition => {another_type => {key => value_str || true}}})
+                                   c::TYPE => {another_type => {key => value_str || true}}})
               }
-            else
+           else
               it { is_expected.to eq({"property" => "property_name", c::TYPE => {key => value_str || true}}) }
             end
           end

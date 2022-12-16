@@ -143,12 +143,10 @@ module NotionRubyMapping
     # @param [Object] value query value
     # @return [NotionRubyMapping::Query] generated Query object
     def make_filter_query(key, value, condition: nil, another_type: nil)
-      if is_a? FormulaProperty
-        Query.new filter: {"property" => @name, "formula" => {another_type => {key => value}}}
-      elsif condition
-        Query.new filter: {"property" => @name, condition => {another_type => {key => value}}}
+      if condition
+        Query.new filter: {"property" => @name, type => {condition => {another_type => {key => value}}}}
       elsif another_type
-        Query.new filter: {"property" => @name, another_type => {key => value}}
+        Query.new filter: {"property" => @name, type => {another_type => {key => value}}}
       elsif @name == "__timestamp__"
         Query.new filter: {"timestamp" => type, type => {key => value}}
       else
