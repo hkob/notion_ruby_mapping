@@ -53,7 +53,10 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e3f1d21e0f724f589e48431468772eed
     def create_child_database(title, *assigns, dry_run: false)
-      build_child_database(title, *assigns).save dry_run: dry_run
+      db = Database.new json: {"title" => [TextObject.new(title).property_values_json]},
+                        assign: assigns, parent: {"type" => "page_id", "page_id" => @id}
+      yield db, db.properties if block_given?
+      db.save dry_run: dry_run
     end
 
     # @return [String] title

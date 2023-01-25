@@ -29,7 +29,7 @@ if ARGV.length < 2
   exit
 end
 database_id, code_block_id = ARGV
-NotionCache.instance.create_client ENV["NOTION_API_KEY"]
+NotionRubyMapping.configure { |c| c.notion_token = ENV["NOTION_API_KEY"] }
 block = Block.find code_block_id
 unless block.is_a? CodeBlock
   print "#{code_block_id} is not CodeBlock's id"

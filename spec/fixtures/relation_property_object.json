@@ -1,10 +1,13 @@
 {
-  "id": "%3CnJT",
-  "name": "RelationTitle",
+  "id": "jZZ%3E",
+  "name": "Related to Sample table (Column)",
   "type": "relation",
   "relation": {
-    "database_id": "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
-    "synced_property_name": "Related to Sample table (Column)",
-    "synced_property_id": "jZZ>"
+    "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+    "type": "dual_property",
+    "dual_property": {
+      "synced_property_name": "RelationTitle",
+      "synced_property_id": "%3CnJT"
+    }
   }
 }

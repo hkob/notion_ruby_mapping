@@ -7,5 +7,9 @@ module NotionRubyMapping
     def type
       "child_database"
     end
+
+    def title
+      @json[type]["title"]
+    end
   end
 end

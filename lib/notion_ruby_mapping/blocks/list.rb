@@ -21,6 +21,8 @@ module NotionRubyMapping
         @property = value
       when :user_object
         @user_object = true
+      when :search
+        @search = value
       end
       @query = query
       @index = 0
@@ -73,6 +75,11 @@ module NotionRubyMapping
         each_sub base: @user_object,
                  query: -> { @nc.users_request @query.query_json },
                  create_object: ->(json) { UserObject.new json: json },
+                 &block
+      elsif @search
+        each_sub base: @search,
+                 query: -> { @nc.search @search.payload.merge(@query.query_json) },
+                 create_object: ->(json) { Base.create_from_json json },
                  &block
       end
       self

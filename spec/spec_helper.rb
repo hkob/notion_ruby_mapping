@@ -142,7 +142,7 @@ module NotionRubyMapping
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Authorization" => "Bearer #{notion_token}",
           "Notion-Version" => NotionRubyMapping::NOTION_VERSION,
-          "User-Agent" => "Faraday v1.10.0",
+          "User-Agent" => "Faraday v1.10.3",
         },
       }
       request[:body] = JSON.generate(payload) if payload
@@ -176,6 +176,7 @@ module NotionRubyMapping
       append_comment
       retrieve_user
       retrieve_users
+      search
     end
 
     # @param [Symbol] method
@@ -407,7 +408,13 @@ module NotionRubyMapping
             "Number": {"number": {"format": "yen"}},
             "People": {"people": {}},
             "PhoneNumber": {"phone_number": {}},
-            "Relation": {"relation": {"database_id": "c37a2c66e3aa4a0da44773de3b80c253"}},
+            "Relation": {
+              "relation": {
+                "database_id": "c37a2c66e3aa4a0da44773de3b80c253",
+                "type": "dual_property",
+                "dual_property": {}
+              }
+            },
             "Rollup": {
               "rollup": {
                 "function": "sum",
@@ -470,8 +477,8 @@ module NotionRubyMapping
             "Relation": {
               "relation": {
                 "database_id": "c37a2c66e3aa4a0da44773de3b80c253",
-                "synced_property_name": "Renamed table",
-                "synced_property_id": "mfBo",
+                "type": "dual_property",
+                "dual_property": {}
               },
             },
             "Number": {"number": {"format": "percent"}},
@@ -2564,6 +2571,12 @@ module NotionRubyMapping
     def retrieve_users
       generate_stubs_sub :get, __method__, :users_path, {
         all: ["?page_size=100", 200],
+      }
+    end
+
+    def search
+      generate_stubs_sub :post, __method__, :search_path, {
+        sample_table: [nil, 200],
       }
     end
 

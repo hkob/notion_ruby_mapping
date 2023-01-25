@@ -43,13 +43,13 @@ module NotionRubyMapping
     # @return [FalseClass]
     def clear_will_update
       super
-      @text_objects.clear_will_update
+      @text_objects.clear_will_update if page?
       false
     end
 
     # @return [TrueClass, FalseClass] will update?
     def will_update
-      @will_update || page? && @text_objects.will_update
+      @will_update || (page? && @text_objects.will_update)
     end
   end
 end

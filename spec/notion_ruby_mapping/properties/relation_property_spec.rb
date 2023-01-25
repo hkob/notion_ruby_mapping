@@ -19,29 +19,38 @@ module NotionRubyMapping
           it_behaves_like :assert_different_property, :property_values_json
           it_behaves_like :update_property_schema_json, {}
           it_behaves_like :raw_json, :relation, {
-            "database_id" => "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
-            "synced_property_name" => "Related to Sample table (Column)",
-            "synced_property_id" => "jZZ>",
+            "database_id" => "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+            "type" => "dual_property",
+            "dual_property" => {
+              "synced_property_name" => "RelationTitle",
+              "synced_property_id" => "%3CnJT",
+            }
           }
           it_behaves_like :property_schema_json, {
             "rp" => {
               "relation" => {
-                "database_id" => "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
+                "database_id" => "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+                "type" => "dual_property",
+                "dual_property" => {
+                  "synced_property_id" => "%3CnJT",
+                  "synced_property_name" => "RelationTitle"
+                }
               },
             },
           }
         end
 
+
         describe "replace_relation_database (dual_property)" do
-          before { target.replace_relation_database database_id: "new_database_id", synced_property_name: "new name" }
+          before { target.replace_relation_database database_id: "new_database_id" }
           it_behaves_like :will_update
           it_behaves_like :assert_different_property, :property_values_json
           it_behaves_like :update_property_schema_json, {
             "rp" => {
               "relation" => {
                 "database_id" => "new_database_id",
-                "synced_property_name" => "new name",
                 "type" => "dual_property",
+                "dual_property" => {}
               },
             },
           }
@@ -49,9 +58,7 @@ module NotionRubyMapping
 
         describe "replace_relation_database (single_property)" do
           before do
-            target.replace_relation_database database_id: "new_database_id",
-                                             synced_property_name: "new name",
-                                             type: "single_property"
+            target.replace_relation_database database_id: "new_database_id", type: "single_property"
           end
           it_behaves_like :will_update
           it_behaves_like :assert_different_property, :property_values_json
@@ -59,8 +66,8 @@ module NotionRubyMapping
             "rp" => {
               "relation" => {
                 "database_id" => "new_database_id",
-                "synced_property_name" => "new name",
                 "type" => "single_property",
+                "single_property" => {}
               },
             },
           }
@@ -88,9 +95,12 @@ module NotionRubyMapping
         it_behaves_like :assert_different_property, :property_values_json
         it_behaves_like :update_property_schema_json, {}
         it_behaves_like :raw_json, :relation, {
-          "database_id" => "1d6b1040-a9fb-48d9-9a3d-041429816e9f",
-          "synced_property_name" => "Related to Sample table (Column)",
-          "synced_property_id" => "jZZ>",
+          "database_id" => "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+          "type" => "dual_property",
+          "dual_property" => {
+            "synced_property_name" => "RelationTitle",
+            "synced_property_id" => "%3CnJT",
+          }
         }
       end
     end

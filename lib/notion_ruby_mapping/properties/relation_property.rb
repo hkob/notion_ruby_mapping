@@ -54,12 +54,13 @@ module NotionRubyMapping
     # @param [String] database_id
     # @param [String] synced_property_name
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#7f5029fb7f6e4c009f22888b233e6f64
-    def replace_relation_database(database_id: nil, type: "dual_property", synced_property_name: nil)
+    def replace_relation_database(database_id: nil, type: "dual_property")
       assert_database_property __method__
       @will_update = true
       @json["database_id"] = database_id if database_id
       @json["type"] = type
-      @json["synced_property_name"] = synced_property_name if synced_property_name
+      @json[type] = {}
+      @json.delete type == "dual_property" ? "single_property" : "dual_property"
       @json
     end
 
@@ -96,6 +97,18 @@ module NotionRubyMapping
       ans
     end
 
+    def database_id
+      @json["database_id"]
+    end
+
+    def synced_property_id
+      @json["type"] == "dual_property" ? @json["dual_property"]["synced_property_id"] : nil
+    end
+
+    def synced_property_name
+      @json["type"] == "dual_property" ? @json["dual_property"]["synced_property_name"] : nil
+    end
+
     # @return [Hash] created json
     def property_values_json
       assert_page_property __method__
@@ -113,7 +126,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def property_schema_json_sub
-      {"database_id" => relation_database_id}
+      @json
     end
   end
 end

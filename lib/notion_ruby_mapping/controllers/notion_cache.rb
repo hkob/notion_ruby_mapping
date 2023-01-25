@@ -262,6 +262,14 @@ module NotionRubyMapping
       response.body
     end
 
+    def search(query)
+      request(:post, search_path, options = query)
+    end
+
+    def search_path
+      "v1/search"
+    end
+
     def update_block_request(block_id, payload)
       request :patch, block_path(block_id), payload
     end

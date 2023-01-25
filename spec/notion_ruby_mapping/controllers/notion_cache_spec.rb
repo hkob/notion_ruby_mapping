@@ -71,5 +71,9 @@ module NotionRubyMapping
     describe "user_path" do
       it { expect(nc.user_path("ABC")).to eq "v1/users/ABC" }
     end
+
+    describe "search_path" do
+      it { expect(nc.search_path).to eq "v1/search" }
+    end
   end
 end

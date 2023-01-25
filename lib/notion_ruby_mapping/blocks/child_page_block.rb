@@ -7,5 +7,9 @@ module NotionRubyMapping
     def type
       "child_page"
     end
+
+    def title
+      @json[type]["title"]
+    end
   end
 end

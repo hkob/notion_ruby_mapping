@@ -33,23 +33,6 @@
       },
       "plain_text": "New database title",
       "href": null
-    },
-    {
-      "type": "text",
-      "text": {
-        "content": "(Added)",
-        "link": null
-      },
-      "annotations": {
-        "bold": false,
-        "italic": false,
-        "strikethrough": false,
-        "underline": false,
-        "code": false,
-        "color": "default"
-      },
-      "plain_text": "(Added)",
-      "href": null
     }
   ],
   "description": [],
@@ -70,11 +53,6 @@
             "id": "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8",
             "name": "S2",
             "color": "default"
-          },
-          {
-            "id": "f880e1b8-7020-488d-ae3b-3c656fcbeb2d",
-            "name": "S3",
-            "color": "red"
           }
         ]
       }
@@ -175,11 +153,6 @@
             "id": "71756a93-cfd8-4675-b508-facb1c31af2c",
             "name": "MS2",
             "color": "green"
-          },
-          {
-            "id": "ed2e3ae1-c482-4c9e-9bec-9baf410cf8a8",
-            "name": "MS3",
-            "color": "blue"
           }
         ]
       }

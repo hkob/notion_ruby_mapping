@@ -125,6 +125,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2023/1/25 [v0.7.2] bug fix for creating relation property / add erdToNotionRb.rb script
 - 2022/12/16 [v0.7.1] bug fix for query rollup property
 - 2022/11/28 [v0.7.0] add this_week filter and NotionRubyMapping.configure
 - 2022/11/13 [v0.6.8] remove error checking for start and end dates, add Users.all, and change Rollup and Formula query specification

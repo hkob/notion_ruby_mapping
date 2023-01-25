@@ -12,7 +12,8 @@ require_relative "notion_ruby_mapping/version"
              link_preview_block link_to_page_block numbered_list_item_block paragraph_block pdf_block quote_block
              synced_block table_block table_row_block table_of_contents_block template_block to_do_block
              toggle_block video_block],
-  controllers: %w[notion_cache payload property_cache query rich_text_array discussion_thread],
+  controllers: %w[notion_cache payload property_cache query rich_text_array discussion_thread search mermaid
+                  mermaid_database],
   objects: %w[rich_text_object emoji_object equation_object file_object mention_object text_object user_object
               comment_object],
   properties: %w[property checkbox_property multi_property created_by_property date_base_property created_time_property
@@ -32,4 +33,3 @@ module NotionRubyMapping
   end
   module_function :configure
 end
-

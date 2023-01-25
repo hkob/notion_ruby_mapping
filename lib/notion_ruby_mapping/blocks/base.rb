@@ -256,6 +256,13 @@ module NotionRubyMapping
       klass.find parent_json[type], dry_run: dry_run
     end
 
+    def parent_id
+      parent_json = @json && @json["parent"]
+      raise StandardError, "Unknown parent" if parent_json.nil?
+
+      parent_json[parent_json["type"]]
+    end
+
     # @return [NotionRubyMapping::PropertyCache] get or created PropertyCache object
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#8f0b28e09dd74e2a9ff06126c48d64d4
     def properties
