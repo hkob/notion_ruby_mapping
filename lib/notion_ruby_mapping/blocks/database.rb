@@ -155,7 +155,12 @@ module NotionRubyMapping
       if dry_run
         dry_run_script :patch, @nc.database_path(@id), :update_property_schema_json
       else
-        update_json @nc.update_database_request(@id, update_property_schema_json)
+        payload = update_property_schema_json
+        begin
+          update_json @nc.update_database_request(@id, payload)
+        rescue StandardError => e
+          raise StandardError, "#{e.message} by #{payload}"
+        end
       end
     end
   end

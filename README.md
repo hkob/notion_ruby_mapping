@@ -116,8 +116,9 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 1. [Set icon to all icon unsettled pages / 全てのページのアイコンを同一に設定](examples/set_icon_to_all_icon_unsettled_pages.md)
 2. [Renumbering pages / ページのナンバリング](examples/renumbering_pages.md)
 3. [Change title / タイトルの変更](examples/change_title.md)
-4. [Create ER Diagram from Notion database / Notion データベースの ER 図を作成](https://www.notion.so/hkob/notionErDiagram-Sample-1720c2199c534ca08138cde38f31f710)
-5. [Create Sitemap from Notion pages / Notion page からサイトマップを作成](https://www.notion.so/hkob/NotionSitemap-sample-14e195c83d024c5382aab09210916c87)
+4. [Create ER Diagram from Notion database / Notion データベースの ER 図を作成](https://hkob.notion.site/notionErDiagram-Sample-1720c2199c534ca08138cde38f31f710)
+5. [Create Sitemap from Notion pages / Notion page からサイトマップを作成](https://hkob.notion.site/notionSitemap-sample-14e195c83d024c5382aab09210916c87)
+6. [Create Notion databases from ER Diagram / ER 図から Notion データベースを作成](https://hkob.notion.site/erdToNotionDb-sample-87e5e52a6b9f46abbdeebcb3c902a516)
 
 ### 2.5 API reference / API リファレンス
 
@@ -125,6 +126,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2023/1/26 [v0.7.3] release beta version of erdToNotionRb.rb script
 - 2023/1/25 [v0.7.2] bug fix for creating relation property / add erdToNotionRb.rb script
 - 2022/12/16 [v0.7.1] bug fix for query rollup property
 - 2022/11/28 [v0.7.0] add this_week filter and NotionRubyMapping.configure

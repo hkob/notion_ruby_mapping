@@ -126,6 +126,8 @@ module NotionRubyMapping
 
     # @return [FalseClass]
     def clear_will_update
+      @new_name = nil
+      @remove = nil
       @will_update = false
     end
 

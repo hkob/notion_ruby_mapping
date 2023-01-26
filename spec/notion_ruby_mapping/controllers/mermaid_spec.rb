@@ -4,7 +4,7 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe Mermaid do
-    TEST_MERMAID_TEXT = <<~"MERMAID_TEXT"
+    test_mermaid_text = <<~"MERMAID_TEXT"
       erDiagram
         AsciiDatabase ||--o{ db1 : "日本語s|ascii"
         db1 ||--|| db2 : "One way"
@@ -26,7 +26,7 @@ module NotionRubyMapping
           select p1 "Selection for some tags|SEL1|SEL2|SEL3"
         }
     MERMAID_TEXT
-    let(:mermaid) { described_class.new TEST_MERMAID_TEXT }
+    let(:mermaid) { described_class.new test_mermaid_text }
 
     describe "constructor" do
       let(:target) { described_class.new "abc" }
@@ -57,7 +57,7 @@ module NotionRubyMapping
       end
 
       context "when parallel values" do
-        let(:full_text) { TEST_MERMAID_TEXT }
+        let(:full_text) { test_mermaid_text }
 
         it { is_expected.to eq ["AsciiDatabase", "日本語データベース", "English with space"] }
       end
@@ -73,6 +73,7 @@ module NotionRubyMapping
           hash.each do |key, title_value|
             context key do
               let(:db) { mermaid.databases[key] }
+
               if property_type == "title"
                 it { expect(db.title).to eq title_value }
               else
@@ -92,8 +93,8 @@ module NotionRubyMapping
       let(:db1) { dbs["db1"] }
       let(:db2) { dbs["db2"] }
 
-      it { expect(adb.relations).to eq({"日本語s|ascii" => db1}) }
-      it { expect(db1.relations).to eq({"One way" => db2}) }
+      it { expect(adb.relation_queue).to eq [["日本語s|ascii", db1]] }
+      it { expect(db1.relation_queue).to eq [["One way", db2]] }
     end
 
     describe "attach_database" do

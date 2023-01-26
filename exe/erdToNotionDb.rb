@@ -35,7 +35,22 @@ exist_dbs.each do |db|
 end
 
 mermaid.create_notion_db target_page, inline
-mermaid.update_databases
-mermaid.rename_reverse_name
-mermaid.update_rollup
-
+mermaid.update_title
+pass = 1
+pre_remain = nil
+loop do
+  print "=== Pass #{pass} ===\n"
+  mermaid.update_databases
+  mermaid.rename_reverse_name
+  count = mermaid.count
+  remain = mermaid.remain
+  print "Pass #{pass} Remain #{remain} in #{count}\n"
+  if pre_remain == remain
+    print "Dependency loop detected.\n"
+    exit
+  end
+  pre_remain = remain
+  break if remain.zero?
+  pass += 1
+end
+print "Finish!!!"
