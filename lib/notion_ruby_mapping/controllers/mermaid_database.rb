@@ -48,7 +48,7 @@ module NotionRubyMapping
     end
 
     def count
-      @properties.count + @relation_queue.count
+      @properties.count + @relation_queue.count + 1
     end
 
     def remain
@@ -59,6 +59,7 @@ module NotionRubyMapping
       ps = @real_db.properties
       title_property = ps.select { |p| p.is_a? TitleProperty }.first
       title_property.new_name = @title unless title_property.name == @title
+      @finish_flag[@title] = true
     end
 
     def update_properties

@@ -126,6 +126,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2023/2/9 [v0.7.4] bug fix for rollup property of erdToNotionRb.rb script
 - 2023/1/26 [v0.7.3] release beta version of erdToNotionRb.rb script
 - 2023/1/25 [v0.7.2] bug fix for creating relation property / add erdToNotionRb.rb script
 - 2022/12/16 [v0.7.1] bug fix for query rollup property
