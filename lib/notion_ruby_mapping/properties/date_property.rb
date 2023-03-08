@@ -24,6 +24,17 @@ module NotionRubyMapping
       @json["end"]
     end
 
+    def end_date_obj
+      assert_page_property __method__
+      jet = @json["end"]
+      case jet
+      when String
+        jet.include?("T") ? Time.parse(jet) : Date.parse(jet)
+      else
+        jet
+      end
+    end
+
     # @param [Date, Time, DateTime, String] edt
     # @see https://www.notion.so/hkob/DateProperty-c6e815c060cb430889dbb33b697f00c6#944c02096101429084527c22155683bf
     def end_date=(edt)
@@ -39,6 +50,17 @@ module NotionRubyMapping
     def start_date
       assert_page_property __method__
       @json["start"]
+    end
+
+    def start_date_obj
+      assert_page_property __method__
+      jst = @json["start"]
+      case jst
+      when String
+        jst.include?("T") ? Time.parse(jst) : Date.parse(jst)
+      else
+        jst
+      end
     end
 
     # @param [Date, Time, DateTime, String] sdt

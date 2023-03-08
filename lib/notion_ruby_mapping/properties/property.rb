@@ -24,7 +24,7 @@ module NotionRubyMapping
                    :last_edited_by, :last_edited_time, :multi_select, :multi_select=, :multi_select_names, :number,
                    :number=, :people, :people=, :phone_number, :phone_number=, :property_values_json, :relation=,
                    :rollup, :start_date, :start_date=, :time_zone, :time_zone=, :select, :select=, :select_name, :url,
-                   :url=
+                   :url=, :start_date_obj, :end_date_obj
 
     ## Database property only methods
 

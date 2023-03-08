@@ -22,10 +22,11 @@ module NotionRubyMapping
       @notion_token = nil
       @wait = 0.3333
       @debug = false
+      @use_cache = true
     end
     attr_reader :object_hash
     attr_writer :client # for test only
-    attr_accessor :notion_token, :wait, :debug
+    attr_accessor :notion_token, :wait, :debug, :use_cache
 
     # @param [String] block_id
     # @return [String (frozen)] block_path
@@ -175,10 +176,12 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Base]
     def object_for_key(id)
       key = hex_id(id)
-      return @object_hash[key] if @object_hash.key? key
+      return @object_hash[key] if @use_cache && @object_hash.key?(key)
 
       json = yield(@client)
-      @object_hash[key] = Base.create_from_json json
+      ans = Base.create_from_json json
+      @object_hash[key] = ans if @use_cache
+      ans
     end
 
     # @param [String] id page_id (with or without "-")

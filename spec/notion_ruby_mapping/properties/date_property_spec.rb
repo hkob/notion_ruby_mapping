@@ -285,7 +285,9 @@ module NotionRubyMapping
         },
       }
       it { expect(target.start_date).to eq "2022-02-25T01:23:00.000+09:00" }
+      it { expect(target.start_date_obj).to eq Time.local(2022, 2, 25, 1, 23, 00) }
       it { expect(target.end_date).to eq nil }
+      it { expect(target.end_date_obj).to eq nil }
       it { expect(target.time_zone).to eq nil }
     end
 
