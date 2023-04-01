@@ -11,6 +11,8 @@ module NotionRubyMapping
     # @return [String, nil] iso8601 format string
     def self.value_str(obj, start_time: false, end_time: false)
       case obj
+      when DateTime
+        obj.iso8601
       when Date
         tz = Time.now.strftime "%:z"
         ds = obj.iso8601
@@ -23,8 +25,6 @@ module NotionRubyMapping
         end
       when Time
         obj.strftime("%Y-%m-%dT%H:%M:%S%:z")
-      when DateTime
-        obj.iso8601
       else
         obj
       end
@@ -49,7 +49,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#5f07c4ebc4744986bfc99a43827349fc
     def filter_equals(date, condition: nil, another_type: nil)
-      if date.is_a? Date
+      if date.class == Date
         start_date, end_date = self.class.start_end_time date
         if condition
           filter_after(start_date, condition: condition, another_type: another_type)
@@ -67,7 +67,7 @@ module NotionRubyMapping
     # @param [String] another_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_does_not_equal(date, condition: nil, another_type: nil)
-      if date.is_a? Date
+      if date.class == Date
         start_date, end_date = self.class.start_end_time date
         if condition
           filter_before(start_date, condition: condition, another_type: another_type)

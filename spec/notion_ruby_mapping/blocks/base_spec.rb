@@ -171,6 +171,11 @@ module NotionRubyMapping
 
     describe "self.page_id" do
       subject { Base.page_id str }
+      context "full url with ?pvs=4" do
+        let(:str) { TestConnection::TOP_PAGE_URL + "?pvs=4" }
+        it { is_expected.to eq TestConnection::TOP_PAGE_ID }
+      end
+
       context "full url" do
         let(:str) { TestConnection::TOP_PAGE_URL }
         it { is_expected.to eq TestConnection::TOP_PAGE_ID }

@@ -76,7 +76,7 @@ module NotionRubyMapping
 
     def self.page_id(str)
       if /^http/.match str
-        /([\da-f]{32})$/.match(str)[1]
+        /([\da-f]{32})(|\?.*)$/.match(str)[1]
       else
         NotionCache.instance.hex_id str
       end
