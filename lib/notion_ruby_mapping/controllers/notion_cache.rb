@@ -272,6 +272,11 @@ module NotionRubyMapping
     def search_path
       "v1/search"
     end
+    
+    # @param [String] token
+    def token=(token)
+      @notion_token = token
+    end
 
     def update_block_request(block_id, payload)
       request :patch, block_path(block_id), payload

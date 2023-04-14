@@ -127,6 +127,8 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2023/4/14 [v0.7.7] add token= method for Notion API book typo
+- 2023/4/1 [v0.7.6] bug fix Ignore last ? option for page_id
 - 2023/3/8 [v0.7.5] add notionTimeRecorder.rb
 - 2023/2/9 [v0.7.4] bug fix for rollup property of erdToNotionRb.rb script
 - 2023/1/26 [v0.7.3] release beta version of erdToNotionRb.rb script
