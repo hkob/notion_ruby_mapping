@@ -34,6 +34,7 @@ module NotionRubyMapping
     DB_FIRST_PAGE_ID = "dcdc805c85fa4155a55c20fc28771af7"
     DB_SECOND_PAGE_ID = "6601e719a39a460c908e8909467fcccf"
     DB_UPDATE_PAGE_ID = "206ffaa277744a99baf593e28730240c"
+    DB_MANY_CHILDREN_PAGE_ID = "b56cba9682ab46f2866ae7a9e590dff3"
     PARENT1_PAGE_ID = "860753bb6d1f48de96211fa6e0e31f82"
     BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
     BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
@@ -199,6 +200,7 @@ module NotionRubyMapping
         unpermitted_page: [UNPERMITTED_PAGE_ID, 404],
         db_first: [DB_FIRST_PAGE_ID, 200],
         block_test_page: [BLOCK_TEST_PAGE_ID, 200],
+        with_many_relations: [DB_MANY_CHILDREN_PAGE_ID, 200],
       }
     end
 
@@ -227,6 +229,7 @@ module NotionRubyMapping
         limit2: [DATABASE_ID, 200, {"page_size" => 2}],
         next2: [DATABASE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
         last2: [DATABASE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
+        filter_properties: [DATABASE_ID, 200, {"page_size" => 100}],
       }
     end
 
@@ -2500,6 +2503,7 @@ module NotionRubyMapping
         people: [[DB_FIRST_PAGE_ID, "_x%3E%3D"], 200],
         phone_number: [[DB_FIRST_PAGE_ID, "%7CNHO"], 200],
         relation: [[DB_FIRST_PAGE_ID, "%3CnJT"], 200],
+        relation_with_many_relations: [[DB_MANY_CHILDREN_PAGE_ID, "%60%5B%3E%7B"], 200],
         rich_text: [[DB_FIRST_PAGE_ID, "flUp"], 200],
         rich_text_limit5: [[DB_SECOND_PAGE_ID, "flUp?page_size=5"], 200],
         rich_text_next5: [[DB_SECOND_PAGE_ID, "flUp?page_size=5&start_cursor=PLuaRX"], 200],
@@ -2509,6 +2513,7 @@ module NotionRubyMapping
         status: [[STATUS_PAGE_ID, "Qy~%3E"], 200],
         title: [[DB_FIRST_PAGE_ID, "title"], 200],
         title_top: [[TOP_PAGE_ID, "title"], 200],
+        unique_id: [[DB_FIRST_PAGE_ID, "%7BGE%7C"], 200],
         url: [[DB_FIRST_PAGE_ID, "tvis"], 200],
       }
     end

@@ -135,7 +135,7 @@ module NotionRubyMapping
     # @param [String] database_id (with or without "-")
     # @param [NotionRubyMapping::Query] query query object
     def database_query_request(database_id, query)
-      request :post, "v1/databases/#{database_id}/query", query.query_json
+      request :post, "v1/databases/#{database_id}/query#{query.database_query_string}", query.query_json
     end
 
     # @param [String] database_id

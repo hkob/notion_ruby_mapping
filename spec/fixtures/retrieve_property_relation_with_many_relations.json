@@ -1,0 +1,222 @@
+{
+  "object": "list",
+  "results": [
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "a56bad3b-acc2-4708-aa68-871dd15d9111"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "1bea00b8-760a-44e7-b896-131aa6ad94b7"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "f4d8033e-edb3-4047-ac7a-dba6c70b8925"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "a63abbde-cc05-4fc6-b5fe-bf0bb6f66ec0"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "f15f2fe0-9f98-4f6e-bf40-462540a1e927"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "12c529c7-7ffc-4dbd-a44b-457ac327c1b7"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "3ed62da0-be0a-4511-861a-c883e74e5536"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "9acbbfcf-7b1f-4451-9340-87dd51c9a3f8"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "8399bcec-fe7b-4caf-bd53-5890a60aa603"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "3aeaf9c6-2091-4165-acfa-979023951519"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "67e4b896-9e7e-468e-951f-a96f911424cd"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "e1054846-224a-4c7c-b0b3-252279a03c8e"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "2a0056e2-9b86-45ce-b2be-d155794bc97b"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "58257318-b28b-4b0a-9504-116cd83fd4fc"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "5ef89dd3-d438-443c-a13d-10d26ed25993"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "d2a297bc-2b32-495a-9e96-9eb39f7eb13b"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "2e7e16a2-ef85-41e3-9f8e-fb5a1ec9e018"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "d1e84af2-bf7f-4d68-8d3a-eadabb1e9da1"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "aef3cb6f-6144-4525-ad7b-d58b09a0aa77"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "84f2b79c-2ca0-4c74-a3ff-39b568006b56"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "8e4596cb-b71b-4b41-8889-dd42ea487ffc"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "54bc139c-8d1d-4794-b230-61e68e9d2be4"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "d0fc1afa-10b2-4297-a4a4-41fb950c7d2c"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "2d54e65d-9422-4ebc-939e-2f48313d946e"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "90838af0-ca3f-4de4-8d0a-a9ad073968ed"
+      }
+    },
+    {
+      "object": "property_item",
+      "type": "relation",
+      "id": "%60%5B%3E%7B",
+      "relation": {
+        "id": "6ee6f3d9-d243-4681-a0d1-301e2d6a40e0"
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false,
+  "type": "property_item",
+  "property_item": {
+    "id": "%60%5B%3E%7B",
+    "next_url": null,
+    "type": "relation",
+    "relation": {}
+  }
+}

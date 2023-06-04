@@ -15,9 +15,9 @@
   },
   "last_edited_by": {
     "object": "user",
-    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
   },
-  "last_edited_time": "2022-07-12T07:28:00.000Z",
+  "last_edited_time": "2023-06-04T04:12:00.000Z",
   "title": [
     {
       "type": "text",
@@ -88,6 +88,68 @@
       "name": "CheckboxTitle",
       "type": "checkbox",
       "checkbox": {}
+    },
+    "StatusTitle": {
+      "id": "MNV~",
+      "name": "StatusTitle",
+      "type": "status",
+      "status": {
+        "options": [
+          {
+            "id": "dfd8a326-f149-4b01-b01a-57d8aed6de1b",
+            "name": "Not started",
+            "color": "default"
+          },
+          {
+            "id": "f17767fd-3186-4ba2-8d3a-01eef36e88ec",
+            "name": "In progress",
+            "color": "blue"
+          },
+          {
+            "id": "F<XA",
+            "name": "Design",
+            "color": "purple"
+          },
+          {
+            "id": "IRXI",
+            "name": "Implementation",
+            "color": "orange"
+          },
+          {
+            "id": "ceb89388-7f74-4bd5-a52d-0fd572a409f6",
+            "name": "Done",
+            "color": "green"
+          }
+        ],
+        "groups": [
+          {
+            "id": "2b356467-0400-420c-ad91-cdd5f98fc799",
+            "name": "To-do",
+            "color": "gray",
+            "option_ids": [
+              "dfd8a326-f149-4b01-b01a-57d8aed6de1b"
+            ]
+          },
+          {
+            "id": "ff88fa16-34b6-4818-ae5c-f8ce892d888b",
+            "name": "In progress",
+            "color": "blue",
+            "option_ids": [
+              "IRXI",
+              "f17767fd-3186-4ba2-8d3a-01eef36e88ec",
+              "F<XA"
+            ]
+          },
+          {
+            "id": "de6040ae-17d1-4dc7-939c-b7db49bcf482",
+            "name": "Complete",
+            "color": "green",
+            "option_ids": [
+              "ceb89388-7f74-4bd5-a52d-0fd572a409f6"
+            ]
+          }
+        ]
+      }
     },
     "DateTitle": {
       "id": "SPrp",
@@ -243,6 +305,12 @@
           }
         ]
       }
+    },
+    "ID": {
+      "id": "%7BGE%7C",
+      "name": "ID",
+      "type": "unique_id",
+      "unique_id": {}
     },
     "TelTitle": {
       "id": "%7CNHO",

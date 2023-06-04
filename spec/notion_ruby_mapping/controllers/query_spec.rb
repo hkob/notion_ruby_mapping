@@ -2,6 +2,7 @@
 
 module NotionRubyMapping
   RSpec.describe Query do
+    let(:tc) { TestConnection.instance }
     let(:tp) { TitleProperty.new "tp" }
     let(:np) { NumberProperty.new "np" }
     let(:cp) { CheckboxProperty.new "cp" }
@@ -230,6 +231,11 @@ module NotionRubyMapping
           expect(Query.new.descending(letp).sort).to eq([{"timestamp" => "letp", "direction" => "descending"}])
         end
       end
+    end
+
+    describe "database_query_string" do
+      let(:ep) { Property.create_from_json "ep", tc.read_json("email_property_object"), :database }
+      it { expect(Query.new(filter_properties: ep).database_query_string).to eq("?filter_properties=p%7Ci%3F") }
     end
   end
 end

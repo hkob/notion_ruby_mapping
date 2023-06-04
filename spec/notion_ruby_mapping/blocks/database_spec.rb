@@ -206,7 +206,6 @@ module NotionRubyMapping
         describe "save" do
           before { target.save }
           it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
-
         end
       end
 
@@ -262,6 +261,15 @@ module NotionRubyMapping
       let(:query) { np.filter_greater_than(100).and(up.filter_starts_with("https")).ascending(np) }
       let(:dry_run) { target.query_database query, dry_run: true }
       it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
+    end
+
+    describe "query with filter_properties" do
+      let(:db) { Database.find TestConnection::DATABASE_ID }
+      let(:np) { db.properties["NumberTitle"] }
+      let(:ep) { db.properties["MailTitle"] }
+      let(:query) { Query.new(filter_properties: [np, ep]) }
+      let(:target) { db.query_database query }
+      it { expect(target.count).to eq 5 }
     end
 
     describe "created_time and last_edited_time" do

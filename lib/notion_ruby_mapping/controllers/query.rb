@@ -3,14 +3,15 @@
 module NotionRubyMapping
   # Query object
   class Query
-    def initialize(filter: {}, sort: [], page_size: 100, start_cursor: nil)
+    def initialize(filter: {}, sort: [], page_size: 100, start_cursor: nil, filter_properties: [])
       @filter = filter
       @sort = sort
       @page_size = page_size
       @start_cursor = start_cursor
+      @filter_properties = Array(filter_properties)
     end
     attr_reader :filter, :sort, :page_size
-    attr_accessor :start_cursor
+    attr_accessor :start_cursor, :filter_properties
 
     # @param [Query] another_query other query
     # @return [NotionRubyMapping::Query] updated self (Query object)
@@ -65,6 +66,11 @@ module NotionRubyMapping
       ans = []
       ans << "page_size=#{@page_size}" if @page_size
       ans << "start_cursor=#{@start_cursor}" if @start_cursor
+      ans.empty? ? "" : "?#{ans.join("&")}"
+    end
+
+    def database_query_string
+      ans = Array(@filter_properties).map { |p| "filter_properties=#{p.property_id}" }
       ans.empty? ? "" : "?#{ans.join("&")}"
     end
   end

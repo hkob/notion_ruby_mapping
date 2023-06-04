@@ -263,6 +263,15 @@ module NotionRubyMapping
               ],
             },
           },
+          UniqueIdProperty, "ID", {
+            "ID" => {
+              "type" => "unique_id",
+              "unique_id" => {
+                "prefix" => "ST",
+                "number" => 3
+              }
+            }
+          },
           UrlProperty, "UrlTitle", {
             "UrlTitle" => {
               "type" => "url",
@@ -278,6 +287,13 @@ module NotionRubyMapping
             it_behaves_like :property_values_json, ans
           end
         end
+      end
+    end
+
+    describe "retrieve a page with many relations" do
+      let!(:target) { Page.find TestConnection::DB_MANY_CHILDREN_PAGE_ID }
+      it "should have 26 relations" do
+        expect(target.properties["Children"].relation.size).to eq 26
       end
     end
 

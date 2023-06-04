@@ -1,0 +1,9 @@
+{
+  "object": "property_item",
+  "type": "unique_id",
+  "id": "%7BGE%7C",
+  "unique_id": {
+    "prefix": "ST",
+    "number": 3
+  }
+}

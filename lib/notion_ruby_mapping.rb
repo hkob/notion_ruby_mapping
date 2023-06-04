@@ -20,7 +20,7 @@ require_relative "notion_ruby_mapping/version"
                  date_property email_property files_property formula_property last_edited_by_property
                  last_edited_time_property multi_select_property number_property people_property phone_number_property
                  relation_property text_property rich_text_property rollup_property select_property status_property
-                 title_property url_property],
+                 title_property unique_id_property url_property],
 }.each do |key, values|
   values.each do |klass|
     require_relative "notion_ruby_mapping/#{key}/#{klass}"
