@@ -127,6 +127,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2023/7/10 [v0.8.1] Automatically change type to external when file object is updated
 - 2023/6/4 [v0.8.0] add unique_id properties, filter_properties
 - 2023/4/14 [v0.7.7] add token= method for Notion API book typo
 - 2023/4/1 [v0.7.6] bug fix Ignore last ? option for page_id

@@ -39,9 +39,9 @@ module NotionRubyMapping
     # @param [String] url
     # @see https://www.notion.so/hkob/FileObject-6218c354e985423a90904f47a985be33#6b841f75d0234a1aac93fb54348abb96
     def url=(url)
-      raise StandardError "internal file url can't change." if @type == "file"
-
       @url = url
+      @type = "external"
+      @expiry_time = nil
       @will_update = true
     end
 

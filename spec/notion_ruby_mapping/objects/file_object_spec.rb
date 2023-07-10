@@ -76,7 +76,14 @@ module NotionRubyMapping
     describe "url=" do
       context "internal image" do
         let(:target) { FileObject.new json: file_internal_json }
-        it { expect { target.url = url }.to raise_error(StandardError) }
+        before { target.url = url }
+        it_behaves_like :property_values_json, {
+          "type" => "external",
+          "external" => {
+            "url" => url,
+          },
+        }
+        it { expect(target.url).to eq url }
       end
 
       context "external image" do
