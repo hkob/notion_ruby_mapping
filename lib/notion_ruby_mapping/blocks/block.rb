@@ -76,6 +76,13 @@ module NotionRubyMapping
       end
     end
 
+    # @param [Boolean] dry_run true if dry_run
+    # @return [NotionRubyMapping::Block, String]
+    # @param [Array<Block>] blocks
+    def append_after(*blocks, dry_run: false)
+      parent.append_block_children *blocks, after: id, dry_run: dry_run
+    end
+
     # @param [Boolean] not_update false when update
     # @return [Hash{String (frozen)->Hash}]
     def block_json(not_update: true)

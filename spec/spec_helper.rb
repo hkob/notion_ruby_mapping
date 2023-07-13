@@ -49,7 +49,12 @@ module NotionRubyMapping
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
     PARAGRAPH_BLOCK_ID = "79ddb5ed15c74a409cf6a018d23ceb19"
+    APPEND_AFTER_PARENT_ID = "03f6460c26734af484b95de15082d84e"
+    APPEND_AFTER_PREVIOUS_ID = "263f125b179e4e4f996a1eff812d9d3d"
+    APPEND_AFTER_ADDED_ID = "67c0e9bdbbe4456c873127763d7fa580"
     BLOCK_ID_HASH = {
+      append_after_parent: APPEND_AFTER_PARENT_ID,
+      append_after_previous: APPEND_AFTER_PREVIOUS_ID,
       bookmark: "aa1c25bcb1724a36898d3ce5e1f572b7",
       breadcrumb: "6d2ed6f38f744e838766747b6d7995f6",
       bulleted_list_item: "8a0d35c5145e41fd89ace46deb85d24f",
@@ -178,6 +183,7 @@ module NotionRubyMapping
       retrieve_user
       retrieve_users
       search
+      append_after
     end
 
     # @param [Symbol] method
@@ -1729,6 +1735,37 @@ module NotionRubyMapping
     def append_block_children_block
       generate_stubs_sub :patch, __method__, :append_block_children_block_path,
                          append_block_children_hash(BLOCK_CREATE_TEST_BLOCK_ID)
+    end
+
+    def append_after
+      generate_stubs_sub :patch, :append_block_children, :append_block_children_block_path, {
+        append_after: [
+          APPEND_AFTER_PARENT_ID, 200,
+          {
+            "children" => [
+              {
+                "type" => "numbered_list_item",
+                "object" => "block",
+                "numbered_list_item" => {
+                  "rich_text" => [
+                    {
+                      "type" =>"text",
+                      "text" => {
+                        "content" => "Middle block",
+                        "link" => nil
+                      },
+                      "plain_text" => "Middle block",
+                      "href" => nil
+                    }
+                  ],
+                  "color" => "default"
+                }
+              }
+            ],
+            "after" => "263f125b179e4e4f996a1eff812d9d3d"
+          }
+        ]
+      }
     end
 
     def destroy_block

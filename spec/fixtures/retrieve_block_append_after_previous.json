@@ -1,0 +1,43 @@
+{
+  "object": "block",
+  "id": "263f125b-179e-4e4f-996a-1eff812d9d3d",
+  "parent": {
+    "type": "block_id",
+    "block_id": "03f6460c-2673-4af4-84b9-5de15082d84e"
+  },
+  "created_time": "2023-07-12T09:42:00.000Z",
+  "last_edited_time": "2023-07-12T09:44:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "has_children": false,
+  "archived": false,
+  "type": "numbered_list_item",
+  "numbered_list_item": {
+    "rich_text": [
+      {
+        "type": "text",
+        "text": {
+          "content": "First block",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "First block",
+        "href": null
+      }
+    ],
+    "color": "default"
+  }
+}

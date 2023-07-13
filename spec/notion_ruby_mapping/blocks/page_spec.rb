@@ -16,8 +16,12 @@ module NotionRubyMapping
           expect(subject.call.id).to eq nc.hex_id(TestConnection::TOP_PAGE_ID)
         end
 
-        it "receive title" do
-          expect(subject.call.title).to eq "notion_ruby_mapping_test_data"
+        it "receive title, url, public_url" do
+          page = subject.call
+          page_id = "notion_ruby_mapping_test_data-c01166c613ae45cbb96818b4ef2f5a77"
+          expect(page.title).to eq "notion_ruby_mapping_test_data"
+          expect(page.url).to eq "https://www.notion.so/#{page_id}"
+          expect(page.public_url).to eq "https://hkob.notion.site/#{page_id}"
         end
 
         describe "dry_run" do
