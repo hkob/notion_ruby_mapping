@@ -118,11 +118,12 @@ module NotionRubyMapping
     end
 
     # @param [Array<Block>] blocks
+    # @param [String, nil] after block id of previous block
     # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Block, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#44bbf83d852c419485c5efe9fe1558fb
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#2c47f7fedae543cf8566389ba1677132
-    def append_block_children(*blocks, dry_run: false)
+    def append_block_children(*blocks, after: nil, dry_run: false)
       raise StandardError, "This block can have no children." unless page? || (block? && can_have_children)
 
       only_one = blocks.length == 1
@@ -132,6 +133,7 @@ module NotionRubyMapping
           block.block_json
         end,
       }
+      json["after"] = after if after
       if dry_run
         path = @nc.append_block_children_page_path(id)
         self.class.dry_run_script :patch, path, json

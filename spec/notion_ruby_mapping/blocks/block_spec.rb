@@ -16,7 +16,8 @@ module NotionRubyMapping
 
         can_have_children = %i[bulleted_list_item paragraph inline_contents numbered_list_item synced_block template
                                toggle toggle_heading_1 toggle_heading_2 toggle_heading_3 quote table to_do
-                               synced_block_original callout column_list column].include? key
+                               synced_block_original callout column_list column append_after_parent
+                               append_after_previous].include? key
         it "can #{key} have children? = #{can_have_children}" do
           expect(target.can_have_children).to eq can_have_children
         end
@@ -41,6 +42,40 @@ module NotionRubyMapping
             end
           end
         end
+      end
+    end
+
+    describe "append block children with after" do
+      parent_id = TestConnection::APPEND_AFTER_PARENT_ID
+      previous_id = TestConnection::APPEND_AFTER_PREVIOUS_ID
+      append_block = NumberedListItemBlock.new "Middle block"
+      let(:parent_block) { Block.find parent_id }
+      let(:above_block) { Block.find previous_id }
+
+      shared_examples "append_block_children_append_after" do
+        context "dry_run" do
+          it_behaves_like :dry_run, :patch, :append_block_children_page_path, id: parent_id,
+                          json: {
+                            "children" => [append_block.block_json],
+                            "after" => previous_id,
+                          }
+        end
+
+        context "create" do
+          it { expect(block.id).to eq TestConnection::APPEND_AFTER_ADDED_ID }
+        end
+      end
+
+      context "after option" do
+        let(:dry_run) { parent_block.append_block_children append_block, after: previous_id, dry_run: true }
+        let(:block) { parent_block.append_block_children append_block, after: previous_id }
+        it_behaves_like "append_block_children_append_after"
+      end
+
+      context "append_after method" do
+        let(:dry_run) { above_block.append_after append_block, dry_run: true }
+        let(:block) { above_block.append_after append_block }
+        it_behaves_like "append_block_children_append_after"
       end
     end
 

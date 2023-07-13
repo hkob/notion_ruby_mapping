@@ -59,11 +59,21 @@ module NotionRubyMapping
       db.save dry_run: dry_run
     end
 
+    # @return [String] 公開URL
+    def public_url
+      @json["public_url"]
+    end
+
     # @return [String] title
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#2ff7209055f346fbbda454cdbb40b1c8
     def title
       tp = properties.select { |p| p.is_a?(TitleProperty) || (p.is_a?(Property) && p.property_id == "title") }
       tp.map(&:full_text).join ""
+    end
+
+    # @return [String] URL
+    def url
+      @json["url"]
     end
 
     protected
@@ -93,5 +103,6 @@ module NotionRubyMapping
         update_json @nc.update_page_request(@id, property_values_json)
       end
     end
+
   end
 end
