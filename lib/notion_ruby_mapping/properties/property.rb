@@ -96,6 +96,7 @@ module NotionRubyMapping
         end
       else
         klass = {
+          "button" => ButtonProperty,
           "checkbox" => CheckboxProperty,
           "created_time" => CreatedTimeProperty,
           "date" => DateProperty,
