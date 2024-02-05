@@ -94,7 +94,7 @@ module NotionRubyMapping
                  json: @nc.retrieve_comments_request(@id, query),
                  query: query).each do |comment|
           dt_id = comment.discussion_id
-          dt = ans[dt_id] ||= DiscussionThread.new dt_id
+          dt = ans[dt_id] ||= DiscussionThread.new(dt_id)
           dt.comments << comment
         end
         ans

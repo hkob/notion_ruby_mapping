@@ -1,0 +1,41 @@
+{
+    "object": "database",
+    "id": "254e7e60-5aad-458a-8a87-7ea7ee355ada",
+    "cover": null,
+    "icon": null,
+    "created_time": "2024-02-04T23:21:00.000Z",
+    "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    },
+    "last_edited_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    },
+    "last_edited_time": "2024-02-04T23:21:00.000Z",
+    "title": [],
+    "description": [],
+    "is_inline": false,
+    "properties": {
+        "Buttons": {
+            "id": "%7CyVi",
+            "name": "Buttons",
+            "type": "button",
+            "button": {}
+        },
+        "Name": {
+            "id": "title",
+            "name": "Name",
+            "type": "title",
+            "title": {}
+        }
+    },
+    "parent": {
+        "type": "page_id",
+        "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+    },
+    "url": "https://www.notion.so/254e7e605aad458a8a877ea7ee355ada",
+    "public_url": "https://hkob.notion.site/254e7e605aad458a8a877ea7ee355ada",
+    "archived": false,
+    "request_id": "8747fd98-67a4-4d81-9fe3-6763465c697e"
+}

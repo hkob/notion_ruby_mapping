@@ -39,12 +39,14 @@ module NotionRubyMapping
     BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
     BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
     STATUS_PAGE_ID = "68ff12a08dc04f94ae2e0931344eb153"
+    BUTTON_PAGE_ID = "4ccd9bda0f6440a0b32490c091011b8f"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
     PARENT_DATABASE_ID = "1d6b1040a9fb48d99a3d041429816e9f"
     CREATED_DATABASE_ID = "c7697137d49f49c2bbcdd6a665c4f921"
     STATUS_DATABASE_ID = "71f892a3bf1744918d8e8f125c55bf43"
+    BUTTON_DATABASE_ID = "254e7e605aad458a8a877ea7ee355ada"
     # block_id
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
@@ -2525,6 +2527,7 @@ module NotionRubyMapping
 
     def retrieve_property
       generate_stubs_sub :get, __method__, :page_property_path, {
+        button: [[BUTTON_PAGE_ID, "%7CyVi"], 200],
         checkbox: [[DB_FIRST_PAGE_ID, "Lbi%5D"], 200],
         created_by: [[DB_FIRST_PAGE_ID, "eR%3D~"], 200],
         created_time: [[DB_FIRST_PAGE_ID, "WsEj"], 200],
