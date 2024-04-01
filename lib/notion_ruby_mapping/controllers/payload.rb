@@ -73,7 +73,7 @@ module NotionRubyMapping
     # @return [Hash] created json
     # @param [Object] others
     def update_property_schema_json(*others)
-      others.compact.reduce({}) { |hash, o| hash.merge o.update_property_schema_json }.merge @json
+      @json.merge(others.compact.reduce({}) { |hash, o| hash.merge o.update_property_schema_json })
     end
   end
 end
