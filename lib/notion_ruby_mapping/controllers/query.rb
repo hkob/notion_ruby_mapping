@@ -10,8 +10,8 @@ module NotionRubyMapping
       @start_cursor = start_cursor
       @filter_properties = Array(filter_properties)
     end
-    attr_reader :filter, :sort, :page_size
-    attr_accessor :start_cursor, :filter_properties
+    attr_reader :filter, :sort
+    attr_accessor :start_cursor, :filter_properties, :page_size
 
     # @param [Query] another_query other query
     # @return [NotionRubyMapping::Query] updated self (Query object)
