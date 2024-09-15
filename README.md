@@ -119,7 +119,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 4. [Create ER Diagram from Notion database / Notion データベースの ER 図を作成](https://hkob.notion.site/notionErDiagram-Sample-1720c2199c534ca08138cde38f31f710)
 5. [Create Sitemap from Notion pages / Notion page からサイトマップを作成](https://hkob.notion.site/notionSitemap-sample-14e195c83d024c5382aab09210916c87)
 6. [Create Notion databases from ER Diagram / ER 図から Notion データベースを作成](https://hkob.notion.site/erdToNotionDb-sample-87e5e52a6b9f46abbdeebcb3c902a516)
-6. [NotionTimeRecorder & GTD template](https://hkob.notion.site/NotionTimeRecorder-GTD-template-8c4b5813dbbe4774a517314c9b20bafa)
+7. [NotionTimeRecorder & GTD template](https://hkob.notion.site/NotionTimeRecorder-GTD-template-8c4b5813dbbe4774a517314c9b20bafa)
 
 ### 2.5 API reference / API リファレンス
 
@@ -127,6 +127,12 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2024/9/15 [v0.8.8] Add link_mention support
+- 2024/5/29 [v0.8.7] Change file attribute for button_property
+- 2024/5/29 [v0.8.6] Change Query.page_size to writable
+- 2024/4/26 [v0.8.5] change permission of button_property.rb
+- 2024/4/1 [v0.8.4] fix payload for update database
+- 2024/2/5 [v0.8.3] Add Button Property
 - 2023/7/13 [v0.8.2] add 'after' option to append_block_chidren, 'append_after' method to block, and 'public_url' method to page
 - 2023/7/10 [v0.8.1] Automatically change type to external when file object is updated
 - 2023/6/4 [v0.8.0] add unique_id properties, filter_properties

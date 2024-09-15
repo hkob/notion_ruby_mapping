@@ -45,6 +45,9 @@ module NotionRubyMapping
           end
         when "link_preview"
           MentionObject.new options.merge({"link_preview" => mention["link_preview"]["url"]})
+        when "link_mention"
+          lm_keys = %w[href icon_url link_provider thumbnail_url title]
+          MentionObject.new options.merge(mention["link_mention"].slice(*lm_keys))
         else
           raise StandardError, "Unknown mention type: #{mention["type"]}"
         end

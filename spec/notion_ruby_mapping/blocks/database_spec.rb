@@ -463,7 +463,7 @@ module NotionRubyMapping
           end
         end
 
-        it_behaves_like :dry_run, :post, :databases_path, json_method: :update_property_schema_json
+        it_behaves_like :dry_run, :post, :databases_path, json_method: :property_schema_json
       end
     end
 

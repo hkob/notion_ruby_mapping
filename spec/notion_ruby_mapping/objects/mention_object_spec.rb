@@ -344,7 +344,7 @@ module NotionRubyMapping
           },
         ],
         "mention_link_preview" => [
-          "mention_link_preview",
+          "mention_link_preview_object",
           {
             "type" => "mention",
             "mention" => {
@@ -365,8 +365,35 @@ module NotionRubyMapping
             "href" => "https://github.com/hkob/notion_ruby_mapping",
           },
         ],
+        "mention_link_mention" => [
+          "mention_link_mention_object",
+          {
+            "type" => "mention",
+            "mention" => {
+              "type" => "link_mention",
+              "link_mention" => {
+                "href" => "https://hkob.hatenablog.com/",
+                "title" => "hkob’s blog",
+                "icon_url" => "https://hkob.hatenablog.com/icon/link",
+                "link_provider" => "hkob’s blog",
+                "thumbnail_url" => "https://cdn.blog.st-hatena.com/images/theme/og-image-1500.png"
+              }
+            },
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default"
+            },
+            "plain_text" => "https://hkob.hatenablog.com/",
+            "href" => "https://hkob.hatenablog.com/"
+          },
+        ],
       }.each do |key, (fname, answer)|
         context key do
+          print key
           let(:target) { RichTextObject.create_from_json tc.read_json(fname) }
           it_behaves_like :property_values_json, answer
         end

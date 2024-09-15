@@ -1,0 +1,23 @@
+{
+  "type": "mention",
+  "mention": {
+    "type": "link_mention",
+    "link_mention": {
+      "href": "https://hkob.hatenablog.com/",
+      "title": "hkob’s blog",
+      "icon_url": "https://hkob.hatenablog.com/icon/link",
+      "link_provider": "hkob’s blog",
+      "thumbnail_url": "https://cdn.blog.st-hatena.com/images/theme/og-image-1500.png"
+    }
+  },
+  "annotations": {
+    "bold": false,
+    "italic": false,
+    "strikethrough": false,
+    "underline": false,
+    "code": false,
+    "color": "default"
+  },
+  "plain_text": "https://hkob.hatenablog.com/",
+  "href": "https://hkob.hatenablog.com/"
+}

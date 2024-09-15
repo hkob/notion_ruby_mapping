@@ -82,6 +82,11 @@ module NotionRubyMapping
             "url" => @options["link_preview"],
           },
         }
+      elsif @options.key? "href"
+        {
+          "type" => "link_mention",
+          "link_mention" => @options.slice("href", "icon_url", "link_provider", "thumbnail_url", "title"),
+        }
       else
         raise StandardError, "Irregular mention type: #{@options.keys}"
       end
