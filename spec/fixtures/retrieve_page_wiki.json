@@ -1,0 +1,98 @@
+{
+    "object": "page",
+    "id": "197d8e4e-98ab-80d7-b0ca-d8a33a1cbfba",
+    "created_time": "2025-02-11T07:34:00.000Z",
+    "last_edited_time": "2025-02-11T07:37:00.000Z",
+    "created_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    },
+    "last_edited_by": {
+        "object": "user",
+        "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+    },
+    "cover": null,
+    "icon": null,
+    "parent": {
+        "type": "database_id",
+        "database_id": "197d8e4e-98ab-8052-82cc-e7137a10f133"
+    },
+    "archived": false,
+    "in_trash": false,
+    "properties": {
+        "最終更新日時": {
+            "id": "%3DMZV",
+            "type": "last_edited_time",
+            "last_edited_time": "2025-02-11T07:37:00.000Z"
+        },
+        "タグ": {
+            "id": "Zcx%7C",
+            "type": "multi_select",
+            "multi_select": []
+        },
+        "ページ": {
+            "id": "title",
+            "type": "title",
+            "title": [
+                {
+                    "type": "text",
+                    "text": {
+                        "content": "Wiki page",
+                        "link": null
+                    },
+                    "annotations": {
+                        "bold": false,
+                        "italic": false,
+                        "strikethrough": false,
+                        "underline": false,
+                        "code": false,
+                        "color": "default"
+                    },
+                    "plain_text": "Wiki page",
+                    "href": null
+                }
+            ]
+        },
+        "有効期限": {
+            "id": "verification",
+            "type": "verification",
+            "verification": {
+                "state": "verified",
+                "verified_by": {
+                    "object": "user",
+                    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+                    "name": "Hiroyuki KOBAYASHI",
+                    "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
+                    "type": "person",
+                    "person": {
+                        "email": "hkob@metro-cit.ac.jp"
+                    }
+                },
+                "date": {
+                    "start": "2025-02-10T15:00:00.000Z",
+                    "end": "2025-02-17T15:00:00.000Z",
+                    "time_zone": null
+                }
+            }
+        },
+        "オーナー": {
+            "id": "verification_owner",
+            "type": "people",
+            "people": [
+                {
+                    "object": "user",
+                    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+                    "name": "Hiroyuki KOBAYASHI",
+                    "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
+                    "type": "person",
+                    "person": {
+                        "email": "hkob@metro-cit.ac.jp"
+                    }
+                }
+            ]
+        }
+    },
+    "url": "https://www.notion.so/Wiki-page-197d8e4e98ab80d7b0cad8a33a1cbfba",
+    "public_url": "https://hkob.notion.site/Wiki-page-197d8e4e98ab80d7b0cad8a33a1cbfba",
+    "request_id": "9ad0d55e-05fa-424f-9e45-a7f0de9b155e"
+}

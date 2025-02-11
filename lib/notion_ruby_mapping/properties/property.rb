@@ -118,6 +118,7 @@ module NotionRubyMapping
           "rich_text" => RichTextProperty,
           "unique_id" => UniqueIdProperty,
           "url" => UrlProperty,
+          "verification" => VerificationProperty,
         }[type]
         raise StandardError, "Irregular property type: #{type}" unless klass
 

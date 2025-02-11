@@ -1,0 +1,18 @@
+{
+    "object": "property_item",
+    "type": "verification",
+    "id": "verification",
+    "verification": {
+        "state": "verified",
+        "verified_by": {
+            "object": "user",
+            "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+        },
+        "date": {
+            "start": "2025-02-10T15:00:00.000Z",
+            "end": "2025-02-17T15:00:00.000Z",
+            "time_zone": null
+        }
+    },
+    "request_id": "6e4c8157-d152-4e3a-8ffd-45cfadd9148a"
+}

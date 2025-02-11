@@ -127,6 +127,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2025/2/11 [v0.8.9] Add verification_property
 - 2024/9/15 [v0.8.8] Add link_mention support
 - 2024/5/29 [v0.8.7] Change file attribute for button_property
 - 2024/5/29 [v0.8.6] Change Query.page_size to writable

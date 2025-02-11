@@ -40,6 +40,7 @@ module NotionRubyMapping
     BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
     STATUS_PAGE_ID = "68ff12a08dc04f94ae2e0931344eb153"
     BUTTON_PAGE_ID = "4ccd9bda0f6440a0b32490c091011b8f"
+    WIKI_PAGE_ID = "197d8e4e98ab80d7b0cad8a33a1cbfba"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
@@ -47,6 +48,7 @@ module NotionRubyMapping
     CREATED_DATABASE_ID = "c7697137d49f49c2bbcdd6a665c4f921"
     STATUS_DATABASE_ID = "71f892a3bf1744918d8e8f125c55bf43"
     BUTTON_DATABASE_ID = "254e7e605aad458a8a877ea7ee355ada"
+    WIKI_DATABASE_ID = "197d8e4e98ab805282cce7137a10f133"
     # block_id
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
@@ -2554,6 +2556,7 @@ module NotionRubyMapping
         title: [[DB_FIRST_PAGE_ID, "title"], 200],
         title_top: [[TOP_PAGE_ID, "title"], 200],
         unique_id: [[DB_FIRST_PAGE_ID, "%7BGE%7C"], 200],
+        verification: [[WIKI_PAGE_ID, "verification"], 200],
         url: [[DB_FIRST_PAGE_ID, "tvis"], 200],
       }
     end
