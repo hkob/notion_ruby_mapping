@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Mapping tool from Notion Database/Page/Block to Ruby Objects."
   spec.homepage = "https://github.com/hkob/notion_ruby_mapping.git"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.6.0"
+  spec.required_ruby_version = ">= 3.0"
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
@@ -35,7 +35,6 @@ Gem::Specification.new do |spec|
   # spec.add_dependency "example-gem", "~> 1.0"
 
   spec.add_dependency "faraday"
-  spec.add_dependency "faraday_middleware"
 
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"

@@ -152,7 +152,7 @@ module NotionRubyMapping
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Authorization" => "Bearer #{notion_token}",
           "Notion-Version" => NotionRubyMapping::NOTION_VERSION,
-          "User-Agent" => "Faraday v1.10.3",
+          "User-Agent" => "Faraday v2.13.1",
         },
       }
       request[:body] = JSON.generate(payload) if payload
