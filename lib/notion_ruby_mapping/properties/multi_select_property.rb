@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # MultiSelect property
   class MultiSelectProperty < MultiProperty
-    TYPE = "multi_select"
+    TYPE = :multi_select
 
     ### Public announced methods
 
@@ -16,8 +16,8 @@ module NotionRubyMapping
 
     # @return [Array]
     def multi_select_names
-      mshs = @base_type == :page ? @json : @json["options"]
-      mshs.map { |h| h["name"] }
+      mshs = @base_type == :page ? @json : @json[:options]
+      mshs.map { |h| h[:name] }
     end
 
     ## Database property only methods
@@ -27,21 +27,21 @@ module NotionRubyMapping
     # @return [Array] added array
     # @see https://www.notion.so/hkob/MultiSelectProperty-b90bba1c55d540ba97131bb013d4ca74#bcac830b00e04cb6bf7dbbb110d95667
     def add_multi_select_option(name:, color:)
-      edit_multi_select_options << {"name" => name, "color" => color}
+      edit_multi_select_options << {name: name, color: color}
     end
 
     # @return [Array] copyed multi select options
     def edit_multi_select_options
       assert_database_property __method__
       @will_update = true
-      @json["options"] ||= []
+      @json[:options] ||= []
     end
 
     # @return [Array]
     # @see https://www.notion.so/hkob/MultiSelectProperty-b90bba1c55d540ba97131bb013d4ca74#5ff6ec299cf64049bde2416f61b30fa9
     def multi_select_options
       assert_database_property __method__
-      @json["options"] || []
+      @json[:options] || []
     end
 
     ## Page property only methods
@@ -51,14 +51,14 @@ module NotionRubyMapping
     def multi_select=(multi_select)
       assert_page_property __method__
       @will_update = true
-      @json = multi_select ? Array(multi_select).map { |ms| {"name" => ms} } : []
+      @json = multi_select ? Array(multi_select).map { |ms| {name: ms} } : []
     end
 
     ### Not public announced methods
 
     ## Common methods
 
-    # @param [String] name
+    # @param [String, Symbol] name
     # @param [Hash] json
     # @param [Array<String>, String] multi_select
     def initialize(name, will_update: false, base_type: :page, json: nil, multi_select: nil,
@@ -66,10 +66,10 @@ module NotionRubyMapping
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       if database?
-        @json = json || {"options" => []}
+        @json = json || {options: []}
       else
         @json = json || []
-        @json = Array(multi_select).map { |ms| {"name" => ms} } unless multi_select.nil?
+        @json = Array(multi_select).map { |ms| {name: ms} } unless multi_select.nil?
       end
     end
 
@@ -82,8 +82,8 @@ module NotionRubyMapping
       return ans if ans != {} || !@will_update
 
       ans[@name] ||= {}
-      ans[@name]["multi_select"] ||= {}
-      ans[@name]["multi_select"]["options"] = @json["options"]
+      ans[@name][:multi_select] ||= {}
+      ans[@name][:multi_select][:options] = @json[:options]
       ans
     end
 
@@ -94,8 +94,8 @@ module NotionRubyMapping
       assert_page_property __method__
       {
         @name => {
-          "type" => "multi_select",
-          "multi_select" => @json,
+          type: "multi_select",
+          multi_select: @json,
         },
       }
     end
@@ -106,7 +106,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def property_schema_json_sub
-      {"options" => edit_multi_select_options}
+      {options: edit_multi_select_options}
     end
   end
 end

@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class EmbedBlock < UrlCaptionBaseBlock
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
-      "embed"
+      :embed
     end
   end
 end

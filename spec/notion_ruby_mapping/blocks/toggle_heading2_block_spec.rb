@@ -4,33 +4,33 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ToggleHeading2Block do
-    type = "heading_2"
+    type = :heading_2
 
-    it_behaves_like :retrieve_block, described_class, TestConnection::BLOCK_ID_HASH[:toggle_heading_2], true, {
-      "object" => "block",
-      "type" => "heading_2",
-      "heading_2" => {
-        "rich_text" => [
+    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:toggle_heading_2], true, {
+      object: "block",
+      type: "heading_2",
+      heading_2: {
+        rich_text: [
           {
-            "type" => "text",
-            "text" => {
-              "content" => "Toggle Heading 2",
-              "link" => nil,
+            type: "text",
+            text: {
+              content: "Toggle Heading 2",
+              link: nil,
             },
-            "annotations" => {
-              "bold" => false,
-              "italic" => false,
-              "strikethrough" => false,
-              "underline" => false,
-              "code" => false,
-              "color" => "default",
+            annotations: {
+              bold: false,
+              italic: false,
+              strikethrough: false,
+              underline: false,
+              code: false,
+              color: "default",
             },
-            "plain_text" => "Toggle Heading 2",
-            "href" => nil,
+            plain_text: "Toggle Heading 2",
+            href: nil,
           },
         ],
-        "color" => "default",
-        "is_toggleable" => true,
+        color: "default",
+        is_toggleable: true,
       },
     }
 
@@ -42,7 +42,7 @@ module NotionRubyMapping
         ]
       end
 
-      it_behaves_like :create_child_block, described_class,
+      it_behaves_like "create child block", described_class,
                       "56687493a84f49c6b25ae055a7f41c30", "987d691e45704d9bb2b1e0666119fbab"
     end
 
@@ -54,8 +54,8 @@ module NotionRubyMapping
         ]
       end
 
-      it_behaves_like :update_block_rich_text_array, type, "New Heading 2"
-      it_behaves_like :update_block_color, type, "green_background", true
+      it_behaves_like "update block rich text array", type, "New Heading 2"
+      it_behaves_like "update block color", type, "green_background", true
     end
   end
 end

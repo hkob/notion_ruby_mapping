@@ -1,7 +1,7 @@
 require: rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.0
 
 Style/StringLiterals:
   Enabled: true
@@ -25,6 +25,17 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
+
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
+RSpec/NestedGroups:
+  Enabled: true
+  MaxNesting: 5
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: true
+  Max: 8
 
 Metrics/BlockLength:
   Exclude:

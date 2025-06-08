@@ -6,11 +6,11 @@ module NotionRubyMapping
   RSpec.describe LinkPreviewBlock do
     # type = "link_preview"
 
-    it_behaves_like :retrieve_block, described_class, TestConnection::BLOCK_ID_HASH[:link_preview_dropbox], false, {
-      "object" => "block",
-      "type" => "link_preview",
-      "link_preview" => {
-        "url" => "https://www.dropbox.com/s/8d6kjlpdlfqiec5/complex.pdf?dl=0",
+    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:link_preview_dropbox], false, {
+      object: "block",
+      type: "link_preview",
+      link_preview: {
+        url: "https://www.dropbox.com/s/8d6kjlpdlfqiec5/complex.pdf?dl=0",
       },
     }
 

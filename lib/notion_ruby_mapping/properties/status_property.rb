@@ -5,7 +5,7 @@ module NotionRubyMapping
   class StatusProperty < Property
     include EqualsDoesNotEqual
     include IsEmptyIsNotEmpty
-    TYPE = "status"
+    TYPE = :status
 
     ### Public announced methods
 
@@ -22,7 +22,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/StatusProperty-c8b2c83019bc42edbc1527386c7ef453#69452ceee6c9452296e96bb2a37460ee
     def status_name
       assert_page_property __method__
-      @json["name"]
+      @json[:name]
     end
 
     ## Page property only methods
@@ -32,14 +32,14 @@ module NotionRubyMapping
     def status=(status)
       assert_page_property __method__
       @will_update = true
-      @json = {"name" => status}
+      @json = {name: status}
     end
 
     ### Not public announced methods
 
     ## Common methods
 
-    # @param [String] name Property name
+    # @param [String, Symbol] name Property name
     # @param [Boolean, Hash] json
     def initialize(name, will_update: false, base_type: :page, property_id: nil, property_cache: nil, json: {})
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
@@ -52,7 +52,7 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      {@name => {"status" => @json, "type" => "status"}}
+      {@name => {status: @json, type: "status"}}
     end
   end
 end

@@ -24,7 +24,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @param [String] name
+    # @param [String, Symbol] name
     # @param [Hash, Array] json
     # @param [Array<RichTextObject>] text_objects
     def initialize(name, will_update: false, base_type: :page, json: nil, text_objects: nil, property_id: nil,

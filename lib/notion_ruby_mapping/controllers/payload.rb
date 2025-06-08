@@ -8,7 +8,7 @@ module NotionRubyMapping
       @update_block_key = []
     end
 
-    # @param [String] key
+    # @param [Symbol] key
     def add_update_block_key(key)
       @update_block_key << key
     end
@@ -20,19 +20,19 @@ module NotionRubyMapping
     end
 
     def description=(text_objects)
-      rta = RichTextArray.rich_text_array "description", text_objects
-      @json.merge!(rta.update_property_schema_json true)
+      rta = RichTextArray.rich_text_array :description, text_objects
+      @json.merge!(rta.update_property_schema_json(true))
     end
 
     # @param [Boolean] flag
     def is_inline=(flag)
-      @json["is_inline"] = flag
+      @json[:is_inline] = flag
     end
 
     # @param [Hash] json
     def merge_property(json)
-      @json["properties"] ||= {}
-      @json["properties"].merge!(json)
+      @json[:properties] ||= {}
+      @json[:properties].merge!(json)
     end
 
     # @return [Hash] created json
@@ -52,21 +52,21 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Payload] updated Payload
     def set_icon(emoji: nil, url: nil)
       payload = if emoji
-                  {"type" => "emoji", "emoji" => emoji}
+                  {type: "emoji", emoji: emoji}
                 elsif url
-                  {"type" => "external", "external" => {"url" => url}}
+                  {type: "external", external: {url: url}}
                 else
                   {}
                 end
-      @json["icon"] = payload
+      @json[:icon] = payload
       self
     end
 
     def update_block_json(type, json)
       sub_json = json[type]
       ans = {type => sub_json.slice(*@update_block_key)}
-      ans[type]["caption"] = sub_json["caption"] if sub_json["caption"]
-      ans[type]["rich_text"] = sub_json["rich_text"] if sub_json["rich_text"]
+      ans[type][:caption] = sub_json[:caption] if sub_json[:caption]
+      ans[type][:rich_text] = sub_json[:rich_text] if sub_json[:rich_text]
       ans
     end
 

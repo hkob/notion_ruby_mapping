@@ -1,6 +1,5 @@
 module NotionRubyMapping
   class Search
-
     def initialize(ascending: false, database_only: false, page_only: false, query: nil)
       @ascending = ascending
       @database_only = database_only
@@ -19,10 +18,10 @@ module NotionRubyMapping
 
     def payload
       ans = {}
-      ans["sort"] = {"direction" => "ascending", "timestamp" => "last_edited_time"} if @ascending
-      ans["filter"] = {"value" => "database", "property" => "object" } if @database_only
-      ans["filter"] = {"value" => "page", "property" => "object" } if @page_only
-      ans["query"] = @query if @query
+      ans[:sort] = {direction: "ascending", timestamp: "last_edited_time"} if @ascending
+      ans[:filter] = {value: "database", property: "object"} if @database_only
+      ans[:filter] = {value: "page", property: "object"} if @page_only
+      ans[:query] = @query if @query
       ans
     end
   end

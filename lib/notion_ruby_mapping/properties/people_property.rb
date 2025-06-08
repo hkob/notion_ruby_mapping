@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # PeopleProperty class
   class PeopleProperty < MultiProperty
-    TYPE = "people"
+    TYPE = :people
 
     ### Public announced methods
 
@@ -42,14 +42,14 @@ module NotionRubyMapping
     def self.people_from_json(json)
       if json.is_a? Array
         json.map { |sub_json| UserObject.new json: sub_json }
-      elsif json["object"] == "list"
+      elsif json[:object] == "list"
         List.new(json: json, type: :property, value: self).select { true }
       else
-        json["people"].map { |sub_json| UserObject.new json: sub_json }
+        json[:people].map { |sub_json| UserObject.new json: sub_json }
       end
     end
 
-    # @param [String] name
+    # @param [String, Symbol] name
     # @param [Hash] json
     # @param [Array] people ids for people
     def initialize(name, will_update: false, base_type: :page, json: nil, people: nil, property_id: nil,
@@ -74,8 +74,8 @@ module NotionRubyMapping
       assert_page_property __method__
       {
         @name => {
-          "type" => "people",
-          "people" => @json.map(&:property_values_json),
+          type: "people",
+          people: @json.map(&:property_values_json),
         },
       }
     end

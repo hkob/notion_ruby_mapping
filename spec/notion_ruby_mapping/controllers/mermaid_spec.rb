@@ -26,7 +26,7 @@ module NotionRubyMapping
           select p1 "Selection for some tags|SEL1|SEL2|SEL3"
         }
     MERMAID_TEXT
-    let(:mermaid) { described_class.new test_mermaid_text }
+    let(:mermaid) { Mermaid.new test_mermaid_text }
 
     describe "constructor" do
       let(:target) { described_class.new "abc" }
@@ -65,16 +65,16 @@ module NotionRubyMapping
 
     describe "database attributes" do
       {
-        "title" => {"AsciiDatabase" => "Name", "db1" => "名前"},
-        "number" => {"AsciiDatabase" => "Number", "db1" => "数値"},
+        title: {AsciiDatabase: "Name", db1: "名前"},
+        number: {AsciiDatabase: "Number", db1: "数値"},
       }.each do |property_type, hash|
         context "when #{property_type}" do
           subject { db.properties[title_value] }
           hash.each do |key, title_value|
             context key do
-              let(:db) { mermaid.databases[key] }
+              let(:db) { mermaid.databases[key.to_s] }
 
-              if property_type == "title"
+              if property_type == :title
                 it { expect(db.title).to eq title_value }
               else
                 let(:title_value) { title_value }

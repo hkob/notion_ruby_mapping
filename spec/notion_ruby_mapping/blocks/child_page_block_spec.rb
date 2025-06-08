@@ -8,15 +8,15 @@ module NotionRubyMapping
     block_id = TestConnection::BLOCK_ID_HASH[type.to_sym]
     let(:block) { Block.find block_id }
 
-    it_behaves_like :retrieve_block, described_class, block_id, false, {
-      "object" => "block",
-      "type" => "child_page",
-      "child_page" => {
-        "title" => "Child page",
+    it_behaves_like "retrieve block", described_class, block_id, false, {
+      object: "block",
+      type: "child_page",
+      child_page: {
+        title: "Child page",
       },
     }
 
-    context "title" do
+    context "when title" do
       it { expect(block.title).to eq "Child page" }
     end
   end

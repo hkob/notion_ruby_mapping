@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # DateProperty
   class DateProperty < DateBaseProperty
-    TYPE = "date"
+    TYPE = :date
 
     ### Public announced methods
 
@@ -21,12 +21,12 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/DateProperty-c6e815c060cb430889dbb33b697f00c6#15f2088e012549cbae93de14ce14d352
     def end_date
       assert_page_property __method__
-      @json["end"]
+      @json[:end]
     end
 
     def end_date_obj
       assert_page_property __method__
-      jet = @json["end"]
+      jet = @json[:end]
       case jet
       when String
         jet.include?("T") ? Time.parse(jet) : Date.parse(jet)
@@ -42,19 +42,19 @@ module NotionRubyMapping
       @will_update = true
       # sdt = start_date
       # edt = nil if sdt.class != edt.class || sdt > edt
-      @json["end"] = edt
+      @json[:end] = edt
     end
 
     # @return [Date, Time, DateTime, String]
     # @see https://www.notion.so/hkob/DateProperty-c6e815c060cb430889dbb33b697f00c6#d37097c7a3f7481e9b33a7aaae783888
     def start_date
       assert_page_property __method__
-      @json["start"]
+      @json[:start]
     end
 
     def start_date_obj
       assert_page_property __method__
-      jst = @json["start"]
+      jst = @json[:start]
       case jst
       when String
         jst.include?("T") ? Time.parse(jst) : Date.parse(jst)
@@ -70,14 +70,14 @@ module NotionRubyMapping
       @will_update = true
       # edt = end_date
       # @json["end"] = nil if sdt.class != edt.class || sdt > edt
-      @json["start"] = sdt
+      @json[:start] = sdt
     end
 
     # @return [String]
     # @see https://www.notion.so/hkob/DateProperty-c6e815c060cb430889dbb33b697f00c6#f892cde82d9a44a0850d69878e31b216
     def time_zone
       assert_page_property __method__
-      @json["time_zone"]
+      @json[:time_zone]
     end
 
     # @param [String] tzone
@@ -85,7 +85,7 @@ module NotionRubyMapping
     def time_zone=(tzone)
       assert_page_property __method__
       @will_update = true
-      @json["time_zone"] = tzone
+      @json[:time_zone] = tzone
     end
 
     ### Not public announced methods
@@ -105,9 +105,9 @@ module NotionRubyMapping
       return if database?
 
       @json = json || {}
-      @json["start"] = start_date if start_date
-      @json["end"] = end_date if end_date
-      @json["time_zone"] = time_zone if time_zone
+      @json[:start] = start_date if start_date
+      @json[:end] = end_date if end_date
+      @json[:time_zone] = time_zone if time_zone
     end
 
     ## Page property only methods
@@ -117,11 +117,11 @@ module NotionRubyMapping
       assert_page_property __method__
       {
         @name => {
-          "type" => "date",
-          "date" => {
-            "start" => value_str(@json["start"]),
-            "end" => value_str(@json["end"]),
-            "time_zone" => @json["time_zone"],
+          type: TYPE.to_s,
+          date: {
+            start: value_str(@json[:start]),
+            end: value_str(@json[:end]),
+            time_zone: @json[:time_zone],
           },
         },
       }

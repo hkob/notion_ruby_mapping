@@ -4,14 +4,14 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe LinkToPageBlock do
-    type = "link_to_page"
+    type = :link_to_page
 
-    it_behaves_like :retrieve_block, described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      "object" => "block",
-      "type" => "link_to_page",
-      "link_to_page" => {
-        "type" => "page_id",
-        "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
+    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
+      object: "block",
+      type: "link_to_page",
+      link_to_page: {
+        type: :page_id,
+        page_id: "c01166c613ae45cbb96818b4ef2f5a77",
       },
     }
 
@@ -20,7 +20,8 @@ module NotionRubyMapping
         let(:target) do
           described_class.new page_id: TestConnection::TOP_PAGE_ID
         end
-        it_behaves_like :create_child_block, described_class,
+
+        it_behaves_like "create child block", described_class,
                         "943c521713ce408481d2bdc6c4f5fe38", "f6489b0b85234c1793946d996b2cb9f3"
       end
 
@@ -28,7 +29,8 @@ module NotionRubyMapping
         let(:target) do
           described_class.new page_id: TestConnection::TOP_PAGE_URL
         end
-        it_behaves_like :create_child_block, described_class,
+
+        it_behaves_like "create child block", described_class,
                         "943c521713ce408481d2bdc6c4f5fe38", "f6489b0b85234c1793946d996b2cb9f3"
       end
 
@@ -36,7 +38,8 @@ module NotionRubyMapping
         let(:target) do
           described_class.new database_id: TestConnection::CREATED_DATABASE_ID
         end
-        it_behaves_like :create_child_block, described_class,
+
+        it_behaves_like "create child block", described_class,
                         "2dfb62446fa844b9aaa085e74389a7d8", "7b1a7fe42fd945b18efab54330533d8b"
       end
 
@@ -44,7 +47,8 @@ module NotionRubyMapping
         let(:target) do
           described_class.new database_id: TestConnection::CREATED_DATABASE_URL
         end
-        it_behaves_like :create_child_block, described_class,
+
+        it_behaves_like "create child block", described_class,
                         "2dfb62446fa844b9aaa085e74389a7d8", "7b1a7fe42fd945b18efab54330533d8b"
       end
     end

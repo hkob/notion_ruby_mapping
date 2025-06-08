@@ -7,13 +7,15 @@ module NotionRubyMapping
     let(:np) { NumberProperty.new "np" }
     let(:cp) { CheckboxProperty.new "cp" }
     let(:letp) { LastEditedTimeProperty.new "letp" }
+
     describe "filter" do
       subject { query.filter }
 
       context "one filter" do
         let(:query) { tp.filter_starts_with "start" }
+
         it "create a single filter" do
-          is_expected.to eq({"property" => "tp", "title" => {"starts_with" => "start"}})
+          expect(subject).to eq({property: :tp, title: {starts_with: "start"}})
         end
       end
 
@@ -22,19 +24,20 @@ module NotionRubyMapping
           tp.filter_starts_with("start")
             .and(np.filter_greater_than(100))
         end
+
         it "create and filter" do
-          is_expected.to eq({
-                              "and" => [
-                                {
-                                  "property" => "tp",
-                                  "title" => {"starts_with" => "start"},
-                                },
-                                {
-                                  "property" => "np",
-                                  "number" => {"greater_than" => 100},
-                                },
-                              ],
-                            })
+          expect(subject).to eq({
+                                  and: [
+                                    {
+                                      property: :tp,
+                                      title: {starts_with: "start"},
+                                    },
+                                    {
+                                      property: :np,
+                                      number: {greater_than: 100},
+                                    },
+                                  ],
+                                })
         end
       end
 
@@ -44,23 +47,24 @@ module NotionRubyMapping
             .and(np.filter_greater_than(100))
             .and(cp.filter_equals(true))
         end
+
         it "create and filter" do
-          is_expected.to eq({
-                              "and" => [
-                                {
-                                  "property" => "tp",
-                                  "title" => {"starts_with" => "start"},
-                                },
-                                {
-                                  "property" => "np",
-                                  "number" => {"greater_than" => 100},
-                                },
-                                {
-                                  "property" => "cp",
-                                  "checkbox" => {"equals" => true},
-                                },
-                              ],
-                            })
+          expect(subject).to eq({
+                                  and: [
+                                    {
+                                      property: :tp,
+                                      title: {starts_with: "start"},
+                                    },
+                                    {
+                                      property: :np,
+                                      number: {greater_than: 100},
+                                    },
+                                    {
+                                      property: :cp,
+                                      checkbox: {equals: true},
+                                    },
+                                  ],
+                                })
         end
       end
 
@@ -69,19 +73,20 @@ module NotionRubyMapping
           tp.filter_starts_with("start")
             .or(np.filter_greater_than(100))
         end
+
         it "create or filter" do
-          is_expected.to eq({
-                              "or" => [
-                                {
-                                  "property" => "tp",
-                                  "title" => {"starts_with" => "start"},
-                                },
-                                {
-                                  "property" => "np",
-                                  "number" => {"greater_than" => 100},
-                                },
-                              ],
-                            })
+          expect(subject).to eq({
+                                  or: [
+                                    {
+                                      property: :tp,
+                                      title: {starts_with: "start"},
+                                    },
+                                    {
+                                      property: :np,
+                                      number: {greater_than: 100},
+                                    },
+                                  ],
+                                })
         end
       end
 
@@ -91,23 +96,24 @@ module NotionRubyMapping
             .or(np.filter_greater_than(100))
             .or(cp.filter_equals(true))
         end
+
         it "create or filter" do
-          is_expected.to eq({
-                              "or" => [
-                                {
-                                  "property" => "tp",
-                                  "title" => {"starts_with" => "start"},
-                                },
-                                {
-                                  "property" => "np",
-                                  "number" => {"greater_than" => 100},
-                                },
-                                {
-                                  "property" => "cp",
-                                  "checkbox" => {"equals" => true},
-                                },
-                              ],
-                            })
+          expect(subject).to eq({
+                                  or: [
+                                    {
+                                      property: :tp,
+                                      title: {starts_with: "start"},
+                                    },
+                                    {
+                                      property: :np,
+                                      number: {greater_than: 100},
+                                    },
+                                    {
+                                      property: :cp,
+                                      checkbox: {equals: true},
+                                    },
+                                  ],
+                                })
         end
       end
 
@@ -117,27 +123,28 @@ module NotionRubyMapping
             .and(np.filter_greater_than(100))
             .or(cp.filter_equals(true))
         end
+
         it "create or filter" do
-          is_expected.to eq({
-                              "or" => [
-                                {
-                                  "and" => [
+          expect(subject).to eq({
+                                  or: [
                                     {
-                                      "property" => "tp",
-                                      "title" => {"starts_with" => "start"},
+                                      and: [
+                                        {
+                                          property: :tp,
+                                          title: {starts_with: "start"},
+                                        },
+                                        {
+                                          property: :np,
+                                          number: {greater_than: 100},
+                                        },
+                                      ],
                                     },
                                     {
-                                      "property" => "np",
-                                      "number" => {"greater_than" => 100},
+                                      property: :cp,
+                                      checkbox: {equals: true},
                                     },
                                   ],
-                                },
-                                {
-                                  "property" => "cp",
-                                  "checkbox" => {"equals" => true},
-                                },
-                              ],
-                            })
+                                })
         end
       end
 
@@ -147,27 +154,28 @@ module NotionRubyMapping
             .or(np.filter_greater_than(100))
             .and(cp.filter_equals(true))
         end
+
         it "create or filter" do
-          is_expected.to eq({
-                              "and" => [
-                                {
-                                  "or" => [
+          expect(subject).to eq({
+                                  and: [
                                     {
-                                      "property" => "tp",
-                                      "title" => {"starts_with" => "start"},
+                                      or: [
+                                        {
+                                          property: :tp,
+                                          title: {starts_with: "start"},
+                                        },
+                                        {
+                                          property: :np,
+                                          number: {greater_than: 100},
+                                        },
+                                      ],
                                     },
                                     {
-                                      "property" => "np",
-                                      "number" => {"greater_than" => 100},
+                                      property: :cp,
+                                      checkbox: {equals: true},
                                     },
                                   ],
-                                },
-                                {
-                                  "property" => "cp",
-                                  "checkbox" => {"equals" => true},
-                                },
-                              ],
-                            })
+                                })
         end
       end
 
@@ -176,35 +184,36 @@ module NotionRubyMapping
           np.filter_greater_than(100).and(np.filter_less_than(200))
             .or(np.filter_greater_than(300).and(np.filter_less_than(400)))
         end
+
         it "create or filter" do
-          is_expected.to eq({
-                              "or" => [
-                                {
-                                  "and" => [
+          expect(subject).to eq({
+                                  or: [
                                     {
-                                      "property" => "np",
-                                      "number" => {"greater_than" => 100},
+                                      and: [
+                                        {
+                                          property: :np,
+                                          number: {greater_than: 100},
+                                        },
+                                        {
+                                          property: :np,
+                                          number: {less_than: 200},
+                                        },
+                                      ],
                                     },
                                     {
-                                      "property" => "np",
-                                      "number" => {"less_than" => 200},
+                                      and: [
+                                        {
+                                          property: :np,
+                                          number: {greater_than: 300},
+                                        },
+                                        {
+                                          property: :np,
+                                          number: {less_than: 400},
+                                        },
+                                      ],
                                     },
                                   ],
-                                },
-                                {
-                                  "and" => [
-                                    {
-                                      "property" => "np",
-                                      "number" => {"greater_than" => 300},
-                                    },
-                                    {
-                                      "property" => "np",
-                                      "number" => {"less_than" => 400},
-                                    },
-                                  ],
-                                },
-                              ],
-                            })
+                                })
         end
       end
     end
@@ -214,27 +223,28 @@ module NotionRubyMapping
 
       context "ascending" do
         it "create ascending sort (property)" do
-          expect(Query.new.ascending(tp).sort).to eq([{"property" => "tp", "direction" => "ascending"}])
+          expect(Query.new.ascending(tp).sort).to eq([{property: :tp, direction: "ascending"}])
         end
 
         it "create ascending sort (timestamp)" do
-          expect(Query.new.ascending(letp).sort).to eq([{"timestamp" => "letp", "direction" => "ascending"}])
+          expect(Query.new.ascending(letp).sort).to eq([{timestamp: :letp, direction: "ascending"}])
         end
       end
 
       context "descending" do
         it "create a descending sort" do
-          expect(Query.new.descending(tp).sort).to eq([{"property" => "tp", "direction" => "descending"}])
+          expect(Query.new.descending(tp).sort).to eq([{property: :tp, direction: "descending"}])
         end
 
         it "create ascending sort (timestamp)" do
-          expect(Query.new.descending(letp).sort).to eq([{"timestamp" => "letp", "direction" => "descending"}])
+          expect(Query.new.descending(letp).sort).to eq([{timestamp: :letp, direction: "descending"}])
         end
       end
     end
 
     describe "database_query_string" do
       let(:ep) { Property.create_from_json "ep", tc.read_json("email_property_object"), :database }
+
       it { expect(Query.new(filter_properties: ep).database_query_string).to eq("?filter_properties=p%7Ci%3F") }
     end
   end

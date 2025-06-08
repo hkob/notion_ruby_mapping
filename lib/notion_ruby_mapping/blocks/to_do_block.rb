@@ -10,7 +10,7 @@ module NotionRubyMapping
     def initialize(text_info = nil, checked = false, sub_blocks: nil, color: "default", json: nil, id: nil, parent: nil)
       super(text_info, sub_blocks: sub_blocks, color: color, json: json, id: id, parent: parent)
       @checked = if @json
-                   @json[type]["checked"]
+                   @json[type][:checked]
                  else
                    checked
                  end
@@ -23,7 +23,7 @@ module NotionRubyMapping
     # @return [Hash{String (frozen)->Hash}]
     def block_json(not_update: true)
       ans = super
-      ans[type]["checked"] = @checked
+      ans[type][:checked] = @checked
       ans
     end
 
@@ -31,12 +31,12 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/ToDoBlock-9e4d863244b541869d91c84620e190d4#8ef8b12721914cccb17790879bdc2fbf
     def checked=(new_checked)
       @checked = new_checked
-      @payload.add_update_block_key "checked"
+      @payload.add_update_block_key :checked
     end
 
     # @return [String (frozen)]
     def type
-      "to_do"
+      :to_do
     end
   end
 end

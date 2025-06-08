@@ -9,7 +9,7 @@ module NotionRubyMapping
     def initialize(page_id: nil, database_id: nil, json: nil, id: nil, parent: nil)
       super(json: json, id: id, parent: parent)
       if @json
-        @page_id, @database_id = @json[type].values_at(*%w[page_id database_id])
+        @page_id, @database_id = @json[type].values_at(*%i[page_id database_id])
       else
         @page_id = page_id
         @database_id = database_id
@@ -25,16 +25,16 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = if @page_id
-                    {"type" => "page_id", "page_id" => Base.page_id(@page_id)}
+                    {type: :page_id, page_id: Base.page_id(@page_id)}
                   else
-                    {"type" => "database_id", "database_id" => Base.database_id(@database_id)}
+                    {type: :database_id, database_id: Base.database_id(@database_id)}
                   end
       ans
     end
 
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
-      "link_to_page"
+      :link_to_page
     end
   end
 end

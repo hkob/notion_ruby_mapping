@@ -5,7 +5,7 @@ module NotionRubyMapping
   class ChildBaseBlock < Block
     def initialize(json: nil, id: nil, parent: nil)
       super
-      @title = @json[type]["title"]
+      @title = @json[type][:title]
       @can_append = false
       @can_append = false
     end
@@ -14,7 +14,7 @@ module NotionRubyMapping
     # @return [Hash{String (frozen)->Hash}]
     def block_json(not_update: true)
       ans = super
-      ans[type] = {"title" => @title}
+      ans[type] = {title: @title}
       ans
     end
   end

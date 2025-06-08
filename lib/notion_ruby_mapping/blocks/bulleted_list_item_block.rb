@@ -5,7 +5,7 @@ module NotionRubyMapping
   class BulletedListItemBlock < TextSubBlockColorBaseBlock
     # @return [String (frozen)]
     def type
-      "bulleted_list_item"
+      :bulleted_list_item
     end
   end
 end

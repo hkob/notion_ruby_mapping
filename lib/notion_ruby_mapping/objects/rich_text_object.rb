@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # RichTextObject
   class RichTextObject
-    # @param [String] type
+    # @param [Symbol] type
     # @return [TextObject]
     def initialize(type, options = {})
       if instance_of?(RichTextObject)
@@ -11,45 +11,45 @@ module NotionRubyMapping
               "RichTextObject is abstract class.  Please use TextObject."
       end
 
-      @type = type
+      @type = type.to_sym
       @options = options
     end
     attr_reader :will_update, :options
 
     def self.create_from_json(json)
-      type = json["type"]
-      options = (json["annotations"] || {}).merge(json.slice("plain_text", "href"))
+      type = json[:type]&.to_sym
+      options = (json[:annotations] || {}).merge(json.slice(:plain_text, :href))
       case type
-      when "text"
-        TextObject.new json["plain_text"], options
-      when "equation"
-        EquationObject.new json["equation"]["expression"], options
-      when "mention"
-        mention = json["mention"]
-        case mention["type"]
-        when "user"
-          MentionObject.new options.merge({"user_id" => mention["user"]["id"]})
-        when "page"
-          MentionObject.new options.merge({"page_id" => mention["page"]["id"]})
-        when "database"
-          MentionObject.new options.merge({"database_id" => mention["database"]["id"]})
-        when "date"
-          MentionObject.new options.merge(mention["date"].slice("start", "end", "time_zone"))
-        when "template_mention"
-          template_mention = mention["template_mention"]
-          case template_mention["type"]
-          when "template_mention_date"
-            MentionObject.new options.merge({"template_mention" => template_mention["template_mention_date"]})
+      when :text
+        TextObject.new json[:plain_text], options
+      when :equation
+        EquationObject.new json[:equation][:expression], options
+      when :mention
+        mention = json[:mention]
+        case mention[:type]&.to_sym
+        when :user
+          MentionObject.new options.merge({user_id: mention[:user][:id]})
+        when :page
+          MentionObject.new options.merge({page_id: mention[:page][:id]})
+        when :database
+          MentionObject.new options.merge({database_id: mention[:database][:id]})
+        when :date
+          MentionObject.new options.merge(mention[:date].slice(:start, :end, :time_zone))
+        when :template_mention
+          template_mention = mention[:template_mention]
+          case template_mention[:type].to_sym
+          when :template_mention_date
+            MentionObject.new options.merge({template_mention: template_mention[:template_mention_date]})
           else
-            MentionObject.new options.merge({"template_mention" => template_mention["template_mention_user"]})
+            MentionObject.new options.merge({template_mention: template_mention[:template_mention_user]})
           end
-        when "link_preview"
-          MentionObject.new options.merge({"link_preview" => mention["link_preview"]["url"]})
-        when "link_mention"
-          lm_keys = %w[href icon_url link_provider thumbnail_url title]
-          MentionObject.new options.merge(mention["link_mention"].slice(*lm_keys))
+        when :link_preview
+          MentionObject.new options.merge({link_preview: mention[:link_preview][:url]})
+        when :link_mention
+          lm_keys = %i[href icon_url link_provider thumbnail_url title]
+          MentionObject.new options.merge(mention[:link_mention].slice(*lm_keys))
         else
-          raise StandardError, "Unknown mention type: #{mention["type"]}"
+          raise StandardError, "Unknown mention type: #{mention[:type]}"
         end
       else
         raise StandardError, json
@@ -69,10 +69,10 @@ module NotionRubyMapping
     # @return [Hash{String (frozen)->Object}]
     def property_values_json
       {
-        "type" => @type,
+        type: @type.to_s,
         @type => partial_property_values_json,
-        "plain_text" => @options["plain_text"],
-        "href" => @options["href"],
+        plain_text: @options[:plain_text],
+        href: @options[:href],
       }.merge annotations_json
     end
 
@@ -85,7 +85,7 @@ module NotionRubyMapping
     # @return [String] input text
     def href=(url)
       @will_update = true
-      @options["href"] = url
+      @options[:href] = url
     end
 
     # @param [String, RichTextObject] value
@@ -98,50 +98,50 @@ module NotionRubyMapping
     # @return [Boolean] input flag
     def bold=(flag)
       @will_update = true
-      @options["bold"] = flag
+      @options[:bold] = flag
     end
 
     # @param [Boolean] flag
     # @return [Boolean] input flag
     def italic=(flag)
       @will_update = true
-      @options["italic"] = flag
+      @options[:italic] = flag
     end
 
     # @param [Boolean] flag
     # @return [Boolean] input flag
     def strikethrough=(flag)
       @will_update = true
-      @options["strikethrough"] = flag
+      @options[:strikethrough] = flag
     end
 
     # @param [Boolean] flag
     # @return [Boolean] input flag
     def underline=(flag)
       @will_update = true
-      @options["underline"] = flag
+      @options[:underline] = flag
     end
 
     # @param [Boolean] flag
     # @return [Boolean] input flag
     def code=(flag)
       @will_update = true
-      @options["code"] = flag
+      @options[:code] = flag
     end
 
     # @param [String] color
     # @return [String] input color
     def color=(color)
       @will_update = true
-      @options["color"] = color
+      @options[:color] = color
     end
 
     protected
 
     # @return [Hash, Hash{String (frozen)->Hash}]
     def annotations_json
-      annotations = @options.slice(*%w[bold italic strikethrough underline code color])
-      annotations.empty? ? {} : {"annotations" => annotations}
+      annotations = @options.slice(*%i[bold italic strikethrough underline code color])
+      annotations.empty? ? {} : {annotations: annotations}
     end
   end
 end

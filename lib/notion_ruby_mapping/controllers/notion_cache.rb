@@ -15,8 +15,7 @@ module NotionRubyMapping
       @object_hash = {}
       @client = Faraday.new "https://api.notion.com" do |conn|
         conn.request :json
-        # conn.response :json, parser_options: { symbolize_names: true }
-        conn.response :json
+        conn.response :json, parser_options: {symbolize_names: true}
         conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
       end
       @notion_token = nil
@@ -265,13 +264,13 @@ module NotionRubyMapping
     end
 
     def search(query)
-      request(:post, search_path, options = query)
+      request(:post, search_path, query)
     end
 
     def search_path
       "v1/search"
     end
-    
+
     # @param [String] token
     def token=(token)
       @notion_token = token

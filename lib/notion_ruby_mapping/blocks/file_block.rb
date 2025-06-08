@@ -5,7 +5,7 @@ module NotionRubyMapping
   class FileBlock < FileBaseBlock
     # @return [String (frozen)]
     def type
-      "file"
+      :file
     end
   end
 end

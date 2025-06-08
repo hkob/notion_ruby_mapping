@@ -6,7 +6,7 @@ module NotionRubyMapping
     include EqualsDoesNotEqual
     include GreaterThanLessThan
     include IsEmptyIsNotEmpty
-    TYPE = "unique_id"
+    TYPE = :unique_id
 
     ### Public announced methods
 
@@ -37,7 +37,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::NumberProperty]
     def update_from_json(json)
       @will_update = false
-      @json = json["unique_id"]
+      @json = json[:unique_id]
       self
     end
 
@@ -48,7 +48,7 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      {@name => {"unique_id" => @json, "type" => "unique_id"}}
+      {@name => {unique_id: @json, type: "unique_id"}}
     end
 
     ## Database property only methods

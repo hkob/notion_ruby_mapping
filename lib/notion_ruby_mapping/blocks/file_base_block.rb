@@ -15,7 +15,7 @@ module NotionRubyMapping
         @can_append = @file_object.external?
       else
         @file_object = FileObject.file_object url
-        @caption = RichTextArray.rich_text_array "caption", caption
+        @caption = RichTextArray.rich_text_array :caption, caption
       end
     end
 
@@ -44,7 +44,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#61598d260b6140f2a359f7d22ea2548a
     def url=(url)
       @file_object.url = url
-      @payload.add_update_block_key "external"
+      @payload.add_update_block_key :external
     end
   end
 end

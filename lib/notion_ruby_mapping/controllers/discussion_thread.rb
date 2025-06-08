@@ -16,7 +16,7 @@ module NotionRubyMapping
     def append_comment(text_objects, dry_run: false)
       rto = RichTextArray.new "rich_text", text_objects: text_objects, will_update: true
       nc = NotionCache.instance
-      json = rto.property_schema_json.merge({"discussion_id" => @discussion_id})
+      json = rto.property_schema_json.merge({discussion_id: @discussion_id})
       if dry_run
         Base.dry_run_script :post, nc.comments_path, json
       else

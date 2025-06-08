@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class NumberedListItemBlock < TextSubBlockColorBaseBlock
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
-      "numbered_list_item"
+      :numbered_list_item
     end
   end
 end

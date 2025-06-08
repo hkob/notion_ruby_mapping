@@ -7,6 +7,7 @@ module NotionRubyMapping
     describe "constructor" do
       context "without json" do
         let(:property_cache) { PropertyCache.new }
+
         it "can create an object" do
           expect(property_cache).not_to be_nil
         end
@@ -14,9 +15,10 @@ module NotionRubyMapping
         it("does not have a page_id") { expect(property_cache.page_id).to be_nil }
       end
 
-      context "with json" do
-        let(:json) { {"np" => {"type" => "number", "number" => 123}} }
+      context "when with json" do
+        let(:json) { {np: {type: "number", number: 123}} }
         let(:property_cache) { PropertyCache.new json, page_id: "abc" }
+
         context "without json" do
           it "can create an object" do
             expect(property_cache).not_to be_nil
@@ -33,10 +35,12 @@ module NotionRubyMapping
 
     describe "add_property (Page)" do
       subject { PropertyCache.new page_id: "def" }
-      let(:np) { NumberProperty.new "np", json: 123 }
+      let(:np) { NumberProperty.new :np, json: 123 }
       let(:target) { subject["np"] }
+
       before { subject.add_property np }
-      context "no update" do
+
+      context "when no update" do
         it "has the NumberProperty" do
           expect(target).to eq np
         end
@@ -46,8 +50,9 @@ module NotionRubyMapping
         end
       end
 
-      context "update value" do
+      context "when update value" do
         before { np.number = 456 }
+
         it "has the NumberProperty" do
           expect(subject["np"]).to eq np
         end
@@ -57,15 +62,17 @@ module NotionRubyMapping
         end
 
         it "can generate property values json" do
-          expect(subject.property_values_json).to eq({"properties" => {"np" => {"number" => 456, "type" => "number"}}})
+          expect(subject.property_values_json).to eq({properties: {np: {number: 456, type: "number"}}})
         end
       end
     end
 
     describe "add_property (Database)" do
       subject { PropertyCache.new }
-      let(:np) { NumberProperty.new "np", base_type: :database }
+      let(:np) { NumberProperty.new :np, base_type: :database }
+
       before { subject.add_property np }
+
       context "no update" do
         it "has the NumberProperty" do
           expect(subject["np"]).to eq np
@@ -86,26 +93,27 @@ module NotionRubyMapping
 
       context "update value" do
         before { np.format = "percent" }
+
         it "has the NumberProperty" do
           expect(subject["np"]).to eq np
         end
 
         it "the NumberProperty will not update" do
-          expect(subject["np"].will_update).to be_truthy
+          expect(subject[:np].will_update).to be_truthy
         end
 
         it "can generate update property schema json" do
           expect(subject.update_property_schema_json).to eq({
-                                                              "properties" => {
-                                                                "np" => {
-                                                                  "number" => {"format" => "percent"},
+                                                              properties: {
+                                                                np: {
+                                                                  number: {format: "percent"},
                                                                 },
                                                               },
                                                             })
         end
 
         it "can generate property schema json" do
-          expect(subject.property_schema_json).to eq({"properties" => {"np" => {"number" => {"format" => "percent"}}}})
+          expect(subject.property_schema_json).to eq({properties: {np: {number: {format: "percent"}}}})
         end
       end
     end
@@ -114,9 +122,11 @@ module NotionRubyMapping
       subject { PropertyCache.new }
       let(:np) { NumberProperty.new "np", json: 123 }
       let(:tp) { TitleProperty.new "tp", text_objects: [TextObject.new("ABC")] }
+
       before { [np, tp].each { |p| subject.add_property p } }
+
       it "can map properties" do
-        expect(subject.map(&:name)).to eq %w[np tp]
+        expect(subject.map(&:name)).to eq %i[np tp]
       end
 
       it "can select properties" do
@@ -124,7 +134,7 @@ module NotionRubyMapping
       end
 
       it "can obtain some properties using values_at" do
-        expect(subject.values_at("np", "tp")).to eq [np, tp]
+        expect(subject.values_at(:np, :tp)).to eq [np, tp]
       end
     end
   end

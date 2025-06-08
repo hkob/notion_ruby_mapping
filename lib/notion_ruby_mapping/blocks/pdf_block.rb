@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class PdfBlock < FileBaseBlock
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
-      "pdf"
+      :pdf
     end
   end
 end

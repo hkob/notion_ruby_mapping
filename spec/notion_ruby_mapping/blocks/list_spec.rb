@@ -8,8 +8,9 @@ module NotionRubyMapping
 
     describe "query" do
       let(:database) { Database.new id: TestConnection::DATABASE_ID }
+
       subject { database.query_database query }
-      context "limit 2" do
+      context "when limit 2" do
         let(:query) { Query.new page_size: 2 }
 
         it "count page count" do
@@ -34,9 +35,11 @@ module NotionRubyMapping
     describe "Page#children" do
       let(:target) { Page.find TestConnection::BLOCK_TEST_PAGE_ID }
       let(:query) { Query.new }
+
       describe "dry_run" do
         let(:dry_run) { target.children dry_run: true }
-        it_should_behave_like :dry_run, :get, :block_children_page_path, use_id: true, use_query: true
+
+        it_behaves_like "dry run", :get, :block_children_page_path, use_id: true, use_query: true
       end
 
       describe "children" do
@@ -50,20 +53,22 @@ module NotionRubyMapping
     end
 
     describe "Property#people" do
-      let(:no_content_json) { {"id" => "_x%3E%3D"} }
+      let(:no_content_json) { {id: "_x%3E%3D"} }
       let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
       let(:property_cache) { PropertyCache.new base_type: :page, page_id: first_page_id }
-      let(:target) { Property.create_from_json "pp", no_content_json, :page, property_cache }
+      let(:target) { Property.create_from_json :pp, no_content_json, :page, property_cache }
+
       it { expect(target.people.first).to be_an_instance_of(UserObject) }
     end
 
     describe "Property#rich_text (pagination)" do
-      let(:no_content_json) { {"id" => "flUp"} }
+      let(:no_content_json) { {id: "flUp"} }
       let(:second_page_id) { TestConnection::DB_SECOND_PAGE_ID }
       let(:property_cache) { PropertyCache.new base_type: :page, page_id: second_page_id }
       let(:target) do
-        Property.create_from_json "rtp", no_content_json, :page, property_cache, Query.new(page_size: 5)
+        Property.create_from_json :rtp, no_content_json, :page, property_cache, Query.new(page_size: 5)
       end
+
       it { expect(target.full_text).to eq "abc\n \n \n \n \n高専HP\n " }
     end
   end

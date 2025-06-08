@@ -6,7 +6,7 @@ module NotionRubyMapping
     # @param [String] emoji
     # @return [TextObject]
     def initialize(emoji: nil, json: {})
-      @emoji = emoji || json && json["emoji"]
+      @emoji = emoji || json && json[:emoji]
       @will_update = false
     end
     attr_reader :will_update, :emoji
@@ -32,8 +32,8 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       {
-        "type" => "emoji",
-        "emoji" => @emoji,
+        type: "emoji",
+        emoji: @emoji,
       }
     end
   end

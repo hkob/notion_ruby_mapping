@@ -12,6 +12,7 @@ module NotionRubyMapping
 
       context "For an existing database" do
         let(:database_id) { TestConnection::DATABASE_ID }
+
         it "receive id" do
           expect(subject.call.id).to eq nc.hex_id(TestConnection::DATABASE_ID)
         end
@@ -24,7 +25,8 @@ module NotionRubyMapping
 
         describe "dry_run" do
           let(:dry_run) { Database.find "database_id", dry_run: true }
-          it_behaves_like :dry_run, :get, :database_path, id: "database_id"
+
+          it_behaves_like "dry run", :get, :database_path, id: "database_id"
         end
       end
 
@@ -43,13 +45,15 @@ module NotionRubyMapping
 
         describe "dry_run" do
           let(:dry_run) { Database.find "database_id", dry_run: true }
-          it_behaves_like :dry_run, :get, :database_path, id: "database_id"
+
+          it_behaves_like "dry run", :get, :database_path, id: "database_id"
         end
       end
 
       context "Wrong database" do
         context "wrong format id" do
           let(:database_id) { "AAA" }
+
           it "raise exception" do
             expect { subject.call }.to raise_error(StandardError)
           end
@@ -57,6 +61,7 @@ module NotionRubyMapping
 
         context "wrong id" do
           let(:database_id) { TestConnection::UNPERMITTED_DATABASE_ID }
+
           it "Can't receive database" do
             expect { subject.call }.to raise_error(StandardError)
           end
@@ -66,10 +71,12 @@ module NotionRubyMapping
 
     describe "new and reload" do
       let(:database) { Database.new id: database_id }
+
       subject { -> { database.reload } }
 
       context "For an existing database" do
         let(:database_id) { TestConnection::DATABASE_ID }
+
         it "has not json before reload" do
           expect(database.json).to be_nil
         end
@@ -86,6 +93,7 @@ module NotionRubyMapping
       context "Wrong database" do
         context "wrong format id" do
           let(:database_id) { "AAA" }
+
           it "has not json before reload" do
             expect(database.json).to be_nil
           end
@@ -97,6 +105,7 @@ module NotionRubyMapping
 
         context "wrong id" do
           let(:database_id) { TestConnection::UNPERMITTED_DATABASE_ID }
+
           it "raise exception" do
             expect { subject.call }.to raise_error(StandardError)
           end
@@ -109,6 +118,7 @@ module NotionRubyMapping
 
       context "loaded database" do
         let(:database) { Database.find TestConnection::DATABASE_ID }
+
         [
           ["Title", TitleProperty],
           ["NumberTitle", NumberProperty],
@@ -133,6 +143,7 @@ module NotionRubyMapping
 
       context "unloaded database" do
         let(:database) { Database.new id: TestConnection::DATABASE_ID }
+
         context "obtain properties after autoloading" do
           [
             ["Title", TitleProperty],
@@ -166,6 +177,7 @@ module NotionRubyMapping
 
         context "obtain properties after assigning" do
           before { database.assign_property NumberProperty, "NumberTitle" }
+
           it "has NumberProperty without API access" do
             expect(properties["NumberTitle"]).to be_a NumberProperty
           end
@@ -178,6 +190,7 @@ module NotionRubyMapping
 
       context "unloaded database with assign" do
         let(:database) { Database.new id: TestConnection::DATABASE_ID, assign: [NumberProperty, "NumberTitle"] }
+
         it "has NumberProperty without API access" do
           expect(properties["NumberTitle"]).to be_a NumberProperty
         end
@@ -190,40 +203,51 @@ module NotionRubyMapping
 
     describe "build_child_page" do
       let(:db) { Database.find TestConnection::PARENT_DATABASE_ID }
+
       context "with assign" do
         let(:target) { db.build_child_page TitleProperty, "Name" }
+
         before { target.properties["Name"] << "New Page Title" }
+
         context "properties.map(&:name)" do
           let(:ans) { "Name" }
+
           it { expect(target.properties.map(&:name).sort.join(":")).to eq ans }
         end
 
         describe "dry_run" do
           let(:dry_run) { target.save dry_run: true }
-          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
         end
 
         describe "save" do
           before { target.save }
+
           it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
         end
       end
 
       context "without assign (no block)" do
         let(:target) { db.build_child_page }
-        before { target.properties["Name"] << "New Page Title" }
+
+        before { target.properties[:Name] << "New Page Title" }
+
         context "properties.map(&:name)" do
-          let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
+          let(:ans) { [:Name, :"Related to Sample table (Column)", :Tags, :title2] }
+
           it { expect(target.properties.map(&:name).sort).to eq ans }
         end
 
         describe "dry_run" do
           let(:dry_run) { target.save dry_run: true }
-          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
         end
 
         describe "save" do
           before { target.save }
+
           it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
         end
       end
@@ -236,17 +260,20 @@ module NotionRubyMapping
         end
 
         context "properties.map(&:name)" do
-          let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
+          let(:ans) { [:Name, :"Related to Sample table (Column)", :Tags, :title2] }
+
           it { expect(target.properties.map(&:name).sort).to eq ans }
         end
 
         describe "dry_run" do
           let(:dry_run) { target.save dry_run: true }
-          it_behaves_like :dry_run, :post, :pages_path, json_method: :property_values_json
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
         end
 
         describe "save" do
           before { target.save }
+
           it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
         end
       end
@@ -260,15 +287,17 @@ module NotionRubyMapping
       let(:up) { target.properties["UrlTitle"] }
       let(:query) { np.filter_greater_than(100).and(up.filter_starts_with("https")).ascending(np) }
       let(:dry_run) { target.query_database query, dry_run: true }
-      it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
+
+      it_behaves_like "dry run", :post, :query_database_path, use_id: true, use_query: true
     end
 
     describe "query with filter_properties" do
       let(:db) { Database.find TestConnection::DATABASE_ID }
-      let(:np) { db.properties["NumberTitle"] }
-      let(:ep) { db.properties["MailTitle"] }
+      let(:np) { db.properties[:NumberTitle] }
+      let(:ep) { db.properties[:MailTitle] }
       let(:query) { Query.new(filter_properties: [np, ep]) }
       let(:target) { db.query_database query }
+
       it { expect(target.count).to eq 5 }
     end
 
@@ -278,7 +307,8 @@ module NotionRubyMapping
       let(:lt) { target.last_edited_time }
       let(:query) { ct.filter_past_week.and(lt.filter_after(Date.new(2022, 5, 10))) }
       let(:dry_run) { target.query_database query, dry_run: true }
-      it_behaves_like :dry_run, :post, :query_database_path, use_id: true, use_query: true
+
+      it_behaves_like "dry run", :post, :query_database_path, use_id: true, use_query: true
     end
 
     describe "build_database" do
@@ -304,7 +334,7 @@ module NotionRubyMapping
                                          SelectProperty, "Select",
                                          TitleProperty, "Title",
                                          UrlProperty, "Url" do |db, ps|
-          fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
+          fp, msp, np, rp, rup, sp = ps.values_at :Formula, :MultiSelect, :Number, :Relation, :Rollup, :Select
           fp.formula_expression = "now()"
           msp.add_multi_select_option name: "MS1", color: "orange"
           msp.add_multi_select_option name: "MS2", color: "green"
@@ -326,80 +356,83 @@ module NotionRubyMapping
       describe "property_schema_json" do
         let(:ans) do
           {
-            "title" => [
+            title: [
               {
-                "href" => nil,
-                "plain_text" => "New database title",
-                "text" => {
-                  "content" => "New database title",
-                  "link" => nil,
+                href: nil,
+                plain_text: "New database title",
+                text: {
+                  content: "New database title",
+                  link: nil,
                 },
-                "type" => "text",
+                type: "text",
               },
             ],
-            "icon" => {"emoji" => "🎉", "type" => "emoji"},
-            "parent" => {
-              "type" => "page_id",
-              "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
+            icon: {emoji: "🎉", type: "emoji"},
+            parent: {
+              type: "page_id",
+              page_id: "c01166c613ae45cbb96818b4ef2f5a77",
             },
-            "properties" => {
-              "Checkbox" => {"checkbox" => {}},
-              "CreatedBy" => {"created_by" => {}},
-              "CreatedTime" => {"created_time" => {}},
-              "Date" => {"date" => {}},
-              "Email" => {"email" => {}},
-              "Files" => {"files" => {}},
-              "Formula" => {"formula" => {"expression" => "now()"}},
-              "LastEditedBy" => {"last_edited_by" => {}},
-              "LastEditedTime" => {"last_edited_time" => {}},
-              "MultiSelect" => {
-                "multi_select" => {
-                  "options" => [
-                    {"color" => "orange", "name" => "MS1"},
-                    {"color" => "green", "name" => "MS2"},
+            properties: {
+              Checkbox: {checkbox: {}},
+              CreatedBy: {created_by: {}},
+              CreatedTime: {created_time: {}},
+              Date: {date: {}},
+              Email: {email: {}},
+              Files: {files: {}},
+              Formula: {formula: {expression: "now()"}},
+              LastEditedBy: {last_edited_by: {}},
+              LastEditedTime: {last_edited_time: {}},
+              MultiSelect: {
+                multi_select: {
+                  options: [
+                    {color: "orange", name: "MS1"},
+                    {color: "green", name: "MS2"},
                   ],
                 },
               },
-              "Number" => {"number" => {"format" => "yen"}},
-              "People" => {"people" => {}},
-              "PhoneNumber" => {"phone_number" => {}},
-              "Relation" => {
-                "relation" => {
-                  "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
-                  "type" => "dual_property",
-                  "dual_property" => {}
-                }
-              },
-              "RichText" => {"rich_text" => {}},
-              "Rollup" => {
-                "rollup" => {
-                  "function" => "sum",
-                  "relation_property_name" => "Relation",
-                  "rollup_property_name" => "NumberTitle",
+              Number: {number: {format: "yen"}},
+              People: {people: {}},
+              PhoneNumber: {phone_number: {}},
+              Relation: {
+                relation: {
+                  database_id: "c37a2c66e3aa4a0da44773de3b80c253",
+                  type: "dual_property",
+                  dual_property: {},
                 },
               },
-              "Select" => {
-                "select" => {
-                  "options" => [
-                    {"color" => "yellow", "name" => "S1"},
-                    {"color" => "default", "name" => "S2"},
+              RichText: {rich_text: {}},
+              Rollup: {
+                rollup: {
+                  function: "sum",
+                  relation_property_name: "Relation",
+                  rollup_property_name: "NumberTitle",
+                },
+              },
+              Select: {
+                select: {
+                  options: [
+                    {color: "yellow", name: "S1"},
+                    {color: "default", name: "S2"},
                   ],
                 },
               },
-              "Title" => {"title" => {}},
-              "Url" => {"url" => {}},
+              Title: {title: {}},
+              Url: {url: {}},
             },
           }
         end
+
         it { expect(target.property_schema_json).to eq ans }
 
         describe "dry_run" do
           let(:dry_run) { target.save dry_run: true }
-          it_behaves_like :dry_run, :post, :databases_path, json_method: :property_schema_json
+
+          it_behaves_like "dry run", :post, :databases_path, json_method: :property_schema_json
         end
 
         describe "save" do
           before { target.save }
+
           describe "id" do
             it { expect(target.id).to eq "eeca3a41f903435da15875f9358cad5d" }
           end
@@ -409,6 +442,7 @@ module NotionRubyMapping
 
     describe "create_database" do
       let(:parent_page) { Page.new id: TestConnection::TOP_PAGE_ID }
+
       context "not dry_run" do
         let(:target) do
           parent_page.create_child_database "New database title",
@@ -431,7 +465,7 @@ module NotionRubyMapping
                                             SelectProperty, "Select",
                                             TitleProperty, "Title",
                                             UrlProperty, "Url" do |db, ps|
-            fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
+            fp, msp, np, rp, rup, sp = ps.values_at :Formula, :MultiSelect, :Number, :Relation, :Rollup, :Select
             fp.formula_expression = "now()"
             msp.add_multi_select_option name: "MS1", color: "orange"
             msp.add_multi_select_option name: "MS2", color: "green"
@@ -463,16 +497,17 @@ module NotionRubyMapping
           end
         end
 
-        it_behaves_like :dry_run, :post, :databases_path, json_method: :property_schema_json
+        it_behaves_like "dry run", :post, :databases_path, json_method: :property_schema_json
       end
     end
 
     describe "update_database" do
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
+
       before do
         tc.clear_object_hash
-        fp, msp, np, rp, rup, sp = target.properties.values_at "Formula", "MultiSelect", "Number", "Relation",
-                                                               "Rollup", "Select"
+        fp, msp, np, rp, rup, sp = target.properties.values_at :Formula, :MultiSelect, :Number, :Relation,
+                                                               :Rollup, :Select
         fp.formula_expression = "pi"
         msp.add_multi_select_option name: "MS3", color: "blue"
         np.format = "percent"
@@ -490,82 +525,85 @@ module NotionRubyMapping
       describe "update_property_schema_json" do
         let(:ans) do
           {
-            "title" => [
+            title: [
               {
-                "href" => nil,
-                "plain_text" => "New database title",
-                "text" => {
-                  "content" => "New database title",
-                  "link" => nil,
+                href: nil,
+                plain_text: "New database title",
+                text: {
+                  content: "New database title",
+                  link: nil,
                 },
-                "annotations" => {
-                  "bold" => false,
-                  "code" => false,
-                  "color" => "default",
-                  "italic" => false,
-                  "strikethrough" => false,
-                  "underline" => false,
+                annotations: {
+                  bold: false,
+                  code: false,
+                  color: "default",
+                  italic: false,
+                  strikethrough: false,
+                  underline: false,
                 },
-                "type" => "text",
+                type: "text",
               },
               {
-                "href" => nil,
-                "plain_text" => "(Added)",
-                "text" => {
-                  "content" => "(Added)",
-                  "link" => nil,
+                href: nil,
+                plain_text: "(Added)",
+                text: {
+                  content: "(Added)",
+                  link: nil,
                 },
-                "type" => "text",
+                type: "text",
               },
             ],
-            "icon" => {"emoji" => "🎉", "type" => "emoji"},
-            "properties" => {
-              "Formula" => {"formula" => {"expression" => "pi"}},
-              "MultiSelect" => {
-                "multi_select" => {
-                  "options" => [
-                    {"color" => "orange", "id" => "98aaa1c0-4634-47e2-bfae-d739a8c5e564", "name" => "MS1"},
-                    {"color" => "green", "id" => "71756a93-cfd8-4675-b508-facb1c31af2c", "name" => "MS2"},
-                    {"color" => "blue", "name" => "MS3"},
+            icon: {emoji: "🎉", type: "emoji"},
+            properties: {
+              Formula: {formula: {expression: "pi"}},
+              MultiSelect: {
+                multi_select: {
+                  options: [
+                    {color: "orange", id: "98aaa1c0-4634-47e2-bfae-d739a8c5e564", name: "MS1"},
+                    {color: "green", id: "71756a93-cfd8-4675-b508-facb1c31af2c", name: "MS2"},
+                    {color: "blue", name: "MS3"},
                   ],
                 },
               },
-              "Number" => {"number" => {"format" => "percent"}},
-              "Relation" => {
-                "relation" => {
-                  "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
-                  "type" => "dual_property",
-                  "dual_property" => {}
+              Number: {number: {format: "percent"}},
+              Relation: {
+                relation: {
+                  database_id: "c37a2c66e3aa4a0da44773de3b80c253",
+                  type: "dual_property",
+                  dual_property: {},
                 },
               },
-              "Rollup" => {
-                "rollup" => {
-                  "function" => "average",
-                  "relation_property_name" => "Relation",
-                  "rollup_property_name" => "NumberTitle",
+              Rollup: {
+                rollup: {
+                  function: "average",
+                  relation_property_name: "Relation",
+                  rollup_property_name: "NumberTitle",
                 },
               },
-              "Select" => {
-                "select" => {
-                  "options" => [
-                    {"color" => "yellow", "id" => "56a526e1-0cec-4b85-b9db-fc68d00e50c6", "name" => "S1"},
-                    {"color" => "default", "id" => "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", "name" => "S2"},
-                    {"color" => "red", "name" => "S3"},
+              Select: {
+                select: {
+                  options: [
+                    {color: "yellow", id: "56a526e1-0cec-4b85-b9db-fc68d00e50c6", name: "S1"},
+                    {color: "default", id: "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", name: "S2"},
+                    {color: "red", name: "S3"},
                   ],
                 },
               },
             },
           }
         end
+
         it { expect(target.update_property_schema_json).to eq ans }
 
         describe "dry_run" do
           let(:dry_run) { target.save dry_run: true }
-          it_behaves_like :dry_run, :patch, :database_path, use_id: true, json_method: :update_property_schema_json
+
+          it_behaves_like "dry run", :patch, :database_path, use_id: true, json_method: :update_property_schema_json
         end
 
         describe "save" do
           before { target.save(dry_run: true) }
+
           describe "id" do
             it { expect(target.id).to eq "c7697137d49f49c2bbcdd6a665c4f921" }
           end
@@ -575,6 +613,21 @@ module NotionRubyMapping
 
     describe "add_property" do
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
+      let(:ans) do
+        {
+          properties: {
+            "added number property": {
+              number: {
+                format: "euro",
+              },
+            },
+            "added url property": {
+              url: {},
+            },
+          },
+        }
+      end
+
       before do
         tc.clear_object_hash
         target.add_property NumberProperty, "added number property" do |np|
@@ -582,29 +635,18 @@ module NotionRubyMapping
         end
         target.add_property UrlProperty, "added url property"
       end
-      let(:ans) do
-        {
-          "properties" => {
-            "added number property" => {
-              "number" => {
-                "format" => "euro",
-              },
-            },
-            "added url property" => {
-              "url" => {},
-            },
-          },
-        }
-      end
+
       it { expect(target.update_property_schema_json).to eq ans }
 
       describe "dry_run" do
         let(:dry_run) { target.save dry_run: true }
-        it_behaves_like :dry_run, :patch, :database_path, use_id: true, json_method: :update_property_schema_json
+
+        it_behaves_like "dry run", :patch, :database_path, use_id: true, json_method: :update_property_schema_json
       end
 
       describe "save" do
         before { target.save }
+
         describe "id" do
           it { expect(target.properties["added url property"]).to be_an_instance_of UrlProperty }
         end
@@ -613,6 +655,15 @@ module NotionRubyMapping
 
     describe "rename_property" do
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
+      let(:ans) do
+        {
+          properties: {
+            "added number property": {name: :"renamed number property"},
+            "added url property": {name: :"renamed url property"},
+          },
+        }
+      end
+
       before do
         tc.clear_object_hash
         target.add_property(NumberProperty, "added number property") { |np| np.format = "euro" }
@@ -621,65 +672,22 @@ module NotionRubyMapping
         target.rename_property "added number property", "renamed number property"
         target.rename_property "added url property", "renamed url property"
       end
-      let(:ans) do
-        {
-          "properties" => {
-            "added number property" => {"name" => "renamed number property"},
-            "added url property" => {"name" => "renamed url property"},
-          },
-        }
-      end
+
       it { expect(target.update_property_schema_json).to eq ans }
 
       describe "dry_run" do
         let(:dry_run) { target.save dry_run: true }
-        it_behaves_like :dry_run, :patch, :database_path, use_id: true, json_method: :update_property_schema_json
+
+        it_behaves_like "dry run", :patch, :database_path, use_id: true, json_method: :update_property_schema_json
       end
 
       describe "save" do
         before { target.save }
+
         describe "id" do
-          it { expect(target.properties["renamed number property"]).to be_an_instance_of NumberProperty }
+          it { expect(target.properties[:"renamed number property"]).to be_an_instance_of NumberProperty }
         end
       end
     end
-
-    # describe "remove_properties" do
-    #   let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
-    #   before do
-    #     tc.clear_object_hash
-    #     target.add_property NumberProperty, "added number property" do |np|
-    #       np.format = "euro"
-    #     end
-    #     target.add_property UrlProperty, "added url property"
-    #     target.save
-    #     properties = target.properties
-    #     properties["added number property"].new_name = "renamed number property"
-    #     properties["added url property"].new_name = "renamed url property"
-    #     target.save
-    #     target.remove_properties "renamed number property", "renamed url property"
-    #   end
-    #   let(:ans) do
-    #     {
-    #       "properties" => {
-    #         "renamed number property" => nil,
-    #         "renamed url property" => nil,
-    #       },
-    #     }
-    #   end
-    #   it { expect(target.update_property_schema_json).to eq ans }
-    #
-    #   describe "dry_run" do
-    #     let(:dry_run) { target.save dry_run: true }
-    #     it_behaves_like :dry_run, :patch, :database_path, use_id: true, json_method: :update_property_schema_json
-    #   end
-
-      # describe "save" do
-      #   before { target.save }
-      #   describe "id" do
-      #     it { expect { target.properties["renamed_number_property"] }.to raise_error(StandardError) }
-      #   end
-      # end
-    # end
   end
 end
