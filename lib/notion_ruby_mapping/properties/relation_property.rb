@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # MultiSelect property
   class RelationProperty < MultiProperty
-    TYPE = "relation"
+    TYPE = :relation
 
     ### Public announced methods
 
@@ -23,7 +23,7 @@ module NotionRubyMapping
       assert_page_property __method__
       @will_update = true
       @json << if page_id_or_json.is_a? String
-                 {"id" => page_id_or_json}
+                 {id: page_id_or_json}
                else
                  page_id_or_json
                end
@@ -38,7 +38,7 @@ module NotionRubyMapping
       page_ids_or_jsons = [page_ids_or_jsons] unless page_ids_or_jsons.is_a? Array
 
       @json = page_ids_or_jsons.map do |page_id_or_json|
-        page_id_or_json.is_a?(String) ? {"id" => page_id_or_json} : page_id_or_json
+        page_id_or_json.is_a?(String) ? {id: page_id_or_json} : page_id_or_json
       end
     end
 
@@ -48,19 +48,20 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#eb40f1a2ad5c4e368d343870a7e529f9
     def relation_database_id
       assert_database_property __method__
-      @json["database_id"]
+      @json[:database_id]
     end
 
     # @param [String] database_id
     # @param [String] synced_property_name
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#7f5029fb7f6e4c009f22888b233e6f64
-    def replace_relation_database(database_id: nil, type: "dual_property")
+    def replace_relation_database(database_id: nil, type: :dual_property)
       assert_database_property __method__
+      type_sym = type.to_sym
       @will_update = true
-      @json["database_id"] = database_id if database_id
-      @json["type"] = type
-      @json[type] = {}
-      @json.delete type == "dual_property" ? "single_property" : "dual_property"
+      @json[:database_id] = database_id if database_id
+      @json[:type] = type_sym.to_s
+      @json[type_sym] = {}
+      @json.delete type_sym == :dual_property ? :single_property : :dual_property
       @json
     end
 
@@ -68,7 +69,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @param [String] name
+    # @param [String, Symbol] name
     # @param [Hash, Array] json
     # @param [String, Array] relation
     def initialize(name, will_update: false, json: nil, relation: nil, base_type: :page, property_id: nil,
@@ -78,7 +79,7 @@ module NotionRubyMapping
       @json = if database?
                 json || {}
               elsif relation
-                Array(relation).map { |r| {"id" => r} }
+                Array(relation).map { |r| {id: r} }
               else
                 json || []
               end
@@ -93,20 +94,20 @@ module NotionRubyMapping
       return ans if ans != {} || !@will_update
 
       ans[@name] ||= {}
-      ans[@name]["relation"] = @json
+      ans[@name][:relation] = @json
       ans
     end
 
     def database_id
-      @json["database_id"]
+      @json[:database_id]
     end
 
     def synced_property_id
-      @json["type"] == "dual_property" ? @json["dual_property"]["synced_property_id"] : nil
+      @json[:type] == "dual_property" ? @json[:dual_property][:synced_property_id] : nil
     end
 
     def synced_property_name
-      @json["type"] == "dual_property" ? @json["dual_property"]["synced_property_name"] : nil
+      @json[:type] == "dual_property" ? @json[:dual_property][:synced_property_name] : nil
     end
 
     # @return [Hash] created json
@@ -114,8 +115,8 @@ module NotionRubyMapping
       assert_page_property __method__
       {
         @name => {
-          "type" => "relation",
-          "relation" => @json,
+          type: "relation",
+          relation: @json,
         },
       }
     end

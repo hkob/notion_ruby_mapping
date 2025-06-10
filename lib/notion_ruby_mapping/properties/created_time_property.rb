@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # CreatedTimeProperty
   class CreatedTimeProperty < DateBaseProperty
-    TYPE = "created_time"
+    TYPE = :created_time
 
     ### Public announced methods
 
@@ -19,7 +19,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @param [String] name Property name
+    # @param [String, Symbol] name Property name
     # @param [String] json created_time value (optional)
     def initialize(name, will_update: false, base_type: :page, json: nil, property_id: nil, property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,

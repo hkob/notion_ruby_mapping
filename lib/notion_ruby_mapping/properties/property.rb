@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-#
+
 require "forwardable"
 
 module NotionRubyMapping
@@ -28,11 +28,11 @@ module NotionRubyMapping
 
     ## Database property only methods
 
-    # @param [String] new_name
+    # @param [String, Symbol] new_name
     def new_name=(new_name)
       assert_database_property __method__
       @will_update = true
-      @new_name = new_name
+      @new_name = new_name.to_sym
     end
 
     # @return [NotionRubyMapping::Property] self
@@ -47,10 +47,10 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @param [String] name Property name
+    # @param [String, Symbol] name Property name
     # @return [Property] generated Property object
     def initialize(name, will_update: false, base_type: :page, property_id: nil, property_cache: nil, query: nil)
-      @name = name
+      @name = name.to_sym
       @will_update = will_update
       @base_type = base_type
       @create = false
@@ -62,69 +62,72 @@ module NotionRubyMapping
       @query = query
     end
 
-    # @param [String] name
+    # @param [String, Symbol] name
     # @param [Hash] input_json
     # @return [NotionRubyMapping::Property, nil] generated Property object
     # @param [Symbol] base_type :page or :database
     # @param [String, nil] page_id
     def self.create_from_json(name, input_json, base_type = :page, property_cache = nil, query = nil)
-      raise StandardError, "Property not found: #{name}:#{input_json}" if input_json.nil?
+      name_sym = name.to_sym
+      raise StandardError, "Property not found: #{name_sym}:#{input_json}" if input_json.nil?
 
-      type = input_json["type"]
+      type = input_json[:type]&.to_sym
       if type.nil?
-        new name, property_id: input_json["id"], base_type: base_type, property_cache: property_cache, query: query
-      elsif type == "property_item"
-        tmp = new name, property_id: input_json["property_item"]["id"], base_type: base_type,
-                        property_cache: property_cache, query: query
+        new name_sym, property_id: input_json[:id], base_type: base_type, property_cache: property_cache, query: query
+      elsif type == :property_item
+        tmp = new name_sym, property_id: input_json[:property_item][:id], base_type: base_type,
+                            property_cache: property_cache, query: query
         objects = List.new(json: input_json, type: :property, value: tmp, query: query).to_a
-        case input_json["property_item"]["type"]
-        when "people"
-          PeopleProperty.new name, people: objects, base_type: base_type,
-                                   property_cache: property_cache, query: query
-        when "relation"
-          RelationProperty.new name, relation: objects, base_type: base_type,
-                                     property_cache: property_cache, query: query
-        when "rich_text"
-          RichTextProperty.new name, text_objects: objects, base_type: base_type,
-                                     property_cache: property_cache, query: query
-        when "rollup"
-          RollupProperty.new name, json: objects, base_type: base_type,
-                                   property_cache: property_cache, query: query
-        when "title"
-          TitleProperty.new name, text_objects: objects, base_type: base_type,
-                                  property_cache: property_cache, query: query
+        case input_json[:property_item][:type]&.to_sym
+        when :people
+          PeopleProperty.new name_sym, people: objects, base_type: base_type,
+                                       property_cache: property_cache, query: query
+        when :relation
+          RelationProperty.new name_sym, relation: objects, base_type: base_type,
+                                         property_cache: property_cache, query: query
+        when :rich_text
+          RichTextProperty.new name_sym, text_objects: objects, base_type: base_type,
+                                         property_cache: property_cache, query: query
+        when :rollup
+          RollupProperty.new name_sym, json: objects, base_type: base_type,
+                                       property_cache: property_cache, query: query
+        when :title
+          TitleProperty.new name_sym, text_objects: objects, base_type: base_type,
+                                      property_cache: property_cache, query: query
+        else
+          raise StandardError, "Irregular property type: #{input_json[:property_item][:type]}"
         end
       else
         klass = {
-          "button" => ButtonProperty,
-          "checkbox" => CheckboxProperty,
-          "created_time" => CreatedTimeProperty,
-          "date" => DateProperty,
-          "formula" => FormulaProperty,
-          "last_edited_time" => LastEditedTimeProperty,
-          "rollup" => RollupProperty,
-          "email" => EmailProperty,
-          "files" => FilesProperty,
-          "created_by" => CreatedByProperty,
-          "last_edited_by" => LastEditedByProperty,
-          "multi_select" => MultiSelectProperty,
-          "relation" => RelationProperty,
-          "number" => NumberProperty,
-          "people" => PeopleProperty,
-          "phone_number" => PhoneNumberProperty,
-          "select" => SelectProperty,
-          "status" => StatusProperty,
-          "title" => TitleProperty,
-          "rich_text" => RichTextProperty,
-          "unique_id" => UniqueIdProperty,
-          "url" => UrlProperty,
-          "verification" => VerificationProperty,
+          button: ButtonProperty,
+          checkbox: CheckboxProperty,
+          created_time: CreatedTimeProperty,
+          date: DateProperty,
+          formula: FormulaProperty,
+          last_edited_time: LastEditedTimeProperty,
+          rollup: RollupProperty,
+          email: EmailProperty,
+          files: FilesProperty,
+          created_by: CreatedByProperty,
+          last_edited_by: LastEditedByProperty,
+          multi_select: MultiSelectProperty,
+          relation: RelationProperty,
+          number: NumberProperty,
+          people: PeopleProperty,
+          phone_number: PhoneNumberProperty,
+          select: SelectProperty,
+          status: StatusProperty,
+          title: TitleProperty,
+          rich_text: RichTextProperty,
+          unique_id: UniqueIdProperty,
+          url: UrlProperty,
+          verification: VerificationProperty,
         }[type]
         raise StandardError, "Irregular property type: #{type}" unless klass
 
-        answer = klass.new name, property_id: input_json["id"], json: input_json[type], base_type: base_type,
-                                 property_cache: property_cache
-        answer = answer.retrieve_page_property if answer.is_a?(RelationProperty) && input_json["has_more"] == true
+        answer = klass.new name_sym, property_id: input_json[:id], json: input_json[type], base_type: base_type,
+                                     property_cache: property_cache
+        answer = answer.retrieve_page_property if answer.is_a?(RelationProperty) && input_json[:has_more] == true
         answer
       end
     end
@@ -138,7 +141,7 @@ module NotionRubyMapping
 
     # @return [TrueClass, FalseClass] true if database property
     def database?
-      @base_type == :database
+      @base_type.to_sym == :database
     end
 
     # @return [TrueClass, FalseClass] true if it has Property contents
@@ -146,18 +149,18 @@ module NotionRubyMapping
       !instance_of? Property
     end
 
-    # @param [String] key query parameter
+    # @param [Symbol] key query parameter
     # @param [Object] value query value
     # @return [NotionRubyMapping::Query] generated Query object
     def make_filter_query(key, value, condition: nil, another_type: nil)
       if condition
-        Query.new filter: {"property" => @name, type => {condition => {another_type => {key => value}}}}
+        Query.new filter: {property: @name, type => {condition => {another_type => {key => value}}}}
       elsif another_type
-        Query.new filter: {"property" => @name, type => {another_type => {key => value}}}
-      elsif @name == "__timestamp__"
-        Query.new filter: {"timestamp" => type, type => {key => value}}
+        Query.new filter: {property: @name, type => {another_type => {key => value}}}
+      elsif @name == :__timestamp__
+        Query.new filter: {timestamp: type.to_s, type => {key => value}}
       else
-        Query.new filter: {"property" => @name, type => {key => value}}
+        Query.new filter: {property: @name, type => {key => value}}
       end
     end
 
@@ -198,7 +201,7 @@ module NotionRubyMapping
       if @remove
         {@name => nil}
       elsif @new_name
-        {@name => {"name" => @new_name}}
+        {@name => {name: @new_name}}
       else
         {}
       end
@@ -208,7 +211,7 @@ module NotionRubyMapping
 
     # @param [Symbol, nil] method
     def assert_page_property(method)
-      raise StandardError, "#{method} can execute only Page property." unless @base_type == :page
+      raise StandardError, "#{method} can execute only Page property." if database?
     end
 
     # @return [NotionRubyMapping::Property, Array<UserObject>, nil]
@@ -243,7 +246,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#5f07c4ebc4744986bfc99a43827349fc
     def filter_equals(value, condition: nil, another_type: nil)
-      make_filter_query "equals", value, condition: condition, another_type: another_type
+      make_filter_query :equals, value, condition: condition, another_type: another_type
     end
 
     # @param [String, Number] value Query value
@@ -252,7 +255,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#a44a1875c3ef49f2b4f817291953a1d4
     def filter_does_not_equal(value, condition: nil, another_type: nil)
-      make_filter_query "does_not_equal", value, condition: condition, another_type: another_type
+      make_filter_query :does_not_equal, value, condition: condition, another_type: another_type
     end
   end
 
@@ -266,7 +269,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#271a2ebaa1ec48acae732ca98920feab
     def filter_contains(value, condition: nil, another_type: nil)
-      make_filter_query "contains", value, condition: condition, another_type: another_type
+      make_filter_query :contains, value, condition: condition, another_type: another_type
     end
 
     # @param [String] value Query value
@@ -275,7 +278,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#b0328e3b146f48a4ad4c9c2ee5363486
     def filter_does_not_contain(value, condition: nil, another_type: nil)
-      make_filter_query "does_not_contain", value, condition: condition, another_type: another_type
+      make_filter_query :does_not_contain, value, condition: condition, another_type: another_type
     end
   end
 
@@ -289,7 +292,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/EmailProperty-39aeb5df56ea4cc1b9380574e4fdeec0#d3e098b2f38c4c8c9d3e815516cfd953
     def filter_starts_with(value, condition: nil, another_type: nil)
-      make_filter_query "starts_with", value, condition: condition, another_type: another_type
+      make_filter_query :starts_with, value, condition: condition, another_type: another_type
     end
 
     # @param [String] value Query value
@@ -297,7 +300,7 @@ module NotionRubyMapping
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_ends_with(value, condition: nil, another_type: nil)
-      make_filter_query "ends_with", value, condition: condition, another_type: another_type
+      make_filter_query :ends_with, value, condition: condition, another_type: another_type
     end
   end
 
@@ -310,7 +313,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#38749dfae0854c68b4c55095d3efbff1
     def filter_is_empty(condition: nil, another_type: nil)
-      make_filter_query "is_empty", true, condition: condition, another_type: another_type
+      make_filter_query :is_empty, true, condition: condition, another_type: another_type
     end
 
     # @param [String] rollup Rollup name
@@ -318,7 +321,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Query] generated Query object
     # @see https://www.notion.so/hkob/CreatedByProperty-945fa6be1c014da2b7e55a2b76e37b57#515659ea52b54fb48c81b813f3b705f6
     def filter_is_not_empty(condition: nil, another_type: nil)
-      make_filter_query "is_not_empty", true, condition: condition, another_type: another_type
+      make_filter_query :is_not_empty, true, condition: condition, another_type: another_type
     end
   end
 
@@ -331,7 +334,7 @@ module NotionRubyMapping
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_greater_than(value, condition: nil, another_type: nil)
-      make_filter_query "greater_than", value, condition: condition, another_type: another_type
+      make_filter_query :greater_than, value, condition: condition, another_type: another_type
     end
 
     # @param [Number] value Query value
@@ -339,7 +342,7 @@ module NotionRubyMapping
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_less_than(value, condition: nil, another_type: nil)
-      make_filter_query "less_than", value, condition: condition, another_type: another_type
+      make_filter_query :less_than, value, condition: condition, another_type: another_type
     end
 
     # @param [Number] value Query value
@@ -347,7 +350,7 @@ module NotionRubyMapping
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_greater_than_or_equal_to(value, condition: nil, another_type: nil)
-      make_filter_query "greater_than_or_equal_to", value, condition: condition, another_type: another_type
+      make_filter_query :greater_than_or_equal_to, value, condition: condition, another_type: another_type
     end
 
     # @param [Number] value Query value
@@ -355,7 +358,7 @@ module NotionRubyMapping
     # @param [String] rollup_type Rollup type
     # @return [NotionRubyMapping::Query] generated Query object
     def filter_less_than_or_equal_to(value, condition: nil, another_type: nil)
-      make_filter_query "less_than_or_equal_to", value, condition: condition, another_type: another_type
+      make_filter_query :less_than_or_equal_to, value, condition: condition, another_type: another_type
     end
   end
 end

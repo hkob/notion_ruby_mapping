@@ -5,9 +5,9 @@ module NotionRubyMapping
     tc = TestConnection.instance
     rich_text_array_json = tc.read_json "rich_text_array"
     rich_text_property_values_json = tc.read_json "rich_text_array"
-    rich_text_property_values_json[1]["mention"]["user"] = {
-      "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-      "object" => "user",
+    rich_text_property_values_json[1][:mention][:user] = {
+      id: "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+      object: "user",
     }
 
     context "for sample RichTextArray" do
@@ -25,19 +25,22 @@ module NotionRubyMapping
         it { expect(target.property_values_json).to eq([]) }
       end
 
-      it_behaves_like :will_not_update
+      it_behaves_like "will not update"
 
       context "[0].text" do
         subject { target[0] }
         it { expect(subject.text).to eq "abc\n" }
         it { expect(subject.will_update).to be_falsey }
-        it_behaves_like :will_not_update
+
+        it_behaves_like "will not update"
 
         context "after [0].text = def" do
           before { subject.text = "def\n" }
+
           it { expect(subject.text).to eq "def\n" }
           it { expect(subject.will_update).to be_truthy }
-          it_behaves_like :will_update
+
+          it_behaves_like "will update"
         end
       end
 
@@ -51,18 +54,19 @@ module NotionRubyMapping
         describe "full_text" do
           it { expect(target.full_text).to eq "abc\n \n \n \n \n高専HP\n ABC" }
         end
-        it_behaves_like :will_update
+
+        it_behaves_like "will update"
 
         describe "property_values_json" do
           ans = rich_text_property_values_json + [
             {
-              "href" => nil,
-              "plain_text" => "ABC",
-              "text" => {
-                "content" => "ABC",
-                "link" => nil,
+              href: nil,
+              plain_text: "ABC",
+              text: {
+                content: "ABC",
+                link: nil,
               },
-              "type" => "text",
+              type: "text",
             },
           ]
           it { expect(target.property_values_json).to eq ans }
@@ -79,24 +83,25 @@ module NotionRubyMapping
         describe "full_text" do
           it { expect(target.full_text).to eq "abc\n \n \n \n \n高専HP\n DEF" }
         end
-        it_behaves_like :will_update
+
+        it_behaves_like "will update"
         describe "property_values_json" do
           ans = rich_text_property_values_json + [
             {
-              "href" => nil,
-              "plain_text" => "DEF",
-              "text" => {
-                "content" => "DEF",
-                "link" => nil,
+              href: nil,
+              plain_text: "DEF",
+              text: {
+                content: "DEF",
+                link: nil,
               },
-              "type" => "text",
+              type: "text",
             },
           ]
           it { expect(target.property_values_json).to eq ans }
         end
       end
 
-      context "after delete_at 0 " do
+      context "after delete_at 0" do
         before { target.delete_at 0 }
 
         describe "count" do
@@ -106,25 +111,30 @@ module NotionRubyMapping
         describe "full_text" do
           it { expect(target.full_text).to eq " \n \n \n \n高専HP\n " }
         end
-        it_behaves_like :will_update
+
+        it_behaves_like "will update"
       end
     end
 
     context "create from text_objects" do
-      let(:target) { RichTextArray.rich_text_array "title", text_objects }
+      let(:target) { RichTextArray.rich_text_array :title, text_objects }
+
       subject { target.full_text }
       context "a single string" do
         let(:text_objects) { "A string" }
+
         it { is_expected.to eq "A string" }
       end
 
       context "two strings" do
         let(:text_objects) { %W[ABC\n DEF] }
+
         it { is_expected.to eq "ABC\nDEF" }
       end
 
       context "A TextObject" do
         let(:text_objects) { TextObject.new "A TextObject" }
+
         it { is_expected.to eq "A TextObject" }
       end
 
@@ -135,6 +145,7 @@ module NotionRubyMapping
             MentionObject.new(user_id: "ABC"),
           ]
         end
+
         it { is_expected.to eq "A TextObject" }
       end
 
@@ -142,28 +153,34 @@ module NotionRubyMapping
         let(:text_objects) do
           RichTextArray.new "title", text_objects: "ABC"
         end
+
         it { is_expected.to eq "ABC" }
       end
     end
 
     context "rich_text_objects=" do
       let(:target) { RichTextArray.rich_text_array "title" }
+
       before { target.rich_text_objects = text_objects }
+
       subject { target.full_text }
       context "a single string" do
         let(:text_objects) { "A string" }
+
         it { is_expected.to eq "A string" }
         it { expect(target.will_update).to be_truthy }
       end
 
       context "two strings" do
         let(:text_objects) { %W[ABC\n DEF] }
+
         it { is_expected.to eq "ABC\nDEF" }
         it { expect(target.will_update).to be_truthy }
       end
 
       context "A TextObject" do
         let(:text_objects) { TextObject.new "A TextObject" }
+
         it { is_expected.to eq "A TextObject" }
         it { expect(target.will_update).to be_truthy }
       end
@@ -175,6 +192,7 @@ module NotionRubyMapping
             MentionObject.new(user_id: "ABC"),
           ]
         end
+
         it { is_expected.to eq "A TextObject" }
         it { expect(target.will_update).to be_truthy }
       end
@@ -183,6 +201,7 @@ module NotionRubyMapping
         let(:text_objects) do
           RichTextArray.new "title", text_objects: "ABC"
         end
+
         it { is_expected.to eq "ABC" }
         it { expect(target.will_update).to be_truthy }
       end

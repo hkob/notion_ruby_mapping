@@ -9,7 +9,7 @@ module NotionRubyMapping
 
       super(json: json, id: id, parent: parent)
       @url = if @json
-               @json[type]["url"]
+               @json[type][:url]
              else
                url
              end
@@ -21,14 +21,14 @@ module NotionRubyMapping
     # @return [Hash{String (frozen)->Hash}]
     def block_json(not_update: true)
       ans = super
-      ans[type] = {"url" => @url}
+      ans[type] = {url: @url}
       ans
     end
 
     # @param [String] str
     def url=(str)
       @url = str
-      @payload.add_update_block_key "url"
+      @payload.add_update_block_key :url
     end
   end
 end

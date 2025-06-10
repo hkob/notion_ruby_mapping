@@ -5,7 +5,7 @@ module NotionRubyMapping
   class QuoteBlock < TextSubBlockColorBaseBlock
     # @return [String (frozen)]
     def type
-      "quote"
+      :quote
     end
   end
 end

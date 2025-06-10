@@ -7,14 +7,16 @@ module NotionRubyMapping
 
     describe "self.emoji_object" do
       subject { EmojiObject.emoji_object eo }
-      context "String" do
+      context "when String" do
         let(:eo) { "🐶" }
+
         it { expect(subject).to be_is_a EmojiObject }
         it { expect(subject.emoji).to eq "🐶" }
       end
 
-      context "EmojiObject" do
+      context "when EmojiObject" do
         let(:eo) { EmojiObject.new emoji: "💿" }
+
         it { expect(subject).to be_is_a EmojiObject }
         it { expect(subject.emoji).to eq "💿" }
       end
@@ -22,24 +24,28 @@ module NotionRubyMapping
 
     describe "property_values_json" do
       let(:target) { EmojiObject.new emoji: "🟠" }
-      it_behaves_like :property_values_json, {
-        "type" => "emoji",
-        "emoji" => "🟠",
+
+      it_behaves_like "property values json", {
+        type: "emoji",
+        emoji: "🟠",
       }
     end
 
     describe "create from json" do
       let(:target) { EmojiObject.new json: emoji_json }
-      it_behaves_like :property_values_json, {
-        "type" => "emoji",
-        "emoji" => "✅",
+
+      it_behaves_like "property values json", {
+        type: "emoji",
+        emoji: "✅",
       }
       it { expect(target.emoji).to eq "✅" }
     end
 
     describe "emoji=" do
       let(:target) { EmojiObject.new emoji: "🟠" }
+
       before { target.emoji = "✅" }
+
       it { expect(target.emoji).to eq "✅" }
       it { expect(target.will_update).to eq true }
     end

@@ -3,68 +3,73 @@
 module NotionRubyMapping
   RSpec.describe TitleProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "title"} }
+    let(:no_content_json) { {id: "title"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
 
-    context "Database property" do
-      context "created by new" do
-        let(:target) { TitleProperty.new "tp", base_type: :database }
-        it_behaves_like :has_name_as, "tp"
-        it_behaves_like :property_schema_json, {"tp" => {"title" => {}}}
+    context "when Database property" do
+      context "when created by new" do
+        let(:target) { described_class.new "tp", base_type: :database }
+
+        it_behaves_like "has name as", :tp
+        it_behaves_like "property schema json", {tp: {title: {}}}
 
         describe "update_from_json" do
           before { target.update_from_json(tc.read_json("title_property_object")) }
-          it_behaves_like :will_not_update
-          it_behaves_like :assert_different_property, :property_values_json
-          it_behaves_like :update_property_schema_json, {}
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {}
         end
 
         describe "new_name=" do
           before { target.new_name = "new_name" }
-          it_behaves_like :will_update
-          it_behaves_like :assert_different_property, :property_values_json
-          it_behaves_like :update_property_schema_json, {"tp" => {"name" => "new_name"}}
+
+          it_behaves_like "will update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {tp: {name: :new_name}}
         end
 
         describe "remove" do
           before { target.remove }
-          it_behaves_like :will_update
-          it_behaves_like :assert_different_property, :property_values_json
-          it_behaves_like :update_property_schema_json, {"tp" => nil}
+
+          it_behaves_like "will update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {tp: nil}
         end
       end
 
-      context "created from json" do
+      context "when created from json" do
         let(:target) { Property.create_from_json "tp", tc.read_json("title_property_object"), :database }
-        it_behaves_like :has_name_as, "tp"
-        it_behaves_like :will_not_update
-        it_behaves_like :assert_different_property, :property_values_json
-        it_behaves_like :update_property_schema_json, {}
+
+        it_behaves_like "has name as", :tp
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "update property schema json", {}
       end
     end
 
-    context "Page property" do
+    context "when Page property" do
       retrieve_title = {
-        "tp" => {
-          "type" => "title",
-          "title" => [
+        tp: {
+          type: "title",
+          title: [
             {
-              "type" => "text",
-              "text" => {
-                "content" => "ABC",
-                "link" => nil,
+              type: "text",
+              text: {
+                content: "ABC",
+                link: nil,
               },
-              "annotations" => {
-                "bold" => false,
-                "italic" => false,
-                "strikethrough" => false,
-                "underline" => false,
-                "code" => false,
-                "color" => "default",
+              annotations: {
+                bold: false,
+                italic: false,
+                strikethrough: false,
+                underline: false,
+                code: false,
+                color: "default",
               },
-              "plain_text" => "ABC",
-              "href" => nil,
+              plain_text: "ABC",
+              href: nil,
             },
           ],
         },
@@ -75,16 +80,16 @@ module NotionRubyMapping
             "text only",
             [tc.to_text],
             {
-              "type" => "title",
-              "title" => [
+              type: "title",
+              title: [
                 {
-                  "type" => "text",
-                  "text" => {
-                    "content" => "plain_text",
-                    "link" => nil,
+                  type: "text",
+                  text: {
+                    content: "plain_text",
+                    link: nil,
                   },
-                  "plain_text" => "plain_text",
-                  "href" => nil,
+                  plain_text: "plain_text",
+                  href: nil,
                 },
               ],
             },
@@ -93,40 +98,42 @@ module NotionRubyMapping
             "text, link text",
             [tc.to_text, tc.to_href],
             {
-              "type" => "title",
-              "title" => [
+              type: "title",
+              title: [
                 {
-                  "type" => "text",
-                  "text" => {
-                    "content" => "plain_text",
-                    "link" => nil,
+                  type: "text",
+                  text: {
+                    content: "plain_text",
+                    link: nil,
                   },
-                  "plain_text" => "plain_text",
-                  "href" => nil,
+                  plain_text: "plain_text",
+                  href: nil,
                 },
                 {
-                  "type" => "text",
-                  "text" => {
-                    "content" => "href_text",
-                    "link" => {
-                      "url" => "https://www.google.com/",
+                  type: "text",
+                  text: {
+                    content: "href_text",
+                    link: {
+                      url: "https://www.google.com/",
                     },
                   },
-                  "plain_text" => "href_text",
-                  "href" => "https://www.google.com/",
+                  plain_text: "href_text",
+                  href: "https://www.google.com/",
                 },
               ],
             },
           ],
         ].each do |(label, params, ans_json)|
           context label do
-            let(:target) { TitleProperty.new "tp", text_objects: params }
-            it_behaves_like :property_values_json, {"tp" => ans_json}
-            it_behaves_like :will_not_update
+            let(:target) { described_class.new "tp", text_objects: params }
+
+            it_behaves_like "property values json", {tp: ans_json}
+            it_behaves_like "will not update"
 
             describe "update_from_json" do
               before { target.update_from_json(tc.read_json("retrieve_property_title")) }
-              it_behaves_like :property_values_json, retrieve_title
+
+              it_behaves_like "property values json", retrieve_title
             end
           end
         end
@@ -134,12 +141,13 @@ module NotionRubyMapping
 
       describe "a title property from property_item_json" do
         let(:target) { Property.create_from_json "tp", tc.read_json("retrieve_property_title") }
-        it_behaves_like :has_name_as, "tp"
-        it_behaves_like :will_not_update
-        it_behaves_like :property_values_json, retrieve_title
 
-        context "a paragraph text and href_text" do
-          let(:target) { TitleProperty.new "tp", text_objects: [tc.to_text, tc.to_href] }
+        it_behaves_like "has name as", :tp
+        it_behaves_like "will not update"
+        it_behaves_like "property values json", retrieve_title
+
+        context "when a paragraph text and href_text" do
+          let(:target) { described_class.new "tp", text_objects: [tc.to_text, tc.to_href] }
 
           describe "[]" do
             it { expect(target[0].text).to eq "plain_text" }
@@ -158,179 +166,19 @@ module NotionRubyMapping
           end
         end
 
-        context "created from json (no content)" do
+        context "when created from json (no content)" do
           let(:target) { Property.create_from_json "tp", no_content_json, :page, property_cache_first }
-          it_behaves_like :has_name_as, "tp"
-          it_behaves_like :will_not_update
-          it { expect(target.contents?).to be_falsey }
-          it_behaves_like :assert_different_property, :update_property_schema_json
+
+          it_behaves_like "has name as", :tp
+          it_behaves_like "will not update"
+          it { expect(target).not_to be_contents }
+
+          it_behaves_like "assert different property", :update_property_schema_json
 
           # hook property_values_json / title to retrieve a property item
-          it_behaves_like :property_values_json, retrieve_title
+          it_behaves_like "property values json", retrieve_title
         end
       end
-
-      # describe "start=" do
-      #   subject { property.property_values_json }
-      #   {
-      #     Date.new(2022, 2, 22) => [
-      #       [{}, {"start" => "2022-02-22"}],
-      #       [{start_date: Date.new(2022, 2, 22)}, {"start" => "2022-02-22"}],
-      #       [{end_date: Date.new(2022, 2, 24)}, {"start" => "2022-02-22", "end" => "2022-02-24"}],
-      #       [
-      #         {end_date: Time.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-22"}, # Different class -> clear end_date
-      #       ],
-      #       [{end_date: Date.new(2022, 2, 20)}, {"start" => "2022-02-22"}], # Previous date -> clear end_date
-      #     ],
-      #     Time.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-      #       [{}, {"start" => "2022-02-22T01:23:45+09:00"}],
-      #       [{start_date: Date.new(2022, 2, 22)}, {"start" => "2022-02-22T01:23:45+09:00"}],
-      #       [
-      #         {end_date: Time.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-24T01:23:45+09:00"},
-      #       ],
-      #       [
-      #         {end_date: Date.new(2022, 2, 24)},
-      #         {"start" => "2022-02-22T01:23:45+09:00"}, # Different class -> clear end_date
-      #       ],
-      #       [
-      #         {end_date: Time.new(2022, 2, 20, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-22T01:23:45+09:00"}, # Previous date -> clear end_date
-      #       ],
-      #     ],
-      #     DateTime.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-      #       [{}, {"start" => "2022-02-22T01:23:45+09:00"}],
-      #       [{start_date: Date.new(2022, 2, 22)}, {"start" => "2022-02-22T01:23:45+09:00"}],
-      #       [
-      #         {end_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-24T01:23:45+09:00"},
-      #       ],
-      #       [
-      #         {end_date: Date.new(2022, 2, 24)},
-      #         {"start" => "2022-02-22T01:23:45+09:00"}, # Different class -> clear end_date
-      #       ],
-      #       [
-      #         {end_date: DateTime.new(2022, 2, 20, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-22T01:23:45+09:00"}, # Previous date -> clear end_date
-      #       ],
-      #     ],
-      #   }.each do |date, array|
-      #     array.each do |params, answer|
-      #       context params do
-      #         let(:property) { DateProperty.new "dp", **params }
-      #         before { property.start_date = date }
-      #         it { is_expected.to eq({"date" => answer}) }
-      #         it "will update" do
-      #           expect(property.will_update).to be_truthy
-      #         end
-      #       end
-      #     end
-      #   end
-      # end
-
-      # describe "end=" do
-      #   subject { property.property_values_json }
-      #   {
-      #     Date.new(2022, 2, 22) => [
-      #       [{}, {}],
-      #       [{start_date: Date.new(2022, 2, 20)}, {"start" => "2022-02-20", "end" => "2022-02-22"}],
-      #       [
-      #         {start_date: Date.new(2022, 2, 21), end_date: Date.new(2022, 2, 22)},
-      #         {"start" => "2022-02-21", "end" => "2022-02-22"},
-      #       ],
-      #       [
-      #         {start_date: Time.new(2022, 2, 20, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-20T01:23:45+09:00"}, # Different class -> clear end_date
-      #       ],
-      #       [
-      #         {start_date: Date.new(2022, 2, 24)},
-      #         {"start" => "2022-02-24"},
-      #       ], # Previous date -> clear end_date
-      #     ],
-      #     Time.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-      #       [{}, {}],
-      #       [
-      #         {start_date: Time.new(2022, 2, 21, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-21T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00"},
-      #       ],
-      #       [
-      #         {
-      #           start_date: Time.new(2022, 2, 20, 1, 23, 45, "+09:00"),
-      #           end_date: Time.new(2022, 2, 24, 1, 23, 45, "+09:00"),
-      #         },
-      #         {"start" => "2022-02-20T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00"},
-      #       ],
-      #       [
-      #         {start_date: Date.new(2022, 2, 20)},
-      #         {"start" => "2022-02-20"}, # Different class -> clear end_date
-      #       ],
-      #       [
-      #         {start_date: Time.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-24T01:23:45+09:00"}, # Previous date -> clear end_date
-      #       ],
-      #     ],
-      #     DateTime.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-      #       [{}, {}],
-      #       [
-      #         {start_date: DateTime.new(2022, 2, 21, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-21T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00"},
-      #       ],
-      #       [
-      #         {
-      #           start_date: DateTime.new(2022, 2, 20, 1, 23, 45, "+09:00"),
-      #           end_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00"),
-      #         },
-      #         {"start" => "2022-02-20T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00"},
-      #       ],
-      #       [
-      #         {start_date: Date.new(2022, 2, 20)},
-      #         {"start" => "2022-02-20"}, # Different class -> clear end_date
-      #       ],
-      #       [
-      #         {start_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00")},
-      #         {"start" => "2022-02-24T01:23:45+09:00"}, # Previous date -> clear end_date
-      #       ],
-      #     ],
-      #   }.each do |date, array|
-      #     context date.class do
-      #       array.each do |params, answer|
-      #         context params do
-      #           let(:property) { DateProperty.new "dp", **params }
-      #           before { property.end_date = date }
-      #           it { is_expected.to eq({"date" => answer}) }
-      #           it "will update" do
-      #             expect(property.will_update).to be_truthy
-      #           end
-      #         end
-      #       end
-      #     end
-      #   end
-      # end
-      # end
-
-      # describe "create_from_json" do
-      #   [
-      #     {"start" => "2022-02-20"},
-      #     {"start" => "2022-02-20", "end" => "2022-02-21"},
-      #     {"start" => "2022-02-20T13:45:00+09:00"},
-      #     {"start" => "2022-02-20T13:45:00+09:00", "end" => "2022-02-20T16:15:00+09:00"},
-      #     {"start" => "2022-02-20T13:45:00", "time_zone" => "Asia/Tokyo"},
-      #     {"start" => "2022-02-20T13:45:00", "end" => "2022-02-20T16:15:00", "time_zone" => "Asia/Tokyo"},
-      #   ].each do |json|
-      #     context json do
-      #       let(:property) { Property.create_from_json "dp", {"date" => json} }
-      #       it "has_name" do
-      #         expect(property.name).to eq "dp"
-      #       end
-      #       it "property_values_json" do
-      #         expect(property.property_values_json).to eq({"date" => json})
-      #       end
-      #       it "will not update" do
-      #         expect(property.will_update).to be_falsey
-      #       end
-      #     end
-      #   end
     end
   end
 end

@@ -6,7 +6,7 @@ module NotionRubyMapping
     # @param [String] expression
     # @return [TextObject]
     def initialize(expression, options = {})
-      super "equation", {"plain_text" => expression}.merge(options)
+      super :equation, {plain_text: expression}.merge(options)
       @expression = expression
       @will_update = false
     end
@@ -27,7 +27,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/EquationObject-cd50126fce544ad5bb76463a4269859b#155800e2c69d4676a2d74572ed8f0de8
     def expression=(expression)
       @expression = expression
-      @options["plain_text"] = expression
+      @options[:plain_text] = expression
       @will_update = true
     end
 
@@ -41,7 +41,7 @@ module NotionRubyMapping
     # @return [Hash{String (frozen)->String}]
     def partial_property_values_json
       {
-        "expression" => @expression,
+        expression: @expression,
       }
     end
   end

@@ -2,7 +2,6 @@
 
 require "singleton"
 require "faraday"
-require "faraday_middleware"
 
 module NotionRubyMapping
   # singleton class of caching Notion objects
@@ -14,10 +13,10 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/NotionCache-65e1599864d6425686d495a5a4b3a623#dca210788f114cf59464090782c073bf
     def initialize
       @object_hash = {}
-      @client = Faraday::Connection.new "https://api.notion.com" do |builder|
-        builder.use FaradayMiddleware::EncodeJson
-        builder.use FaradayMiddleware::ParseJson
-        builder.adapter Faraday.default_adapter
+      @client = Faraday.new "https://api.notion.com" do |conn|
+        conn.request :json
+        conn.response :json, parser_options: {symbolize_names: true}
+        conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
       end
       @notion_token = nil
       @wait = 0.3333
@@ -248,7 +247,6 @@ module NotionRubyMapping
       sleep @wait
       response = @client.send(method) do |request|
         request.headers["Authorization"] = "Bearer #{@notion_token}"
-        request.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
         case method
         when :get, :delete
           request.url path, options
@@ -266,13 +264,13 @@ module NotionRubyMapping
     end
 
     def search(query)
-      request(:post, search_path, options = query)
+      request(:post, search_path, query)
     end
 
     def search_path
       "v1/search"
     end
-    
+
     # @param [String] token
     def token=(token)
       @notion_token = token

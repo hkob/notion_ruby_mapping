@@ -7,11 +7,12 @@ module NotionRubyMapping
 
     describe "create from json" do
       let(:target) { CommentObject.new json: comment_json }
+
       it { expect(target.full_text).to eq "Comment to a page" }
     end
 
     # describe "self.comment_object" do
-    #   subject { CommentObject.comment_object eo }
+    #   subject { CommentObject.comment_object eo
     #   context "String" do
     #     let(:eo) { "🐶" }
     #     it { expect(subject).to be_is_a CommentObject }

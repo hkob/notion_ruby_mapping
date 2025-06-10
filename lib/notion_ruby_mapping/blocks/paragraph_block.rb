@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class ParagraphBlock < TextSubBlockColorBaseBlock
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
-      "paragraph"
+      :paragraph
     end
   end
 end

@@ -4,40 +4,41 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe Heading1Block do
-    type = "heading_1"
+    type = :heading_1
 
-    it_behaves_like :retrieve_block, described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      "object" => "block",
-      "type" => "heading_1",
-      "heading_1" => {
-        "rich_text" => [
+    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
+      object: "block",
+      type: "heading_1",
+      heading_1: {
+        rich_text: [
           {
-            "type" => "text",
-            "text" => {
-              "content" => "Heading 1",
-              "link" => nil,
+            type: "text",
+            text: {
+              content: "Heading 1",
+              link: nil,
             },
-            "annotations" => {
-              "bold" => false,
-              "italic" => false,
-              "strikethrough" => false,
-              "underline" => false,
-              "code" => false,
-              "color" => "default",
+            annotations: {
+              bold: false,
+              italic: false,
+              strikethrough: false,
+              underline: false,
+              code: false,
+              color: "default",
             },
-            "plain_text" => "Heading 1",
-            "href" => nil,
+            plain_text: "Heading 1",
+            href: nil,
           },
         ],
-        "color" => "default",
-        "is_toggleable" => false,
+        color: "default",
+        is_toggleable: false,
       },
     }
 
     describe "create_child_block" do
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { described_class.new "Heading 1", color: "orange_background" }
-      it_behaves_like :create_child_block, described_class,
+
+      it_behaves_like "create child block", described_class,
                       "1462a512a97c4897a0e96f842171660e", "f2f026eebd0e475e9652ab85546d3825"
     end
 
@@ -45,8 +46,8 @@ module NotionRubyMapping
       let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
       let(:target) { described_class.new "Heading 1", color: "orange_background", id: update_id }
 
-      it_behaves_like :update_block_rich_text_array, type, "New Heading 1"
-      it_behaves_like :update_block_color, type, "green_background", true
+      it_behaves_like "update block rich text array", type, "New Heading 1"
+      it_behaves_like "update block color", type, "green_background", true
     end
   end
 end

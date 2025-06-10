@@ -6,7 +6,7 @@ module NotionRubyMapping
     # @param [String] user_id
     # @return [TextObject]
     def initialize(user_id: nil, json: {})
-      @user_id = NotionCache.instance.hex_id(user_id || json && json["id"])
+      @user_id = NotionCache.instance.hex_id(user_id || json && json[:id])
       @json = json
       @will_update = false
     end
@@ -56,14 +56,14 @@ module NotionRubyMapping
 
     # @return [String]
     def name
-      @json["name"]
+      @json[:name]
     end
 
     # @return [Hash]
     def property_values_json
       {
-        "object" => "user",
-        "id" => @user_id,
+        object: "user",
+        id: @user_id,
       }
     end
 

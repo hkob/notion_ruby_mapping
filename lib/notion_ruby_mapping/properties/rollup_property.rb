@@ -6,7 +6,7 @@ module NotionRubyMapping
     include ContainsDoesNotContain
     include StartsWithEndsWith
     include GreaterThanLessThan
-    TYPE = "rollup"
+    TYPE = :rollup
 
     ### Public announced methods
 
@@ -24,7 +24,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#94021d4e6c0b44519443c1e1cc6b3aba
     def function
       assert_database_property __method__
-      @json["function"]
+      @json[:function]
     end
 
     # @param [String] func
@@ -32,14 +32,14 @@ module NotionRubyMapping
     def function=(func)
       assert_database_property __method__
       @will_update = true
-      @json["function"] = func
+      @json[:function] = func
     end
 
     # @return [String] new or settled relation_property_name
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#684fc4739c4f4d6a9b93687f72cd8dad
     def relation_property_name
       assert_database_property __method__
-      @json["relation_property_name"]
+      @json[:relation_property_name]
     end
 
     # @param [String] rpn
@@ -47,14 +47,14 @@ module NotionRubyMapping
     def relation_property_name=(rpn)
       assert_database_property __method__
       @will_update = true
-      @json["relation_property_name"] = rpn
+      @json[:relation_property_name] = rpn
     end
 
     # @return [String] new or settled rollup_property_name
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#8ce9ee31a2e2473ab7ba21781e4b440d
     def rollup_property_name
       assert_database_property __method__
-      @json["rollup_property_name"]
+      @json[:rollup_property_name]
     end
 
     # @param [String] rpn
@@ -62,14 +62,14 @@ module NotionRubyMapping
     def rollup_property_name=(rpn)
       assert_database_property __method__
       @will_update = true
-      @json["rollup_property_name"] = rpn
+      @json[:rollup_property_name] = rpn
     end
 
     ### Not public announced methods
 
     ## Common methods
 
-    # @param [String] name
+    # @param [String, Symbol] name
     # @param [Hash] json
     def initialize(name, will_update: false, json: nil, base_type: :page, property_id: nil,
                    property_cache: nil, query: nil)
@@ -87,10 +87,10 @@ module NotionRubyMapping
       return ans if ans != {} || !@will_update
 
       ans[@name] ||= {}
-      ans[@name]["rollup"] ||= {}
-      ans[@name]["rollup"]["function"] = function
-      ans[@name]["rollup"]["relation_property_name"] = relation_property_name
-      ans[@name]["rollup"]["rollup_property_name"] = rollup_property_name
+      ans[@name][:rollup] ||= {}
+      ans[@name][:rollup][:function] = function
+      ans[@name][:rollup][:relation_property_name] = relation_property_name
+      ans[@name][:rollup][:rollup_property_name] = rollup_property_name
       ans
     end
 
@@ -108,9 +108,9 @@ module NotionRubyMapping
     # @return [Hash]
     def property_schema_json_sub
       {
-        "function" => function,
-        "relation_property_name" => relation_property_name,
-        "rollup_property_name" => rollup_property_name,
+        function: function,
+        relation_property_name: relation_property_name,
+        rollup_property_name: rollup_property_name,
       }
     end
   end

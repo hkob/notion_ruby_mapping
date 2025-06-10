@@ -10,13 +10,13 @@ module NotionRubyMapping
     def initialize(json: nil, id: nil, assign: [], parent: nil)
       @nc = NotionCache.instance
       @json = json
-      @id = @nc.hex_id(id || @json && @json["id"])
-      @archived = @json && @json["archived"]
-      @has_children = @json && @json["has_children"]
+      @id = @nc.hex_id(id || @json && @json[:id])
+      @archived = @json && @json[:archived]
+      @has_children = @json && @json[:has_children]
       @new_record = true unless parent.nil?
       raise StandardError, "Unknown id" if !is_a?(List) && !is_a?(Block) && @id.nil? && parent.nil?
 
-      @payload = Payload.new(!is_a?(Block) && parent && {"parent" => parent})
+      @payload = Payload.new(!is_a?(Block) && parent && {parent: parent})
       @property_cache = nil
       @created_time = nil
       @last_edited_time = nil
@@ -30,14 +30,14 @@ module NotionRubyMapping
     # @param [Hash, Notion::Messages] json
     # @return [NotionRubyMapping::Base]
     def self.create_from_json(json)
-      case json["object"]
-      when "page"
+      case json[:object]&.to_sym
+      when :page
         Page.new json: json
-      when "database"
+      when :database
         Database.new json: json
-      when "list"
+      when :list
         List.new json: json
-      when "block"
+      when :block
         Block.decode_block json
       else
         raise StandardError, json.inspect
@@ -90,7 +90,7 @@ module NotionRubyMapping
         self.class.dry_run_script :get, @nc.retrieve_comments_path(@id)
       else
         ans = {}
-        List.new(type: :comment_parent, value: self,
+        List.new(type: "comment_parent", value: self,
                  json: @nc.retrieve_comments_request(@id, query),
                  query: query).each do |comment|
           dt_id = comment.discussion_id
@@ -110,7 +110,7 @@ module NotionRubyMapping
         reload
       end
       case key
-      when "properties"
+      when :properties
         properties
       else
         @json[key]
@@ -128,20 +128,20 @@ module NotionRubyMapping
 
       only_one = blocks.length == 1
       json = {
-        "children" => Array(blocks).map do |block|
+        children: Array(blocks).map do |block|
           assert_parent_children_pair block
           block.block_json
         end,
       }
-      json["after"] = after if after
+      json[:after] = after if after
       if dry_run
         path = @nc.append_block_children_page_path(id)
         self.class.dry_run_script :patch, path, json
       else
         response = @nc.append_block_children_request @id, json
-        raise StandardError, response unless response["results"]
+        raise StandardError, response unless response[:results]
 
-        answers = response["results"].map { |sub_json| Block.create_from_json sub_json }
+        answers = response[:results].map { |sub_json| Block.create_from_json sub_json }
         only_one ? answers.first : answers
       end
     end
@@ -155,10 +155,10 @@ module NotionRubyMapping
       return if block.can_append
 
       bt = block.type
-      raise StandardError, "Internal file block can not append." if bt == "file"
+      raise StandardError, "Internal file block can not append." if bt == :file
 
-      raise StandardError, "Column block can only append column_list block" unless bt == "column" &&
-                                                                                   block? && type == "column_list"
+      raise StandardError, "Column block can only append column_list block" unless bt == :column &&
+                                                                                   block? && type == :column_list
     end
 
     # @param [NotionRubyMapping::Property] klass
@@ -199,7 +199,7 @@ module NotionRubyMapping
 
     # @return [NotionRubyMapping::CreatedTimeProperty]
     def created_time
-      @created_time ||= CreatedTimeProperty.new("__timestamp__", json: self["created_time"])
+      @created_time ||= CreatedTimeProperty.new("__timestamp__", json: self[:created_time])
     end
 
     # @return [TrueClass, FalseClass] true if Database object
@@ -210,7 +210,7 @@ module NotionRubyMapping
     # @return [Hash, nil] obtained Hash
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e13d526bd709451e9b06fd32e8d07fcd
     def icon
-      self["icon"]
+      self[:icon]
     end
 
     # @return [String (frozen)]
@@ -220,12 +220,12 @@ module NotionRubyMapping
 
     # @return [Hash] json properties
     def json_properties
-      @json && @json["properties"]
+      @json && @json[:properties]
     end
 
     # @return [NotionRubyMapping::LastEditedTimeProperty]
     def last_edited_time
-      @last_edited_time ||= LastEditedTimeProperty.new("__timestamp__", json: self["last_edited_time"])
+      @last_edited_time ||= LastEditedTimeProperty.new("__timestamp__", json: self[:last_edited_time])
     end
 
     # @return [Boolean] true if new record
@@ -241,16 +241,16 @@ module NotionRubyMapping
 
     # @param [Boolean] dry_run true if dry_run
     def parent(dry_run: false)
-      parent_json = @json && @json["parent"]
+      parent_json = @json && @json[:parent]
       raise StandardError, "Unknown parent" if parent_json.nil?
 
-      type = parent_json["type"]
+      type = parent_json[:type]&.to_sym
       klass = case type
-              when "database_id"
+              when :database_id
                 Database
-              when "page_id"
+              when :page_id
                 Page
-              when "block_id"
+              when :block_id
                 Block
               else
                 raise StandardError, "List does not have any parent"
@@ -259,10 +259,10 @@ module NotionRubyMapping
     end
 
     def parent_id
-      parent_json = @json && @json["parent"]
+      parent_json = @json && @json[:parent]
       raise StandardError, "Unknown parent" if parent_json.nil?
 
-      parent_json[parent_json["type"]]
+      parent_json[parent_json[:type]]
     end
 
     # @return [NotionRubyMapping::PropertyCache] get or created PropertyCache object
@@ -294,13 +294,13 @@ module NotionRubyMapping
 
     # @return [NotionRubyMapping::Base]
     def restore_from_json
-      return if (ps = @json["properties"]).nil?
+      return if (ps = @json[:properties]).nil?
 
       properties.json = json_properties
       return unless is_a?(Page) || is_a?(Database)
 
       ps.each do |key, json|
-        if json["type"]
+        if json[:type]
           properties[key].update_from_json json
         else
           properties[key]&.clear_will_update
@@ -341,13 +341,13 @@ module NotionRubyMapping
     # @param [Hash] json
     # @return [NotionRubyMapping::Base]
     def update_json(json)
-      unless json["object"] != "error" && (@json.nil? || @json["type"] == json["type"])
+      unless json[:object] != "error" && (@json.nil? || @json[:type] == json[:type])
         raise StandardError,
               json.inspect
       end
 
       @json = json
-      @id = @nc.hex_id(@json["id"])
+      @id = @nc.hex_id(@json[:id])
       restore_from_json
       self
     end

@@ -7,10 +7,10 @@ module NotionRubyMapping
 
     def initialize(json: nil, id: nil, type: nil, value: nil, query: nil)
       super(json: json, id: id)
-      @has_more = @json["has_more"]
+      @has_more = @json[:has_more]
       @load_all_contents = !@has_more
 
-      case type
+      case type.to_sym
       when :comment_parent
         @comment_parent = value
       when :database
@@ -20,7 +20,7 @@ module NotionRubyMapping
       when :property
         @property = value
       when :user_object
-        @user_object = true
+        @user_object = value
       when :search
         @search = value
       end
@@ -34,6 +34,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/List-9a0b32335e0d48849a785ce5e162c760#12e1c261a0944a4095776b7515bef4a1
     def each(&block)
       return enum_for(:each) if block.nil?
+
       if @parent
         each_sub base: @page,
                  query: -> { @parent.children @query },
@@ -46,25 +47,25 @@ module NotionRubyMapping
                  &block
       elsif @property
         each_sub base: @property,
-                 query: -> do
+                 query: lambda {
                    @nc.page_property_request @property.property_cache.page_id,
                                              @property.property_id,
                                              @query.query_json
-                 end,
-                 create_object: ->(json) do
-                   case json["type"]
-                   when "people"
-                     UserObject.new json: json["people"]
-                   when "relation"
-                     json["relation"]["id"]
-                   when "rich_text"
-                     RichTextObject.create_from_json json["rich_text"]
-                   when "title"
-                     RichTextObject.create_from_json json["title"]
+                 },
+                 create_object: lambda { |json|
+                   case json[:type]&.to_sym
+                   when :people
+                     UserObject.new json: json[:people]
+                   when :relation
+                     json[:relation][:id]
+                   when :rich_text
+                     RichTextObject.create_from_json json[:rich_text]
+                   when :title
+                     RichTextObject.create_from_json json[:title]
                    else
                      json
                    end
-                 end,
+                 },
                  &block
       elsif @comment_parent
         each_sub base: @comment_parent,
@@ -96,7 +97,7 @@ module NotionRubyMapping
         unless @load_all_contents
           @query.start_cursor = nil
           @json = query.call
-          @has_more = @json["has_more"]
+          @has_more = @json[:has_more]
         end
         @index = 0
         @has_content = true
@@ -109,10 +110,10 @@ module NotionRubyMapping
           block.call object
         elsif @has_more
           if base
-            @query.start_cursor = @json["next_cursor"]
+            @query.start_cursor = @json[:next_cursor]
             @json = query.call
             @index = 0
-            @has_more = @json["has_more"]
+            @has_more = @json[:has_more]
           else
             @has_content = false
           end
@@ -124,7 +125,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def results
-      @json["results"]
+      @json[:results]
     end
   end
 end

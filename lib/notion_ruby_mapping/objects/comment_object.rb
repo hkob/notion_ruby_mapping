@@ -10,7 +10,7 @@ module NotionRubyMapping
         @json = {}
       elsif json
         @json = json
-        @text_objects = RichTextArray.new "rich_text", json: json["rich_text"]
+        @text_objects = RichTextArray.new "rich_text", json: json[:rich_text]
       else
         raise StandardError, "Either text_objects or json is required CommentObject"
       end
@@ -19,7 +19,7 @@ module NotionRubyMapping
     attr_reader :will_update, :text_objects, :json
 
     def discussion_id
-      NotionCache.instance.hex_id @json["discussion_id"]
+      NotionCache.instance.hex_id @json[:discussion_id]
     end
 
     # @return [String] full_text

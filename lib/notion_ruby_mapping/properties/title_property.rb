@@ -3,18 +3,18 @@
 module NotionRubyMapping
   # TitleProperty
   class TitleProperty < TextProperty
-    TYPE = "title"
+    TYPE = :title
 
     ### Not public announced methods
 
     ## Common methods
 
     def self.rich_text_array_from_json(json)
-      if json["object"] == "list"
+      if json[:object]&.to_sym == :list
         rich_text_objects = List.new(json: json, type: :property, value: self).select { true }
-        RichTextArray.rich_text_array "title", rich_text_objects
+        RichTextArray.rich_text_array :title, rich_text_objects
       else
-        RichTextArray.new "title", json: json["title"]
+        RichTextArray.new :title, json: json[:title]
       end
     end
 
@@ -43,8 +43,8 @@ module NotionRubyMapping
       text_json = map(&:property_values_json)
       {
         @name => {
-          "type" => "title",
-          "title" => text_json.empty? ? @json : text_json,
+          type: "title",
+          title: text_json.empty? ? @json : text_json,
         },
       }
     end

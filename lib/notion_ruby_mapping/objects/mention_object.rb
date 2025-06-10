@@ -5,16 +5,16 @@ module NotionRubyMapping
   class MentionObject < RichTextObject
     # @return [MentionObject]
     def initialize(options = {})
-      super "mention", options
-      return unless (url = options["link_preview"])
+      super :mention, options
+      return unless (url = options[:link_preview])
 
-      @options["href"] = url
-      @options["plain_text"] = url
+      @options[:href] = url
+      @options[:plain_text] = url
     end
 
     # @return [String, NilClass]
     def page_id
-      @options["page_id"]
+      @options[:page_id]
     end
 
     # @return [String (frozen)]
@@ -23,69 +23,69 @@ module NotionRubyMapping
     end
 
     def partial_property_values_json
-      if @options.key? "user_id"
+      if @options.key? :user_id
         {
-          "type" => "user",
-          "user" => {
-            "object" => "user",
-            "id" => @options["user_id"],
+          type: "user",
+          user: {
+            object: "user",
+            id: @options[:user_id],
           },
         }
-      elsif @options.key? "page_id"
+      elsif @options.key? :page_id
         {
-          "type" => "page",
-          "page" => {
-            "id" => @options["page_id"],
+          type: "page",
+          page: {
+            id: @options[:page_id],
           },
         }
-      elsif @options.key? "database_id"
+      elsif @options.key? :database_id
         {
-          "type" => "database",
-          "database" => {
-            "id" => @options["database_id"],
+          type: "database",
+          database: {
+            id: @options[:database_id],
           },
         }
-      elsif @options.key? "start"
+      elsif @options.key? :start
         {
-          "type" => "date",
-          "date" => @options.slice("start", "end", "time_zone"),
+          type: "date",
+          date: @options.slice(:start, :end, :time_zone),
         }
-      elsif @options.key? "template_mention"
-        sub = case @options["template_mention"]
-              when "today"
-                @options["plain_text"] = "@Today"
+      elsif @options.key? :template_mention
+        sub = case @options[:template_mention]&.to_sym
+              when :today
+                @options[:plain_text] = "@Today"
                 {
-                  "type" => "template_mention_date",
-                  "template_mention_date" => "today",
+                  type: :template_mention_date,
+                  template_mention_date: "today",
                 }
-              when "now"
-                @options["plain_text"] = "@Now"
+              when :now
+                @options[:plain_text] = "@Now"
                 {
-                  "type" => "template_mention_date",
-                  "template_mention_date" => "now",
+                  type: :template_mention_date,
+                  template_mention_date: "now",
                 }
               else
-                @options["plain_text"] = "@Me"
+                @options[:plain_text] = "@Me"
                 {
-                  "type" => "template_mention_user",
-                  "template_mention_user" => "me",
+                  type: :template_mention_user,
+                  template_mention_user: "me",
                 }
               end
         {
-          "type" => "template_mention",
-          "template_mention" => sub,
+          type: :template_mention,
+          template_mention: sub,
         }
-      elsif @options.key? "link_preview"
+      elsif @options.key? :link_preview
         {
-          "type" => "link_preview",
-          "link_preview" => {
-            "url" => @options["link_preview"],
+          type: :link_preview,
+          link_preview: {
+            url: @options[:link_preview],
           },
         }
-      elsif @options.key? "href"
+      elsif @options.key? :href
         {
-          "type" => "link_mention",
-          "link_mention" => @options.slice("href", "icon_url", "link_provider", "thumbnail_url", "title"),
+          type: :link_mention,
+          link_mention: @options.slice(:href, :icon_url, :link_provider, :thumbnail_url, :title),
         }
       else
         raise StandardError, "Irregular mention type: #{@options.keys}"

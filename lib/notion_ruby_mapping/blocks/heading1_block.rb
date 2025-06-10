@@ -10,16 +10,16 @@ module NotionRubyMapping
       @can_have_children = false
     end
 
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
-      "heading_1"
+      :heading_1
     end
 
     # @param [Boolean] not_update false when update
-    # @return [Hash{String (frozen)->Hash}]
+    # @return [Hash{Symbol->Hash}]
     def block_json(not_update: true)
       ans = super
-      ans[type]["is_toggleable"] = false
+      ans[type][:is_toggleable] = false
       ans
     end
   end
