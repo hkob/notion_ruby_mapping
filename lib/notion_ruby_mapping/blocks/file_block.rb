@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # Notion block
   class FileBlock < FileBaseBlock
-    # @return [String (frozen)]
+    # @return [Symbol]
     def type
       :file
     end

@@ -60,7 +60,9 @@ module NotionRubyMapping
         {}
       else
         files = @files.map(&:property_values_json)
-        @file_names&.each_with_index { |name, i| files[i][:name] = name }
+        @file_names&.each_with_index do |name, i|
+          files[i][:name] = name.is_a?(FileUploadObject) ? name.fname : name
+        end
         {@name => {files: files, type: "files"}}
       end
     end

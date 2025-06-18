@@ -49,12 +49,15 @@ module NotionRubyMapping
 
     # @param [String] emoji
     # @param [String] url
+    # @param [FileUploadObject] file_upload_object
     # @return [NotionRubyMapping::Payload] updated Payload
-    def set_icon(emoji: nil, url: nil)
+    def set_icon(emoji: nil, url: nil, file_upload_object: nil)
       payload = if emoji
                   {type: "emoji", emoji: emoji}
                 elsif url
                   {type: "external", external: {url: url}}
+                elsif file_upload_object
+                  {type: "file_upload", file_upload: {id: file_upload_object.id}}
                 else
                   {}
                 end

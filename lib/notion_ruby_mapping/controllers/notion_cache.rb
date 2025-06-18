@@ -2,6 +2,8 @@
 
 require "singleton"
 require "faraday"
+require "faraday/multipart"
+require "mime/types"
 
 module NotionRubyMapping
   # singleton class of caching Notion objects
@@ -26,6 +28,14 @@ module NotionRubyMapping
     attr_reader :object_hash
     attr_writer :client # for test only
     attr_accessor :notion_token, :wait, :debug, :use_cache
+
+    def multipart_client
+      @multipart_client ||= Faraday.new "https://api.notion.com" do |conn|
+        conn.request :multipart, flat_encode: true
+        conn.response :json, parser_options: {symbolize_names: true}
+        conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
+      end
+    end
 
     # @param [String] block_id
     # @return [String (frozen)] block_path
@@ -108,6 +118,12 @@ module NotionRubyMapping
 
     # @param [Hash] payload
     # @return [Hash] response
+    def create_file_upload_request(payload = {})
+      request :post, file_uploads_path, payload
+    end
+
+    # @param [Hash] payload
+    # @return [Hash] response
     def create_page_request(payload)
       request :post, "v1/pages", payload
     end
@@ -160,6 +176,25 @@ module NotionRubyMapping
       request :delete, block_path(id)
     end
 
+    # @param [String] fname
+    # @param [String] id
+    # @param [Hash] options
+    # @return [Hash]
+    def file_upload_request(fname, id, options = {})
+      multipart_request(file_upload_path(id), options, fname)
+    end
+
+    # @param [String] id
+    # @return [String]
+    def file_upload_path(id)
+      "v1/file_uploads/#{id}/send"
+    end
+
+    # @return [String]
+    def file_uploads_path
+      "v1/file_uploads"
+    end
+
     # @param [String] id id string with "-"
     # @return [String] id without "-"
     # @see https://www.notion.so/hkob/NotionCache-65e1599864d6425686d495a5a4b3a623#a2d70a2e019c4c17898aaa1a36580f1d
@@ -169,6 +204,28 @@ module NotionRubyMapping
 
     def inspect
       "NotionCache"
+    end
+
+    # @param [String] path
+    # @param [Hash] json
+    # @param [String] fname
+    # @return [Hash] response hash
+    def multipart_request(path, json, fname)
+      raise "Please call `NotionRubyMapping.configure' before using other methods" unless @notion_token
+
+      content_type = MIME::Types.type_for(fname).first.to_s
+
+      sleep @wait
+      json_part = Faraday::Multipart::ParamPart.new(json.to_json, "application/json")
+      file_part = Faraday::Multipart::FilePart.new(fname, content_type, File.basename(fname))
+      response = multipart_client.send(:post) do |request|
+        request.headers["Authorization"] = "Bearer #{@notion_token}"
+        request.headers["content-Type"] = "multipart/form-data"
+        request.path = path
+        request.body = {json: json_part, file: file_part}
+      end
+      p response.body if @debug
+      response.body
     end
 
     # @param [String] id id (with or without "-")

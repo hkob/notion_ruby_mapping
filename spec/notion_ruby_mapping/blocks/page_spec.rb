@@ -316,7 +316,7 @@ module NotionRubyMapping
       end
     end
 
-    describe "update_icon" do
+    describe "set_icon" do
       let(:target) { Page.new id: TestConnection::TOP_PAGE_ID }
 
       before do
@@ -325,7 +325,7 @@ module NotionRubyMapping
 
       subject { target.icon }
 
-      context "for emoji icon" do
+      context "with emoji icon" do
         let(:params) { {emoji: "😀"} }
 
         describe "dry_run" do
@@ -343,7 +343,7 @@ module NotionRubyMapping
         end
       end
 
-      context "for link icon" do
+      context "with link icon" do
         let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
         let(:params) { {url: url} }
 
@@ -358,6 +358,34 @@ module NotionRubyMapping
 
           it "update icon (link)" do
             expect(subject).to eq({type: "external", external: {url: url}})
+          end
+        end
+      end
+
+      context "with file upload object" do
+        let(:id) { TestConnection::FILE_UPLOAD_IMAGE_ID }
+        let(:file_upload_object) { instance_double(FileUploadObject, id: id) }
+        let(:params) { {file_upload_object: file_upload_object} }
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+
+          it_behaves_like "dry run", :patch, :page_path, use_id: true, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+
+          it "update icon (file upload object)" do
+            expect(subject).to eq(
+              {
+                file: {
+                  url: "https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/bf91dfb5-72e5-4c22-bab7-f4b9f343610f/ErSxuLeq.png-medium.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466WMJXGZJ3%2F20250608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250608T113658Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEK7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQCRwDcy8FCGnwyLhq4HS25fQRC6TfVV3YQMrNHRsUrVsgIgXY2DAKoH34KEsqKA0qcrl6Bn5G7DFknz9YMcuew97noqiAQIh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDOdZh%2BfooUNxMlf5mircAx%2BEoEoF605FjkDX9BcjnNExp0PCtN3KIV6lpr1THqt788Ig9X995g5jPRHjn72DATXSuIjWR%2FKB7uUNe30FxVFZtDKfTX6zqXhdXwahhViHR27zkQs2wWlG8BHi3S4ntEzKDNGlCVz0wA%2BrMdL9OuB9gZK1%2FbS5QWvt005VgaHck9m33wXFSSAD1xaTay%2BDfjSjcFjc4Cgoz7Qi%2Bhk6ET3jeGrJum%2FbcXxGeFBmwNRlMyOTOIUKXOURj71UECsZKPbtyLvbBJ2Yk%2BAaciBPeatA%2BXmJWlYhTRJqsMKliWqcWMqgFlFkvjpAx2t%2BL0alsTP0ujVGhWXohshSNMJYm0FDp%2B72rToWzxRvN1XKxmLGlbrGjNd5TCzyaiBzoaEZQQYCoIi%2BTkqHfmBo7213Y20lURKLNnaR%2FmNn80kLM2fuOpcNShbWHfSktL2zg5Fsr7UGBw8AE5%2FD0shM0IUmx2N2%2B84WcAzpSvMH23IiPn%2FCrPdPqcr7Os9ZwozllQdx%2BAr3rezywUZCT63155cmcCiO1%2Byze7q56eGZ5UIh%2FAzHIxC0u1ZSNGwu1a664mQJbaCJlEN%2F%2BCRRJ4%2BbuJygd6pWsC2shrOPQtOgfq4AvkHXMLGKrc25al9LxNKNMIjNlMIGOqUBHSGCWMW2ZHjpvN%2FaN4T4k8RUXRhmpFmghjbdhEgA7NoAWanBwMery8qJLsOl2b0XEtd2ANBb6gfz3FFoVKjvzocpiYsubz39zOc2WHRsQuAweoeHcTjavNZqMueBqqFg0fbcMoRtSrE8nkgTgsNO8YIpNYC8C0tuJMx6Ve9QZKtY8TbrDBiegLKRBkDjWunt0cW5T8nP3Q6iG7uRMILII9ydjepg&X-Amz-Signature=835ffd4f0ae04a321cecdd3cc27d0e53461bda12f0e0789a57bee07823f96b45&X-Amz-SignedHeaders=host&x-id=GetObject",
+                  expiry_time: "2025-06-08T12:36:58.153Z",
+                },
+                type: "file",
+              },
+            )
           end
         end
       end

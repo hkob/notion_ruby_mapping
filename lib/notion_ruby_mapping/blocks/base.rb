@@ -328,8 +328,8 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Base]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#62eea67af7824496820c6bb903503540
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e13d526bd709451e9b06fd32e8d07fcd
-    def set_icon(emoji: nil, url: nil)
-      @payload.set_icon(emoji: emoji, url: url) if page? || database?
+    def set_icon(emoji: nil, url: nil, file_upload_object: nil)
+      @payload.set_icon(emoji: emoji, url: url, file_upload_object: file_upload_object) if page? || database?
       self
     end
 

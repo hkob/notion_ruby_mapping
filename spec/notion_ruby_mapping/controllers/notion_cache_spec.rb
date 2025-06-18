@@ -6,6 +6,7 @@ require_relative "../../spec_helper"
 module NotionRubyMapping
   RSpec.describe NotionCache do
     let(:nc) { NotionCache.instance }
+
     describe "singleton" do
       it "can get hex_id" do
         expect(nc.hex_id("0123-4567-89ab")).to eq "0123456789ab"
@@ -47,8 +48,17 @@ module NotionRubyMapping
       it { expect(nc.append_block_children_page_path("ABC")).to eq "v1/blocks/ABC/children" }
     end
 
-    describe "page_path" do
-      it { expect(nc.page_path("ABC")).to eq "v1/pages/ABC" }
+    describe "block_children_page_path" do
+      it { expect(nc.block_children_page_path("ABC")).to eq "v1/blocks/ABC/children" }
+      it { expect(nc.block_children_page_path("ABC", "?page_size=100")).to eq "v1/blocks/ABC/children?page_size=100" }
+    end
+
+    describe "file_upload_path" do
+      it { expect(nc.file_upload_path("ABC")).to eq "v1/file_uploads/ABC/send" }
+    end
+
+    describe "file_uploads_path" do
+      it { expect(nc.file_uploads_path).to eq "v1/file_uploads" }
     end
 
     describe "database_path" do
@@ -59,21 +69,20 @@ module NotionRubyMapping
       it { expect(nc.databases_path).to eq "v1/databases" }
     end
 
-    describe "block_children_page_path" do
-      it { expect(nc.block_children_page_path("ABC")).to eq "v1/blocks/ABC/children" }
-      it { expect(nc.block_children_page_path("ABC", "?page_size=100")).to eq "v1/blocks/ABC/children?page_size=100" }
+    describe "page_path" do
+      it { expect(nc.page_path("ABC")).to eq "v1/pages/ABC" }
     end
 
     describe "page_property_path" do
       it { expect(nc.page_property_path("ABC", "DEF")).to eq "v1/pages/ABC/properties/DEF" }
     end
 
-    describe "user_path" do
-      it { expect(nc.user_path("ABC")).to eq "v1/users/ABC" }
-    end
-
     describe "search_path" do
       it { expect(nc.search_path).to eq "v1/search" }
+    end
+
+    describe "user_path" do
+      it { expect(nc.user_path("ABC")).to eq "v1/users/ABC" }
     end
   end
 end

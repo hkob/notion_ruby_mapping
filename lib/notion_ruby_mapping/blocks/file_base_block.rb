@@ -21,7 +21,7 @@ module NotionRubyMapping
 
     # @see https://www.notion.so/hkob/FileBlock-08f2aa6948364d00b92beacaac9a619c#158487a7e1644fae8778dcff59869356
     # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#19a4aa3e06514bbe84be9d3b8a45a20f
-    attr_reader :caption
+    attr_reader :caption, :file_object
 
     # @param [Boolean] not_update false when update
     # @return [Hash{String (frozen)->Hash}]
@@ -45,6 +45,18 @@ module NotionRubyMapping
     def url=(url)
       @file_object.url = url
       @payload.add_update_block_key :external
+    end
+
+    # @param [FileUploadObject] fuo
+    def file_upload_object=(fuo)
+      @file_object.file_upload_object = fuo
+      @payload.add_update_block_key :file_upload
+    end
+
+    def update_file_object_from_json(json)
+      @file_object = FileObject.new json: json[type]
+      decode_block_caption
+      @can_append = @file_object.external?
     end
   end
 end

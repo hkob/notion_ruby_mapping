@@ -100,7 +100,7 @@ module NotionRubyMapping
 
     # @return [NotionRubyMapping::RichTextArray]
     def decode_block_caption
-      @caption = RichTextArray.new :caption, json: @json[type][:caption]
+      @caption = RichTextArray.new :caption, json: @json[type][:caption] if @json[type][:caption]
     end
 
     # @return [String]
@@ -129,7 +129,8 @@ module NotionRubyMapping
       if dry_run
         dry_run_script :patch, @nc.block_path(@id), :update_block_json
       else
-        update_json @nc.update_block_request(@id, update_block_json)
+        @json = @nc.update_block_request(@id, update_block_json)
+        update_file_object_from_json(@json) if is_a? FileBaseBlock
       end
     end
 

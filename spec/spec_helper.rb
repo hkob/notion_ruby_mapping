@@ -41,6 +41,7 @@ module NotionRubyMapping
     STATUS_PAGE_ID = "68ff12a08dc04f94ae2e0931344eb153"
     BUTTON_PAGE_ID = "4ccd9bda0f6440a0b32490c091011b8f"
     WIKI_PAGE_ID = "197d8e4e98ab80d7b0cad8a33a1cbfba"
+    FILE_UPLOAD_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
@@ -56,6 +57,8 @@ module NotionRubyMapping
     APPEND_AFTER_PARENT_ID = "03f6460c26734af484b95de15082d84e"
     APPEND_AFTER_PREVIOUS_ID = "263f125b179e4e4f996a1eff812d9d3d"
     APPEND_AFTER_ADDED_ID = "67c0e9bdbbe4456c873127763d7fa580"
+    FILE_UPLOAD_IMAGE_ID = "20cd8e4e98ab81aa973b00b23083c115"
+    FILE_UPLOAD_PAGE_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     BLOCK_ID_HASH = {
       append_after_parent: APPEND_AFTER_PARENT_ID,
       append_after_previous: APPEND_AFTER_PREVIOUS_ID,
@@ -188,6 +191,7 @@ module NotionRubyMapping
       retrieve_users
       search
       append_after
+      create_file_upload
     end
 
     # @param [Symbol] method
@@ -203,6 +207,12 @@ module NotionRubyMapping
       end
     end
 
+    def create_file_upload
+      generate_stubs_sub :post, __method__, :file_uploads_path, {
+        image: [nil, 200],
+      }
+    end
+
     def retrieve_page
       generate_stubs_sub :get, __method__, :page_path, {
         top: [TOP_PAGE_ID, 200],
@@ -211,6 +221,7 @@ module NotionRubyMapping
         db_first: [DB_FIRST_PAGE_ID, 200],
         block_test_page: [BLOCK_TEST_PAGE_ID, 200],
         with_many_relations: [DB_MANY_CHILDREN_PAGE_ID, 200],
+        file_upload: [FILE_UPLOAD_PAGE_ID, 200],
       }
     end
 
@@ -256,6 +267,14 @@ module NotionRubyMapping
             type: "external",
             external: {
               url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png",
+            },
+          },
+        }],
+        set_icon_file_upload: [TOP_PAGE_ID, 200, {
+          icon: {
+            type: "file_upload",
+            file_upload: {
+              id: TestConnection::FILE_UPLOAD_IMAGE_ID,
             },
           },
         }],
@@ -368,6 +387,24 @@ module NotionRubyMapping
             },
           },
         }],
+        set_file_property_file_upload: [
+          FILE_UPLOAD_PAGE_ID, 200, {
+            properties: {
+              files: {
+                files: [
+                  {
+                    type: "file_upload",
+                    file_upload: {
+                      id: TestConnection::FILE_UPLOAD_IMAGE_ID,
+                    },
+                    name: "test.png",
+                  },
+                ],
+                type: "files",
+              },
+            },
+          }
+        ],
       }
     end
 
@@ -401,16 +438,16 @@ module NotionRubyMapping
       generate_stubs_sub :post, __method__, :databases_path, {
         from_page: [nil, 200, {
           properties: {
-            "Checkbox" => {checkbox: {}},
-            "CreatedBy" => {created_by: {}},
-            "CreatedTime" => {created_time: {}},
-            "Date" => {date: {}},
-            "Email" => {email: {}},
-            "Files" => {files: {}},
-            "Formula" => {formula: {expression: "now()"}},
-            "LastEditedBy" => {last_edited_by: {}},
-            "LastEditedTime" => {last_edited_time: {}},
-            "MultiSelect" => {
+            Checkbox: {checkbox: {}},
+            CreatedBy: {created_by: {}},
+            CreatedTime: {created_time: {}},
+            Date: {date: {}},
+            Email: {email: {}},
+            Files: {files: {}},
+            Formula: {formula: {expression: "now()"}},
+            LastEditedBy: {last_edited_by: {}},
+            LastEditedTime: {last_edited_time: {}},
+            MultiSelect: {
               multi_select: {
                 options: [
                   {name: "MS1", color: "orange"},
@@ -418,25 +455,25 @@ module NotionRubyMapping
                 ],
               },
             },
-            "Number" => {number: {format: "yen"}},
-            "People" => {people: {}},
-            "PhoneNumber" => {phone_number: {}},
-            "Relation" => {
+            Number: {number: {format: "yen"}},
+            People: {people: {}},
+            PhoneNumber: {phone_number: {}},
+            Relation: {
               relation: {
                 database_id: "c37a2c66e3aa4a0da44773de3b80c253",
                 type: "dual_property",
                 dual_property: {},
               },
             },
-            "Rollup" => {
+            Rollup: {
               rollup: {
                 function: "sum",
                 relation_property_name: "Relation",
                 rollup_property_name: "NumberTitle",
               },
             },
-            "RichText" => {rich_text: {}},
-            "Select" => {
+            RichText: {rich_text: {}},
+            Select: {
               select: {
                 options: [
                   {name: "S1", color: "yellow"},
@@ -444,8 +481,8 @@ module NotionRubyMapping
                 ],
               },
             },
-            "Title" => {title: {}},
-            "Url" => {url: {}},
+            Title: {title: {}},
+            Url: {url: {}},
           },
           title: [
             {
@@ -471,7 +508,7 @@ module NotionRubyMapping
       generate_stubs_sub :patch, __method__, :database_path, {
         created: [CREATED_DATABASE_ID, 200, {
           properties: {
-            "Select" => {
+            Select: {
               select: {
                 options: [
                   {id: "56a526e1-0cec-4b85-b9db-fc68d00e50c6", name: "S1", color: "yellow"},
@@ -2520,6 +2557,16 @@ module NotionRubyMapping
             video: {
               external: {
                 url: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
+              },
+            },
+          }
+        ],
+        file_file_upload: [
+          "20bd8e4e98ab8081ad29dd62726e4525", 200,
+          {
+            file: {
+              file_upload: {
+                id: TestConnection::FILE_UPLOAD_IMAGE_ID,
               },
             },
           }

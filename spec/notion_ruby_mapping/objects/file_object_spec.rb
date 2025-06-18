@@ -6,17 +6,59 @@ module NotionRubyMapping
     file_internal_json = tc.read_json "file_internal_object"
     file_external_json = tc.read_json "file_external_object"
     url = "https://example.com/external.jpg"
+    let(:file_upload_object) { instance_double(FileUploadObject, id: TestConnection::FILE_UPLOAD_IMAGE_ID) }
+
+    describe "constructor" do
+      context "with url" do
+        subject { FileObject.new url: url }
+
+        it { expect(subject.url).to eq url }
+        it { expect(subject.type).to eq :external }
+        it { expect(subject.will_update).to be_falsey }
+      end
+
+      context "with file_upload_object" do
+        subject { FileObject.new file_upload_object: file_upload_object }
+
+        it { expect(subject.file_upload_object).to eq file_upload_object }
+        it { expect(subject.type).to eq :file_upload }
+        it { expect(subject.will_update).to be_falsey }
+      end
+
+      context "with json" do
+        subject { FileObject.new json: file_internal_json }
+
+        it { expect(subject.url).to eq file_internal_json[:file][:url] }
+        it { expect(subject.type).to eq :file }
+        it { expect(subject.will_update).to be_falsey }
+      end
+
+      context "without arguments" do
+        subject { -> { FileObject.new } }
+
+        it { expect { subject.call }.to raise_error(StandardError) }
+      end
+    end
 
     describe "self.file_object" do
       subject { FileObject.file_object fo }
-      context "when String" do
+      context "with url string" do
         let(:fo) { url }
 
         it { expect(subject).to be_is_a FileObject }
         it { expect(subject.url).to eq url }
       end
 
-      context "when FileObject" do
+      context "with FileUploadObject" do
+        let(:fo) { file_upload_object }
+
+        before { allow(file_upload_object).to receive(:is_a?).with(FileUploadObject).and_return(true) }
+
+        it { expect(subject).to be_is_a FileObject }
+        it { expect(subject.file_upload_object).to eq file_upload_object }
+      end
+
+      context "with FileObject" do
         let(:fo) { FileObject.new url: url }
 
         it { expect(subject).to be_is_a FileObject }
@@ -47,11 +89,17 @@ module NotionRubyMapping
           },
         }
       end
-    end
 
-    describe "new without arguments" do
-      subject { -> { FileObject.new } }
-      it { expect { subject.call }.to raise_error(StandardError) }
+      context "when file upload object" do
+        let(:target) { FileObject.new file_upload_object: file_upload_object }
+
+        it_behaves_like "property values json", {
+          type: "file_upload",
+          file_upload: {
+            id: TestConnection::FILE_UPLOAD_IMAGE_ID,
+          },
+        }
+      end
     end
 
     describe "create from json" do
@@ -108,6 +156,20 @@ module NotionRubyMapping
         }
         it { expect(target.url).to eq url }
       end
+    end
+
+    describe "file_upload_object=" do
+      let(:target) { FileObject.new json: file_internal_json }
+
+      before { target.file_upload_object = file_upload_object }
+
+      it_behaves_like "property values json", {
+        type: "file_upload",
+        file_upload: {
+          id: TestConnection::FILE_UPLOAD_IMAGE_ID,
+        },
+      }
+      it { expect(target.file_upload_object).to eq file_upload_object }
     end
   end
 end
