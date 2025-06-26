@@ -10,7 +10,7 @@ module NotionRubyMapping
       if @json
         decode_block_rich_text_array
       else
-        rich_text_array_and_color :rich_text, text_info, nil
+        rich_text_array_and_color "rich_text", text_info, nil
         add_sub_blocks sub_blocks
       end
       @can_have_children = true
@@ -23,12 +23,12 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = @rich_text_array.update_property_schema_json not_update
-      ans[type][:children] = @sub_blocks.map(&:block_json) if @sub_blocks
+      ans[type]["children"] = @sub_blocks.map(&:block_json) if @sub_blocks
       ans
     end
 
     def type
-      :template
+      "template"
     end
   end
 end

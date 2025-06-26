@@ -4,33 +4,33 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe Heading3Block do
-    type = :heading_3
+    type = "heading_3"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      object: "block",
-      type: "heading_3",
-      heading_3: {
-        rich_text: [
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => "heading_3",
+      "heading_3" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Heading 3",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Heading 3",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              italic: false,
-              strikethrough: false,
-              underline: false,
-              code: false,
-              color: "default",
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
             },
-            plain_text: "Heading 3",
-            href: nil,
+            "plain_text" => "Heading 3",
+            "href" => nil,
           },
         ],
-        color: "default",
-        is_toggleable: false,
+        "color" => "default",
+        "is_toggleable" => false,
       },
     }
 
@@ -43,7 +43,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "Heading 3", color: "blue_background", id: update_id }
 
       it_behaves_like "update block rich text array", type, "New Heading 3"

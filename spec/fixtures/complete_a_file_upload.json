@@ -1,0 +1,21 @@
+{
+    "object": "file_upload",
+    "id": "21ad8e4e-98ab-814e-8d96-00b2ded97d6c",
+    "created_time": "2025-06-22T07:16:00.000Z",
+    "created_by": {
+        "id": "40673a87-d8ed-41e0-aa55-7f0e8ace24cd",
+        "type": "bot"
+    },
+    "last_edited_time": "2025-06-22T07:28:00.000Z",
+    "expiry_time": "2025-06-22T08:16:00.000Z",
+    "archived": false,
+    "status": "uploaded",
+    "filename": "sample-15s.mp4",
+    "content_type": "application/mp4",
+    "content_length": 11916526,
+    "number_of_parts": {
+        "total": 2,
+        "sent": 2
+    },
+    "request_id": "0295d4b2-c58f-4e3d-bc54-b8c1ee05d2e4"
+}

@@ -14,9 +14,9 @@ module NotionRubyMapping
 
         it_behaves_like "dry run", :post, :search_path, json:
           {
-            sort: {
-              direction: "ascending",
-              timestamp: "last_edited_time",
+            "sort" => {
+              "direction" => "ascending",
+              "timestamp" => "last_edited_time",
             },
           }
       end
@@ -26,9 +26,9 @@ module NotionRubyMapping
 
         it_behaves_like "dry run", :post, :search_path, json:
           {
-            filter: {
-              value: "database",
-              property: "object",
+            "filter" => {
+              "value" => "database",
+              "property" => "object",
             },
           }
       end
@@ -38,9 +38,9 @@ module NotionRubyMapping
 
         it_behaves_like "dry run", :post, :search_path, json:
           {
-            filter: {
-              value: "page",
-              property: "object",
+            "filter" => {
+              "value" => "page",
+              "property" => "object",
             },
           }
       end
@@ -50,7 +50,7 @@ module NotionRubyMapping
 
         it_behaves_like "dry run", :post, :search_path, json:
           {
-            query: "ABC",
+            "query" => "ABC",
           }
       end
     end

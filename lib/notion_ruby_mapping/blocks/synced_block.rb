@@ -8,8 +8,8 @@ module NotionRubyMapping
     def initialize(block_id: nil, sub_blocks: nil, json: nil, id: nil, parent: nil)
       super json: json, id: id, parent: parent
       if @json
-        synced_from = @json[type][:synced_from]
-        @block_id = synced_from && @nc.hex_id(synced_from[:block_id])
+        synced_from = @json[type]["synced_from"]
+        @block_id = synced_from && @nc.hex_id(synced_from["block_id"])
       else
         @block_id = Base.block_id block_id
         add_sub_blocks sub_blocks
@@ -21,8 +21,8 @@ module NotionRubyMapping
 
     def block_json(not_update: true)
       ans = super
-      ans[type] = {synced_from: @block_id ? {type: :block_id, block_id: @nc.hex_id(@block_id)} : nil}
-      ans[type][:children] = @sub_blocks.map(&:block_json) if @sub_blocks
+      ans[type] = {"synced_from" => @block_id ? {"type" => "block_id", "block_id" => @nc.hex_id(@block_id)} : nil}
+      ans[type]["children"] = @sub_blocks.map(&:block_json) if @sub_blocks
       ans
     end
 
@@ -43,7 +43,7 @@ module NotionRubyMapping
 
     # @return [String (frozen)]
     def type
-      :synced_block
+      "synced_block"
     end
   end
 end

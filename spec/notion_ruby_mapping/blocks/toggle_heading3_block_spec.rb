@@ -4,33 +4,33 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ToggleHeading3Block do
-    type = :heading_3
+    type = "heading_3"
 
     it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:toggle_heading_3], true, {
-      object: "block",
-      type: "heading_3",
-      heading_3: {
-        rich_text: [
+      "object" => "block",
+      "type" => "heading_3",
+      "heading_3" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Toggle Heading 3",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Toggle Heading 3",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              italic: false,
-              strikethrough: false,
-              underline: false,
-              code: false,
-              color: "default",
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
             },
-            plain_text: "Toggle Heading 3",
-            href: nil,
+            "plain_text" => "Toggle Heading 3",
+            "href" => nil,
           },
         ],
-        color: "default",
-        is_toggleable: true,
+        "color" => "default",
+        "is_toggleable" => true,
       },
     }
 
@@ -47,7 +47,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[:toggle_heading_3] }
+      let(:update_id) { TestConnection.update_block_id(:toggle_heading_3) }
       let(:target) do
         described_class.new "Toggle Heading 3", color: "blue_background", id: update_id, sub_blocks: [
           BulletedListItemBlock.new("inside Toggle Heading 3"),

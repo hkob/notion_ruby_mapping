@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # LastEditedTimeProperty
   class LastEditedTimeProperty < DateBaseProperty
-    TYPE = :last_edited_time
+    TYPE = "last_edited_time"
 
     ### Public announced methods
 
@@ -21,7 +21,7 @@ module NotionRubyMapping
 
     # @param [String, Symbol] name Property name
     # @param [String] json last_edited_time value (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, property_id: nil, property_cache: nil)
+    def initialize(name, will_update: false, base_type: "page", json: nil, property_id: nil, property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       @json = json

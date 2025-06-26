@@ -65,8 +65,8 @@ module NotionRubyMapping
 
     describe "database attributes" do
       {
-        title: {AsciiDatabase: "Name", db1: "名前"},
-        number: {AsciiDatabase: "Number", db1: "数値"},
+        "title" => {AsciiDatabase: "Name", db1: "名前"},
+        "number" => {AsciiDatabase: "Number", db1: "数値"},
       }.each do |property_type, hash|
         context "when #{property_type}" do
           subject { db.properties[title_value] }
@@ -74,7 +74,7 @@ module NotionRubyMapping
             context key do
               let(:db) { mermaid.databases[key.to_s] }
 
-              if property_type == :title
+              if property_type == "title"
                 it { expect(db.title).to eq title_value }
               else
                 let(:title_value) { title_value }

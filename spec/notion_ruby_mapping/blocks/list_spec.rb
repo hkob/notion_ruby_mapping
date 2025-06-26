@@ -53,20 +53,20 @@ module NotionRubyMapping
     end
 
     describe "Property#people" do
-      let(:no_content_json) { {id: "_x%3E%3D"} }
+      let(:no_content_json) { {"id" => "_x%3E%3D"} }
       let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
-      let(:property_cache) { PropertyCache.new base_type: :page, page_id: first_page_id }
-      let(:target) { Property.create_from_json :pp, no_content_json, :page, property_cache }
+      let(:property_cache) { PropertyCache.new base_type: "page", page_id: first_page_id }
+      let(:target) { Property.create_from_json "pp", no_content_json, "page", property_cache }
 
       it { expect(target.people.first).to be_an_instance_of(UserObject) }
     end
 
     describe "Property#rich_text (pagination)" do
-      let(:no_content_json) { {id: "flUp"} }
+      let(:no_content_json) { {"id" => "flUp"} }
       let(:second_page_id) { TestConnection::DB_SECOND_PAGE_ID }
-      let(:property_cache) { PropertyCache.new base_type: :page, page_id: second_page_id }
+      let(:property_cache) { PropertyCache.new base_type: "page", page_id: second_page_id }
       let(:target) do
-        Property.create_from_json :rtp, no_content_json, :page, property_cache, Query.new(page_size: 5)
+        Property.create_from_json "rtp", no_content_json, "page", property_cache, Query.new(page_size: 5)
       end
 
       it { expect(target.full_text).to eq "abc\n \n \n \n \n高専HP\n " }

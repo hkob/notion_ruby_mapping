@@ -35,6 +35,8 @@ Gem::Specification.new do |spec|
   # spec.add_dependency "example-gem", "~> 1.0"
 
   spec.add_dependency "faraday"
+  spec.add_dependency "faraday-multipart"
+  spec.add_dependency "mime-types"
 
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"

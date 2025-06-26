@@ -28,8 +28,8 @@ module NotionRubyMapping
         let(:target) { UserObject.new user_id: "user_id" }
 
         it_behaves_like "property values json", {
-          object: "user",
-          id: "user_id",
+          "object" => "user",
+          "id" => "user_id",
         }
       end
     end
@@ -41,8 +41,8 @@ module NotionRubyMapping
         let(:json) { hkob_json }
 
         it_behaves_like "property values json", {
-          object: "user",
-          id: "2200a9116a9644bbbd386bfb1e01b9f6",
+          "object" => "user",
+          "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
         }
         it { expect(target.name).to eq "Hiroyuki KOBAYASHI" }
       end
@@ -51,8 +51,8 @@ module NotionRubyMapping
         let(:json) { token_bot_json }
 
         it_behaves_like "property values json", {
-          object: "user",
-          id: "019a87c7d19744a4b19abaa684400f81",
+          "object" => "user",
+          "id" => "019a87c7d19744a4b19abaa684400f81",
         }
       end
     end
@@ -63,8 +63,8 @@ module NotionRubyMapping
         let(:target) { UserObject.find user_id }
 
         it_behaves_like "property values json", {
-          object: "user",
-          id: user_id,
+          "object" => "user",
+          "id" => user_id,
         }
         it { expect(target.name).to eq "Hiroyuki KOBAYASHI" }
       end
@@ -82,8 +82,8 @@ module NotionRubyMapping
         let(:target) { UserObject.find_me }
 
         it_behaves_like "property values json", {
-          object: "user",
-          id: user_id,
+          "object" => "user",
+          "id" => user_id,
         }
         it { expect(target.name).to eq "notion_ruby_mapping" }
       end
@@ -115,8 +115,8 @@ module NotionRubyMapping
       before { target.user_id = "new_user_id" }
 
       it_behaves_like "property values json", {
-        object: "user",
-        id: "new_user_id",
+        "object" => "user",
+        "id" => "new_user_id",
       }
     end
   end

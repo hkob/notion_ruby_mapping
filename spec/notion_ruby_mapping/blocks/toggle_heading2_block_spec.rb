@@ -4,33 +4,33 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ToggleHeading2Block do
-    type = :heading_2
+    type = "heading_2"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:toggle_heading_2], true, {
-      object: "block",
-      type: "heading_2",
-      heading_2: {
-        rich_text: [
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(:toggle_heading_2), true, {
+      "object" => "block",
+      "type" => "heading_2",
+      "heading_2" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Toggle Heading 2",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Toggle Heading 2",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              italic: false,
-              strikethrough: false,
-              underline: false,
-              code: false,
-              color: "default",
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
             },
-            plain_text: "Toggle Heading 2",
-            href: nil,
+            "plain_text" => "Toggle Heading 2",
+            "href" => nil,
           },
         ],
-        color: "default",
-        is_toggleable: true,
+        "color" => "default",
+        "is_toggleable" => true,
       },
     }
 

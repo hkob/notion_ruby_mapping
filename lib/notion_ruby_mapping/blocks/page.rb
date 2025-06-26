@@ -27,8 +27,8 @@ module NotionRubyMapping
 
     # @param [Boolean] dry_run true if dry_run
     def append_comment(text_objects, dry_run: false)
-      rto = RichTextArray.new :rich_text, text_objects: text_objects, will_update: true
-      json = rto.property_schema_json.merge({parent: {page_id: @id}})
+      rto = RichTextArray.new "rich_text", text_objects: text_objects, will_update: true
+      json = rto.property_schema_json.merge({"parent" => {"page_id" => @id}})
       if dry_run
         self.class.dry_run_script :post, @nc.comments_path, json
       else
@@ -41,8 +41,8 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Database]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#71f680d59b874930bf9f488a7cd6a49e
     def build_child_database(title, *assigns)
-      db = Database.new json: {title: [TextObject.new(title).property_values_json]},
-                        assign: assigns, parent: {type: "page_id", page_id: @id}
+      db = Database.new json: {"title" => [TextObject.new(title).property_values_json]},
+                        assign: assigns, parent: {"type" => "page_id", "page_id" => @id}
       yield db, db.properties if block_given?
       db
     end
@@ -53,15 +53,15 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Database, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e3f1d21e0f724f589e48431468772eed
     def create_child_database(title, *assigns, dry_run: false)
-      db = Database.new json: {title: [TextObject.new(title).property_values_json]},
-                        assign: assigns, parent: {type: :page_id, page_id: @id}
+      db = Database.new json: {"title" => [TextObject.new(title).property_values_json]},
+                        assign: assigns, parent: {"type" => "page_id", "page_id" => @id}
       yield db, db.properties if block_given?
       db.save dry_run: dry_run
     end
 
     # @return [String] 公開URL
     def public_url
-      @json[:public_url]
+      @json["public_url"]
     end
 
     # @return [String] title
@@ -73,7 +73,7 @@ module NotionRubyMapping
 
     # @return [String] URL
     def url
-      @json[:url]
+      @json["url"]
     end
 
     protected

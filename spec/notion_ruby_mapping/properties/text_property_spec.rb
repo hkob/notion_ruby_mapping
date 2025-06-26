@@ -4,9 +4,9 @@ module NotionRubyMapping
   [TitleProperty, RichTextProperty].each do |c|
     RSpec.describe c do
       it_behaves_like "filter test", c,
-                      %i[equals does_not_equal contains does_not_contain starts_with ends_with],
+                      %w[equals does_not_equal contains does_not_contain starts_with ends_with],
                       value: "abc"
-      it_behaves_like "filter test", c, %i[is_empty is_not_empty]
+      it_behaves_like "filter test", c, %w[is_empty is_not_empty]
     end
   end
 

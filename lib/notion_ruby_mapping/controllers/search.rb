@@ -12,16 +12,16 @@ module NotionRubyMapping
         Base.dry_run_script :post, NotionCache.instance.search_path, payload
       else
         response = NotionCache.instance.search payload
-        List.new json: response, type: :search, value: self, query: Query.new
+        List.new json: response, type: "search", value: self, query: Query.new
       end
     end
 
     def payload
       ans = {}
-      ans[:sort] = {direction: "ascending", timestamp: "last_edited_time"} if @ascending
-      ans[:filter] = {value: "database", property: "object"} if @database_only
-      ans[:filter] = {value: "page", property: "object"} if @page_only
-      ans[:query] = @query if @query
+      ans["sort"] = {"direction" => "ascending", "timestamp" => "last_edited_time"} if @ascending
+      ans["filter"] = {"value" => "database", "property" => "object"} if @database_only
+      ans["filter"] = {"value" => "page", "property" => "object"} if @page_only
+      ans["query"] = @query if @query
       ans
     end
   end

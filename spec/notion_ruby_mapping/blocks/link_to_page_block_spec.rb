@@ -4,14 +4,14 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe LinkToPageBlock do
-    type = :link_to_page
+    type = "link_to_page"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      object: "block",
-      type: "link_to_page",
-      link_to_page: {
-        type: :page_id,
-        page_id: "c01166c613ae45cbb96818b4ef2f5a77",
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => "link_to_page",
+      "link_to_page" => {
+        "type" => "page_id",
+        "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
       },
     }
 

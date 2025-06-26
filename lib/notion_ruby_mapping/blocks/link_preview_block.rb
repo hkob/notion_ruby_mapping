@@ -8,9 +8,9 @@ module NotionRubyMapping
       @can_append = false
     end
 
-    # @return [Symbol]
+    # @return [String]
     def type
-      :link_preview
+      "link_preview"
     end
   end
 end

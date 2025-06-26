@@ -4,29 +4,29 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe TemplateBlock do
-    type = :template
+    type = "template"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], true, {
-      object: "block",
-      type: "template",
-      template: {
-        rich_text: [
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
+      "object" => "block",
+      "type" => "template",
+      "template" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Add a new to-do",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Add a new to-do",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              italic: false,
-              strikethrough: false,
-              underline: false,
-              code: false,
-              color: "default",
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
             },
-            plain_text: "Add a new to-do",
-            href: nil,
+            "plain_text" => "Add a new to-do",
+            "href" => nil,
           },
         ],
       },
@@ -41,7 +41,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "Old Template", id: update_id }
 
       it_behaves_like "update block rich text array", type, "New template"

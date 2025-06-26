@@ -6,7 +6,7 @@ module NotionRubyMapping
     include EqualsDoesNotEqual
     include GreaterThanLessThan
     include IsEmptyIsNotEmpty
-    TYPE = :number
+    TYPE = "number"
 
     ### Public announced methods
 
@@ -24,7 +24,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#5e3682ed9e124d518f735b236787d7a7
     def format
       assert_database_property __method__
-      @json[:format]
+      @json["format"]
     end
 
     # @param [String] format
@@ -33,7 +33,7 @@ module NotionRubyMapping
     def format=(format)
       assert_database_property __method__
       @will_update = true
-      @json[:format] = format
+      @json["format"] = format
     end
 
     ## Page property only methods
@@ -53,19 +53,19 @@ module NotionRubyMapping
 
     # @param [String, Symbol] name Property name
     # @param [Float, Integer, Hash] json Number value or format Hash
-    def initialize(name, will_update: false, base_type: :page, json: nil, format: nil, property_id: nil,
+    def initialize(name, will_update: false, base_type: "page", json: nil, format: nil, property_id: nil,
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       @json = json
-      @json ||= {format: format || "number"} if database?
+      @json ||= {"format" => format || "number"} if database?
     end
 
     # @param [Hash] json
     # @return [NotionRubyMapping::NumberProperty]
     def update_from_json(json)
       @will_update = false
-      @json = json[:number]
+      @json = json["number"]
       self
     end
 
@@ -78,7 +78,7 @@ module NotionRubyMapping
       return ans if ans != {} || !@will_update
 
       ans[@name] ||= {}
-      ans[@name][:number] = @json
+      ans[@name]["number"] = @json
       ans
     end
 
@@ -87,7 +87,7 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      {@name => {number: @json, type: "number"}}
+      {@name => {"number" => @json, "type" => "number"}}
     end
 
     protected
@@ -96,7 +96,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def property_schema_json_sub
-      {format: format}
+      {"format" => format}
     end
   end
 end

@@ -5,9 +5,9 @@ module NotionRubyMapping
     tc = TestConnection.instance
     rich_text_array_json = tc.read_json "rich_text_array"
     rich_text_property_values_json = tc.read_json "rich_text_array"
-    rich_text_property_values_json[1][:mention][:user] = {
-      id: "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
-      object: "user",
+    rich_text_property_values_json[1]["mention"]["user"] = {
+      "id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
+      "object" => "user",
     }
 
     context "for sample RichTextArray" do
@@ -60,13 +60,13 @@ module NotionRubyMapping
         describe "property_values_json" do
           ans = rich_text_property_values_json + [
             {
-              href: nil,
-              plain_text: "ABC",
-              text: {
-                content: "ABC",
-                link: nil,
+              "href" => nil,
+              "plain_text" => "ABC",
+              "text" => {
+                "content" => "ABC",
+                "link" => nil,
               },
-              type: "text",
+              "type" => "text",
             },
           ]
           it { expect(target.property_values_json).to eq ans }
@@ -88,13 +88,13 @@ module NotionRubyMapping
         describe "property_values_json" do
           ans = rich_text_property_values_json + [
             {
-              href: nil,
-              plain_text: "DEF",
-              text: {
-                content: "DEF",
-                link: nil,
+              "href" => nil,
+              "plain_text" => "DEF",
+              "text" => {
+                "content" => "DEF",
+                "link" => nil,
               },
-              type: "text",
+              "type" => "text",
             },
           ]
           it { expect(target.property_values_json).to eq ans }
@@ -142,7 +142,7 @@ module NotionRubyMapping
         let(:text_objects) do
           [
             TextObject.new("A TextObject"),
-            MentionObject.new(user_id: "ABC"),
+            MentionObject.new("user_id" => "ABC"),
           ]
         end
 

@@ -5,7 +5,7 @@ module NotionRubyMapping
   class BookmarkBlock < UrlCaptionBaseBlock
     # @return [String (frozen)]
     def type
-      :bookmark
+      "bookmark"
     end
   end
 end

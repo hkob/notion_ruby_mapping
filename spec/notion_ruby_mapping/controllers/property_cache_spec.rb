@@ -16,7 +16,7 @@ module NotionRubyMapping
       end
 
       context "when with json" do
-        let(:json) { {np: {type: "number", number: 123}} }
+        let(:json) { {"np" => {"type" => "number", "number" => 123}} }
         let(:property_cache) { PropertyCache.new json, page_id: "abc" }
 
         context "without json" do
@@ -35,7 +35,7 @@ module NotionRubyMapping
 
     describe "add_property (Page)" do
       subject { PropertyCache.new page_id: "def" }
-      let(:np) { NumberProperty.new :np, json: 123 }
+      let(:np) { NumberProperty.new "np", json: 123 }
       let(:target) { subject["np"] }
 
       before { subject.add_property np }
@@ -62,14 +62,14 @@ module NotionRubyMapping
         end
 
         it "can generate property values json" do
-          expect(subject.property_values_json).to eq({properties: {np: {number: 456, type: "number"}}})
+          expect(subject.property_values_json).to eq({"properties" => {"np" => {"number" => 456, "type" => "number"}}})
         end
       end
     end
 
     describe "add_property (Database)" do
       subject { PropertyCache.new }
-      let(:np) { NumberProperty.new :np, base_type: :database }
+      let(:np) { NumberProperty.new "np", base_type: "database" }
 
       before { subject.add_property np }
 
@@ -99,21 +99,21 @@ module NotionRubyMapping
         end
 
         it "the NumberProperty will not update" do
-          expect(subject[:np].will_update).to be_truthy
+          expect(subject["np"].will_update).to be_truthy
         end
 
         it "can generate update property schema json" do
           expect(subject.update_property_schema_json).to eq({
-                                                              properties: {
-                                                                np: {
-                                                                  number: {format: "percent"},
+                                                              "properties" => {
+                                                                "np" => {
+                                                                  "number" => {"format" => "percent"},
                                                                 },
                                                               },
                                                             })
         end
 
         it "can generate property schema json" do
-          expect(subject.property_schema_json).to eq({properties: {np: {number: {format: "percent"}}}})
+          expect(subject.property_schema_json).to eq({"properties" => {"np" => {"number" => {"format" => "percent"}}}})
         end
       end
     end
@@ -126,7 +126,7 @@ module NotionRubyMapping
       before { [np, tp].each { |p| subject.add_property p } }
 
       it "can map properties" do
-        expect(subject.map(&:name)).to eq %i[np tp]
+        expect(subject.map(&:name)).to eq %w[np tp]
       end
 
       it "can select properties" do
@@ -134,7 +134,7 @@ module NotionRubyMapping
       end
 
       it "can obtain some properties using values_at" do
-        expect(subject.values_at(:np, :tp)).to eq [np, tp]
+        expect(subject.values_at("np", "tp")).to eq [np, tp]
       end
     end
   end

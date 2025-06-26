@@ -16,11 +16,10 @@ module NotionRubyMapping
     attr_accessor :name
 
     def add_property(key, value)
-      key_sym = key.to_sym
-      if key_sym == :title
+      if key == "title"
         @title = value
       else
-        @properties[value] = key_sym
+        @properties[value] = key
       end
     end
 
@@ -44,7 +43,7 @@ module NotionRubyMapping
     end
 
     def blocked?(name)
-      @finish_flag[name.to_sym].nil?
+      @finish_flag[name].nil?
     end
 
     def count
@@ -66,12 +65,10 @@ module NotionRubyMapping
       ps = @real_db.properties
       @properties.each do |(value, key)|
         name, *options = value.split("|")
-        name_sym = name.to_sym
-        key_sym = key.to_sym
-        next if @finish_flag[name_sym]
+        next if @finish_flag[name]
 
-        property = ps.values_at(name_sym).first
-        case key_sym
+        property = ps.values_at(name).first
+        case key
         when /checkbox|created_by|created_time|date|email|files|last_edited_by|last_edited_time|people|phone_number|text|url|status/
           klass = {
             checkbox: CheckboxProperty, created_by: CreatedByProperty, created_time: CreatedTimeProperty,
@@ -79,9 +76,9 @@ module NotionRubyMapping
             last_edited_time: LastEditedTimeProperty, people: PeopleProperty, phone_number: PhoneNumberProperty,
             rich_text: RichTextProperty, url: UrlProperty, status: StatusProperty
           }[key.to_sym]
-          @real_db.add_property klass, name_sym unless property
-          @working << name_sym
-        when :formula
+          @real_db.add_property klass, name unless property
+          @working << name
+        when "formula"
           f_e = options.first&.gsub "@", '"'
           dependencies = f_e&.scan(/prop\("([^"]+)"\)/) || []
           blocked_key = dependencies.select { |k| blocked? k.first }
@@ -89,37 +86,37 @@ module NotionRubyMapping
             if property
               property.formula_expression = f_e unless property.formula_expression == f_e
             else
-              @real_db.add_property(FormulaProperty, name_sym) { |dp| dp.formula_expression = f_e }
+              @real_db.add_property(FormulaProperty, name) { |dp| dp.formula_expression = f_e }
             end
-            @working << name_sym
+            @working << name
           else
-            print("#{name_sym} blocked by #{blocked_key.flatten}\n")
+            print("#{name} blocked by #{blocked_key.flatten}\n")
             next
           end
 
-        when :multi_select
+        when "multi_select"
           if property
-            (options - (property.multi_select_options.map { |h| h[:name] })).each do |select_name|
+            (options - (property.multi_select_options.map { |h| h["name"] })).each do |select_name|
               property.add_multi_select_option name: select_name, color: "default"
             end
           else
-            @real_db.add_property(MultiSelectProperty, name_sym) do |dp|
+            @real_db.add_property(MultiSelectProperty, name) do |dp|
               options.each do |select_name|
                 dp.add_multi_select_option name: select_name, color: "default"
               end
             end
           end
-          @working << name_sym
-        when :number
+          @working << name
+        when "number"
           format_value = options.empty? ? "number" : options.first
           if property
             property.format = format_value unless property.format == format_value
           else
-            @real_db.add_property(NumberProperty, name_sym) { |p| p.format = format_value }
+            @real_db.add_property(NumberProperty, name) { |p| p.format = format_value }
           end
-          @working << name_sym
-        when :rollup
-          name, *options = value.split("|").map(&:to_sym)
+          @working << name
+        when "rollup"
+          name, *options = value.split("|")
           relation_name, rollup_name, function = options
           if blocked? relation_name
             print("#{name} blocked by #{relation_name}\n")
@@ -146,9 +143,9 @@ module NotionRubyMapping
               @working << name
             end
           end
-        when :select
+        when "select"
           if property
-            (options - (property.select_options.map { |h| h[:name] })).each do |select_name|
+            (options - (property.select_options.map { |h| h["name"] })).each do |select_name|
               property.add_select_option name: select_name, color: "default"
             end
           else
@@ -164,12 +161,12 @@ module NotionRubyMapping
       while (array = @relation_queue.shift)
         value, relation_db = array
         db_id = relation_db.real_db.id
-        forward, reverse = value.split("|").map(&:to_sym)
+        forward, reverse = value.split("|").map(&:to_s)
         property = ps.values_at(forward).first
         if property
           if reverse
             if property.database_id == db_id && property.synced_property_name == reverse
-              relation_db.add_property :relation, reverse
+              relation_db.add_property "relation", reverse
               relation_db.finish_flag[reverse] = true
             else
               unless @finish_flag[forward]
@@ -177,14 +174,14 @@ module NotionRubyMapping
                 relation_db.append_reverse_name_queue self, forward, reverse
               end
               @working << forward
-              add_property :relation, forward
+              add_property "relation", forward
             end
             relation_db.relations[reverse] = self
           else
             unless property.database_id == db_id
               property.replace_relation_database database_id: db_id, type: "single_property"
               @working << forward
-              add_property :relation, forward
+              add_property "relation", forward
             end
           end
           @relations[forward] = relation_db
@@ -200,7 +197,7 @@ module NotionRubyMapping
           end
           @relations[forward] = relation_db
           @working << forward
-          add_property :relation, forward
+          add_property "relation", forward
         end
       end
       @real_db.property_schema_json
@@ -208,7 +205,7 @@ module NotionRubyMapping
 
     def append_reverse_name_queue(other_db, forward, reverse)
       @reverse_name_queue[reverse] = [other_db, forward]
-      add_property :relation, reverse
+      add_property "relation", reverse
     end
 
     def update_database

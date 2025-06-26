@@ -12,11 +12,11 @@ module NotionRubyMapping
 
       super(json: json, id: id, parent: parent)
       if @json
-        @url = @json[type][:url]
+        @url = @json[type]["url"]
         decode_block_caption
       else
         @url = url
-        @caption = RichTextArray.rich_text_array :caption, caption
+        @caption = RichTextArray.rich_text_array "caption", caption
       end
     end
 
@@ -31,7 +31,7 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = @caption.update_property_schema_json not_update
-      ans[type][:url] = @url
+      ans[type]["url"] = @url
       ans
     end
 
@@ -40,7 +40,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/EmbedBlock-57c31e7d8e1d41669eb30f27e1c41035#25ece6bfce0749f8b4bbecc6ba7feedc
     def url=(str)
       @url = str
-      @payload.add_update_block_key :url
+      @payload.add_update_block_key "url"
     end
   end
 end

@@ -16,11 +16,10 @@ module NotionRubyMapping
       until @lines.empty?
         case @lines.shift
         when / *(\w+) *[|}][|o]--[o|][|{] *(\w+) *: *"(.*)" */
-          db_or_create(Regexp.last_match(1)).append_relation_queue db_or_create(Regexp.last_match(2)), Regexp.last_match(3)
+          db_or_create(Regexp.last_match(1)).append_relation_queue db_or_create(Regexp.last_match(2)),
+                                                                   Regexp.last_match(3)
         when / *(\w+) *{ */
           append_db_with_attributes Regexp.last_match(1)
-        else
-          nil
         end
       end
     end
@@ -41,8 +40,6 @@ module NotionRubyMapping
           db.add_property Regexp.last_match(1), Regexp.last_match(2)
         when /^ *([^ ]+) +([^ ]+) *$/
           db.add_property Regexp.last_match(1), Regexp.last_match(2)
-        else
-          nil
         end
       end
     end

@@ -15,19 +15,19 @@ module NotionRubyMapping
 
     def color=(new_color)
       @color = new_color
-      @payload.add_update_block_key :color
+      @payload.add_update_block_key "color"
     end
 
     # @return [String (frozen)]
     def type
-      :table_of_contents
+      "table_of_contents"
     end
 
     # @param [Boolean] not_update false when update
     # @return [Hash{String (frozen)->Hash}]
     def block_json(not_update: true)
       ans = super
-      ans[type] = {color: @color}
+      ans[type] = {"color" => @color}
       ans
     end
   end

@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # LastEditedByProperty
   class LastEditedByProperty < MultiProperty
-    TYPE = :last_edited_by
+    TYPE = "last_edited_by"
 
     ### Public announced methods
 
@@ -22,7 +22,8 @@ module NotionRubyMapping
     # @param [String] name Property name
     # @param [String] user_id user_id (optional)
     # @param [Hash] json json (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, user_id: nil, property_id: nil,
+    def initialize(name, will_update: false, base_type:
+          "page", json: nil, user_id: nil, property_id: nil,
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
@@ -37,7 +38,7 @@ module NotionRubyMapping
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
-      leb = json[:last_edited_by]
+      leb = json["last_edited_by"]
       @json = database? ? leb : UserObject.new(json: leb)
     end
 

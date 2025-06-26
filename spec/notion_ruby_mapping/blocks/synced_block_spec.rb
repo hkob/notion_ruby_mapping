@@ -7,23 +7,23 @@ module NotionRubyMapping
     # type = "synced_block"
 
     context "when synced_block_original" do
-      it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:synced_block_original], true, {
-        object: "block",
-        type: "synced_block",
-        synced_block: {
-          synced_from: nil,
+      it_behaves_like "retrieve block", described_class, TestConnection.block_id("synced_block_original"), true, {
+        "object" => "block",
+        "type" => "synced_block",
+        "synced_block" => {
+          "synced_from" => nil,
         },
       }
     end
 
     context "when synced_block_referece" do
-      it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:synced_block_copy], false, {
-        object: "block",
-        type: "synced_block",
-        synced_block: {
-          synced_from: {
-            type: :block_id,
-            block_id: "4815032e6f2443e4bc8c9bdc6299b090",
+      it_behaves_like "retrieve block", described_class, TestConnection.block_id("synced_block_copy"), false, {
+        "object" => "block",
+        "type" => "synced_block",
+        "synced_block" => {
+          "synced_from" => {
+            "type" => "block_id",
+            "block_id" => "4815032e6f2443e4bc8c9bdc6299b090",
           },
         },
       }

@@ -4,12 +4,12 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe DividerBlock do
-    type = :divider
+    type = "divider"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      object: "block",
-      type: "divider",
-      divider: {},
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => "divider",
+      "divider" => {},
     }
 
     describe "create_child_block" do

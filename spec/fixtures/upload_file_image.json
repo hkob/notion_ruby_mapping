@@ -1,0 +1,17 @@
+{
+    "object": "file_upload",
+    "id": "20cd8e4e-98ab-81aa-973b-00b23083c115",
+    "created_time": "2025-06-08T11:34:00.000Z",
+    "created_by": {
+        "id": "40673a87-d8ed-41e0-aa55-7f0e8ace24cd",
+        "type": "bot"
+    },
+    "last_edited_time": "2025-06-08T11:34:00.000Z",
+    "expiry_time": "2025-06-08T12:34:00.000Z",
+    "archived": false,
+    "status": "uploaded",
+    "filename": "ErSxuLeq.png-medium.png",
+    "content_type": "image/png",
+    "content_length": 15369,
+    "request_id": "75b62d5c-fbd5-41d5-ad35-8ee586579650"
+}

@@ -2,6 +2,8 @@
 
 require "singleton"
 require "faraday"
+require "faraday/multipart"
+require "mime/types"
 
 module NotionRubyMapping
   # singleton class of caching Notion objects
@@ -15,7 +17,7 @@ module NotionRubyMapping
       @object_hash = {}
       @client = Faraday.new "https://api.notion.com" do |conn|
         conn.request :json
-        conn.response :json, parser_options: {symbolize_names: true}
+        conn.response :json
         conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
       end
       @notion_token = nil
@@ -26,6 +28,14 @@ module NotionRubyMapping
     attr_reader :object_hash
     attr_writer :client # for test only
     attr_accessor :notion_token, :wait, :debug, :use_cache
+
+    def multipart_client
+      @multipart_client ||= Faraday.new "https://api.notion.com" do |conn|
+        conn.request :multipart, flat_encode: true
+        conn.response :json
+        conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
+      end
+    end
 
     # @param [String] block_id
     # @return [String (frozen)] block_path
@@ -91,6 +101,14 @@ module NotionRubyMapping
       "v1/comments"
     end
 
+    def complete_a_file_upload_path(file_id)
+      "v1/file_uploads/#{file_id}/complete"
+    end
+
+    def complete_a_file_upload_request(file_id)
+      request :post, complete_a_file_upload_path(file_id)
+    end
+
     # @param [String] notion_token
     # @return [NotionRubyMapping::NotionCache] self (NotionCache.instance)
     def create_client(notion_token, wait: 0.3333, debug: false)
@@ -104,6 +122,12 @@ module NotionRubyMapping
     # @return [Hash] response
     def create_database_request(payload)
       request :post, databases_path, payload
+    end
+
+    # @param [Hash] payload
+    # @return [Hash] response
+    def create_file_upload_request(payload = {})
+      request :post, file_uploads_path, payload
     end
 
     # @param [Hash] payload
@@ -160,6 +184,25 @@ module NotionRubyMapping
       request :delete, block_path(id)
     end
 
+    # @param [String] fname
+    # @param [String] id
+    # @param [Hash] options
+    # @return [Hash]
+    def file_upload_request(fname, id, options = {})
+      multipart_request(file_upload_path(id), fname, options)
+    end
+
+    # @param [String] id
+    # @return [String]
+    def file_upload_path(id)
+      "v1/file_uploads/#{id}/send"
+    end
+
+    # @return [String]
+    def file_uploads_path
+      "v1/file_uploads"
+    end
+
     # @param [String] id id string with "-"
     # @return [String] id without "-"
     # @see https://www.notion.so/hkob/NotionCache-65e1599864d6425686d495a5a4b3a623#a2d70a2e019c4c17898aaa1a36580f1d
@@ -169,6 +212,28 @@ module NotionRubyMapping
 
     def inspect
       "NotionCache"
+    end
+
+    # @param [String] path
+    # @param [String] fname
+    # @param [Hash] options
+    # @return [Hash] response hash
+    def multipart_request(path, fname, options = {})
+      raise "Please call `NotionRubyMapping.configure' before using other methods" unless @notion_token
+
+      content_type = MIME::Types.type_for(fname).first.to_s
+
+      sleep @wait
+      body = options.map { |k, v| [k, Faraday::Multipart::ParamPart.new(v, "text/plain")] }.to_h
+      file_part = Faraday::Multipart::FilePart.new(fname, content_type, File.basename(fname))
+      response = multipart_client.send(:post) do |request|
+        request.headers["Authorization"] = "Bearer #{@notion_token}"
+        request.headers["content-Type"] = "multipart/form-data"
+        request.path = path
+        request.body = {file: file_part}.merge body
+      end
+      p response.body if @debug
+      response.body
     end
 
     # @param [String] id id (with or without "-")
@@ -206,6 +271,7 @@ module NotionRubyMapping
     # @param [String] property_id
     # @return [Hash] response
     def page_property_request(page_id, property_id, query = {})
+      p "page_id = #{page_id}, property_id = #{property_id}, query = #{query}" if @debug
       request :get, page_property_path(page_id, property_id), query
     end
 
@@ -320,7 +386,7 @@ module NotionRubyMapping
 
     # @return [Array<NotionRubyMapping::UserObject>] UserObject array
     def users
-      List.new json: users_request, type: :user_object, value: true
+      List.new json: users_request, type: "user_object", value: true
     end
 
     # @return [String (frozen)] user_path

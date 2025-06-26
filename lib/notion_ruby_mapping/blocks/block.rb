@@ -15,7 +15,6 @@ module NotionRubyMapping
     attr_reader :can_have_children, :can_append, :type, :rich_text_array, :url, :caption, :color, :language
 
     def self.type2class(type, has_children = false)
-      type_sym = type.to_sym
       @type2class ||= {
         false => {
           bookmark: BookmarkBlock,
@@ -56,17 +55,17 @@ module NotionRubyMapping
           heading_3: ToggleHeading3Block,
         },
       }
-      @klass = @type2class[has_children][type_sym] || @type2class[false][type_sym] || Block
+      @klass = @type2class[has_children][type.to_sym] || @type2class[false][type.to_sym] || Block
     end
 
     def self.decode_block(json)
-      type2class(json[:type], json[:has_children]).new json: json
+      type2class(json["type"], json["has_children"]).new json: json
     end
 
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#298916c7c379424682f39ff09ee38544
     # @param [String] id
     # @param [Boolean] dry_run true if dry_run
-    # @return [NotionRubyMapping::Block]
+    # @return [String, NotionRubyMapping::Block]
     def self.find(id, dry_run: false)
       nc = NotionCache.instance
       block_id = Base.block_id id
@@ -87,30 +86,30 @@ module NotionRubyMapping
     # @param [Boolean] not_update false when update
     # @return [Hash{String (frozen)->Hash}]
     def block_json(not_update: true)
-      ans = {type: type.to_s}
-      ans[:object] = "block"
-      ans[:archived] = true if @archived
+      ans = {"type" => type}
+      ans["object"] = "block"
+      ans["archived"] = true if @archived
       ans
     end
 
     # @return [Hash{String (frozen)->Array<Hash{String (frozen)->Hash}>}]
     def children_block_json
-      {children: [block_json]}
+      {"children" => [block_json]}
     end
 
     # @return [NotionRubyMapping::RichTextArray]
     def decode_block_caption
-      @caption = RichTextArray.new :caption, json: @json[type][:caption]
+      @caption = RichTextArray.new "caption", json: @json[type]["caption"] if @json[type]["caption"]
     end
 
     # @return [String]
     def decode_color
-      @color = @json[type][:color]
+      @color = @json[type]["color"]
     end
 
     # @return [NotionRubyMapping::RichTextArray]
     def decode_block_rich_text_array
-      @rich_text_array = RichTextArray.new :rich_text, json: @json[type][:rich_text]
+      @rich_text_array = RichTextArray.new "rich_text", json: @json[type]["rich_text"]
     end
 
     # @param [Boolean] dry_run true if dry_run
@@ -129,7 +128,8 @@ module NotionRubyMapping
       if dry_run
         dry_run_script :patch, @nc.block_path(@id), :update_block_json
       else
-        update_json @nc.update_block_request(@id, update_block_json)
+        @json = @nc.update_block_request(@id, update_block_json)
+        update_file_object_from_json(@json) if is_a? FileBaseBlock
       end
     end
 
@@ -148,7 +148,7 @@ module NotionRubyMapping
     # @param [String, Symbol] type
     # @param [String] color
     def rich_text_array_and_color(type, text_info, color = "default")
-      @rich_text_array = RichTextArray.rich_text_array type.to_sym, text_info
+      @rich_text_array = RichTextArray.rich_text_array type, text_info
       @color = color
       self
     end

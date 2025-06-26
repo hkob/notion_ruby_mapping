@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class ToggleBlock < TextSubBlockColorBaseBlock
-    # @return [Symbol]
+    # @return [String]
     def type
-      :toggle
+      "toggle"
     end
   end
 end

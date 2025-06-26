@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # RichTextProperty
   class RichTextProperty < TextProperty
-    TYPE = :rich_text
+    TYPE = "rich_text"
 
     ### Not public announced methods
 
@@ -13,9 +13,9 @@ module NotionRubyMapping
     def update_from_json(json)
       @will_update = false
       if database?
-        @json = json[:rich_text] || {}
+        @json = json["rich_text"] || {}
       else
-        @text_objects = RichTextArray.new :rich_text, json: json[:rich_text]
+        @text_objects = RichTextArray.new "rich_text", json: json["rich_text"]
       end
     end
 
@@ -27,8 +27,8 @@ module NotionRubyMapping
       text_json = @text_objects.map(&:property_values_json)
       {
         @name => {
-          type: "rich_text",
-          rich_text: text_json.empty? ? (@json || []) : text_json,
+          "type" => "rich_text",
+          "rich_text" => text_json.empty? ? (@json || []) : text_json,
         },
       }
     end

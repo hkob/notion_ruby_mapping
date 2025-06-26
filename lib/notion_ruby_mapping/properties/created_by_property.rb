@@ -3,7 +3,7 @@
 module NotionRubyMapping
   # CreatedByProperty
   class CreatedByProperty < MultiProperty
-    TYPE = :created_by
+    TYPE = "created_by"
 
     ### Public announced methods
 
@@ -22,7 +22,7 @@ module NotionRubyMapping
     # @param [String, Symbol] name Property name
     # @param [String] user_id user_id (optional)
     # @param [Hash] json json (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, user_id: nil, property_id: nil,
+    def initialize(name, will_update: false, base_type: "page", json: nil, user_id: nil, property_id: nil,
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
@@ -36,7 +36,7 @@ module NotionRubyMapping
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
-      cb = json[:created_by]
+      cb = json["created_by"]
       @json = database? ? cb : UserObject.new(json: cb)
     end
 

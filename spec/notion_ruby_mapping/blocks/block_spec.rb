@@ -15,10 +15,10 @@ module NotionRubyMapping
           expect(target.id).to eq nc.hex_id(id)
         end
 
-        can_have_children = %i[bulleted_list_item paragraph inline_contents numbered_list_item synced_block template
+        can_have_children = %w[bulleted_list_item paragraph inline_contents numbered_list_item synced_block template
                                toggle toggle_heading_1 toggle_heading_2 toggle_heading_3 quote table to_do
                                synced_block_original callout column_list column append_after_parent
-                               append_after_previous].include? key
+                               append_after_previous].include? key.to_s
         it "can #{key} have children? = #{can_have_children}" do
           expect(target.can_have_children).to eq can_have_children
         end
@@ -58,8 +58,8 @@ module NotionRubyMapping
         context "dry_run" do
           it_behaves_like "dry run", :patch, :append_block_children_page_path, id: parent_id,
                                                                                json: {
-                                                                                 children: [append_block.block_json],
-                                                                                 after: previous_id,
+                                                                                 "children" => [append_block.block_json],
+                                                                                 "after" => previous_id,
                                                                                }
         end
 
@@ -101,7 +101,7 @@ module NotionRubyMapping
         end
 
         it "is archived" do
-          expect(deleted_item.get(:archived)).to be_truthy
+          expect(deleted_item.get("archived")).to be_truthy
         end
       end
     end
