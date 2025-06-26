@@ -41,13 +41,13 @@ module NotionRubyMapping
         let(:target) { tc.to_text }
 
         it_behaves_like "property values json", {
-          type: "text",
-          text: {
-            content: "plain_text",
-            link: nil,
+          "type" => "text",
+          "text" => {
+            "content" => "plain_text",
+            "link" => nil,
           },
-          plain_text: "plain_text",
-          href: nil,
+          "plain_text" => "plain_text",
+          "href" => nil,
         }
       end
 
@@ -55,34 +55,34 @@ module NotionRubyMapping
         let(:target) { tc.to_href }
 
         it_behaves_like "property values json", {
-          type: "text",
-          text: {
-            content: "href_text",
-            link: {
-              url: "https://www.google.com/",
+          "type" => "text",
+          "text" => {
+            "content" => "href_text",
+            "link" => {
+              "url" => "https://www.google.com/",
             },
           },
-          plain_text: "href_text",
-          href: "https://www.google.com/",
+          "plain_text" => "href_text",
+          "href" => "https://www.google.com/",
         }
       end
 
       context "annotations" do
-        %i[bold italic strikethrough underline code].each do |an|
+        %w[bold italic strikethrough underline code].each do |an|
           context "annotation #{an}" do
             let(:target) { TextObject.new "#{an}_text", {an => true} }
 
             it_behaves_like "property values json", {
-              type: "text",
-              text: {
-                content: "#{an}_text",
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => "#{an}_text",
+                "link" => nil,
               },
-              annotations: {
+              "annotations" => {
                 an => true,
               },
-              plain_text: "#{an}_text",
-              href: nil,
+              "plain_text" => "#{an}_text",
+              "href" => nil,
             }
           end
         end
@@ -96,21 +96,21 @@ module NotionRubyMapping
         let(:json) { text_json }
 
         it_behaves_like "property values json", {
-          type: "text",
-          text: {
-            content: "abc\n",
-            link: nil,
+          "type" => "text",
+          "text" => {
+            "content" => "abc\n",
+            "link" => nil,
           },
-          annotations: {
-            bold: false,
-            italic: false,
-            strikethrough: false,
-            underline: false,
-            code: false,
-            color: "default",
+          "annotations" => {
+            "bold" => false,
+            "italic" => false,
+            "strikethrough" => false,
+            "underline" => false,
+            "code" => false,
+            "color" => "default",
           },
-          plain_text: "abc\n",
-          href: nil,
+          "plain_text" => "abc\n",
+          "href" => nil,
         }
       end
 
@@ -118,23 +118,23 @@ module NotionRubyMapping
         let(:json) { href_json }
 
         it_behaves_like "property values json", {
-          type: "text",
-          text: {
-            content: "高専HP",
-            link: {
-              url: "https://www.metro-cit.ac.jp",
+          "type" => "text",
+          "text" => {
+            "content" => "高専HP",
+            "link" => {
+              "url" => "https://www.metro-cit.ac.jp",
             },
           },
-          annotations: {
-            bold: false,
-            italic: false,
-            strikethrough: false,
-            underline: false,
-            code: false,
-            color: "default",
+          "annotations" => {
+            "bold" => false,
+            "italic" => false,
+            "strikethrough" => false,
+            "underline" => false,
+            "code" => false,
+            "color" => "default",
           },
-          plain_text: "高専HP",
-          href: "https://www.metro-cit.ac.jp",
+          "plain_text" => "高専HP",
+          "href" => "https://www.metro-cit.ac.jp",
         }
       end
     end
@@ -145,37 +145,37 @@ module NotionRubyMapping
       {
         :text= => [
           "DEF",
-          {type: "text", text: {content: "DEF", link: nil}, plain_text: "DEF", href: nil},
+          {"type" => "text", "text" => {"content" => "DEF", "link" => nil}, "plain_text" => "DEF", "href" => nil},
         ],
         :bold= => [
           true,
-          {type: "text", text: {content: "ABC", link: nil}, annotations: {bold: true},
-           plain_text: "ABC", href: nil},
+          {"type" => "text", "text" => {"content" => "ABC", "link" => nil}, "annotations" => {"bold" => true},
+           "plain_text" => "ABC", "href" => nil},
         ],
         :italic= => [
           true,
-          {type: "text", text: {content: "ABC", link: nil}, annotations: {italic: true},
-           plain_text: "ABC", href: nil},
+          {"type" => "text", "text" => {"content" => "ABC", "link" => nil}, "annotations" => {"italic" => true},
+           "plain_text" => "ABC", "href" => nil},
         ],
         :strikethrough= => [
           true,
-          {type: "text", text: {content: "ABC", link: nil}, annotations: {strikethrough: true},
-           plain_text: "ABC", href: nil},
+          {"type" => "text", "text" => {"content" => "ABC", "link" => nil}, "annotations" => {"strikethrough" => true},
+           "plain_text" => "ABC", "href" => nil},
         ],
         :underline= => [
           true,
-          {type: "text", text: {content: "ABC", link: nil}, annotations: {underline: true},
-           plain_text: "ABC", href: nil},
+          {"type" => "text", "text" => {"content" => "ABC", "link" => nil}, "annotations" => {"underline" => true},
+           "plain_text" => "ABC", "href" => nil},
         ],
         :code= => [
           true,
-          {type: "text", text: {content: "ABC", link: nil}, annotations: {code: true},
-           plain_text: "ABC", href: nil},
+          {"type" => "text", "text" => {"content" => "ABC", "link" => nil}, "annotations" => {"code" => true},
+           "plain_text" => "ABC", "href" => nil},
         ],
         :color= => [
           "red",
-          {type: "text", text: {content: "ABC", link: nil}, annotations: {color: "red"},
-           plain_text: "ABC", href: nil},
+          {"type" => "text", "text" => {"content" => "ABC", "link" => nil}, "annotations" => {"color" => "red"},
+           "plain_text" => "ABC", "href" => nil},
         ],
       }.each do |method, (value, json)|
         context method do

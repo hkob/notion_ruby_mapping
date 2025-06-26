@@ -4,14 +4,14 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ChildDatabaseBlock do
-    type = :child_database
-    block_id = TestConnection::BLOCK_ID_HASH[type.to_sym]
+    type = "child_database"
+    block_id = TestConnection.block_id(type)
 
     it_behaves_like "retrieve block", described_class, block_id, false, {
-      object: "block",
-      type: "child_database",
-      child_database: {
-        title: "Child database",
+      "object" => "block",
+      "type" => "child_database",
+      "child_database" => {
+        "title" => "Child database",
       },
     }
 

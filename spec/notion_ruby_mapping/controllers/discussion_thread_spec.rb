@@ -62,16 +62,16 @@ module NotionRubyMapping
         it_behaves_like "dry run", :post, :comments_path, json: {
           "rich_text": [
             {
-              type: "text",
-              text: {
-                content: "test comment to discussion",
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => "test comment to discussion",
+                "link" => nil,
               },
-              plain_text: "test comment to discussion",
-              href: nil,
+              "plain_text" => "test comment to discussion",
+              "href" => nil,
             },
           ],
-          discussion_id: "4475361640994a5f97c653eb758e7a9d",
+          "discussion_id" => "4475361640994a5f97c653eb758e7a9d",
         }
       end
     end

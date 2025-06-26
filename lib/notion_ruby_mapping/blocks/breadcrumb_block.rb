@@ -5,7 +5,7 @@ module NotionRubyMapping
   class BreadcrumbBlock < Block
     # @return [String (frozen)]
     def type
-      :breadcrumb
+      "breadcrumb"
     end
 
     # @param [Boolean] not_update false when update

@@ -18,15 +18,15 @@ module NotionRubyMapping
 
       let(:ans) do
         {
-          description: [
+          "description" => [
             {
-              href: nil,
-              plain_text: "Title",
-              text: {
-                content: "Title",
-                link: nil,
+              "href" => nil,
+              "plain_text" => "Title",
+              "text" => {
+                "content" => "Title",
+                "link" => nil,
               },
-              type: "text",
+              "type" => "text",
             },
           ],
         }
@@ -38,7 +38,7 @@ module NotionRubyMapping
     describe "is_inline=" do
       before { payload.is_inline = true }
 
-      it { is_expected.to eq({is_inline: true}) }
+      it { is_expected.to eq({"is_inline" => true}) }
     end
 
     describe "set_icon" do
@@ -48,7 +48,7 @@ module NotionRubyMapping
         let(:params) { {emoji: "😀"} }
 
         it "update icon (emoji)" do
-          expect(subject).to eq({icon: {type: "emoji", emoji: "😀"}})
+          expect(subject).to eq({"icon" => {"type" => "emoji", "emoji" => "😀"}})
         end
       end
 
@@ -57,7 +57,7 @@ module NotionRubyMapping
         let(:params) { {url: url} }
 
         it "update icon (link)" do
-          expect(subject).to eq({icon: {type: "external", external: {url: url}}})
+          expect(subject).to eq({"icon" => {"type" => "external", "external" => {"url" => url}}})
         end
       end
 
@@ -67,7 +67,7 @@ module NotionRubyMapping
         let(:params) { {file_upload_object: file_upload_object} }
 
         it "update icon (file upload)" do
-          expect(subject).to eq({icon: {type: "file_upload", file_upload: {id: id}}})
+          expect(subject).to eq({"icon" => {"type" => "file_upload", "file_upload" => {"id" => id}}})
         end
       end
     end

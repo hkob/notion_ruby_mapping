@@ -4,16 +4,16 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe VideoBlock do
-    type = :video
+    type = "video"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type], false, {
-      object: "block",
-      type: "video",
-      video: {
-        caption: [],
-        type: "external",
-        external: {
-          url: "https://youtu.be/gp2yhkVw0z4",
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => "video",
+      "video" => {
+        "caption" => [],
+        "type" => "external",
+        "external" => {
+          "url" => "https://youtu.be/gp2yhkVw0z4",
         },
       },
     }
@@ -28,7 +28,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) do
         described_class.new "https://download.samplelib.com/mp4/sample-5s.mp4", caption: "Old caption", id: update_id
       end

@@ -6,7 +6,7 @@ module NotionRubyMapping
     # @param [String] text
     # @return [TextObject]
     def initialize(text, options = {})
-      super :text, {plain_text: text}.merge(options)
+      super "text", {"plain_text" => text}.merge(options)
       @text = text
       @will_update = false
     end
@@ -20,17 +20,17 @@ module NotionRubyMapping
         @text = value.text
       else
         @text = value
-        @options[:plain_text] = value
+        @options["plain_text"] = value
       end
     end
 
     protected
 
     def partial_property_values_json
-      url = @options[:href]
+      url = @options["href"]
       {
-        content: @text,
-        link: url ? {url: url} : nil,
+        "content" => @text,
+        "link" => url ? {"url" => url} : nil,
       }
     end
   end

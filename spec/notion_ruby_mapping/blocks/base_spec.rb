@@ -19,10 +19,10 @@ module NotionRubyMapping
       end
 
       it_behaves_like "property values json", {
-        properties: {
-          np: {
-            number: 12_345,
-            type: "number",
+        "properties" => {
+          "np" => {
+            "number" => 12_345,
+            "type" => "number",
           },
         },
       }
@@ -31,24 +31,24 @@ module NotionRubyMapping
     context "when base created by json" do
       let(:json) do
         {
-          id: "created by json",
-          properties: {
-            Title: {
-              type: "title",
-              title: [
+          "id" => "created by json",
+          "properties" => {
+            "Title" => {
+              "type" => "title",
+              "title" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "ABC\n",
+                  "type" => "text",
+                  "text" => {
+                    "content" => "ABC\n",
                   },
-                  plain_text: "ABC\n",
+                  "plain_text" => "ABC\n",
                 },
                 {
-                  type: "text",
-                  text: {
-                    content: "DEF",
+                  "type" => "text",
+                  "text" => {
+                    "content" => "DEF",
                   },
-                  plain_text: "DEF",
+                  "plain_text" => "DEF",
                 },
               ],
             },
@@ -74,27 +74,27 @@ module NotionRubyMapping
         it { expect(target.title).to eq "ABC\nupdated text" }
 
         it_behaves_like "property values json", {
-          properties: {
-            Title: {
-              type: "title",
-              title: [
+          "properties" => {
+            "Title" => {
+              "type" => "title",
+              "title" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "ABC\n",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "ABC\n",
+                    "link" => nil,
                   },
-                  plain_text: "ABC\n",
-                  href: nil,
+                  "plain_text" => "ABC\n",
+                  "href" => nil,
                 },
                 {
-                  type: "text",
-                  text: {
-                    content: "updated text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "updated text",
+                    "link" => nil,
                   },
-                  plain_text: "updated text",
-                  href: nil,
+                  "plain_text" => "updated text",
+                  "href" => nil,
                 },
               ],
             },
@@ -118,7 +118,7 @@ module NotionRubyMapping
       subject { target.parent dry_run: true }
 
       context "when Database - page_id" do
-        let(:target) { Database.new json: {id: "ABC", parent: {type: "page_id", page_id: "parent_id"}} }
+        let(:target) { Database.new json: {"id" => "ABC", "parent" => {"type" => "page_id", "page_id" => "parent_id"}} }
         let(:klass) { "pages" }
 
         it { is_expected.to eq ans }
@@ -126,7 +126,7 @@ module NotionRubyMapping
 
       context "when Database - block_id" do
         let(:target) do
-          Database.new json: {id: "ABC", parent: {type: "block_id", block_id: "parent_id"}}
+          Database.new json: {"id" => "ABC", "parent" => {"type" => "block_id", "block_id" => "parent_id"}}
         end
         let(:klass) { "blocks" }
 
@@ -135,7 +135,7 @@ module NotionRubyMapping
 
       context "when Page - database_id" do
         let(:target) do
-          Page.new json: {id: "ABC", parent: {type: "database_id", database_id: "parent_id"}}
+          Page.new json: {"id" => "ABC", "parent" => {"type" => "database_id", "database_id" => "parent_id"}}
         end
         let(:klass) { "databases" }
 
@@ -143,28 +143,28 @@ module NotionRubyMapping
       end
 
       context "when Page - page_id" do
-        let(:target) { Page.new json: {id: "ABC", parent: {type: "page_id", page_id: "parent_id"}} }
+        let(:target) { Page.new json: {"id" => "ABC", "parent" => {"type" => "page_id", "page_id" => "parent_id"}} }
         let(:klass) { "pages" }
 
         it { is_expected.to eq ans }
       end
 
       context "when Page - block_id" do
-        let(:target) { Page.new json: {id: "ABC", parent: {type: "block_id", block_id: "parent_id"}} }
+        let(:target) { Page.new json: {"id" => "ABC", "parent" => {"type" => "block_id", "block_id" => "parent_id"}} }
         let(:klass) { "blocks" }
 
         it { is_expected.to eq ans }
       end
 
       context "when Block - page_id" do
-        let(:target) { Block.new json: {id: "ABC", parent: {type: "page_id", page_id: "parent_id"}} }
+        let(:target) { Block.new json: {"id" => "ABC", "parent" => {"type" => "page_id", "page_id" => "parent_id"}} }
         let(:klass) { "pages" }
 
         it { is_expected.to eq ans }
       end
 
       context "when Block - block_id" do
-        let(:target) { Block.new json: {id: "ABC", parent: {type: "block_id", block_id: "parent_id"}} }
+        let(:target) { Block.new json: {"id" => "ABC", "parent" => {"type" => "block_id", "block_id" => "parent_id"}} }
         let(:klass) { "blocks" }
 
         it { is_expected.to eq ans }

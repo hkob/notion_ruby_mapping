@@ -4,15 +4,15 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ToDoBlock do
-    type = :to_do
+    type = "to_do"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], true, {
-      object: "block",
-      type: "to_do",
-      to_do: {
-        rich_text: [],
-        checked: false,
-        color: "default",
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
+      "object" => "block",
+      "type" => "to_do",
+      "to_do" => {
+        "rich_text" => [],
+        "checked" => false,
+        "color" => "default",
       },
     }
 
@@ -25,7 +25,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "old To Do", id: update_id, color: "green_background" }
 
       it_behaves_like "update block rich text array", type, "new To Do"
@@ -34,7 +34,7 @@ module NotionRubyMapping
       context "checked" do
         before { target.checked = true }
 
-        let(:json) { {type => {checked: true}} }
+        let(:json) { {type => {"checked" => true}} }
 
         it { expect(target.update_block_json).to eq json }
 

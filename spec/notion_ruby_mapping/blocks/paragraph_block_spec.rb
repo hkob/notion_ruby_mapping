@@ -4,32 +4,32 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ParagraphBlock do
-    type = :paragraph
+    type = "paragraph"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type], true, {
-      object: "block",
-      type: "paragraph",
-      paragraph: {
-        rich_text: [
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
+      "object" => "block",
+      "type" => "paragraph",
+      "paragraph" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Text",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Text",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              code: false,
-              color: "default",
-              italic: false,
-              strikethrough: false,
-              underline: false,
+            "annotations" => {
+              "bold" => false,
+              "code" => false,
+              "color" => "default",
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
             },
-            href: nil,
-            plain_text: "Text",
+            "href" => nil,
+            "plain_text" => "Text",
           },
         ],
-        color: "default",
+        "color" => "default",
       },
     }
 
@@ -42,7 +42,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id type }
       let(:target) { described_class.new "old paragraph text", id: update_id, color: "green_background" }
 
       it_behaves_like "update block rich text array", type, "new paragraph text"

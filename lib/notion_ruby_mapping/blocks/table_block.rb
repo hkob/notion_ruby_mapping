@@ -15,9 +15,9 @@ module NotionRubyMapping
       super json: json, id: id, parent: parent
       if @json
         sub_json = @json[type]
-        @has_column_header = sub_json[:has_column_header]
-        @has_row_header = sub_json[:has_row_header]
-        @table_width = sub_json[:table_width]
+        @has_column_header = sub_json["has_column_header"]
+        @has_row_header = sub_json["has_row_header"]
+        @table_width = sub_json["table_width"]
       else
         @table_width = table_width
         @has_column_header = has_column_header
@@ -34,17 +34,17 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = {
-        has_column_header: @has_column_header,
-        has_row_header: @has_row_header,
-        table_width: @table_width,
+        "has_column_header" => @has_column_header,
+        "has_row_header" => @has_row_header,
+        "table_width" => @table_width,
       }
-      ans[type][:children] = @table_rows.map(&:block_json) if @table_rows
+      ans[type]["children"] = @table_rows.map(&:block_json) if @table_rows
       ans
     end
 
     # @return [String (frozen)]
     def type
-      :table
+      "table"
     end
   end
 end

@@ -59,6 +59,7 @@ module NotionRubyMapping
     APPEND_AFTER_ADDED_ID = "67c0e9bdbbe4456c873127763d7fa580"
     FILE_UPLOAD_IMAGE_ID = "20cd8e4e98ab81aa973b00b23083c115"
     FILE_UPLOAD_PAGE_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
+    FILE_UPLOAD_VIDEO_ID = "21ad8e4e98ab814e8d9600b2ded97d6c"
     BLOCK_ID_HASH = {
       append_after_parent: APPEND_AFTER_PARENT_ID,
       append_after_previous: APPEND_AFTER_PREVIOUS_ID,
@@ -132,6 +133,18 @@ module NotionRubyMapping
     USER_HKOB_ID = "2200a9116a9644bbbd386bfb1e01b9f6"
     USER_BOT_ID = "019a87c7d19744a4b19abaa684400f81"
 
+    # @param [String] key
+    # @return [String] block_id
+    def self.block_id(key)
+      BLOCK_ID_HASH[key.to_sym]
+    end
+
+    # @param [String] key
+    # @return [String] block_id
+    def self.update_block_id(key)
+      UPDATE_BLOCK_ID_HASH[key.to_sym]
+    end
+
     def initialize
       @config = YAML.load_file "env.yml"
       @nc = NotionCache.instance.create_client @config["notion_token"], debug: false, wait: 0
@@ -192,6 +205,7 @@ module NotionRubyMapping
       search
       append_after
       create_file_upload
+      complete
     end
 
     # @param [Symbol] method
@@ -209,7 +223,14 @@ module NotionRubyMapping
 
     def create_file_upload
       generate_stubs_sub :post, __method__, :file_uploads_path, {
-        image: [nil, 200],
+        image: [nil, 200, {}],
+        video: [nil, 200, {"number_of_parts" => 2, "mode" => "multi_part", "filename" => "sample-15s.mp4"}],
+      }
+    end
+
+    def complete
+      generate_stubs_sub :post, __method__, :complete_a_file_upload_path, {
+        a_file_upload: [FILE_UPLOAD_VIDEO_ID, 200],
       }
     end
 
@@ -247,160 +268,176 @@ module NotionRubyMapping
 
     def query_database
       generate_stubs_sub :post, __method__, :query_database_path, {
-        limit_2: [DATABASE_ID, 200, {page_size: 2}],
-        next_2: [DATABASE_ID, 200, {start_cursor: "6601e719-a39a-460c-908e-8909467fcccf", page_size: 2}],
-        last_2: [DATABASE_ID, 200, {start_cursor: "dcdc805c-85fa-4155-a55c-20fc28771af7", page_size: 2}],
-        filter_properties: [DATABASE_ID, 200, {page_size: 100}],
+        limit_2: [DATABASE_ID, 200, {"page_size" => 2}],
+        next_2: [DATABASE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
+        last_2: [DATABASE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
+        filter_properties: [DATABASE_ID, 200, {"page_size" => 100}],
       }
     end
 
     def update_page
       generate_stubs_sub :patch, __method__, :page_path, {
         set_icon_emoji: [TOP_PAGE_ID, 200, {
-          icon: {
-            type: "emoji",
-            emoji: "😀",
+          "icon" => {
+            "type" => "emoji",
+            "emoji" => "😀",
           },
         }],
-        set_link_icon: [TOP_PAGE_ID, 200, {
-          icon: {
-            type: "external",
-            external: {
-              url: "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png",
+        set_icon_link: [TOP_PAGE_ID, 200, {
+          "icon" => {
+            "type" => "external",
+            "external" => {
+              "url" => "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png",
             },
           },
         }],
-        set_icon_file_upload: [TOP_PAGE_ID, 200, {
-          icon: {
-            type: "file_upload",
-            file_upload: {
-              id: TestConnection::FILE_UPLOAD_IMAGE_ID,
+        "set_icon_file_upload" => [TOP_PAGE_ID, 200, {
+          "icon" => {
+            "type" => "file_upload",
+            "file_upload" => {
+              "id" => TestConnection::FILE_UPLOAD_IMAGE_ID,
+            },
+          },
+        }],
+        set_cover_link: [TOP_PAGE_ID, 200, {
+          "cover" => {
+            "type" => "external",
+            "external" => {
+              "url" => "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png",
+            },
+          },
+        }],
+        set_cover_file_upload: [TOP_PAGE_ID, 200, {
+          "cover" => {
+            "type" => "file_upload",
+            "file_upload" => {
+              "id" => TestConnection::FILE_UPLOAD_IMAGE_ID,
             },
           },
         }],
         all: [DB_UPDATE_PAGE_ID, 200, {
-          properties: {
+          "properties" => {
             "CheckboxTitle" => {
-              checkbox: true,
-              type: "checkbox",
+              "checkbox" => true,
+              "type" => "checkbox",
             },
             "DateTitle" => {
-              type: "date",
-              date: {
-                start: "2022-03-14",
-                end: nil,
-                time_zone: nil,
+              "type" => "date",
+              "date" => {
+                "start" => "2022-03-14",
+                "end" => nil,
+                "time_zone" => nil,
               },
             },
             "MailTitle" => {
-              email: "hkobhkob@gmail.com",
-              type: "email",
+              "email" => "hkobhkob@gmail.com",
+              "type" => "email",
             },
             "File&MediaTitle" => {
-              files: [
+              "files" => [
                 {
-                  type: "external",
-                  external: {
-                    url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                   },
-                  name: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                  "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                 },
               ],
-              type: "files",
+              "type" => "files",
             },
             "MultiSelectTitle" => {
-              type: "multi_select",
-              multi_select: [
+              "type" => "multi_select",
+              "multi_select" => [
                 {
-                  name: "Multi Select 2",
+                  "name" => "Multi Select 2",
                 },
               ],
             },
             "UserTitle" => {
-              type: "people",
-              people: [
+              "type" => "people",
+              "people" => [
                 {
-                  object: "user",
-                  id: "2200a9116a9644bbbd386bfb1e01b9f6",
+                  "object" => "user",
+                  "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
                 },
               ],
             },
             "RelationTitle" => {
-              type: "relation",
-              relation: [
+              "type" => "relation",
+              "relation" => [
                 {
-                  id: "860753bb6d1f48de96211fa6e0e31f82",
+                  "id" => "860753bb6d1f48de96211fa6e0e31f82",
                 },
               ],
             },
             "NumberTitle" => {
-              number: 3.1415926535,
-              type: "number",
+              "number" => 3.1415926535,
+              "type" => "number",
             },
             "TelTitle" => {
-              phone_number: "zz-zzzz-zzzz",
-              type: "phone_number",
+              "phone_number" => "zz-zzzz-zzzz",
+              "type" => "phone_number",
             },
             "SelectTitle" => {
-              type: "select",
-              select: {
-                name: "Select 3",
+              "type" => "select",
+              "select" => {
+                "name" => "Select 3",
               },
             },
             "StatusTitle" => {
-              status: {
-                name: "Design",
+              "status" => {
+                "name" => "Design",
               },
-              type: "status",
+              "type" => "status",
             },
             "TextTitle" => {
-              type: "rich_text",
-              rich_text: [
+              "type" => "rich_text",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
                   },
-                  plain_text: "new text",
-                  href: nil,
+                  "plain_text" => "new text",
+                  "href" => nil,
                 },
               ],
             },
             "Title" => {
-              type: "title",
-              title: [
+              "type" => "title",
+              "title" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "MNO",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "MNO",
+                    "link" => nil,
                   },
-                  plain_text: "MNO",
-                  href: nil,
+                  "plain_text" => "MNO",
+                  "href" => nil,
                 },
               ],
             },
             "UrlTitle" => {
-              url: "https://www.google.com/",
-              type: "url",
+              "url" => "https://www.google.com/",
+              "type" => "url",
             },
           },
         }],
         set_file_property_file_upload: [
           FILE_UPLOAD_PAGE_ID, 200, {
-            properties: {
-              files: {
-                files: [
+            "properties" => {
+              "files" => {
+                "files" => [
                   {
-                    type: "file_upload",
-                    file_upload: {
-                      id: TestConnection::FILE_UPLOAD_IMAGE_ID,
+                    "type" => "file_upload",
+                    "file_upload" => {
+                      "id" => TestConnection::FILE_UPLOAD_IMAGE_ID,
                     },
-                    name: "test.png",
+                    "name" => "test.png",
                   },
                 ],
-                type: "files",
+                "type" => "files",
               },
             },
           }
@@ -411,24 +448,24 @@ module NotionRubyMapping
     def create_page
       generate_stubs_sub :post, __method__, :pages_path, {
         parent_database: [nil, 200, {
-          properties: {
-            Name: {
-              type: "title",
-              title: [
+          "properties" => {
+            "Name" => {
+              "type" => "title",
+              "title" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Page Title",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page Title",
+                    "link" => nil,
                   },
-                  plain_text: "New Page Title",
-                  href: nil,
+                  "plain_text" => "New Page Title",
+                  "href" => nil,
                 },
               ],
             },
           },
-          parent: {
-            database_id: "1d6b1040a9fb48d99a3d041429816e9f",
+          "parent" => {
+            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
           },
         }],
       }
@@ -437,68 +474,68 @@ module NotionRubyMapping
     def create_database
       generate_stubs_sub :post, __method__, :databases_path, {
         from_page: [nil, 200, {
-          properties: {
-            Checkbox: {checkbox: {}},
-            CreatedBy: {created_by: {}},
-            CreatedTime: {created_time: {}},
-            Date: {date: {}},
-            Email: {email: {}},
-            Files: {files: {}},
-            Formula: {formula: {expression: "now()"}},
-            LastEditedBy: {last_edited_by: {}},
-            LastEditedTime: {last_edited_time: {}},
-            MultiSelect: {
-              multi_select: {
-                options: [
-                  {name: "MS1", color: "orange"},
-                  {name: "MS2", color: "green"},
+          "properties" => {
+            "Checkbox" => {"checkbox" => {}},
+            "CreatedBy" => {"created_by" => {}},
+            "CreatedTime" => {"created_time" => {}},
+            "Date" => {"date" => {}},
+            "Email" => {"email" => {}},
+            "Files" => {"files" => {}},
+            "Formula" => {"formula" => {"expression" => "now()"}},
+            "LastEditedBy" => {"last_edited_by" => {}},
+            "LastEditedTime" => {"last_edited_time" => {}},
+            "MultiSelect" => {
+              "multi_select" => {
+                "options" => [
+                  {"name" => "MS1", "color" => "orange"},
+                  {"name" => "MS2", "color" => "green"},
                 ],
               },
             },
-            Number: {number: {format: "yen"}},
-            People: {people: {}},
-            PhoneNumber: {phone_number: {}},
-            Relation: {
-              relation: {
-                database_id: "c37a2c66e3aa4a0da44773de3b80c253",
-                type: "dual_property",
-                dual_property: {},
+            "Number" => {"number" => {"format" => "yen"}},
+            "People" => {"people" => {}},
+            "PhoneNumber" => {"phone_number" => {}},
+            "Relation" => {
+              "relation" => {
+                "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
+                "type" => "dual_property",
+                "dual_property" => {},
               },
             },
-            Rollup: {
-              rollup: {
-                function: "sum",
-                relation_property_name: "Relation",
-                rollup_property_name: "NumberTitle",
+            "Rollup" => {
+              "rollup" => {
+                "function" => "sum",
+                "relation_property_name" => "Relation",
+                "rollup_property_name" => "NumberTitle",
               },
             },
-            RichText: {rich_text: {}},
-            Select: {
-              select: {
-                options: [
-                  {name: "S1", color: "yellow"},
-                  {name: "S2", color: "default"},
+            "RichText" => {"rich_text" => {}},
+            "Select" => {
+              "select" => {
+                "options" => [
+                  {"name" => "S1", "color" => "yellow"},
+                  {"name" => "S2", "color" => "default"},
                 ],
               },
             },
-            Title: {title: {}},
-            Url: {url: {}},
+            "Title" => {"title" => {}},
+            "Url" => {"url" => {}},
           },
-          title: [
+          "title" => [
             {
-              type: "text",
-              text: {content: "New database title", link: nil},
-              plain_text: "New database title",
-              href: nil,
+              "type" => "text",
+              "text" => {"content" => "New database title", "link" => nil},
+              "plain_text" => "New database title",
+              "href" => nil,
             },
           ],
-          parent: {
-            type: "page_id",
-            page_id: "c01166c613ae45cbb96818b4ef2f5a77",
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
           },
-          icon: {
-            type: "emoji",
-            emoji: "🎉",
+          "icon" => {
+            "type" => "emoji",
+            "emoji" => "🎉",
           },
         }],
       }
@@ -507,95 +544,95 @@ module NotionRubyMapping
     def update_database
       generate_stubs_sub :patch, __method__, :database_path, {
         created: [CREATED_DATABASE_ID, 200, {
-          properties: {
-            Select: {
-              select: {
-                options: [
-                  {id: "56a526e1-0cec-4b85-b9db-fc68d00e50c6", name: "S1", color: "yellow"},
-                  {id: "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", name: "S2", color: "default"},
-                  {name: "S3", color: "red"},
+          "properties" => {
+            "Select" => {
+              "select" => {
+                "options" => [
+                  {"id" => "56a526e1-0cec-4b85-b9db-fc68d00e50c6", "name" => "S1", "color" => "yellow"},
+                  {"id" => "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", "name" => "S2", "color" => "default"},
+                  {"name" => "S3", "color" => "red"},
                 ],
               },
             },
             "Rollup": {
-              rollup: {
-                function: "average",
-                relation_property_name: "Relation",
-                rollup_property_name: "NumberTitle",
+              "rollup" => {
+                "function" => "average",
+                "relation_property_name" => "Relation",
+                "rollup_property_name" => "NumberTitle",
               },
             },
             "Relation": {
-              relation: {
-                database_id: "c37a2c66e3aa4a0da44773de3b80c253",
-                type: "dual_property",
-                dual_property: {},
+              "relation" => {
+                "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
+                "type" => "dual_property",
+                "dual_property" => {},
               },
             },
-            "Number": {number: {format: "percent"}},
+            "Number": {"number" => {"format" => "percent"}},
             "MultiSelect": {
-              multi_select: {
-                options: [
-                  {id: "98aaa1c0-4634-47e2-bfae-d739a8c5e564", name: "MS1", color: "orange"},
-                  {id: "71756a93-cfd8-4675-b508-facb1c31af2c", name: "MS2", color: "green"},
-                  {name: "MS3", color: "blue"},
+              "multi_select" => {
+                "options" => [
+                  {"id" => "98aaa1c0-4634-47e2-bfae-d739a8c5e564", "name" => "MS1", "color" => "orange"},
+                  {"id" => "71756a93-cfd8-4675-b508-facb1c31af2c", "name" => "MS2", "color" => "green"},
+                  {"name" => "MS3", "color" => "blue"},
                 ],
               },
             },
-            "Formula": {formula: {expression: "pi"}},
+            "Formula": {"formula" => {"expression" => "pi"}},
           },
           title: [
             {
-              type: "text",
-              text: {
-                content: "New database title",
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => "New database title",
+                "link" => nil,
               },
-              plain_text: "New database title",
-              href: nil,
-              annotations: {
-                bold: false,
-                italic: false,
-                strikethrough: false,
-                underline: false,
-                code: false,
-                color: "default",
+              "plain_text" => "New database title",
+              "href" => nil,
+              "annotations" => {
+                "bold" => false,
+                "italic" => false,
+                "strikethrough" => false,
+                "underline" => false,
+                "code" => false,
+                "color" => "default",
               },
             },
             {
-              type: "text",
-              text: {
-                content: "(Added)",
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => "(Added)",
+                "link" => nil,
               },
-              plain_text: "(Added)",
-              href: nil,
+              "plain_text" => "(Added)",
+              "href" => nil,
             },
           ],
-          icon: {
-            type: "emoji",
-            emoji: "🎉",
+          "icon" => {
+            "type" => "emoji",
+            "emoji" => "🎉",
           },
         }],
         add_property: [CREATED_DATABASE_ID, 200, {
-          properties: {
+          "properties" => {
             "added number property" => {
-              number: {
-                format: "euro",
+              "number" => {
+                "format" => "euro",
               },
             },
             "added url property" => {
-              url: {},
+              "url" => {},
             },
           },
         }],
         rename_properties: [CREATED_DATABASE_ID, 200, {
-          properties: {
-            "added number property" => {name: "renamed number property"},
-            "added url property" => {name: "renamed url property"},
+          "properties" => {
+            "added number property" => {"name" => "renamed number property"},
+            "added url property" => {"name" => "renamed url property"},
           },
         }],
         remove_properties: [CREATED_DATABASE_ID, 200, {
-          properties: {
+          "properties" => {
             "renamed number property" => nil,
             "renamed url property" => nil,
           },
@@ -614,23 +651,23 @@ module NotionRubyMapping
         bookmark: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "bookmark",
-                object: "block",
-                bookmark: {
-                  caption: [
+                "type" => "bookmark",
+                "object" => "block",
+                "bookmark" => {
+                  "caption" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Google",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Google",
+                        "link" => nil,
                       },
-                      plain_text: "Google",
-                      href: nil,
+                      "plain_text" => "Google",
+                      "href" => nil,
                     },
                   ],
-                  url: "https://www.google.com",
+                  "url" => "https://www.google.com",
                 },
               },
             ],
@@ -639,11 +676,11 @@ module NotionRubyMapping
         breadcrumb: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "breadcrumb",
-                object: "block",
-                breadcrumb: {},
+                "type" => "breadcrumb",
+                "object" => "block",
+                "breadcrumb" => {},
               },
             ],
           }
@@ -651,40 +688,40 @@ module NotionRubyMapping
         bulleted_list_item: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "bulleted_list_item",
-                object: "block",
-                bulleted_list_item: {
-                  rich_text: [
+                "type" => "bulleted_list_item",
+                "object" => "block",
+                "bulleted_list_item" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Bullet list item",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Bullet list item",
+                        "link" => nil,
                       },
-                      plain_text: "Bullet list item",
-                      href: nil,
+                      "plain_text" => "Bullet list item",
+                      "href" => nil,
                     },
                   ],
-                  color: "green",
-                  children: [
+                  "color" => "green",
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -696,44 +733,44 @@ module NotionRubyMapping
         callout_emoji: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "callout",
-                object: "block",
-                callout: {
-                  rich_text: [
+                "type" => "callout",
+                "object" => "block",
+                "callout" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Emoji callout",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Emoji callout",
+                        "link" => nil,
                       },
-                      plain_text: "Emoji callout",
-                      href: nil,
+                      "plain_text" => "Emoji callout",
+                      "href" => nil,
                     },
                   ],
-                  color: "blue",
-                  icon: {
-                    type: "emoji",
-                    emoji: "✅",
+                  "color" => "blue",
+                  "icon" => {
+                    "type" => "emoji",
+                    "emoji" => "✅",
                   },
-                  children: [
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -745,46 +782,46 @@ module NotionRubyMapping
         callout_url: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "callout",
-                object: "block",
-                callout: {
-                  rich_text: [
+                "type" => "callout",
+                "object" => "block",
+                "callout" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Url callout",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Url callout",
+                        "link" => nil,
                       },
-                      plain_text: "Url callout",
-                      href: nil,
+                      "plain_text" => "Url callout",
+                      "href" => nil,
                     },
                   ],
-                  color: "default",
-                  icon: {
-                    type: "external",
-                    external: {
-                      url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                  "color" => "default",
+                  "icon" => {
+                    "type" => "external",
+                    "external" => {
+                      "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                     },
                   },
-                  children: [
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -796,34 +833,34 @@ module NotionRubyMapping
         code: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "code",
-                object: "block",
-                code: {
-                  rich_text: [
+                "type" => "code",
+                "object" => "block",
+                "code" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "% ls -l",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "% ls -l",
+                        "link" => nil,
                       },
-                      plain_text: "% ls -l",
-                      href: nil,
+                      "plain_text" => "% ls -l",
+                      "href" => nil,
                     },
                   ],
-                  caption: [
+                  "caption" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "List files",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "List files",
+                        "link" => nil,
                       },
-                      plain_text: "List files",
-                      href: nil,
+                      "plain_text" => "List files",
+                      "href" => nil,
                     },
                   ],
-                  language: "shell",
+                  "language" => "shell",
                 },
               },
             ],
@@ -832,36 +869,36 @@ module NotionRubyMapping
         column_list: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "column_list",
-                object: "block",
-                column_list: {
-                  children: [
+                "type" => "column_list",
+                "object" => "block",
+                "column_list" => {
+                  "children" => [
                     {
-                      type: "column",
-                      object: "block",
-                      column: {
-                        children: [
+                      "type" => "column",
+                      "object" => "block",
+                      "column" => {
+                        "children" => [
                           {
-                            type: "callout",
-                            object: "block",
-                            callout: {
-                              rich_text: [
+                            "type" => "callout",
+                            "object" => "block",
+                            "callout" => {
+                              "rich_text" => [
                                 {
-                                  type: "text",
-                                  text: {
-                                    content: "Emoji callout",
-                                    link: nil,
+                                  "type" => "text",
+                                  "text" => {
+                                    "content" => "Emoji callout",
+                                    "link" => nil,
                                   },
-                                  plain_text: "Emoji callout",
-                                  href: nil,
+                                  "plain_text" => "Emoji callout",
+                                  "href" => nil,
                                 },
                               ],
-                              color: "default",
-                              icon: {
-                                type: "emoji",
-                                emoji: "✅",
+                              "color" => "default",
+                              "icon" => {
+                                "type" => "emoji",
+                                "emoji" => "✅",
                               },
                             },
                           },
@@ -869,30 +906,30 @@ module NotionRubyMapping
                       },
                     },
                     {
-                      type: "column",
-                      object: "block",
-                      column: {
-                        children: [
+                      "type" => "column",
+                      "object" => "block",
+                      "column" => {
+                        "children" => [
                           {
-                            type: "callout",
-                            object: "block",
-                            callout: {
-                              rich_text: [
+                            "type" => "callout",
+                            "object" => "block",
+                            "callout" => {
+                              "rich_text" => [
                                 {
-                                  type: "text",
-                                  text: {
-                                    content: "Url callout",
-                                    link: nil,
+                                  "type" => "text",
+                                  "text" => {
+                                    "content" => "Url callout",
+                                    "link" => nil,
                                   },
-                                  plain_text: "Url callout",
-                                  href: nil,
+                                  "plain_text" => "Url callout",
+                                  "href" => nil,
                                 },
                               ],
-                              color: "default",
-                              icon: {
-                                type: "external",
-                                external: {
-                                  url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                              "color" => "default",
+                              "icon" => {
+                                "type" => "external",
+                                "external" => {
+                                  "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                                 },
                               },
                             },
@@ -909,11 +946,11 @@ module NotionRubyMapping
         divider: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "divider",
-                object: "block",
-                divider: {},
+                "type" => "divider",
+                "object" => "block",
+                "divider" => {},
               },
             ],
           }
@@ -921,23 +958,23 @@ module NotionRubyMapping
         embed: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "embed",
-                object: "block",
-                embed: {
-                  caption: [
+                "type" => "embed",
+                "object" => "block",
+                "embed" => {
+                  "caption" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "NotionRubyMapping開発記録(21)",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "NotionRubyMapping開発記録(21)",
+                        "link" => nil,
                       },
-                      plain_text: "NotionRubyMapping開発記録(21)",
-                      href: nil,
+                      "plain_text" => "NotionRubyMapping開発記録(21)",
+                      "href" => nil,
                     },
                   ],
-                  url: "https://twitter.com/hkob/status/1507972453095833601",
+                  "url" => "https://twitter.com/hkob/status/1507972453095833601",
                 },
               },
             ],
@@ -946,12 +983,12 @@ module NotionRubyMapping
         equation: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "equation",
-                object: "block",
-                equation: {
-                  expression: "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
+                "type" => "equation",
+                "object" => "block",
+                "equation" => {
+                  "expression" => "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
                 },
               },
             ],
@@ -960,24 +997,24 @@ module NotionRubyMapping
         file: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "file",
-                object: "block",
-                file: {
-                  type: "external",
-                  external: {
-                    url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                "type" => "file",
+                "object" => "block",
+                "file" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                   },
-                  caption: [
+                  "caption" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "macOS icon",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "macOS icon",
+                        "link" => nil,
                       },
-                      plain_text: "macOS icon",
-                      href: nil,
+                      "plain_text" => "macOS icon",
+                      "href" => nil,
                     },
                   ],
                 },
@@ -988,24 +1025,24 @@ module NotionRubyMapping
         heading_1: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "heading_1",
-                object: "block",
-                heading_1: {
-                  rich_text: [
+                "type" => "heading_1",
+                "object" => "block",
+                "heading_1" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Heading 1",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 1",
+                        "link" => nil,
                       },
-                      plain_text: "Heading 1",
-                      href: nil,
+                      "plain_text" => "Heading 1",
+                      "href" => nil,
                     },
                   ],
-                  color: "orange_background",
-                  is_toggleable: false,
+                  "color" => "orange_background",
+                  "is_toggleable" => false,
                 },
               },
             ],
@@ -1014,24 +1051,24 @@ module NotionRubyMapping
         heading_2: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "heading_2",
-                object: "block",
-                heading_2: {
-                  rich_text: [
+                "type" => "heading_2",
+                "object" => "block",
+                "heading_2" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Heading 2",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 2",
+                        "link" => nil,
                       },
-                      plain_text: "Heading 2",
-                      href: nil,
+                      "plain_text" => "Heading 2",
+                      "href" => nil,
                     },
                   ],
-                  color: "blue_background",
-                  is_toggleable: false,
+                  "color" => "blue_background",
+                  "is_toggleable" => false,
                 },
               },
             ],
@@ -1040,24 +1077,24 @@ module NotionRubyMapping
         heading_3: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "heading_3",
-                object: "block",
-                heading_3: {
-                  rich_text: [
+                "type" => "heading_3",
+                "object" => "block",
+                "heading_3" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Heading 3",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 3",
+                        "link" => nil,
                       },
-                      plain_text: "Heading 3",
-                      href: nil,
+                      "plain_text" => "Heading 3",
+                      "href" => nil,
                     },
                   ],
-                  color: "gray_background",
-                  is_toggleable: false,
+                  "color" => "gray_background",
+                  "is_toggleable" => false,
                 },
               },
             ],
@@ -1066,24 +1103,24 @@ module NotionRubyMapping
         image: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "image",
-                object: "block",
-                image: {
-                  type: "external",
-                  external: {
-                    url: "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
+                "type" => "image",
+                "object" => "block",
+                "image" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
                   },
-                  caption: [
+                  "caption" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Notion logo",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Notion logo",
+                        "link" => nil,
                       },
-                      plain_text: "Notion logo",
-                      href: nil,
+                      "plain_text" => "Notion logo",
+                      "href" => nil,
                     },
                   ],
                 },
@@ -1094,13 +1131,13 @@ module NotionRubyMapping
         link_to_page_page: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "link_to_page",
-                object: "block",
-                link_to_page: {
-                  type: "page_id",
-                  page_id: "c01166c613ae45cbb96818b4ef2f5a77",
+                "type" => "link_to_page",
+                "object" => "block",
+                "link_to_page" => {
+                  "type" => "page_id",
+                  "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
                 },
               },
             ],
@@ -1109,13 +1146,13 @@ module NotionRubyMapping
         link_to_page_database: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "link_to_page",
-                object: "block",
-                link_to_page: {
-                  type: "database_id",
-                  database_id: "c7697137d49f49c2bbcdd6a665c4f921",
+                "type" => "link_to_page",
+                "object" => "block",
+                "link_to_page" => {
+                  "type" => "database_id",
+                  "database_id" => "c7697137d49f49c2bbcdd6a665c4f921",
                 },
               },
             ],
@@ -1124,40 +1161,40 @@ module NotionRubyMapping
         numbered_list_item: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "numbered_list_item",
-                object: "block",
-                numbered_list_item: {
-                  rich_text: [
+                "type" => "numbered_list_item",
+                "object" => "block",
+                "numbered_list_item" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Numbered list item",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Numbered list item",
+                        "link" => nil,
                       },
-                      plain_text: "Numbered list item",
-                      href: nil,
+                      "plain_text" => "Numbered list item",
+                      "href" => nil,
                     },
                   ],
-                  color: "red",
-                  children: [
+                  "color" => "red",
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -1169,40 +1206,40 @@ module NotionRubyMapping
         paragraph: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "paragraph",
-                object: "block",
-                paragraph: {
-                  rich_text: [
+                "type" => "paragraph",
+                "object" => "block",
+                "paragraph" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "A sample paragraph",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample paragraph",
+                        "link" => nil,
                       },
-                      plain_text: "A sample paragraph",
-                      href: nil,
+                      "plain_text" => "A sample paragraph",
+                      "href" => nil,
                     },
                   ],
-                  color: "yellow_background",
-                  children: [
+                  "color" => "yellow_background",
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -1214,16 +1251,16 @@ module NotionRubyMapping
         pdf: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "pdf",
-                object: "block",
-                pdf: {
-                  type: "external",
-                  external: {
-                    url: "https://github.com/onocom/sample-files-for-demo-use/raw/151dd797d54d7e0ae0dc50e8e19d7965b387e202/sample-pdf.pdf",
+                "type" => "pdf",
+                "object" => "block",
+                "pdf" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://github.com/onocom/sample-files-for-demo-use/raw/151dd797d54d7e0ae0dc50e8e19d7965b387e202/sample-pdf.pdf",
                   },
-                  caption: [],
+                  "caption" => [],
                 },
               },
             ],
@@ -1232,40 +1269,40 @@ module NotionRubyMapping
         quote: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "quote",
-                object: "block",
-                quote: {
-                  rich_text: [
+                "type" => "quote",
+                "object" => "block",
+                "quote" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "A sample quote",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample quote",
+                        "link" => nil,
                       },
-                      plain_text: "A sample quote",
-                      href: nil,
+                      "plain_text" => "A sample quote",
+                      "href" => nil,
                     },
                   ],
-                  color: "purple",
-                  children: [
+                  "color" => "purple",
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -1277,35 +1314,35 @@ module NotionRubyMapping
         synced_block_original: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "synced_block",
-                object: "block",
-                synced_block: {
-                  synced_from: nil,
-                  children: [
+                "type" => "synced_block",
+                "object" => "block",
+                "synced_block" => {
+                  "synced_from" => nil,
+                  "children" => [
                     {
-                      type: "bulleted_list_item",
-                      object: "block",
-                      bulleted_list_item: {
-                        rich_text: [
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "Synced block",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "Synced block",
+                              "link" => nil,
                             },
-                            plain_text: "Synced block",
-                            href: nil,
+                            "plain_text" => "Synced block",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                     {
-                      type: "divider",
-                      object: "block",
-                      divider: {},
+                      "type" => "divider",
+                      "object" => "block",
+                      "divider" => {},
                     },
                   ],
                 },
@@ -1316,14 +1353,14 @@ module NotionRubyMapping
         synced_block_copy: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "synced_block",
-                object: "block",
-                synced_block: {
-                  synced_from: {
-                    type: "block_id",
-                    block_id: "4815032e6f2443e4bc8c9bdc6299b090",
+                "type" => "synced_block",
+                "object" => "block",
+                "synced_block" => {
+                  "synced_from" => {
+                    "type" => "block_id",
+                    "block_id" => "4815032e6f2443e4bc8c9bdc6299b090",
                   },
                 },
               },
@@ -1333,12 +1370,12 @@ module NotionRubyMapping
         table_of_contents: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "table_of_contents",
-                object: "block",
-                table_of_contents: {
-                  color: "pink",
+                "type" => "table_of_contents",
+                "object" => "block",
+                "table_of_contents" => {
+                  "color" => "pink",
                 },
               },
             ],
@@ -1347,39 +1384,39 @@ module NotionRubyMapping
         template: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "template",
-                object: "block",
-                template: {
-                  rich_text: [
+                "type" => "template",
+                "object" => "block",
+                "template" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "A sample template",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample template",
+                        "link" => nil,
                       },
-                      plain_text: "A sample template",
-                      href: nil,
+                      "plain_text" => "A sample template",
+                      "href" => nil,
                     },
                   ],
-                  children: [
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -1391,44 +1428,44 @@ module NotionRubyMapping
         to_do: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "to_do",
-                object: "block",
-                to_do: {
-                  rich_text: [
+                "type" => "to_do",
+                "object" => "block",
+                "to_do" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "A sample To-Do",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample To-Do",
+                        "link" => nil,
                       },
-                      plain_text: "A sample To-Do",
-                      href: nil,
+                      "plain_text" => "A sample To-Do",
+                      "href" => nil,
                     },
                   ],
-                  color: "brown_background",
-                  children: [
+                  "color" => "brown_background",
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
-                  checked: false,
+                  "checked" => false,
                 },
               },
             ],
@@ -1437,40 +1474,40 @@ module NotionRubyMapping
         toggle: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "toggle",
-                object: "block",
-                toggle: {
-                  rich_text: [
+                "type" => "toggle",
+                "object" => "block",
+                "toggle" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "A sample toggle",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "A sample toggle",
+                        "link" => nil,
                       },
-                      plain_text: "A sample toggle",
-                      href: nil,
+                      "plain_text" => "A sample toggle",
+                      "href" => nil,
                     },
                   ],
-                  color: "yellow_background",
-                  children: [
+                  "color" => "yellow_background",
+                  "children" => [
                     {
-                      type: "paragraph",
-                      object: "block",
-                      paragraph: {
-                        rich_text: [
+                      "type" => "paragraph",
+                      "object" => "block",
+                      "paragraph" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "with children",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "with children",
+                              "link" => nil,
                             },
-                            plain_text: "with children",
-                            href: nil,
+                            "plain_text" => "with children",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
@@ -1482,44 +1519,44 @@ module NotionRubyMapping
         toggle_heading_1: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "heading_1",
-                object: "block",
-                heading_1: {
-                  rich_text: [
+                "type" => "heading_1",
+                "object" => "block",
+                "heading_1" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Toggle Heading 1",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 1",
+                        "link" => nil,
                       },
-                      plain_text: "Toggle Heading 1",
-                      href: nil,
+                      "plain_text" => "Toggle Heading 1",
+                      "href" => nil,
                     },
                   ],
-                  color: "orange_background",
-                  children: [
+                  "color" => "orange_background",
+                  "children" => [
                     {
-                      type: "bulleted_list_item",
-                      object: "block",
-                      bulleted_list_item: {
-                        rich_text: [
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "inside Toggle Heading 1",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 1",
+                              "link" => nil,
                             },
-                            plain_text: "inside Toggle Heading 1",
-                            href: nil,
+                            "plain_text" => "inside Toggle Heading 1",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
-                  is_toggleable: true,
+                  "is_toggleable" => true,
                 },
               },
             ],
@@ -1528,44 +1565,44 @@ module NotionRubyMapping
         toggle_heading_2: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "heading_2",
-                object: "block",
-                heading_2: {
-                  rich_text: [
+                "type" => "heading_2",
+                "object" => "block",
+                "heading_2" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Toggle Heading 2",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 2",
+                        "link" => nil,
                       },
-                      plain_text: "Toggle Heading 2",
-                      href: nil,
+                      "plain_text" => "Toggle Heading 2",
+                      "href" => nil,
                     },
                   ],
-                  color: "blue_background",
-                  children: [
+                  "color" => "blue_background",
+                  "children" => [
                     {
-                      type: "bulleted_list_item",
-                      object: "block",
-                      bulleted_list_item: {
-                        rich_text: [
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "inside Toggle Heading 2",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 2",
+                              "link" => nil,
                             },
-                            plain_text: "inside Toggle Heading 2",
-                            href: nil,
+                            "plain_text" => "inside Toggle Heading 2",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
-                  is_toggleable: true,
+                  "is_toggleable" => true,
                 },
               },
             ],
@@ -1574,44 +1611,44 @@ module NotionRubyMapping
         toggle_heading_3: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "heading_3",
-                object: "block",
-                heading_3: {
-                  rich_text: [
+                "type" => "heading_3",
+                "object" => "block",
+                "heading_3" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Toggle Heading 3",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 3",
+                        "link" => nil,
                       },
-                      plain_text: "Toggle Heading 3",
-                      href: nil,
+                      "plain_text" => "Toggle Heading 3",
+                      "href" => nil,
                     },
                   ],
-                  color: "gray_background",
-                  children: [
+                  "color" => "gray_background",
+                  "children" => [
                     {
-                      type: "bulleted_list_item",
-                      object: "block",
-                      bulleted_list_item: {
-                        rich_text: [
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
                           {
-                            type: "text",
-                            text: {
-                              content: "inside Toggle Heading 3",
-                              link: nil,
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 3",
+                              "link" => nil,
                             },
-                            plain_text: "inside Toggle Heading 3",
-                            href: nil,
+                            "plain_text" => "inside Toggle Heading 3",
+                            "href" => nil,
                           },
                         ],
-                        color: "default",
+                        "color" => "default",
                       },
                     },
                   ],
-                  is_toggleable: true,
+                  "is_toggleable" => true,
                 },
               },
             ],
@@ -1620,16 +1657,16 @@ module NotionRubyMapping
         video: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "video",
-                object: "block",
-                video: {
-                  type: "external",
-                  external: {
-                    url: "https://download.samplelib.com/mp4/sample-5s.mp4",
+                "type" => "video",
+                "object" => "block",
+                "video" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://download.samplelib.com/mp4/sample-5s.mp4",
                   },
-                  caption: [],
+                  "caption" => [],
                 },
               },
             ],
@@ -1638,122 +1675,122 @@ module NotionRubyMapping
         table: [
           id, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "table",
-                object: "block",
-                table: {
-                  has_column_header: true,
-                  has_row_header: true,
-                  table_width: 2,
-                  children: [
+                "type" => "table",
+                "object" => "block",
+                "table" => {
+                  "has_column_header" => true,
+                  "has_row_header" => true,
+                  "table_width" => 2,
+                  "children" => [
                     {
-                      type: "table_row",
-                      object: "block",
-                      table_row: {
-                        cells: [
+                      "type" => "table_row",
+                      "object" => "block",
+                      "table_row" => {
+                        "cells" => [
                           [
                             {
-                              type: "text",
-                              text: {
-                                content: "Services",
-                                link: nil,
+                              "type" => "text",
+                              "text" => {
+                                "content" => "Services",
+                                "link" => nil,
                               },
-                              plain_text: "Services",
-                              href: nil,
+                              "plain_text" => "Services",
+                              "href" => nil,
                             },
                           ],
                           [
                             {
-                              type: "text",
-                              text: {
-                                content: "Account",
-                                link: nil,
+                              "type" => "text",
+                              "text" => {
+                                "content" => "Account",
+                                "link" => nil,
                               },
-                              plain_text: "Account",
-                              href: nil,
+                              "plain_text" => "Account",
+                              "href" => nil,
                             },
                           ],
                         ],
                       },
                     },
                     {
-                      type: "table_row",
-                      object: "block",
-                      table_row: {
-                        cells: [
+                      "type" => "table_row",
+                      "object" => "block",
+                      "table_row" => {
+                        "cells" => [
                           [
                             {
-                              type: "text",
-                              text: {
-                                content: "Twitter",
-                                link: nil,
+                              "type" => "text",
+                              "text" => {
+                                "content" => "Twitter",
+                                "link" => nil,
                               },
-                              plain_text: "Twitter",
-                              href: nil,
+                              "plain_text" => "Twitter",
+                              "href" => nil,
                             },
                           ],
                           [
                             {
-                              type: "text",
-                              text: {
-                                content: "hkob\n",
-                                link: nil,
+                              "type" => "text",
+                              "text" => {
+                                "content" => "hkob\n",
+                                "link" => nil,
                               },
-                              plain_text: "hkob\n",
-                              href: nil,
+                              "plain_text" => "hkob\n",
+                              "href" => nil,
                             },
                             {
-                              type: "text",
-                              text: {
-                                content: "profile",
-                                link: {
-                                  url: "https://twitter.com/hkob/",
+                              "type" => "text",
+                              "text" => {
+                                "content" => "profile",
+                                "link" => {
+                                  "url" => "https://twitter.com/hkob/",
                                 },
                               },
-                              plain_text: "profile",
-                              href: "https://twitter.com/hkob/",
+                              "plain_text" => "profile",
+                              "href" => "https://twitter.com/hkob/",
                             },
                           ],
                         ],
                       },
                     },
                     {
-                      type: "table_row",
-                      object: "block",
-                      table_row: {
-                        cells: [
+                      "type" => "table_row",
+                      "object" => "block",
+                      "table_row" => {
+                        "cells" => [
                           [
                             {
-                              type: "text",
-                              text: {
-                                content: "GitHub",
-                                link: nil,
+                              "type" => "text",
+                              "text" => {
+                                "content" => "GitHub",
+                                "link" => nil,
                               },
-                              plain_text: "GitHub",
-                              href: nil,
+                              "plain_text" => "GitHub",
+                              "href" => nil,
                             },
                           ],
                           [
                             {
-                              type: "text",
-                              text: {
-                                content: "hkob\n",
-                                link: nil,
+                              "type" => "text",
+                              "text" => {
+                                "content" => "hkob\n",
+                                "link" => nil,
                               },
-                              plain_text: "hkob\n",
-                              href: nil,
+                              "plain_text" => "hkob\n",
+                              "href" => nil,
                             },
                             {
-                              type: "text",
-                              text: {
-                                content: "repositories",
-                                link: {
-                                  url: "https://github.com/hkob/",
+                              "type" => "text",
+                              "text" => {
+                                "content" => "repositories",
+                                "link" => {
+                                  "url" => "https://github.com/hkob/",
                                 },
                               },
-                              plain_text: "repositories",
-                              href: "https://github.com/hkob/",
+                              "plain_text" => "repositories",
+                              "href" => "https://github.com/hkob/",
                             },
                           ],
                         ],
@@ -1783,27 +1820,27 @@ module NotionRubyMapping
         append_after: [
           APPEND_AFTER_PARENT_ID, 200,
           {
-            children: [
+            "children" => [
               {
-                type: "numbered_list_item",
-                object: "block",
-                numbered_list_item: {
-                  rich_text: [
+                "type" => "numbered_list_item",
+                "object" => "block",
+                "numbered_list_item" => {
+                  "rich_text" => [
                     {
-                      type: "text",
-                      text: {
-                        content: "Middle block",
-                        link: nil,
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Middle block",
+                        "link" => nil,
                       },
-                      plain_text: "Middle block",
-                      href: nil,
+                      "plain_text" => "Middle block",
+                      "href" => nil,
                     },
                   ],
-                  color: "default",
+                  "color" => "default",
                 },
               },
             ],
-            after: "263f125b179e4e4f996a1eff812d9d3d",
+            "after" => "263f125b179e4e4f996a1eff812d9d3d",
           }
         ],
       }
@@ -1820,24 +1857,24 @@ module NotionRubyMapping
         bookmark_url: [
           UPDATE_BLOCK_ID_HASH[:bookmark], 200,
           {
-            bookmark: {
-              url: "https://www.apple.com/",
+            "bookmark" => {
+              "url" => "https://www.apple.com/",
             },
           }
         ],
         bookmark_caption: [
           UPDATE_BLOCK_ID_HASH[:bookmark], 200,
           {
-            bookmark: {
-              caption: [
+            "bookmark" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Apple",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Apple",
+                    "link" => nil,
                   },
-                  plain_text: "Apple",
-                  href: nil,
+                  "plain_text" => "Apple",
+                  "href" => nil,
                 },
               ],
             },
@@ -1846,16 +1883,16 @@ module NotionRubyMapping
         bulleted_list_item_rta: [
           UPDATE_BLOCK_ID_HASH[:bulleted_list_item], 200,
           {
-            bulleted_list_item: {
-              rich_text: [
+            "bulleted_list_item" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
                   },
-                  plain_text: "new text",
-                  href: nil,
+                  "plain_text" => "new text",
+                  "href" => nil,
                 },
               ],
             },
@@ -1864,17 +1901,17 @@ module NotionRubyMapping
         bulleted_list_item_color: [
           UPDATE_BLOCK_ID_HASH[:bulleted_list_item], 200,
           {
-            bulleted_list_item: {
-              color: "orange_background",
-              rich_text: [
+            "bulleted_list_item" => {
+              "color" => "orange_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "old text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old text",
+                    "link" => nil,
                   },
-                  plain_text: "old text",
-                  href: nil,
+                  "plain_text" => "old text",
+                  "href" => nil,
                 },
               ],
             },
@@ -1883,24 +1920,24 @@ module NotionRubyMapping
         callout_color: [
           UPDATE_BLOCK_ID_HASH[:callout], 200,
           {
-            callout: {
-              color: "orange_background",
+            "callout" => {
+              "color" => "orange_background",
             },
           }
         ],
         callout_rta: [
           UPDATE_BLOCK_ID_HASH[:callout], 200,
           {
-            callout: {
-              rich_text: [
+            "callout" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
                   },
-                  plain_text: "new text",
-                  href: nil,
+                  "plain_text" => "new text",
+                  "href" => nil,
                 },
               ],
             },
@@ -1909,11 +1946,11 @@ module NotionRubyMapping
         callout_file_url: [
           UPDATE_BLOCK_ID_HASH[:callout], 200,
           {
-            callout: {
-              icon: {
-                type: "external",
-                external: {
-                  url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+            "callout" => {
+              "icon" => {
+                "type" => "external",
+                "external" => {
+                  "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                 },
               },
             },
@@ -1922,10 +1959,10 @@ module NotionRubyMapping
         callout_emoji: [
           UPDATE_BLOCK_ID_HASH[:callout], 200,
           {
-            callout: {
-              icon: {
-                type: "emoji",
-                emoji: "💡",
+            "callout" => {
+              "icon" => {
+                "type" => "emoji",
+                "emoji" => "💡",
               },
             },
           }
@@ -1933,24 +1970,24 @@ module NotionRubyMapping
         code_language: [
           UPDATE_BLOCK_ID_HASH[:code], 200,
           {
-            code: {
-              language: "ruby",
+            "code" => {
+              "language" => "ruby",
             },
           }
         ],
         code_caption: [
           UPDATE_BLOCK_ID_HASH[:code], 200,
           {
-            code: {
-              caption: [
+            "code" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "set an array",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "set an array",
+                    "link" => nil,
                   },
-                  plain_text: "set an array",
-                  href: nil,
+                  "plain_text" => "set an array",
+                  "href" => nil,
                 },
               ],
             },
@@ -1959,16 +1996,16 @@ module NotionRubyMapping
         code_rta: [
           UPDATE_BLOCK_ID_HASH[:code], 200,
           {
-            code: {
-              rich_text: [
+            "code" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "array = %w[ABC DEF]",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "array = %w[ABC DEF]",
+                    "link" => nil,
                   },
-                  plain_text: "array = %w[ABC DEF]",
-                  href: nil,
+                  "plain_text" => "array = %w[ABC DEF]",
+                  "href" => nil,
                 },
               ],
             },
@@ -1977,16 +2014,16 @@ module NotionRubyMapping
         embed_caption: [
           UPDATE_BLOCK_ID_HASH[:embed], 200,
           {
-            embed: {
-              caption: [
+            "embed" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "NotionRubyMapping v0.4.0",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "NotionRubyMapping v0.4.0",
+                    "link" => nil,
                   },
-                  plain_text: "NotionRubyMapping v0.4.0",
-                  href: nil,
+                  "plain_text" => "NotionRubyMapping v0.4.0",
+                  "href" => nil,
                 },
               ],
             },
@@ -1995,25 +2032,25 @@ module NotionRubyMapping
         embed_url: [
           UPDATE_BLOCK_ID_HASH[:embed], 200,
           {
-            embed: {
-              url: "https://twitter.com/hkob/status/1525470656447811586",
+            "embed" => {
+              "url" => "https://twitter.com/hkob/status/1525470656447811586",
             },
           }
         ],
         equation_expression: [
           UPDATE_BLOCK_ID_HASH[:equation], 200,
           {
-            equation: {
-              expression: "X(z) = \\sum_{n=-\\infty}^{\\infty}x[n]z^{-n}",
+            "equation" => {
+              "expression" => "X(z) = \\sum_{n=-\\infty}^{\\infty}x[n]z^{-n}",
             },
           }
         ],
         file_url: [
           UPDATE_BLOCK_ID_HASH[:file], 200,
           {
-            file: {
-              external: {
-                url: "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
+            "file" => {
+              "external" => {
+                "url" => "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
               },
             },
           }
@@ -2021,16 +2058,16 @@ module NotionRubyMapping
         file_caption: [
           UPDATE_BLOCK_ID_HASH[:file], 200,
           {
-            file: {
-              caption: [
+            "file" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Notion logo",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Notion logo",
+                    "link" => nil,
                   },
-                  plain_text: "Notion logo",
-                  href: nil,
+                  "plain_text" => "Notion logo",
+                  "href" => nil,
                 },
               ],
             },
@@ -2039,17 +2076,17 @@ module NotionRubyMapping
         heading1_color: [
           UPDATE_BLOCK_ID_HASH[:heading_1], 200,
           {
-            heading_1: {
-              color: "green_background",
-              rich_text: [
+            "heading_1" => {
+              "color" => "green_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Heading 1",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 1",
+                    "link" => nil,
                   },
-                  plain_text: "Heading 1",
-                  href: nil,
+                  "plain_text" => "Heading 1",
+                  "href" => nil,
                 },
               ],
             },
@@ -2058,16 +2095,16 @@ module NotionRubyMapping
         heading1_rta: [
           UPDATE_BLOCK_ID_HASH[:heading_1], 200,
           {
-            heading_1: {
-              rich_text: [
+            "heading_1" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Heading 1",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 1",
+                    "link" => nil,
                   },
-                  plain_text: "New Heading 1",
-                  href: nil,
+                  "plain_text" => "New Heading 1",
+                  "href" => nil,
                 },
               ],
             },
@@ -2076,17 +2113,17 @@ module NotionRubyMapping
         heading2_color: [
           UPDATE_BLOCK_ID_HASH[:heading_2], 200,
           {
-            heading_2: {
-              color: "green_background",
-              rich_text: [
+            "heading_2" => {
+              "color" => "green_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Heading 2",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 2",
+                    "link" => nil,
                   },
-                  plain_text: "Heading 2",
-                  href: nil,
+                  "plain_text" => "Heading 2",
+                  "href" => nil,
                 },
               ],
             },
@@ -2095,16 +2132,16 @@ module NotionRubyMapping
         heading2_rta: [
           UPDATE_BLOCK_ID_HASH[:heading_2], 200,
           {
-            heading_2: {
-              rich_text: [
+            "heading_2" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Heading 2",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 2",
+                    "link" => nil,
                   },
-                  plain_text: "New Heading 2",
-                  href: nil,
+                  "plain_text" => "New Heading 2",
+                  "href" => nil,
                 },
               ],
             },
@@ -2113,17 +2150,17 @@ module NotionRubyMapping
         heading3_color: [
           UPDATE_BLOCK_ID_HASH[:heading_3], 200,
           {
-            heading_3: {
-              color: "green_background",
-              rich_text: [
+            "heading_3" => {
+              "color" => "green_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Heading 3",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 3",
+                    "link" => nil,
                   },
-                  plain_text: "Heading 3",
-                  href: nil,
+                  "plain_text" => "Heading 3",
+                  "href" => nil,
                 },
               ],
             },
@@ -2132,16 +2169,16 @@ module NotionRubyMapping
         heading3_rta: [
           UPDATE_BLOCK_ID_HASH[:heading_3], 200,
           {
-            heading_3: {
-              rich_text: [
+            "heading_3" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Heading 3",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 3",
+                    "link" => nil,
                   },
-                  plain_text: "New Heading 3",
-                  href: nil,
+                  "plain_text" => "New Heading 3",
+                  "href" => nil,
                 },
               ],
             },
@@ -2150,9 +2187,9 @@ module NotionRubyMapping
         image_url: [
           UPDATE_BLOCK_ID_HASH[:image], 200,
           {
-            image: {
-              external: {
-                url: "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg",
+            "image" => {
+              "external" => {
+                "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
               },
             },
           }
@@ -2160,16 +2197,16 @@ module NotionRubyMapping
         image_caption: [
           UPDATE_BLOCK_ID_HASH[:image], 200,
           {
-            image: {
-              caption: [
+            "image" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "macOS logo",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "macOS logo",
+                    "link" => nil,
                   },
-                  plain_text: "macOS logo",
-                  href: nil,
+                  "plain_text" => "macOS logo",
+                  "href" => nil,
                 },
               ],
             },
@@ -2178,17 +2215,17 @@ module NotionRubyMapping
         numbered_list_item_color: [
           UPDATE_BLOCK_ID_HASH[:numbered_list_item], 200,
           {
-            numbered_list_item: {
-              color: "orange_background",
-              rich_text: [
+            "numbered_list_item" => {
+              "color" => "orange_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "old text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old text",
+                    "link" => nil,
                   },
-                  plain_text: "old text",
-                  href: nil,
+                  "plain_text" => "old text",
+                  "href" => nil,
                 },
               ],
             },
@@ -2197,16 +2234,16 @@ module NotionRubyMapping
         numbered_list_item_rta: [
           UPDATE_BLOCK_ID_HASH[:numbered_list_item], 200,
           {
-            numbered_list_item: {
-              rich_text: [
+            "numbered_list_item" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
                   },
-                  plain_text: "new text",
-                  href: nil,
+                  "plain_text" => "new text",
+                  "href" => nil,
                 },
               ],
             },
@@ -2215,17 +2252,17 @@ module NotionRubyMapping
         paragraph_color: [
           UPDATE_BLOCK_ID_HASH[:paragraph], 200,
           {
-            paragraph: {
-              color: "orange_background",
-              rich_text: [
+            "paragraph" => {
+              "color" => "orange_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "old paragraph text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old paragraph text",
+                    "link" => nil,
                   },
-                  plain_text: "old paragraph text",
-                  href: nil,
+                  "plain_text" => "old paragraph text",
+                  "href" => nil,
                 },
               ],
             },
@@ -2234,16 +2271,16 @@ module NotionRubyMapping
         paragraph_rta: [
           UPDATE_BLOCK_ID_HASH[:paragraph], 200,
           {
-            paragraph: {
-              rich_text: [
+            "paragraph" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new paragraph text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new paragraph text",
+                    "link" => nil,
                   },
-                  plain_text: "new paragraph text",
-                  href: nil,
+                  "plain_text" => "new paragraph text",
+                  "href" => nil,
                 },
               ],
             },
@@ -2252,16 +2289,16 @@ module NotionRubyMapping
         pdf_caption: [
           UPDATE_BLOCK_ID_HASH[:pdf], 200,
           {
-            pdf: {
-              caption: [
+            "pdf" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new caption",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new caption",
+                    "link" => nil,
                   },
-                  plain_text: "new caption",
-                  href: nil,
+                  "plain_text" => "new caption",
+                  "href" => nil,
                 },
               ],
             },
@@ -2270,9 +2307,9 @@ module NotionRubyMapping
         pdf_url: [
           UPDATE_BLOCK_ID_HASH[:pdf], 200,
           {
-            pdf: {
-              external: {
-                url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+            "pdf" => {
+              "external" => {
+                "url" => "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
               },
             },
           }
@@ -2280,17 +2317,17 @@ module NotionRubyMapping
         quote_color: [
           UPDATE_BLOCK_ID_HASH[:quote], 200,
           {
-            quote: {
-              color: "orange_background",
-              rich_text: [
+            "quote" => {
+              "color" => "orange_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "old text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old text",
+                    "link" => nil,
                   },
-                  plain_text: "old text",
-                  href: nil,
+                  "plain_text" => "old text",
+                  "href" => nil,
                 },
               ],
             },
@@ -2299,16 +2336,16 @@ module NotionRubyMapping
         quote_rta: [
           UPDATE_BLOCK_ID_HASH[:quote], 200,
           {
-            quote: {
-              rich_text: [
+            "quote" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new text",
+                    "link" => nil,
                   },
-                  plain_text: "new text",
-                  href: nil,
+                  "plain_text" => "new text",
+                  "href" => nil,
                 },
               ],
             },
@@ -2317,24 +2354,24 @@ module NotionRubyMapping
         table_of_contents_color: [
           UPDATE_BLOCK_ID_HASH[:table_of_contents], 200,
           {
-            table_of_contents: {
-              color: "orange_background",
+            "table_of_contents" => {
+              "color" => "orange_background",
             },
           }
         ],
         template_rta: [
           UPDATE_BLOCK_ID_HASH[:template], 200,
           {
-            template: {
-              rich_text: [
+            "template" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New template",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New template",
+                    "link" => nil,
                   },
-                  plain_text: "New template",
-                  href: nil,
+                  "plain_text" => "New template",
+                  "href" => nil,
                 },
               ],
             },
@@ -2343,25 +2380,25 @@ module NotionRubyMapping
         to_do_checked: [
           UPDATE_BLOCK_ID_HASH[:to_do], 200,
           {
-            to_do: {
-              checked: true,
+            "to_do" => {
+              "checked" => true,
             },
           }
         ],
         to_do_color: [
           UPDATE_BLOCK_ID_HASH[:to_do], 200,
           {
-            to_do: {
-              color: "orange_background",
-              rich_text: [
+            "to_do" => {
+              "color" => "orange_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "old To Do",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "old To Do",
+                    "link" => nil,
                   },
-                  plain_text: "old To Do",
-                  href: nil,
+                  "plain_text" => "old To Do",
+                  "href" => nil,
                 },
               ],
             },
@@ -2370,16 +2407,16 @@ module NotionRubyMapping
         to_do_rta: [
           UPDATE_BLOCK_ID_HASH[:to_do], 200,
           {
-            to_do: {
-              rich_text: [
+            "to_do" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "new To Do",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "new To Do",
+                    "link" => nil,
                   },
-                  plain_text: "new To Do",
-                  href: nil,
+                  "plain_text" => "new To Do",
+                  "href" => nil,
                 },
               ],
             },
@@ -2388,17 +2425,17 @@ module NotionRubyMapping
         toggle_color: [
           UPDATE_BLOCK_ID_HASH[:toggle], 200,
           {
-            toggle: {
-              color: "orange_background",
-              rich_text: [
+            "toggle" => {
+              "color" => "orange_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Old Toggle",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Old Toggle",
+                    "link" => nil,
                   },
-                  plain_text: "Old Toggle",
-                  href: nil,
+                  "plain_text" => "Old Toggle",
+                  "href" => nil,
                 },
               ],
             },
@@ -2407,16 +2444,16 @@ module NotionRubyMapping
         toggle_rta: [
           UPDATE_BLOCK_ID_HASH[:toggle], 200,
           {
-            toggle: {
-              rich_text: [
+            "toggle" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Toggle",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Toggle",
+                    "link" => nil,
                   },
-                  plain_text: "New Toggle",
-                  href: nil,
+                  "plain_text" => "New Toggle",
+                  "href" => nil,
                 },
               ],
             },
@@ -2425,17 +2462,17 @@ module NotionRubyMapping
         toggle_heading1_color: [
           UPDATE_BLOCK_ID_HASH[:toggle_heading_1], 200,
           {
-            heading_1: {
-              color: "green_background",
-              rich_text: [
+            "heading_1" => {
+              "color" => "green_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Toggle Heading 1",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 1",
+                    "link" => nil,
                   },
-                  plain_text: "Toggle Heading 1",
-                  href: nil,
+                  "plain_text" => "Toggle Heading 1",
+                  "href" => nil,
                 },
               ],
             },
@@ -2444,16 +2481,16 @@ module NotionRubyMapping
         toggle_heading1_rta: [
           UPDATE_BLOCK_ID_HASH[:toggle_heading_1], 200,
           {
-            heading_1: {
-              rich_text: [
+            "heading_1" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Heading 1",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 1",
+                    "link" => nil,
                   },
-                  plain_text: "New Heading 1",
-                  href: nil,
+                  "plain_text" => "New Heading 1",
+                  "href" => nil,
                 },
               ],
             },
@@ -2462,17 +2499,17 @@ module NotionRubyMapping
         toggle_heading2_color: [
           UPDATE_BLOCK_ID_HASH[:toggle_heading_2], 200,
           {
-            heading_2: {
-              color: "green_background",
-              rich_text: [
+            "heading_2" => {
+              "color" => "green_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Toggle Heading 2",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 2",
+                    "link" => nil,
                   },
-                  plain_text: "Toggle Heading 2",
-                  href: nil,
+                  "plain_text" => "Toggle Heading 2",
+                  "href" => nil,
                 },
               ],
             },
@@ -2481,16 +2518,16 @@ module NotionRubyMapping
         toggle_heading2_rta: [
           UPDATE_BLOCK_ID_HASH[:toggle_heading_2], 200,
           {
-            heading_2: {
-              rich_text: [
+            "heading_2" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Heading 2",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 2",
+                    "link" => nil,
                   },
-                  plain_text: "New Heading 2",
-                  href: nil,
+                  "plain_text" => "New Heading 2",
+                  "href" => nil,
                 },
               ],
             },
@@ -2499,17 +2536,17 @@ module NotionRubyMapping
         toggle_heading3_color: [
           UPDATE_BLOCK_ID_HASH[:toggle_heading_3], 200,
           {
-            heading_3: {
-              color: "green_background",
-              rich_text: [
+            "heading_3" => {
+              "color" => "green_background",
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "Toggle Heading 3",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 3",
+                    "link" => nil,
                   },
-                  plain_text: "Toggle Heading 3",
-                  href: nil,
+                  "plain_text" => "Toggle Heading 3",
+                  "href" => nil,
                 },
               ],
             },
@@ -2518,16 +2555,16 @@ module NotionRubyMapping
         toggle_heading3_rta: [
           UPDATE_BLOCK_ID_HASH[:toggle_heading_3], 200,
           {
-            heading_3: {
-              rich_text: [
+            "heading_3" => {
+              "rich_text" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New Heading 3",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 3",
+                    "link" => nil,
                   },
-                  plain_text: "New Heading 3",
-                  href: nil,
+                  "plain_text" => "New Heading 3",
+                  "href" => nil,
                 },
               ],
             },
@@ -2536,16 +2573,16 @@ module NotionRubyMapping
         video_caption: [
           UPDATE_BLOCK_ID_HASH[:video], 200,
           {
-            video: {
-              caption: [
+            "video" => {
+              "caption" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "New caption",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New caption",
+                    "link" => nil,
                   },
-                  plain_text: "New caption",
-                  href: nil,
+                  "plain_text" => "New caption",
+                  "href" => nil,
                 },
               ],
             },
@@ -2554,9 +2591,9 @@ module NotionRubyMapping
         video_url: [
           UPDATE_BLOCK_ID_HASH[:video], 200,
           {
-            video: {
-              external: {
-                url: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
+            "video" => {
+              "external" => {
+                "url" => "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
               },
             },
           }
@@ -2564,9 +2601,19 @@ module NotionRubyMapping
         file_file_upload: [
           "20bd8e4e98ab8081ad29dd62726e4525", 200,
           {
-            file: {
-              file_upload: {
-                id: TestConnection::FILE_UPLOAD_IMAGE_ID,
+            "file" => {
+              "file_upload" => {
+                "id" => TestConnection::FILE_UPLOAD_IMAGE_ID,
+              },
+            },
+          }
+        ],
+        image_file_upload: [
+          "20bd8e4e98ab802193bef79f70225b06", 200,
+          {
+            "image" => {
+              "file_upload" => {
+                "id" => TestConnection::FILE_UPLOAD_IMAGE_ID,
               },
             },
           }
@@ -2620,37 +2667,37 @@ module NotionRubyMapping
         top_page: [
           nil, 200,
           {
-            rich_text: [
+            "rich_text" => [
               {
-                type: "text",
-                text: {
-                  content: "test comment",
-                  link: nil,
+                "type" => "text",
+                "text" => {
+                  "content" => "test comment",
+                  "link" => nil,
                 },
-                plain_text: "test comment",
-                href: nil,
+                "plain_text" => "test comment",
+                "href" => nil,
               },
             ],
-            parent: {
-              page_id: "c01166c613ae45cbb96818b4ef2f5a77",
+            "parent" => {
+              "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
             },
           }
         ],
         discussion_id: [
           nil, 200,
           {
-            rich_text: [
+            "rich_text" => [
               {
-                type: "text",
-                text: {
-                  content: "test comment to discussion",
-                  link: nil,
+                "type" => "text",
+                "text" => {
+                  "content" => "test comment to discussion",
+                  "link" => nil,
                 },
-                plain_text: "test comment to discussion",
-                href: nil,
+                "plain_text" => "test comment to discussion",
+                "href" => nil,
               },
             ],
-            discussion_id: "4475361640994a5f97c653eb758e7a9d",
+            "discussion_id" => "4475361640994a5f97c653eb758e7a9d",
           }
         ],
       }
@@ -2678,7 +2725,7 @@ module NotionRubyMapping
     # @param [Symbol, String] json_file (without path and extension)
     # @return [Hash] Hash object created from json
     def read_json(json_file)
-      File.open("spec/fixtures/#{json_file}.json") { |f| JSON.parse f.read, symbolize_names: true }
+      File.open("spec/fixtures/#{json_file}.json") { |f| JSON.parse f.read }
     end
 
     ### read ids from env.yml
@@ -2692,7 +2739,7 @@ module NotionRubyMapping
     end
 
     def to_href
-      @to_href ||= TextObject.new "href_text", href: "https://www.google.com/"
+      @to_href ||= TextObject.new "href_text", "href" => "https://www.google.com/"
     end
   end
 end
@@ -2780,7 +2827,7 @@ module RSpec
     value_str ||= value
     describe "a #{c.name} property" do
       it "has name" do
-        expect(property.name).to eq :property_name
+        expect(property.name).to eq "property_name"
       end
 
       context "when create filter" do
@@ -2793,16 +2840,16 @@ module RSpec
 
             if condition
               it {
-                expect(subject).to eq({property: :property_name,
+                expect(subject).to eq({"property" => "property_name",
                                        c::TYPE => {condition => {another_type => {key => value_str || true}}}})
               }
             elsif another_type
               it {
-                expect(subject).to eq({property: :property_name,
+                expect(subject).to eq({"property" => "property_name",
                                        c::TYPE => {another_type => {key => value_str || true}}})
               }
             else
-              it { is_expected.to eq({property: :property_name, c::TYPE => {key => value_str || true}}) }
+              it { is_expected.to eq({"property" => "property_name", c::TYPE => {key => value_str || true}}) }
             end
           end
         end
@@ -2815,7 +2862,7 @@ module RSpec
     start_str, end_str = DateProperty.start_end_time date
     describe "a #{c.name} property" do
       it "has name" do
-        expect(property.name).to eq :property_name
+        expect(property.name).to eq "property_name"
       end
 
       context "when create filter" do
@@ -2827,7 +2874,7 @@ module RSpec
             end
 
             it {
-              answer = if key == :equals
+              answer = if key == "equals"
                          if property.is_a? FormulaProperty
                            property.filter_after(start_str, another_type: another_type)
                                    .and(property.filter_before(end_str, another_type: another_type))
@@ -2863,7 +2910,7 @@ module RSpec
     value_str ||= value
     describe "a #{c.name} property" do
       it "has name" do
-        expect(property.name).to eq :__timestamp__
+        expect(property.name).to eq "__timestamp__"
       end
 
       context "when create filter" do
@@ -2872,7 +2919,7 @@ module RSpec
           context key do
             let(:query) { property.send(*["filter_#{key}", value].compact) }
 
-            it { is_expected.to eq({timestamp: c::TYPE.to_s, c::TYPE => {key => value_str || true}}) }
+            it { is_expected.to eq({"timestamp" => c::TYPE, c::TYPE => {key => value_str || true}}) }
           end
         end
       end
@@ -2884,7 +2931,7 @@ module RSpec
     start_str, end_str = DateProperty.start_end_time date
     describe "a #{c.name} property" do
       it "has name" do
-        expect(property.name).to eq :__timestamp__
+        expect(property.name).to eq "__timestamp__"
       end
 
       context "when create filter" do
@@ -2894,7 +2941,7 @@ module RSpec
             let(:query) { property.send(*["filter_#{key}", date].compact) }
 
             it {
-              if key == :equals
+              if key == "equals"
                 expect(subject).to eq property.filter_after(start_str).and(property.filter_before(end_str)).filter
               else
                 expect(subject).to eq property.filter_before(start_str).or(property.filter_after(end_str)).filter
@@ -2914,7 +2961,7 @@ module RSpec
         expect(target.id).to eq id
       end
 
-      it_behaves_like "raw json", :block_json, json
+      it_behaves_like "raw json", "block_json", json
 
       it "can #{klass} have children?" do
         expect(target.can_have_children).to eq have_children
@@ -2930,7 +2977,7 @@ module RSpec
       let(:org_block) { CalloutBlock.new "ABC", id: block_id, emoji: "💡" }
 
       %i[page block].each do |pb|
-        is_page = pb == :page
+        is_page = pb == "page"
         ans_block_id = is_page ? block_page_id : block_block_id
         context "when for #{pb}" do
           context "when dry_run" do
@@ -2964,7 +3011,7 @@ module RSpec
   shared_examples_for "update block url" do |type, url|
     before { target.url = url }
 
-    it { expect(target.update_block_json).to eq({type => {url: url}}) }
+    it { expect(target.update_block_json).to eq({type => {"url" => url}}) }
 
     context "when dry_run" do
       let(:dry_run) { target.save dry_run: true }
@@ -2983,15 +3030,15 @@ module RSpec
     let(:json) do
       {
         type => {
-          caption: [
+          "caption" => [
             {
-              type: "text",
-              text: {
-                content: new_caption,
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => new_caption,
+                "link" => nil,
               },
-              plain_text: new_caption,
-              href: nil,
+              "plain_text" => new_caption,
+              "href" => nil,
             },
           ],
         },
@@ -3016,15 +3063,15 @@ module RSpec
     let(:json) do
       {
         type => {
-          rich_text: [
+          "rich_text" => [
             {
-              type: "text",
-              text: {
-                content: new_text,
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => new_text,
+                "link" => nil,
               },
-              plain_text: new_text,
-              href: nil,
+              "plain_text" => new_text,
+              "href" => nil,
             },
           ],
         },
@@ -3048,9 +3095,9 @@ module RSpec
 
     let(:json) do
       if with_rta
-        {type => {color: new_color}.merge(target.rich_text_array.update_property_schema_json(true))}
+        {type => {"color" => new_color}.merge(target.rich_text_array.update_property_schema_json(true))}
       else
-        {type => {color: new_color}}
+        {type => {"color" => new_color}}
       end
     end
     it { expect(target.update_block_json).to eq json }
@@ -3069,7 +3116,7 @@ module RSpec
   shared_examples_for "update block file" do |type, new_url, json = nil|
     before { target.url = new_url }
 
-    json ||= {type => {external: {url: new_url}}}
+    json ||= {type => {"external" => {"url" => new_url}}}
     it { expect(target.update_block_json).to eq json }
 
     context "when dry_run" do

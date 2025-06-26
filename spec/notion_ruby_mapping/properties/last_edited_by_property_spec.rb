@@ -3,16 +3,16 @@
 module NotionRubyMapping
   RSpec.describe LastEditedByProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {id: "LQGa"} }
+    let(:no_content_json) { {"id" => "LQGa"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
-    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
+    let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
     context "when Database property" do
       context "when last_edited by new" do
-        let(:target) { described_class.new "lebp", base_type: :database }
+        let(:target) { described_class.new "lebp", base_type: "database" }
 
-        it_behaves_like "has name as", :lebp
-        it_behaves_like "raw json", :last_edited_by, {}
+        it_behaves_like "has name as", "lebp"
+        it_behaves_like "raw json", "last_edited_by", {}
 
         describe "update_from_json" do
           before { target.update_from_json(tc.read_json("last_edited_by_property_object")) }
@@ -20,8 +20,8 @@ module NotionRubyMapping
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {}
-          it_behaves_like "raw json", :last_edited_by, {}
-          it_behaves_like "property schema json", {lebp: {last_edited_by: {}}}
+          it_behaves_like "raw json", "last_edited_by", {}
+          it_behaves_like "property schema json", {"lebp" => {"last_edited_by" => {}}}
         end
 
         describe "new_name=" do
@@ -29,7 +29,7 @@ module NotionRubyMapping
 
           it_behaves_like "will update"
           it_behaves_like "assert different property", :property_values_json
-          it_behaves_like "update property schema json", {lebp: {name: :new_name}}
+          it_behaves_like "update property schema json", {"lebp" => {"name" => "new_name"}}
         end
 
         describe "remove" do
@@ -37,14 +37,14 @@ module NotionRubyMapping
 
           it_behaves_like "will update"
           it_behaves_like "assert different property", :property_values_json
-          it_behaves_like "update property schema json", {lebp: nil}
+          it_behaves_like "update property schema json", {"lebp" => nil}
         end
       end
 
       context "when last_edited from json" do
-        let(:target) { Property.create_from_json :lebp, tc.read_json("last_edited_by_property_object"), :database }
+        let(:target) { Property.create_from_json "lebp", tc.read_json("last_edited_by_property_object"), "database" }
 
-        it_behaves_like "has name as", :lebp
+        it_behaves_like "has name as", "lebp"
         it_behaves_like "will not update"
         it_behaves_like "assert different property", :property_values_json
         it_behaves_like "update property schema json", {}
@@ -76,7 +76,7 @@ module NotionRubyMapping
       context "when created from json" do
         let(:target) { Property.create_from_json "lebp", tc.read_json("retrieve_property_last_edited_by") }
 
-        it_behaves_like "has name as", :lebp
+        it_behaves_like "has name as", "lebp"
         it_behaves_like "will not update"
         it_behaves_like "property values json", {}
         it { expect(target.last_edited_by.name).to eq "Hiroyuki KOBAYASHI" }
@@ -86,9 +86,9 @@ module NotionRubyMapping
     end
 
     context "when created from json (no content)" do
-      let(:target) { Property.create_from_json "lebp", no_content_json, :page, property_cache_first }
+      let(:target) { Property.create_from_json "lebp", no_content_json, "page", property_cache_first }
 
-      it_behaves_like "has name as", :lebp
+      it_behaves_like "has name as", "lebp"
       it_behaves_like "will not update"
       it { expect(target).not_to be_contents }
 
@@ -115,7 +115,7 @@ module NotionRubyMapping
     describe "a last_edited_by property from property_item_json" do
       let(:target) { Property.create_from_json "lebp", tc.read_json("retrieve_property_last_edited_by") }
 
-      it_behaves_like "has name as", :lebp
+      it_behaves_like "has name as", "lebp"
       it_behaves_like "will not update"
       it_behaves_like "property values json", {}
     end

@@ -7,7 +7,7 @@ module NotionRubyMapping
     include ContainsDoesNotContain
     include StartsWithEndsWith
     include IsEmptyIsNotEmpty
-    TYPE = :email
+    TYPE = "email"
 
     ### Public announced methods
 
@@ -32,7 +32,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @param [String, Symbol] name Property name
-    def initialize(name, will_update: false, base_type: :page, json: nil, property_id: nil, property_cache: nil)
+    def initialize(name, will_update: false, base_type: "page", json: nil, property_id: nil, property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       @json = json || {}
@@ -41,7 +41,7 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      {@name => {email: @json, type: "email"}}
+      {@name => {"email" => @json, "type" => "email"}}
     end
   end
 end

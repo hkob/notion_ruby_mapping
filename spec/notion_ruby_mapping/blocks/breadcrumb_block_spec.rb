@@ -4,11 +4,11 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe BreadcrumbBlock do
-    type = :breadcrumb
+    type = "breadcrumb"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      object: "block",
-      type: "breadcrumb",
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => type,
       type => {},
     }
 

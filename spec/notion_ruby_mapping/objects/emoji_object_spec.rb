@@ -26,8 +26,8 @@ module NotionRubyMapping
       let(:target) { EmojiObject.new emoji: "🟠" }
 
       it_behaves_like "property values json", {
-        type: "emoji",
-        emoji: "🟠",
+        "type" => "emoji",
+        "emoji" => "🟠",
       }
     end
 
@@ -35,8 +35,8 @@ module NotionRubyMapping
       let(:target) { EmojiObject.new json: emoji_json }
 
       it_behaves_like "property values json", {
-        type: "emoji",
-        emoji: "✅",
+        "type" => "emoji",
+        "emoji" => "✅",
       }
       it { expect(target.emoji).to eq "✅" }
     end

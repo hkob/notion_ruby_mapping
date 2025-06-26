@@ -4,13 +4,13 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe EquationBlock do
-    type = :equation
+    type = "equation"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type], false, {
-      object: "block",
-      type: "equation",
-      equation: {
-        expression: "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => "equation",
+      "equation" => {
+        "expression" => "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}",
       },
     }
 
@@ -22,12 +22,12 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}", id: update_id }
 
       context "expression" do
         let(:new_expression) { "X(z) = \\sum_{n=-\\infty}^{\\infty}x[n]z^{-n}" }
-        let(:json) { {type => {expression: new_expression}} }
+        let(:json) { {type => {"expression" => new_expression}} }
 
         before { target.expression = new_expression }
 

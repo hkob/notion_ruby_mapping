@@ -26,12 +26,12 @@ module NotionRubyMapping
       let(:target) { EquationObject.new "x^2 + y^2 = 1" }
 
       it_behaves_like "property values json", {
-        type: "equation",
-        equation: {
-          expression: "x^2 + y^2 = 1",
+        "type" => "equation",
+        "equation" => {
+          "expression" => "x^2 + y^2 = 1",
         },
-        href: nil,
-        plain_text: "x^2 + y^2 = 1",
+        "href" => nil,
+        "plain_text" => "x^2 + y^2 = 1",
       }
     end
 
@@ -40,20 +40,20 @@ module NotionRubyMapping
       let(:json) { equation_json }
 
       it_behaves_like "property values json", {
-        type: "equation",
-        equation: {
-          expression: "y = f(x)",
+        "type" => "equation",
+        "equation" => {
+          "expression" => "y = f(x)",
         },
-        annotations: {
-          bold: false,
-          code: false,
-          color: "default",
-          italic: false,
-          strikethrough: false,
-          underline: false,
+        "annotations" => {
+          "bold" => false,
+          "code" => false,
+          "color" => "default",
+          "italic" => false,
+          "strikethrough" => false,
+          "underline" => false,
         },
-        href: nil,
-        plain_text: "y = f(x)",
+        "href" => nil,
+        "plain_text" => "y = f(x)",
       }
       it { expect(target.expression).to eq "y = f(x)" }
     end

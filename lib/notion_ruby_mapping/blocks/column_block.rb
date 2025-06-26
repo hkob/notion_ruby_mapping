@@ -12,9 +12,9 @@ module NotionRubyMapping
       @can_append = false
     end
 
-    # @return [Symbol]
+    # @return [String]
     def type
-      :column
+      "column"
     end
 
     # @param [Boolean] not_update false when update
@@ -22,7 +22,7 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = {}
-      ans[type][:children] = @sub_blocks.map(&:block_json) if @sub_blocks
+      ans[type]["children"] = @sub_blocks.map(&:block_json) if @sub_blocks
       ans
     end
   end

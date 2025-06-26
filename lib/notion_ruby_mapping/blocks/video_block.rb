@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class VideoBlock < FileBaseBlock
-    # @return [Symbol]
+    # @return [String]
     def type
-      :video
+      "video"
     end
   end
 end

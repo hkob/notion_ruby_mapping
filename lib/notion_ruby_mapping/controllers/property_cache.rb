@@ -4,7 +4,7 @@ module NotionRubyMapping
   # PropertyCache class
   class PropertyCache
     include Enumerable
-    def initialize(json = {}, base_type: :page, page_id: nil)
+    def initialize(json = {}, base_type: "page", page_id: nil)
       @properties = {}
       @json = json
       @base_type = base_type
@@ -17,8 +17,7 @@ module NotionRubyMapping
     # @return [Property] Property for key
     # @see https://www.notion.so/hkob/PropertyCache-2451fa64a814432db4809831cc77ba25#9709e2b2a7a0479f9951291a501f65c8
     def [](key)
-      key_sym = key.to_sym
-      @properties[key_sym] ||= Property.create_from_json key_sym, @json[key_sym], @base_type, self
+      @properties[key] ||= Property.create_from_json key, @json[key], @base_type, self
     end
 
     # @param [Property] property added Property
@@ -57,8 +56,8 @@ module NotionRubyMapping
     def property_values_json
       @properties.each_with_object({}) do |(_, property), ans|
         if property.will_update
-          ans[:properties] ||= {}
-          ans[:properties].merge! property.property_values_json
+          ans["properties"] ||= {}
+          ans["properties"].merge! property.property_values_json
         end
       end
     end
@@ -67,8 +66,8 @@ module NotionRubyMapping
     def property_schema_json
       @properties.each_with_object({}) do |(_, property), ans|
         if property.will_update
-          ans[:properties] ||= {}
-          ans[:properties].merge! property.property_schema_json
+          ans["properties"] ||= {}
+          ans["properties"].merge! property.property_schema_json
         end
       end
     end
@@ -77,8 +76,8 @@ module NotionRubyMapping
     def update_property_schema_json
       @properties.each_with_object({}) do |(_, property), ans|
         if property.will_update
-          ans[:properties] ||= {}
-          ans[:properties].merge! property.update_property_schema_json
+          ans["properties"] ||= {}
+          ans["properties"].merge! property.update_property_schema_json
         end
       end
     end

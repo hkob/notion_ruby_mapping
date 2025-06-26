@@ -17,7 +17,7 @@ module NotionRubyMapping
       @object_hash = {}
       @client = Faraday.new "https://api.notion.com" do |conn|
         conn.request :json
-        conn.response :json, parser_options: {symbolize_names: true}
+        conn.response :json
         conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
       end
       @notion_token = nil
@@ -32,7 +32,7 @@ module NotionRubyMapping
     def multipart_client
       @multipart_client ||= Faraday.new "https://api.notion.com" do |conn|
         conn.request :multipart, flat_encode: true
-        conn.response :json, parser_options: {symbolize_names: true}
+        conn.response :json
         conn.headers["Notion-Version"] = NotionRubyMapping::NOTION_VERSION
       end
     end
@@ -99,6 +99,14 @@ module NotionRubyMapping
     # @return [String (frozen)]
     def comments_path
       "v1/comments"
+    end
+
+    def complete_a_file_upload_path(file_id)
+      "v1/file_uploads/#{file_id}/complete"
+    end
+
+    def complete_a_file_upload_request(file_id)
+      request :post, complete_a_file_upload_path(file_id)
     end
 
     # @param [String] notion_token
@@ -181,7 +189,7 @@ module NotionRubyMapping
     # @param [Hash] options
     # @return [Hash]
     def file_upload_request(fname, id, options = {})
-      multipart_request(file_upload_path(id), options, fname)
+      multipart_request(file_upload_path(id), fname, options)
     end
 
     # @param [String] id
@@ -207,22 +215,22 @@ module NotionRubyMapping
     end
 
     # @param [String] path
-    # @param [Hash] json
     # @param [String] fname
+    # @param [Hash] options
     # @return [Hash] response hash
-    def multipart_request(path, json, fname)
+    def multipart_request(path, fname, options = {})
       raise "Please call `NotionRubyMapping.configure' before using other methods" unless @notion_token
 
       content_type = MIME::Types.type_for(fname).first.to_s
 
       sleep @wait
-      json_part = Faraday::Multipart::ParamPart.new(json.to_json, "application/json")
+      body = options.map { |k, v| [k, Faraday::Multipart::ParamPart.new(v, "text/plain")] }.to_h
       file_part = Faraday::Multipart::FilePart.new(fname, content_type, File.basename(fname))
       response = multipart_client.send(:post) do |request|
         request.headers["Authorization"] = "Bearer #{@notion_token}"
         request.headers["content-Type"] = "multipart/form-data"
         request.path = path
-        request.body = {json: json_part, file: file_part}
+        request.body = {file: file_part}.merge body
       end
       p response.body if @debug
       response.body
@@ -263,6 +271,7 @@ module NotionRubyMapping
     # @param [String] property_id
     # @return [Hash] response
     def page_property_request(page_id, property_id, query = {})
+      p "page_id = #{page_id}, property_id = #{property_id}, query = #{query}" if @debug
       request :get, page_property_path(page_id, property_id), query
     end
 
@@ -377,7 +386,7 @@ module NotionRubyMapping
 
     # @return [Array<NotionRubyMapping::UserObject>] UserObject array
     def users
-      List.new json: users_request, type: :user_object, value: true
+      List.new json: users_request, type: "user_object", value: true
     end
 
     # @return [String (frozen)] user_path

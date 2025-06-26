@@ -13,7 +13,7 @@ module NotionRubyMapping
 
     # @return [String (frozen)]
     def type
-      :divider
+      "divider"
     end
   end
 end

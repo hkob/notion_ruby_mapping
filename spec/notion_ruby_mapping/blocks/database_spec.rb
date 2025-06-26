@@ -231,10 +231,10 @@ module NotionRubyMapping
       context "without assign (no block)" do
         let(:target) { db.build_child_page }
 
-        before { target.properties[:Name] << "New Page Title" }
+        before { target.properties["Name"] << "New Page Title" }
 
         context "properties.map(&:name)" do
-          let(:ans) { [:Name, :"Related to Sample table (Column)", :Tags, :title2] }
+          let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
 
           it { expect(target.properties.map(&:name).sort).to eq ans }
         end
@@ -260,7 +260,7 @@ module NotionRubyMapping
         end
 
         context "properties.map(&:name)" do
-          let(:ans) { [:Name, :"Related to Sample table (Column)", :Tags, :title2] }
+          let(:ans) { ["Name", "Related to Sample table (Column)", "Tags", "title2"] }
 
           it { expect(target.properties.map(&:name).sort).to eq ans }
         end
@@ -293,8 +293,8 @@ module NotionRubyMapping
 
     describe "query with filter_properties" do
       let(:db) { Database.find TestConnection::DATABASE_ID }
-      let(:np) { db.properties[:NumberTitle] }
-      let(:ep) { db.properties[:MailTitle] }
+      let(:np) { db.properties["NumberTitle"] }
+      let(:ep) { db.properties["MailTitle"] }
       let(:query) { Query.new(filter_properties: [np, ep]) }
       let(:target) { db.query_database query }
 
@@ -334,7 +334,7 @@ module NotionRubyMapping
                                          SelectProperty, "Select",
                                          TitleProperty, "Title",
                                          UrlProperty, "Url" do |db, ps|
-          fp, msp, np, rp, rup, sp = ps.values_at :Formula, :MultiSelect, :Number, :Relation, :Rollup, :Select
+          fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
           fp.formula_expression = "now()"
           msp.add_multi_select_option name: "MS1", color: "orange"
           msp.add_multi_select_option name: "MS2", color: "green"
@@ -356,68 +356,68 @@ module NotionRubyMapping
       describe "property_schema_json" do
         let(:ans) do
           {
-            title: [
+            "title" => [
               {
-                href: nil,
-                plain_text: "New database title",
-                text: {
-                  content: "New database title",
-                  link: nil,
+                "href" => nil,
+                "plain_text" => "New database title",
+                "text" => {
+                  "content" => "New database title",
+                  "link" => nil,
                 },
-                type: "text",
+                "type" => "text",
               },
             ],
-            icon: {emoji: "🎉", type: "emoji"},
-            parent: {
-              type: "page_id",
-              page_id: "c01166c613ae45cbb96818b4ef2f5a77",
+            "icon" => {"emoji" => "🎉", "type" => "emoji"},
+            "parent" => {
+              "type" => "page_id",
+              "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
             },
-            properties: {
-              Checkbox: {checkbox: {}},
-              CreatedBy: {created_by: {}},
-              CreatedTime: {created_time: {}},
-              Date: {date: {}},
-              Email: {email: {}},
-              Files: {files: {}},
-              Formula: {formula: {expression: "now()"}},
-              LastEditedBy: {last_edited_by: {}},
-              LastEditedTime: {last_edited_time: {}},
-              MultiSelect: {
-                multi_select: {
-                  options: [
-                    {color: "orange", name: "MS1"},
-                    {color: "green", name: "MS2"},
+            "properties" => {
+              "Checkbox" => {"checkbox" => {}},
+              "CreatedBy" => {"created_by" => {}},
+              "CreatedTime" => {"created_time" => {}},
+              "Date" => {"date" => {}},
+              "Email" => {"email" => {}},
+              "Files" => {"files" => {}},
+              "Formula" => {"formula" => {"expression" => "now()"}},
+              "LastEditedBy" => {"last_edited_by" => {}},
+              "LastEditedTime" => {"last_edited_time" => {}},
+              "MultiSelect" => {
+                "multi_select" => {
+                  "options" => [
+                    {"color" => "orange", "name" => "MS1"},
+                    {"color" => "green", "name" => "MS2"},
                   ],
                 },
               },
-              Number: {number: {format: "yen"}},
-              People: {people: {}},
-              PhoneNumber: {phone_number: {}},
-              Relation: {
-                relation: {
-                  database_id: "c37a2c66e3aa4a0da44773de3b80c253",
-                  type: "dual_property",
-                  dual_property: {},
+              "Number" => {"number" => {"format" => "yen"}},
+              "People" => {"people" => {}},
+              "PhoneNumber" => {"phone_number" => {}},
+              "Relation" => {
+                "relation" => {
+                  "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
+                  "type" => "dual_property",
+                  "dual_property" => {},
                 },
               },
-              RichText: {rich_text: {}},
-              Rollup: {
-                rollup: {
-                  function: "sum",
-                  relation_property_name: "Relation",
-                  rollup_property_name: "NumberTitle",
+              "RichText" => {"rich_text" => {}},
+              "Rollup" => {
+                "rollup" => {
+                  "function" => "sum",
+                  "relation_property_name" => "Relation",
+                  "rollup_property_name" => "NumberTitle",
                 },
               },
-              Select: {
-                select: {
-                  options: [
-                    {color: "yellow", name: "S1"},
-                    {color: "default", name: "S2"},
+              "Select" => {
+                "select" => {
+                  "options" => [
+                    {"color" => "yellow", "name" => "S1"},
+                    {"color" => "default", "name" => "S2"},
                   ],
                 },
               },
-              Title: {title: {}},
-              Url: {url: {}},
+              "Title" => {"title" => {}},
+              "Url" => {"url" => {}},
             },
           }
         end
@@ -465,7 +465,7 @@ module NotionRubyMapping
                                             SelectProperty, "Select",
                                             TitleProperty, "Title",
                                             UrlProperty, "Url" do |db, ps|
-            fp, msp, np, rp, rup, sp = ps.values_at :Formula, :MultiSelect, :Number, :Relation, :Rollup, :Select
+            fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
             fp.formula_expression = "now()"
             msp.add_multi_select_option name: "MS1", color: "orange"
             msp.add_multi_select_option name: "MS2", color: "green"
@@ -506,8 +506,8 @@ module NotionRubyMapping
 
       before do
         tc.clear_object_hash
-        fp, msp, np, rp, rup, sp = target.properties.values_at :Formula, :MultiSelect, :Number, :Relation,
-                                                               :Rollup, :Select
+        fp, msp, np, rp, rup, sp = target.properties.values_at "Formula", "MultiSelect", "Number", "Relation",
+                                                               "Rollup", "Select"
         fp.formula_expression = "pi"
         msp.add_multi_select_option name: "MS3", color: "blue"
         np.format = "percent"
@@ -525,67 +525,67 @@ module NotionRubyMapping
       describe "update_property_schema_json" do
         let(:ans) do
           {
-            title: [
+            "title" => [
               {
-                href: nil,
-                plain_text: "New database title",
-                text: {
-                  content: "New database title",
-                  link: nil,
+                "href" => nil,
+                "plain_text" => "New database title",
+                "text" => {
+                  "content" => "New database title",
+                  "link" => nil,
                 },
-                annotations: {
-                  bold: false,
-                  code: false,
-                  color: "default",
-                  italic: false,
-                  strikethrough: false,
-                  underline: false,
+                "annotations" => {
+                  "bold" => false,
+                  "code" => false,
+                  "color" => "default",
+                  "italic" => false,
+                  "strikethrough" => false,
+                  "underline" => false,
                 },
-                type: "text",
+                "type" => "text",
               },
               {
-                href: nil,
-                plain_text: "(Added)",
-                text: {
-                  content: "(Added)",
-                  link: nil,
+                "href" => nil,
+                "plain_text" => "(Added)",
+                "text" => {
+                  "content" => "(Added)",
+                  "link" => nil,
                 },
-                type: "text",
+                "type" => "text",
               },
             ],
-            icon: {emoji: "🎉", type: "emoji"},
-            properties: {
-              Formula: {formula: {expression: "pi"}},
-              MultiSelect: {
-                multi_select: {
-                  options: [
-                    {color: "orange", id: "98aaa1c0-4634-47e2-bfae-d739a8c5e564", name: "MS1"},
-                    {color: "green", id: "71756a93-cfd8-4675-b508-facb1c31af2c", name: "MS2"},
-                    {color: "blue", name: "MS3"},
+            "icon" => {"emoji" => "🎉", "type" => "emoji"},
+            "properties" => {
+              "Formula" => {"formula" => {"expression" => "pi"}},
+              "MultiSelect" => {
+                "multi_select" => {
+                  "options" => [
+                    {"color" => "orange", "id" => "98aaa1c0-4634-47e2-bfae-d739a8c5e564", "name" => "MS1"},
+                    {"color" => "green", "id" => "71756a93-cfd8-4675-b508-facb1c31af2c", "name" => "MS2"},
+                    {"color" => "blue", "name" => "MS3"},
                   ],
                 },
               },
-              Number: {number: {format: "percent"}},
-              Relation: {
-                relation: {
-                  database_id: "c37a2c66e3aa4a0da44773de3b80c253",
-                  type: "dual_property",
-                  dual_property: {},
+              "Number" => {"number" => {"format" => "percent"}},
+              "Relation" => {
+                "relation" => {
+                  "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
+                  "type" => "dual_property",
+                  "dual_property" => {},
                 },
               },
-              Rollup: {
-                rollup: {
-                  function: "average",
-                  relation_property_name: "Relation",
-                  rollup_property_name: "NumberTitle",
+              "Rollup" => {
+                "rollup" => {
+                  "function" => "average",
+                  "relation_property_name" => "Relation",
+                  "rollup_property_name" => "NumberTitle",
                 },
               },
-              Select: {
-                select: {
-                  options: [
-                    {color: "yellow", id: "56a526e1-0cec-4b85-b9db-fc68d00e50c6", name: "S1"},
-                    {color: "default", id: "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", name: "S2"},
-                    {color: "red", name: "S3"},
+              "Select" => {
+                "select" => {
+                  "options" => [
+                    {"color" => "yellow", "id" => "56a526e1-0cec-4b85-b9db-fc68d00e50c6", "name" => "S1"},
+                    {"color" => "default", "id" => "6ead7aee-d7f0-40ba-aa5e-59bccf6c50c8", "name" => "S2"},
+                    {"color" => "red", "name" => "S3"},
                   ],
                 },
               },
@@ -615,14 +615,14 @@ module NotionRubyMapping
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
       let(:ans) do
         {
-          properties: {
-            "added number property": {
-              number: {
-                format: "euro",
+          "properties" => {
+            "added number property" => {
+              "number" => {
+                "format" => "euro",
               },
             },
-            "added url property": {
-              url: {},
+            "added url property" => {
+              "url" => {},
             },
           },
         }
@@ -657,9 +657,9 @@ module NotionRubyMapping
       let(:target) { Database.find "c7697137d49f49c2bbcdd6a665c4f921" }
       let(:ans) do
         {
-          properties: {
-            "added number property": {name: :"renamed number property"},
-            "added url property": {name: :"renamed url property"},
+          "properties" => {
+            "added number property" => {"name" => "renamed number property"},
+            "added url property" => {"name" => "renamed url property"},
           },
         }
       end
@@ -685,7 +685,7 @@ module NotionRubyMapping
         before { target.save }
 
         describe "id" do
-          it { expect(target.properties[:"renamed number property"]).to be_an_instance_of NumberProperty }
+          it { expect(target.properties["renamed number property"]).to be_an_instance_of NumberProperty }
         end
       end
     end

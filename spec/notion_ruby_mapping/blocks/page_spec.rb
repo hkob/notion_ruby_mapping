@@ -122,7 +122,7 @@ module NotionRubyMapping
     end
 
     describe "properties" do
-      let(:target) { page.properties[key] }
+      let(:target) { page.properties[key.to_s] }
 
       context "For an existing top page" do
         let(:page) { Page.find TestConnection::DB_FIRST_PAGE_ID }
@@ -130,19 +130,19 @@ module NotionRubyMapping
         [
           CheckboxProperty, :CheckboxTitle,
           {
-            CheckboxTitle: {
-              type: "checkbox",
-              checkbox: true,
+            "CheckboxTitle" => {
+              "type" => "checkbox",
+              "checkbox" => true,
             },
           },
           CreatedTimeProperty, :CreatedTimeTitle, {},
           DateProperty, :DateTitle, {
-            DateTitle: {
-              type: "date",
-              date: {
-                start: "2022-02-25T01:23:00.000+09:00",
-                end: nil,
-                time_zone: nil,
+            "DateTitle" => {
+              "type" => "date",
+              "date" => {
+                "start" => "2022-02-25T01:23:00.000+09:00",
+                "end" => nil,
+                "time_zone" => nil,
               },
             },
           },
@@ -150,21 +150,21 @@ module NotionRubyMapping
           FormulaProperty, :FormulaTitle, {},
           RollupProperty, :RollupTitle, {},
           EmailProperty, :MailTitle, {
-            MailTitle: {
-              email: "hkobhkob@gmail.com",
-              type: "email",
+            "MailTitle" => {
+              "email" => "hkobhkob@gmail.com",
+              "type" => "email",
             },
           },
           FilesProperty, :"File&MediaTitle", {
-            "File&MediaTitle": {
-              type: "files",
-              files: [
+            "File&MediaTitle" => {
+              "type" => "files",
+              "files" => [
                 {
-                  external: {
-                    url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                  "external" => {
+                    "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                   },
-                  name: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
-                  type: "external",
+                  "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                  "type" => "external",
                 },
               ],
             },
@@ -172,126 +172,126 @@ module NotionRubyMapping
           CreatedByProperty, :CreatedByTitle, {},
           LastEditedByProperty, :LastEditedByTitle, {},
           MultiSelectProperty, :MultiSelectTitle, {
-            MultiSelectTitle: {
-              multi_select: [
+            "MultiSelectTitle" => {
+              "multi_select" => [
                 {
-                  color: "default",
-                  id: "5f554552-b77a-474b-b5c7-4ae819966e32",
-                  name: "Multi Select 2",
+                  "color" => "default",
+                  "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
+                  "name" => "Multi Select 2",
                 },
                 {
-                  color: "yellow",
-                  id: "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
-                  name: "Multi Select 1",
+                  "color" => "yellow",
+                  "id" => "2a0eeeee-b3fd-4072-96a9-865f67cfa6ff",
+                  "name" => "Multi Select 1",
                 },
               ],
-              type: "multi_select",
+              "type" => "multi_select",
             },
           },
           PeopleProperty, :UserTitle, {
-            UserTitle: {
-              people: [
+            "UserTitle" => {
+              "people" => [
                 {
-                  object: "user",
-                  id: "2200a9116a9644bbbd386bfb1e01b9f6",
+                  "object" => "user",
+                  "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
                 },
               ],
-              type: "people",
+              "type" => "people",
             },
           },
           RelationProperty, :RelationTitle, {
-            RelationTitle: {
-              type: "relation",
-              relation: [
+            "RelationTitle" => {
+              "type" => "relation",
+              "relation" => [
                 {
-                  id: "860753bb-6d1f-48de-9621-1fa6e0e31f82",
+                  "id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82",
                 },
               ],
             },
           },
           NumberProperty, :NumberTitle, {
-            NumberTitle: {
-              type: "number",
-              number: 1.41421356,
+            "NumberTitle" => {
+              "type" => "number",
+              "number" => 1.41421356,
             },
           },
           PhoneNumberProperty, :TelTitle, {
-            TelTitle: {
-              type: "phone_number",
-              phone_number: "xx-xxxx-xxxx",
+            "TelTitle" => {
+              "type" => "phone_number",
+              "phone_number" => "xx-xxxx-xxxx",
             },
           },
           SelectProperty, :SelectTitle, {
-            SelectTitle: {
-              type: "select",
-              select: {
-                color: "purple",
-                id: "b32c83bb-c9af-49e8-9b88-122139affdb7",
-                name: "Select 3",
+            "SelectTitle" => {
+              "type" => "select",
+              "select" => {
+                "color" => "purple",
+                "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
+                "name" => "Select 3",
               },
             },
           },
           RichTextProperty, :TextTitle, {
-            TextTitle: {
-              type: "rich_text",
-              rich_text: [
+            "TextTitle" => {
+              "type" => "rich_text",
+              "rich_text" => [
                 {
-                  annotations: {
-                    bold: false,
-                    code: false,
-                    color: "default",
-                    italic: false,
-                    strikethrough: false,
-                    underline: false,
+                  "annotations" => {
+                    "bold" => false,
+                    "code" => false,
+                    "color" => "default",
+                    "italic" => false,
+                    "strikethrough" => false,
+                    "underline" => false,
                   },
-                  href: nil,
-                  plain_text: "def",
-                  text: {
-                    content: "def",
-                    link: nil,
+                  "href" => nil,
+                  "plain_text" => "def",
+                  "text" => {
+                    "content" => "def",
+                    "link" => nil,
                   },
-                  type: "text",
+                  "type" => "text",
                 },
               ],
             },
           },
           TitleProperty, :Title, {
-            Title: {
-              type: "title",
-              title: [
+            "Title" => {
+              "type" => "title",
+              "title" => [
                 {
-                  annotations: {
-                    bold: false,
-                    code: false,
-                    color: "default",
-                    italic: false,
-                    strikethrough: false,
-                    underline: false,
+                  "annotations" => {
+                    "bold" => false,
+                    "code" => false,
+                    "color" => "default",
+                    "italic" => false,
+                    "strikethrough" => false,
+                    "underline" => false,
                   },
-                  href: nil,
-                  plain_text: "ABC",
-                  text: {
-                    content: "ABC",
-                    link: nil,
+                  "href" => nil,
+                  "plain_text" => "ABC",
+                  "text" => {
+                    "content" => "ABC",
+                    "link" => nil,
                   },
-                  type: "text",
+                  "type" => "text",
                 },
               ],
             },
           },
           UniqueIdProperty, :ID, {
-            ID: {
-              type: "unique_id",
-              unique_id: {
-                prefix: "ST",
-                number: 3,
+            "ID" => {
+              "type" => "unique_id",
+              "unique_id" => {
+                "prefix" => "ST",
+                "number" => 3,
               },
             },
           },
           UrlProperty, :UrlTitle, {
-            UrlTitle: {
-              type: "url",
-              url: "https://hkob.hatenablog.com/",
+            "UrlTitle" => {
+              "type" => "url",
+              "url" => "https://hkob.hatenablog.com/",
             },
           }
         ].each_slice(3) do |(klass, title, ans)|
@@ -312,7 +312,7 @@ module NotionRubyMapping
       let!(:target) { Page.find TestConnection::DB_MANY_CHILDREN_PAGE_ID }
 
       it "has 26 relations" do
-        expect(target.properties[:Children].relation.size).to eq 26
+        expect(target.properties["Children"].relation.size).to eq 26
       end
     end
 
@@ -338,12 +338,12 @@ module NotionRubyMapping
           before { target.save }
 
           it "update icon (emoji)" do
-            expect(subject).to eq({type: "emoji", emoji: "😀"})
+            expect(subject).to eq({"type" => "emoji", "emoji" => "😀"})
           end
         end
       end
 
-      context "with link icon" do
+      context "with icon link" do
         let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
         let(:params) { {url: url} }
 
@@ -357,7 +357,7 @@ module NotionRubyMapping
           before { target.save }
 
           it "update icon (link)" do
-            expect(subject).to eq({type: "external", external: {url: url}})
+            expect(subject).to eq({"type" => "external", "external" => {"url" => url}})
           end
         end
       end
@@ -379,11 +379,68 @@ module NotionRubyMapping
           it "update icon (file upload object)" do
             expect(subject).to eq(
               {
-                file: {
-                  url: "https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/bf91dfb5-72e5-4c22-bab7-f4b9f343610f/ErSxuLeq.png-medium.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466WMJXGZJ3%2F20250608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250608T113658Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEK7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQCRwDcy8FCGnwyLhq4HS25fQRC6TfVV3YQMrNHRsUrVsgIgXY2DAKoH34KEsqKA0qcrl6Bn5G7DFknz9YMcuew97noqiAQIh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDOdZh%2BfooUNxMlf5mircAx%2BEoEoF605FjkDX9BcjnNExp0PCtN3KIV6lpr1THqt788Ig9X995g5jPRHjn72DATXSuIjWR%2FKB7uUNe30FxVFZtDKfTX6zqXhdXwahhViHR27zkQs2wWlG8BHi3S4ntEzKDNGlCVz0wA%2BrMdL9OuB9gZK1%2FbS5QWvt005VgaHck9m33wXFSSAD1xaTay%2BDfjSjcFjc4Cgoz7Qi%2Bhk6ET3jeGrJum%2FbcXxGeFBmwNRlMyOTOIUKXOURj71UECsZKPbtyLvbBJ2Yk%2BAaciBPeatA%2BXmJWlYhTRJqsMKliWqcWMqgFlFkvjpAx2t%2BL0alsTP0ujVGhWXohshSNMJYm0FDp%2B72rToWzxRvN1XKxmLGlbrGjNd5TCzyaiBzoaEZQQYCoIi%2BTkqHfmBo7213Y20lURKLNnaR%2FmNn80kLM2fuOpcNShbWHfSktL2zg5Fsr7UGBw8AE5%2FD0shM0IUmx2N2%2B84WcAzpSvMH23IiPn%2FCrPdPqcr7Os9ZwozllQdx%2BAr3rezywUZCT63155cmcCiO1%2Byze7q56eGZ5UIh%2FAzHIxC0u1ZSNGwu1a664mQJbaCJlEN%2F%2BCRRJ4%2BbuJygd6pWsC2shrOPQtOgfq4AvkHXMLGKrc25al9LxNKNMIjNlMIGOqUBHSGCWMW2ZHjpvN%2FaN4T4k8RUXRhmpFmghjbdhEgA7NoAWanBwMery8qJLsOl2b0XEtd2ANBb6gfz3FFoVKjvzocpiYsubz39zOc2WHRsQuAweoeHcTjavNZqMueBqqFg0fbcMoRtSrE8nkgTgsNO8YIpNYC8C0tuJMx6Ve9QZKtY8TbrDBiegLKRBkDjWunt0cW5T8nP3Q6iG7uRMILII9ydjepg&X-Amz-Signature=835ffd4f0ae04a321cecdd3cc27d0e53461bda12f0e0789a57bee07823f96b45&X-Amz-SignedHeaders=host&x-id=GetObject",
-                  expiry_time: "2025-06-08T12:36:58.153Z",
+                "file" => {
+                  "url" => "https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/bf91dfb5-72e5-4c22-bab7-f4b9f343610f/ErSxuLeq.png-medium.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466WMJXGZJ3%2F20250608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250608T113658Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEK7%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQCRwDcy8FCGnwyLhq4HS25fQRC6TfVV3YQMrNHRsUrVsgIgXY2DAKoH34KEsqKA0qcrl6Bn5G7DFknz9YMcuew97noqiAQIh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDOdZh%2BfooUNxMlf5mircAx%2BEoEoF605FjkDX9BcjnNExp0PCtN3KIV6lpr1THqt788Ig9X995g5jPRHjn72DATXSuIjWR%2FKB7uUNe30FxVFZtDKfTX6zqXhdXwahhViHR27zkQs2wWlG8BHi3S4ntEzKDNGlCVz0wA%2BrMdL9OuB9gZK1%2FbS5QWvt005VgaHck9m33wXFSSAD1xaTay%2BDfjSjcFjc4Cgoz7Qi%2Bhk6ET3jeGrJum%2FbcXxGeFBmwNRlMyOTOIUKXOURj71UECsZKPbtyLvbBJ2Yk%2BAaciBPeatA%2BXmJWlYhTRJqsMKliWqcWMqgFlFkvjpAx2t%2BL0alsTP0ujVGhWXohshSNMJYm0FDp%2B72rToWzxRvN1XKxmLGlbrGjNd5TCzyaiBzoaEZQQYCoIi%2BTkqHfmBo7213Y20lURKLNnaR%2FmNn80kLM2fuOpcNShbWHfSktL2zg5Fsr7UGBw8AE5%2FD0shM0IUmx2N2%2B84WcAzpSvMH23IiPn%2FCrPdPqcr7Os9ZwozllQdx%2BAr3rezywUZCT63155cmcCiO1%2Byze7q56eGZ5UIh%2FAzHIxC0u1ZSNGwu1a664mQJbaCJlEN%2F%2BCRRJ4%2BbuJygd6pWsC2shrOPQtOgfq4AvkHXMLGKrc25al9LxNKNMIjNlMIGOqUBHSGCWMW2ZHjpvN%2FaN4T4k8RUXRhmpFmghjbdhEgA7NoAWanBwMery8qJLsOl2b0XEtd2ANBb6gfz3FFoVKjvzocpiYsubz39zOc2WHRsQuAweoeHcTjavNZqMueBqqFg0fbcMoRtSrE8nkgTgsNO8YIpNYC8C0tuJMx6Ve9QZKtY8TbrDBiegLKRBkDjWunt0cW5T8nP3Q6iG7uRMILII9ydjepg&X-Amz-Signature=835ffd4f0ae04a321cecdd3cc27d0e53461bda12f0e0789a57bee07823f96b45&X-Amz-SignedHeaders=host&x-id=GetObject",
+                  "expiry_time" => "2025-06-08T12:36:58.153Z",
                 },
-                type: "file",
+                "type" => "file",
+              },
+            )
+          end
+        end
+      end
+    end
+
+    describe "set_cover" do
+      let(:target) { Page.new id: TestConnection::TOP_PAGE_ID }
+
+      before do
+        target.set_cover(**params)
+      end
+
+      subject { target.cover }
+
+      context "with cover link" do
+        let(:url) { "https://cdn.profile-image.st-hatena.com/users/hkob/profile.png" }
+        let(:params) { {url: url} }
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+
+          it_behaves_like "dry run", :patch, :page_path, use_id: true, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+
+          it "update cover (link)" do
+            expect(subject).to eq({"type" => "external", "external" => {"url" => url}})
+          end
+        end
+      end
+
+      context "with file upload object" do
+        let(:id) { TestConnection::FILE_UPLOAD_IMAGE_ID }
+        let(:file_upload_object) { instance_double(FileUploadObject, id: id) }
+        let(:params) { {file_upload_object: file_upload_object} }
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+
+          it_behaves_like "dry run", :patch, :page_path, use_id: true, json_method: :property_values_json
+        end
+
+        describe "save" do
+          before { target.save }
+
+          it "update cover (file upload object)" do
+            expect(subject).to eq(
+              {
+                "file" => {
+                  "url" => "https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/bf91dfb5-72e5-4c22-bab7-f4b9f343610f/ErSxuLeq.png-medium.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466SCWC6OQZ%2F20250608%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250608T113828Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQDe03nZgmH7Wn6IuW2LJ8zusL56DWxSXVuL4fCn7m%2FX7wIgPQUVMnT7H7AlHkOMYF24RP6syOfRN9TDtbFA%2BHv06coqiAQIif%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDKbsbrsELLC9IAkAjyrcA51TQ0z5zUWBamgsA6Teq1kJYyjzsvpHmAoZYpHS7HeAAVwP%2BTcphLXbV8tMPH9JV1lcmDgPflGUZIbamcFPGHSzC%2F22be1cRRh5aDb0vSNqRr63rWGYthiXnJ8ynK4TXhQyfaNpKDLGm%2BdkVkMabCK2JpWvvDoBW4BUJGLC7S6Lt09QWTZT9P1YuyILW%2BnZvd4%2BRZd%2F3UVPwwhh%2FJtCIVcAon8APIlEZ%2B0YkhD8F95eMBRrvkbGzVQEv0SpAWcVwLOiISBlR4e0h9tlZoeG5%2Ff8Fhj92WypusgyDLH1F4Mmn74kXeK5WwwTxxOCkdexLOh4Rpd%2F84bkiSHVvtSk7UdyNvMaFp7vAmmAI%2Bis7FNA3z%2FcZ8D4z%2BHcXjgwB8lLSdEPU1pZw4mE2MWyuP8SKNiTIWHAcVkEPHOiB2Kd3ZP0B2r8%2BOc1%2FIPRr%2BynDYSOxbhBqlZElC77gjuBe2byLyHm67Ru2qVeDtSLSFCXEgFv0SlMFYwUb4n16cJbqPNKoLvV7ZeaJQIbdclSruAQPkj%2BAA%2FPJgTZQLOl%2Fg6PkEWJt6BoBULPNhnwzLfIqbyrmHci67%2F8RcfQlBVVkbYLL%2B94V%2Fr0xdn0ZQdA73nVnnpN85FxIJ0y%2BmppKuUHMPaJlcIGOqUB656TNrFS4EUM2b%2F4N%2F3CiBPAjL266ada7GcGy6dMEA1hkMKJnqBQI%2FX41gvrDLgMhuunoOIvRmj46fXQT8iYWgrBsO8jkIFE6YRT5PhsnxBfqhVfm1sJ0mIhg3p75JPVTgGqBdSkqoFifHrr0Nvp9ILsfu1qAJAHezeSdFEc%2BDbq%2BLFelG8jAy9qW3JAsM%2BoVYOlz%2BsTJIOSw9v3iGkOpeicieJT&X-Amz-Signature=43148ab23f35a6aad7e20f2cb910dc4382bfac5568fcd6b4481ab8eb91ef0234&X-Amz-SignedHeaders=host&x-id=GetObject",
+                  "expiry_time" => "2025-06-08T12:38:28.886Z",
+                },
+                "type" => "file",
               },
             )
           end
@@ -397,183 +454,183 @@ module NotionRubyMapping
         let(:properties) { target.properties }
 
         {
-          CheckboxTitle: [
+          "CheckboxTitle" => [
             :checkbox=,
             true,
             {
-              CheckboxTitle: {
-                type: "checkbox",
-                checkbox: true,
+              "CheckboxTitle" => {
+                "type" => "checkbox",
+                "checkbox" => true,
               },
             },
           ],
-          DateTitle: [
+          "DateTitle" => [
             :start_date=,
             Date.new(2022, 3, 13),
             {
-              DateTitle: {
-                type: "date",
-                date: {
-                  start: "2022-03-13",
-                  end: nil,
-                  time_zone: nil,
+              "DateTitle" => {
+                "type" => "date",
+                "date" => {
+                  "start" => "2022-03-13",
+                  "end" => nil,
+                  "time_zone" => nil,
                 },
               },
             },
           ],
-          MailTitle: [
+          "MailTitle" => [
             :email=,
             "hkobhkob@gmail.com",
             {
-              MailTitle: {
-                type: "email",
-                email: "hkobhkob@gmail.com",
+              "MailTitle" => {
+                "type" => "email",
+                "email" => "hkobhkob@gmail.com",
               },
             },
           ],
-          "File&MediaTitle": [
+          "File&MediaTitle" => [
             :files=,
             "F1",
             {
-              "File&MediaTitle": {
-                type: "files",
-                files: [
+              "File&MediaTitle" => {
+                "type" => "files",
+                "files" => [
                   {
-                    type: "external",
-                    external: {
-                      url: "F1",
+                    "type" => "external",
+                    "external" => {
+                      "url" => "F1",
                     },
-                    name: "F1",
+                    "name" => "F1",
                   },
                 ],
               },
             },
           ],
-          MultiSelectTitle: [
+          "MultiSelectTitle" => [
             :multi_select=,
             %w[M1 M2],
             {
-              MultiSelectTitle: {
-                type: "multi_select",
-                multi_select: [
+              "MultiSelectTitle" => {
+                "type" => "multi_select",
+                "multi_select" => [
                   {
-                    name: "M1",
+                    "name" => "M1",
                   },
                   {
-                    name: "M2",
+                    "name" => "M2",
                   },
                 ],
               },
             },
           ],
-          UserTitle: [
+          "UserTitle" => [
             :people=,
             "U1",
             {
-              UserTitle: {
-                type: "people",
-                people: [
+              "UserTitle" => {
+                "type" => "people",
+                "people" => [
                   {
-                    object: "user",
-                    id: "U1",
+                    "object" => "user",
+                    "id" => "U1",
                   },
                 ],
               },
             },
           ],
-          RelationTitle: [
+          "RelationTitle" => [
             :relation=,
             "R1",
             {
-              RelationTitle: {
-                type: "relation",
-                relation: [
+              "RelationTitle" => {
+                "type" => "relation",
+                "relation" => [
                   {
-                    id: "R1",
+                    "id" => "R1",
                   },
                 ],
               },
             },
           ],
-          NumberTitle: [
+          "NumberTitle" => [
             :number=,
             12_345,
             {
-              NumberTitle: {
-                type: "number",
-                number: 12_345,
+              "NumberTitle" => {
+                "type" => "number",
+                "number" => 12_345,
               },
             },
           ],
-          TelTitle: [
+          "TelTitle" => [
             :phone_number=,
             "yy-yyyy-yyyy",
             {
-              TelTitle: {
-                type: "phone_number",
-                phone_number: "yy-yyyy-yyyy",
+              "TelTitle" => {
+                "type" => "phone_number",
+                "phone_number" => "yy-yyyy-yyyy",
               },
             },
           ],
-          SelectTitle: [
+          "SelectTitle" => [
             :select=,
             "Select 3",
             {
-              SelectTitle: {
-                type: "select",
-                select: {
-                  name: "Select 3",
+              "SelectTitle" => {
+                "type" => "select",
+                "select" => {
+                  "name" => "Select 3",
                 },
               },
             },
           ],
-          TextTitle: [
+          "TextTitle" => [
             :text=,
             TextObject.new("abcdefg"),
             {
-              TextTitle: {
-                type: "rich_text",
-                rich_text: [
+              "TextTitle" => {
+                "type" => "rich_text",
+                "rich_text" => [
                   {
-                    href: nil,
-                    plain_text: "abcdefg",
-                    text: {
-                      content: "abcdefg",
-                      link: nil,
+                    "href" => nil,
+                    "plain_text" => "abcdefg",
+                    "text" => {
+                      "content" => "abcdefg",
+                      "link" => nil,
                     },
-                    type: "text",
+                    "type" => "text",
                   },
                 ],
               },
             },
           ],
-          Title: [
+          "Title" => [
             :text=,
             TextObject.new("ABCDEFG"),
             {
-              Title: {
-                type: "title",
-                title: [
+              "Title" => {
+                "type" => "title",
+                "title" => [
                   {
-                    type: "text",
-                    href: nil,
-                    plain_text: "ABCDEFG",
-                    text: {
-                      content: "ABCDEFG",
-                      link: nil,
+                    "type" => "text",
+                    "href" => nil,
+                    "plain_text" => "ABCDEFG",
+                    "text" => {
+                      "content" => "ABCDEFG",
+                      "link" => nil,
                     },
                   },
                 ],
               },
             },
           ],
-          UrlTitle: [
+          "UrlTitle" => [
             :url=,
             "URL",
             {
-              UrlTitle: {
-                type: "url",
-                url: "URL",
+              "UrlTitle" => {
+                "type" => "url",
+                "url" => "URL",
               },
             },
           ],
@@ -581,12 +638,12 @@ module NotionRubyMapping
           context key do
             it {
               tc.clear_object_hash
-              if %i[Title TextTitle].include? key
+              if %w[Title TextTitle].include? key
                 properties[key][0].send(method, value)
               else
                 properties[key].send(method, value)
               end
-              expect(target.property_values_json).to eq({properties: json})
+              expect(target.property_values_json).to eq({"properties" => json})
             }
           end
         end
@@ -613,9 +670,9 @@ module NotionRubyMapping
         end
 
         before do
-          ps = target.properties.values_at :CheckboxTitle, :DateTitle, :MailTitle, :"File&MediaTitle",
-                                           :MultiSelectTitle, :UserTitle, :RelationTitle, :NumberTitle,
-                                           :TelTitle, :SelectTitle, :TextTitle, :Title, :UrlTitle, :StatusTitle
+          ps = target.properties.values_at "CheckboxTitle", "DateTitle", "MailTitle", "File&MediaTitle",
+                                           "MultiSelectTitle", "UserTitle", "RelationTitle", "NumberTitle",
+                                           "TelTitle", "SelectTitle", "TextTitle", "Title", "UrlTitle", "StatusTitle"
           @cp, @dp, @mp, @fp, @msp, @up, @rp, @np, @telp, @sp, @tp, @titlep, @urlp, @stp = ps
           @cp.checkbox = true
           @dp.start_date = "2022-03-14"
@@ -645,130 +702,130 @@ module NotionRubyMapping
           aggregate_failures do
             {
               @cp => {
-                type: "checkbox",
-                checkbox: true,
+                "type" => "checkbox",
+                "checkbox" => true,
               },
               @dp => {
-                type: "date",
-                date: {
-                  start: "2022-03-14",
-                  end: nil,
-                  time_zone: nil,
+                "type" => "date",
+                "date" => {
+                  "start" => "2022-03-14",
+                  "end" => nil,
+                  "time_zone" => nil,
                 },
               },
               @mp => {
-                type: "email",
-                email: "hkobhkob@gmail.com",
+                "type" => "email",
+                "email" => "hkobhkob@gmail.com",
               },
               @fp => {
-                type: "files",
-                files: [
+                "type" => "files",
+                "files" => [
                   {
-                    external: {
-                      url: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                    "external" => {
+                      "url" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
                     },
-                    name: "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
-                    type: "external",
+                    "name" => "https://img.icons8.com/ios-filled/250/000000/mac-os.png",
+                    "type" => "external",
                   },
                 ],
               },
               @msp => {
-                type: "multi_select",
-                multi_select: [
+                "type" => "multi_select",
+                "multi_select" => [
                   {
-                    id: "5f554552-b77a-474b-b5c7-4ae819966e32",
-                    name: "Multi Select 2",
-                    color: "default",
+                    "id" => "5f554552-b77a-474b-b5c7-4ae819966e32",
+                    "name" => "Multi Select 2",
+                    "color" => "default",
                   },
                 ],
               },
               @up => {
-                people: [
+                "people" => [
                   {
-                    object: "user",
-                    id: "2200a9116a9644bbbd386bfb1e01b9f6",
+                    "object" => "user",
+                    "id" => "2200a9116a9644bbbd386bfb1e01b9f6",
                   },
                 ],
-                type: "people",
+                "type" => "people",
               },
               @rp => {
-                type: "relation",
-                relation: [
+                "type" => "relation",
+                "relation" => [
                   {
-                    id: "860753bb-6d1f-48de-9621-1fa6e0e31f82",
+                    "id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82",
                   },
                 ],
               },
               @np => {
-                type: "number",
-                number: 3.1415926535,
+                "type" => "number",
+                "number" => 3.1415926535,
               },
               @telp => {
-                type: "phone_number",
-                phone_number: "zz-zzzz-zzzz",
+                "type" => "phone_number",
+                "phone_number" => "zz-zzzz-zzzz",
               },
               @sp => {
-                type: "select",
-                select: {
-                  color: "purple",
-                  id: "b32c83bb-c9af-49e8-9b88-122139affdb7",
-                  name: "Select 3",
+                "type" => "select",
+                "select" => {
+                  "color" => "purple",
+                  "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
+                  "name" => "Select 3",
                 },
               },
               @tp => {
-                type: "rich_text",
-                rich_text: [
+                "type" => "rich_text",
+                "rich_text" => [
                   {
-                    href: nil,
-                    plain_text: "new text",
-                    text: {
-                      content: "new text",
-                      link: nil,
+                    "href" => nil,
+                    "plain_text" => "new text",
+                    "text" => {
+                      "content" => "new text",
+                      "link" => nil,
                     },
-                    annotations: {
-                      bold: false,
-                      code: false,
-                      color: "default",
-                      italic: false,
-                      strikethrough: false,
-                      underline: false,
+                    "annotations" => {
+                      "bold" => false,
+                      "code" => false,
+                      "color" => "default",
+                      "italic" => false,
+                      "strikethrough" => false,
+                      "underline" => false,
                     },
-                    type: "text",
+                    "type" => "text",
                   },
                 ],
               },
               @titlep => {
-                type: "title",
-                title: [
+                "type" => "title",
+                "title" => [
                   {
-                    href: nil,
-                    plain_text: "MNO",
-                    text: {
-                      content: "MNO",
-                      link: nil,
+                    "href" => nil,
+                    "plain_text" => "MNO",
+                    "text" => {
+                      "content" => "MNO",
+                      "link" => nil,
                     },
-                    annotations: {
-                      bold: false,
-                      code: false,
-                      color: "default",
-                      italic: false,
-                      strikethrough: false,
-                      underline: false,
+                    "annotations" => {
+                      "bold" => false,
+                      "code" => false,
+                      "color" => "default",
+                      "italic" => false,
+                      "strikethrough" => false,
+                      "underline" => false,
                     },
-                    type: "text",
+                    "type" => "text",
                   },
                 ],
               },
               @urlp => {
-                type: "url",
-                url: "https://www.google.com/",
+                "type" => "url",
+                "url" => "https://www.google.com/",
               },
               @stp => {
-                type: "status",
-                status: {
-                  color: "purple",
-                  id: "F<XA",
-                  name: "Design",
+                "type" => "status",
+                "status" => {
+                  "color" => "purple",
+                  "id" => "F<XA",
+                  "name" => "Design",
                 },
               },
             }.each do |pp, json|
@@ -782,20 +839,20 @@ module NotionRubyMapping
 
     describe "create" do
       create_page_title = {
-        properties: {
-          Name: {
-            title: [
+        "properties" => {
+          "Name" => {
+            "title" => [
               {
-                href: nil,
-                plain_text: "New Page Title",
-                text: {
-                  content: "New Page Title",
-                  link: nil,
+                "href" => nil,
+                "plain_text" => "New Page Title",
+                "text" => {
+                  "content" => "New Page Title",
+                  "link" => nil,
                 },
-                type: "text",
+                "type" => "text",
               },
             ],
-            type: "title",
+            "type" => "title",
           },
         },
       }
@@ -803,16 +860,16 @@ module NotionRubyMapping
 
       context "build_child_database" do
         let(:target) do
-          parent_db.build_child_page TitleProperty, :Name do |_, ps|
-            ps[:Name] << "New Page Title"
+          parent_db.build_child_page TitleProperty, "Name" do |_, ps|
+            ps["Name"] << "New Page Title"
           end
         end
 
         it { expect(target).to be_new_record }
 
         it_behaves_like "property values json", {
-          parent: {
-            database_id: "1d6b1040a9fb48d99a3d041429816e9f",
+          "parent" => {
+            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
           },
         }.merge(create_page_title)
 
@@ -847,12 +904,12 @@ module NotionRubyMapping
         context "dry_run" do
           let(:target) do
             parent_db.build_child_page TitleProperty, "Name" do |_, ps|
-              ps[:Name] << "New Page Title"
+              ps["Name"] << "New Page Title"
             end
           end
           let(:dry_run) do
             parent_db.create_child_page TitleProperty, "Name", dry_run: true do |_, ps|
-              ps[:Name] << "New Page Title"
+              ps["Name"] << "New Page Title"
             end
           end
 
@@ -874,18 +931,18 @@ module NotionRubyMapping
         let(:dry_run) { page.append_comment "test comment", dry_run: true }
 
         it_behaves_like "dry run", :post, :comments_path, json: {
-          "rich_text": [
+          "rich_text" => [
             {
-              type: "text",
-              text: {
-                content: "test comment",
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => "test comment",
+                "link" => nil,
               },
-              plain_text: "test comment",
-              href: nil,
+              "plain_text" => "test comment",
+              "href" => nil,
             },
           ],
-          "parent": {page_id: TestConnection::TOP_PAGE_ID},
+          "parent": {"page_id" => TestConnection::TOP_PAGE_ID},
         }
       end
     end

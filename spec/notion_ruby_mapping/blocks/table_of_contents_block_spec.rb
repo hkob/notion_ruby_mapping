@@ -4,13 +4,13 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe TableOfContentsBlock do
-    type = :table_of_contents
+    type = "table_of_contents"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], false, {
-      object: "block",
-      type: "table_of_contents",
-      table_of_contents: {
-        color: "gray",
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
+      "object" => "block",
+      "type" => "table_of_contents",
+      "table_of_contents" => {
+        "color" => "gray",
       },
     }
 
@@ -22,7 +22,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "green_background", id: update_id }
 
       it_behaves_like "update block color", type, "orange_background", false

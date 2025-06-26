@@ -7,15 +7,15 @@ module NotionRubyMapping
     # @return [TextObject]
     def initialize(url: nil, file_upload_object: nil, json: {})
       if url
-        @type = :external
+        @type = "external"
         @url = url
       elsif file_upload_object
-        @type = :file_upload
+        @type = "file_upload"
         @file_upload_object = file_upload_object
       elsif json
-        @type = json[:type].to_sym
-        @url = json[@type][:url]
-        @expiry_time = json[@type][:expiry_time]
+        @type = json["type"]
+        @url = json[@type]["url"]
+        @expiry_time = json[@type]["expiry_time"]
       else
         raise StandardError, "FileObject requires url: or json:"
       end
@@ -38,13 +38,13 @@ module NotionRubyMapping
 
     # @return [TrueClass, FalseClass] true if "type" is "external"
     def external?
-      @type == :external
+      @type == "external"
     end
 
     # @param [FileUploadObject] fuo
     def file_upload_object=(fuo)
       @file_upload_object = fuo
-      @type = :file_upload
+      @type = "file_upload"
       @url = nil
       @expiry_time = nil
       @will_update = true
@@ -54,28 +54,28 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/FileObject-6218c354e985423a90904f47a985be33#6b841f75d0234a1aac93fb54348abb96
     def url=(url)
       @url = url
-      @type = :external
+      @type = "external"
       @expiry_time = nil
       @will_update = true
     end
 
     # @return [Hash]
     def property_values_json
-      if @type == :file_upload
+      if @type == "file_upload"
         {
-          type: @type.to_s,
+          "type" => @type.to_s,
           @type => {
-            id: @file_upload_object.id,
+            "id" => @file_upload_object.id,
           },
         }
       else
         ans = {
-          type: @type.to_s,
+          "type" => @type.to_s,
           @type => {
-            url: @url,
+            "url" => @url,
           },
         }
-        ans[@type][:expiry_time] = @expiry_time if @expiry_time
+        ans[@type]["expiry_time"] = @expiry_time if @expiry_time
         ans
       end
     end

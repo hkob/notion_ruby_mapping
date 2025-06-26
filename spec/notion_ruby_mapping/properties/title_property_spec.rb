@@ -3,16 +3,16 @@
 module NotionRubyMapping
   RSpec.describe TitleProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {id: "title"} }
+    let(:no_content_json) { {"id" => "title"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
-    let(:property_cache_first) { PropertyCache.new base_type: :page, page_id: first_page_id }
+    let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
     context "when Database property" do
       context "when created by new" do
-        let(:target) { described_class.new "tp", base_type: :database }
+        let(:target) { described_class.new "tp", base_type: "database" }
 
-        it_behaves_like "has name as", :tp
-        it_behaves_like "property schema json", {tp: {title: {}}}
+        it_behaves_like "has name as", "tp"
+        it_behaves_like "property schema json", {"tp" => {"title" => {}}}
 
         describe "update_from_json" do
           before { target.update_from_json(tc.read_json("title_property_object")) }
@@ -27,7 +27,7 @@ module NotionRubyMapping
 
           it_behaves_like "will update"
           it_behaves_like "assert different property", :property_values_json
-          it_behaves_like "update property schema json", {tp: {name: :new_name}}
+          it_behaves_like "update property schema json", {"tp" => {"name" => "new_name"}}
         end
 
         describe "remove" do
@@ -35,14 +35,14 @@ module NotionRubyMapping
 
           it_behaves_like "will update"
           it_behaves_like "assert different property", :property_values_json
-          it_behaves_like "update property schema json", {tp: nil}
+          it_behaves_like "update property schema json", {"tp" => nil}
         end
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "tp", tc.read_json("title_property_object"), :database }
+        let(:target) { Property.create_from_json "tp", tc.read_json("title_property_object"), "database" }
 
-        it_behaves_like "has name as", :tp
+        it_behaves_like "has name as", "tp"
         it_behaves_like "will not update"
         it_behaves_like "assert different property", :property_values_json
         it_behaves_like "update property schema json", {}
@@ -51,25 +51,25 @@ module NotionRubyMapping
 
     context "when Page property" do
       retrieve_title = {
-        tp: {
-          type: "title",
-          title: [
+        "tp" => {
+          "type" => "title",
+          "title" => [
             {
-              type: "text",
-              text: {
-                content: "ABC",
-                link: nil,
+              "type" => "text",
+              "text" => {
+                "content" => "ABC",
+                "link" => nil,
               },
-              annotations: {
-                bold: false,
-                italic: false,
-                strikethrough: false,
-                underline: false,
-                code: false,
-                color: "default",
+              "annotations" => {
+                "bold" => false,
+                "italic" => false,
+                "strikethrough" => false,
+                "underline" => false,
+                "code" => false,
+                "color" => "default",
               },
-              plain_text: "ABC",
-              href: nil,
+              "plain_text" => "ABC",
+              "href" => nil,
             },
           ],
         },
@@ -80,16 +80,16 @@ module NotionRubyMapping
             "text only",
             [tc.to_text],
             {
-              type: "title",
-              title: [
+              "type" => "title",
+              "title" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "plain_text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "plain_text",
+                    "link" => nil,
                   },
-                  plain_text: "plain_text",
-                  href: nil,
+                  "plain_text" => "plain_text",
+                  "href" => nil,
                 },
               ],
             },
@@ -98,27 +98,27 @@ module NotionRubyMapping
             "text, link text",
             [tc.to_text, tc.to_href],
             {
-              type: "title",
-              title: [
+              "type" => "title",
+              "title" => [
                 {
-                  type: "text",
-                  text: {
-                    content: "plain_text",
-                    link: nil,
+                  "type" => "text",
+                  "text" => {
+                    "content" => "plain_text",
+                    "link" => nil,
                   },
-                  plain_text: "plain_text",
-                  href: nil,
+                  "plain_text" => "plain_text",
+                  "href" => nil,
                 },
                 {
-                  type: "text",
-                  text: {
-                    content: "href_text",
-                    link: {
-                      url: "https://www.google.com/",
+                  "type" => "text",
+                  "text" => {
+                    "content" => "href_text",
+                    "link" => {
+                      "url" => "https://www.google.com/",
                     },
                   },
-                  plain_text: "href_text",
-                  href: "https://www.google.com/",
+                  "plain_text" => "href_text",
+                  "href" => "https://www.google.com/",
                 },
               ],
             },
@@ -127,7 +127,7 @@ module NotionRubyMapping
           context label do
             let(:target) { described_class.new "tp", text_objects: params }
 
-            it_behaves_like "property values json", {tp: ans_json}
+            it_behaves_like "property values json", {"tp" => ans_json}
             it_behaves_like "will not update"
 
             describe "update_from_json" do
@@ -142,7 +142,7 @@ module NotionRubyMapping
       describe "a title property from property_item_json" do
         let(:target) { Property.create_from_json "tp", tc.read_json("retrieve_property_title") }
 
-        it_behaves_like "has name as", :tp
+        it_behaves_like "has name as", "tp"
         it_behaves_like "will not update"
         it_behaves_like "property values json", retrieve_title
 
@@ -167,9 +167,9 @@ module NotionRubyMapping
         end
 
         context "when created from json (no content)" do
-          let(:target) { Property.create_from_json "tp", no_content_json, :page, property_cache_first }
+          let(:target) { Property.create_from_json "tp", no_content_json, "page", property_cache_first }
 
-          it_behaves_like "has name as", :tp
+          it_behaves_like "has name as", "tp"
           it_behaves_like "will not update"
           it { expect(target).not_to be_contents }
 

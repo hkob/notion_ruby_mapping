@@ -7,21 +7,21 @@ module NotionRubyMapping
 
     def initialize(json: nil, id: nil, type: nil, value: nil, query: nil)
       super(json: json, id: id)
-      @has_more = @json[:has_more]
+      @has_more = @json["has_more"]
       @load_all_contents = !@has_more
 
-      case type.to_sym
-      when :comment_parent
+      case type
+      when "comment_parent"
         @comment_parent = value
-      when :database
+      when "database"
         @database = value
-      when :parent
+      when "parent"
         @parent = value
-      when :property
+      when "property"
         @property = value
-      when :user_object
+      when "user_object"
         @user_object = value
-      when :search
+      when "search"
         @search = value
       end
       @query = query
@@ -53,15 +53,15 @@ module NotionRubyMapping
                                              @query.query_json
                  },
                  create_object: lambda { |json|
-                   case json[:type]&.to_sym
-                   when :people
-                     UserObject.new json: json[:people]
-                   when :relation
-                     json[:relation][:id]
-                   when :rich_text
-                     RichTextObject.create_from_json json[:rich_text]
-                   when :title
-                     RichTextObject.create_from_json json[:title]
+                   case json["type"]
+                   when "people"
+                     UserObject.new json: json["people"]
+                   when "relation"
+                     json["relation"]["id"]
+                   when "rich_text"
+                     RichTextObject.create_from_json json["rich_text"]
+                   when "title"
+                     RichTextObject.create_from_json json["title"]
                    else
                      json
                    end
@@ -97,7 +97,7 @@ module NotionRubyMapping
         unless @load_all_contents
           @query.start_cursor = nil
           @json = query.call
-          @has_more = @json[:has_more]
+          @has_more = @json["has_more"]
         end
         @index = 0
         @has_content = true
@@ -110,10 +110,10 @@ module NotionRubyMapping
           block.call object
         elsif @has_more
           if base
-            @query.start_cursor = @json[:next_cursor]
+            @query.start_cursor = @json["next_cursor"]
             @json = query.call
             @index = 0
-            @has_more = @json[:has_more]
+            @has_more = @json["has_more"]
           else
             @has_content = false
           end
@@ -125,7 +125,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def results
-      @json[:results]
+      @json["results"]
     end
   end
 end

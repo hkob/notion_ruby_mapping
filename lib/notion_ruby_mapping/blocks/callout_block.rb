@@ -15,7 +15,7 @@ module NotionRubyMapping
         decode_block_rich_text_array
         decode_color
       else
-        rich_text_array_and_color :rich_text, text_info, color
+        rich_text_array_and_color "rich_text", text_info, color
         @emoji = EmojiObject.emoji_object emoji if emoji
         @file_object = FileObject.file_object file_url if file_url
         add_sub_blocks sub_blocks
@@ -32,10 +32,10 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = @rich_text_array.update_property_schema_json not_update
-      ans[type][:color] = @color
-      ans[type][:icon] = @emoji.property_values_json if @emoji
-      ans[type][:icon] = @file_object.property_values_json if @file_object
-      ans[type][:children] = @sub_blocks.map(&:block_json) if @sub_blocks
+      ans[type]["color"] = @color
+      ans[type]["icon"] = @emoji.property_values_json if @emoji
+      ans[type]["icon"] = @file_object.property_values_json if @file_object
+      ans[type]["children"] = @sub_blocks.map(&:block_json) if @sub_blocks
       ans
     end
 
@@ -43,7 +43,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/CalloutBlock-0eb8b64bea664bc89fad706a866a6e26#b3598e385c2d4a23ada506441a7f0f32
     def color=(new_color)
       @color = new_color
-      @payload.add_update_block_key :color
+      @payload.add_update_block_key "color"
     end
 
     # @return [String, nil]
@@ -57,7 +57,7 @@ module NotionRubyMapping
     def emoji=(emoji)
       @emoji = EmojiObject.emoji_object emoji
       @file_object = nil
-      @payload.add_update_block_key :icon
+      @payload.add_update_block_key "icon"
     end
 
     # @return [String]
@@ -71,12 +71,12 @@ module NotionRubyMapping
     def file_url=(url)
       @file_object = FileObject.file_object url
       @emoji = nil
-      @payload.add_update_block_key :icon
+      @payload.add_update_block_key "icon"
     end
 
-    # @return [Symbol]
+    # @return [String]
     def type
-      :callout
+      "callout"
     end
   end
 end

@@ -27,7 +27,7 @@ module NotionRubyMapping
     # @param [String, Symbol] name
     # @param [Hash, Array] json
     # @param [Array<RichTextObject>] text_objects
-    def initialize(name, will_update: false, base_type: :page, json: nil, text_objects: nil, property_id: nil,
+    def initialize(name, will_update: false, base_type: "page", json: nil, text_objects: nil, property_id: nil,
                    property_cache: nil, query: nil)
       raise StandardError, "TextObject is abstract class.  Please use RichTextProperty." if instance_of? TextProperty
 

@@ -4,12 +4,12 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ColumnListBlock do
-    type = :column_list
+    type = "column_list"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], true, {
-      object: "block",
-      type: "column_list",
-      column_list: {},
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
+      "object" => "block",
+      "type" => "column_list",
+      "column_list" => {},
     }
 
     describe "create_child_block" do

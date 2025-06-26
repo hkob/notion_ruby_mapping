@@ -4,32 +4,32 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe ToggleBlock do
-    type = :toggle
+    type = "toggle"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], true, {
-      object: "block",
-      type: "toggle",
-      toggle: {
-        rich_text: [
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
+      "object" => "block",
+      "type" => "toggle",
+      "toggle" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Toggle",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Toggle",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              italic: false,
-              strikethrough: false,
-              underline: false,
-              code: false,
-              color: "default",
+            "annotations" => {
+              "bold" => false,
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
+              "code" => false,
+              "color" => "default",
             },
-            plain_text: "Toggle",
-            href: nil,
+            "plain_text" => "Toggle",
+            "href" => nil,
           },
         ],
-        color: "default",
+        "color" => "default",
       },
     }
 
@@ -42,7 +42,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "Old Toggle", id: update_id, color: "green_background" }
 
       it_behaves_like "update block rich text array", type, "New Toggle"

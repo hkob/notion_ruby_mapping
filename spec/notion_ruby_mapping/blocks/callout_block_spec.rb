@@ -4,32 +4,32 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe CalloutBlock do
-    type = :callout
+    type = "callout"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[type.to_sym], true, {
-      object: "block",
-      type: "callout",
-      callout: {
-        rich_text: [
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
+      "object" => "block",
+      "type" => "callout",
+      "callout" => {
+        "rich_text" => [
           {
-            type: "text",
-            text: {
-              content: "Callout",
-              link: nil,
+            "type" => "text",
+            "text" => {
+              "content" => "Callout",
+              "link" => nil,
             },
-            annotations: {
-              bold: false,
-              code: false,
-              color: "default",
-              italic: false,
-              strikethrough: false,
-              underline: false,
+            "annotations" => {
+              "bold" => false,
+              "code" => false,
+              "color" => "default",
+              "italic" => false,
+              "strikethrough" => false,
+              "underline" => false,
             },
-            href: nil,
-            plain_text: "Callout",
+            "href" => nil,
+            "plain_text" => "Callout",
           },
         ],
-        color: "gray_background",
+        "color" => "gray_background",
       },
     }
 
@@ -55,7 +55,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) { described_class.new "old text", id: update_id, color: "green_background" }
 
       it_behaves_like "update block rich text array", type, "new text"
@@ -65,11 +65,11 @@ module NotionRubyMapping
         let(:file_url) { "https://img.icons8.com/ios-filled/250/000000/mac-os.png" }
         let(:json) do
           {
-            callout: {
-              icon: {
-                type: "external",
-                external: {
-                  url: file_url,
+            "callout" => {
+              "icon" => {
+                "type" => "external",
+                "external" => {
+                  "url" => file_url,
                 },
               },
             },
@@ -95,10 +95,10 @@ module NotionRubyMapping
         let(:emoji) { "💡" }
         let(:json) do
           {
-            callout: {
-              icon: {
-                type: "emoji",
-                emoji: "💡",
+            "callout" => {
+              "icon" => {
+                "type" => "emoji",
+                "emoji" => "💡",
               },
             },
           }

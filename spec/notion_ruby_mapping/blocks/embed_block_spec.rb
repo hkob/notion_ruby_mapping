@@ -4,14 +4,14 @@ require_relative "../../spec_helper"
 
 module NotionRubyMapping
   RSpec.describe EmbedBlock do
-    type = :embed
+    type = "embed"
 
-    it_behaves_like "retrieve block", described_class, TestConnection::BLOCK_ID_HASH[:embed_twitter], false, {
-      object: "block",
-      type: "embed",
-      embed: {
-        url: "https://twitter.com/hkob/status/1517825460025331712",
-        caption: [],
+    it_behaves_like "retrieve block", described_class, TestConnection.block_id("embed_twitter"), false, {
+      "object" => "block",
+      "type" => "embed",
+      "embed" => {
+        "url" => "https://twitter.com/hkob/status/1517825460025331712",
+        "caption" => [],
       },
     }
 
@@ -26,7 +26,7 @@ module NotionRubyMapping
     end
 
     describe "save (update)" do
-      let(:update_id) { TestConnection::UPDATE_BLOCK_ID_HASH[type.to_sym] }
+      let(:update_id) { TestConnection.update_block_id(type) }
       let(:target) do
         described_class.new "https://twitter.com/hkob/status/1507972453095833601",
                             id: update_id, caption: "NotionRubyMapping開発記録(21)"

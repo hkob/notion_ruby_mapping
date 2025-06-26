@@ -3,13 +3,13 @@
 module NotionRubyMapping
   # Notion block
   class ChildPageBlock < ChildBaseBlock
-    # @return [Symbol]
+    # @return [String]
     def type
-      :child_page
+      "child_page"
     end
 
     def title
-      @json[type][:title]
+      @json[type]["title"]
     end
   end
 end

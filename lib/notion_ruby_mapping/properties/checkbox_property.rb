@@ -4,7 +4,7 @@ module NotionRubyMapping
   # Checkbox property
   class CheckboxProperty < Property
     include EqualsDoesNotEqual
-    TYPE = :checkbox
+    TYPE = "checkbox"
 
     ### Public announced methods
 
@@ -33,7 +33,7 @@ module NotionRubyMapping
 
     # @param [String, Symbol] name Property name
     # @param [Boolean, Hash] json
-    def initialize(name, will_update: false, base_type: :page, property_id: nil, property_cache: nil, json: nil)
+    def initialize(name, will_update: false, base_type: "page", property_id: nil, property_cache: nil, json: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       @json = if database?
@@ -48,7 +48,7 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      {@name => {checkbox: @json, type: "checkbox"}}
+      {@name => {"checkbox" => @json, "type" => "checkbox"}}
     end
   end
 end

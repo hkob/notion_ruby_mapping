@@ -18,7 +18,7 @@ module NotionRubyMapping
 
     # @return [String (frozen)]
     def type
-      :column_list
+      "column_list"
     end
 
     # @param [Boolean] not_update false when update
@@ -26,7 +26,7 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = super
       ans[type] = {}
-      ans[type][:children] = @columns.map(&:block_json) if @columns
+      ans[type]["children"] = @columns.map(&:block_json) if @columns
       ans
     end
   end

@@ -42,7 +42,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
     def build_child_page(*assign)
       assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
-      page = Page.new assign: assign, parent: {database_id: @id}
+      page = Page.new assign: assign, parent: {"database_id" => @id}
       pp = page.properties
       pp.clear_will_update
       yield page, pp if block_given?
@@ -55,7 +55,7 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
     def create_child_page(*assign, dry_run: false)
       assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
-      page = Page.new assign: assign, parent: {database_id: @id}
+      page = Page.new assign: assign, parent: {"database_id" => @id}
       pp = page.properties
       pp.clear_will_update
       yield page, pp if block_given?
@@ -65,12 +65,12 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::RichTextArray]
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#217a7d988c404d68b270c4874a9117b4
     def database_title
-      @database_title ||= RichTextArray.new :title, json: (self[:title]), will_update: new_record?
+      @database_title ||= RichTextArray.new "title", json: (self["title"]), will_update: new_record?
     end
 
     # @return [NotionRubyMapping::RichTextArray]
     def description
-      RichTextArray.new :description, json: self[:description]
+      RichTextArray.new "description", json: self["description"]
     end
 
     # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] text_info
@@ -80,7 +80,7 @@ module NotionRubyMapping
 
     # @return [Boolean]
     def is_inline
-      self[:is_inline]
+      self["is_inline"]
     end
 
     # @param [Boolean] flag

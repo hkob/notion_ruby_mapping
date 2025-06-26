@@ -4,7 +4,7 @@ module NotionRubyMapping
   # Select property
   class FilesProperty < Property
     include IsEmptyIsNotEmpty
-    TYPE = :files
+    TYPE = "files"
 
     attr_reader :files
 
@@ -36,7 +36,7 @@ module NotionRubyMapping
 
     # @param [String, Symbol] name Property name
     # @param [String] files files value (optional)
-    def initialize(name, will_update: false, base_type: :page, json: nil, files: [], property_id: nil,
+    def initialize(name, will_update: false, base_type: "page", json: nil, files: [], property_id: nil,
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
@@ -44,7 +44,7 @@ module NotionRubyMapping
         @files = json || {}
       elsif json
         @files = json.map { |sub_json| FileObject.new json: sub_json }
-        @file_names = json.map { |sub_json| sub_json[:name] }
+        @file_names = json.map { |sub_json| sub_json["name"] }
       elsif !files.empty?
         @files = Array(files).map { |url| FileObject.file_object url }
         @file_names = Array(files)
@@ -56,22 +56,22 @@ module NotionRubyMapping
     # @return [Hash]
     def property_values_json
       assert_page_property __method__
-      if @files.map(&:type).include? :file
+      if @files.map(&:type).include? "file"
         {}
       else
         files = @files.map(&:property_values_json)
         @file_names&.each_with_index do |name, i|
-          files[i][:name] = name.is_a?(FileUploadObject) ? name.fname : name
+          files[i]["name"] = name.is_a?(FileUploadObject) ? name.fname : name
         end
-        {@name => {files: files, type: "files"}}
+        {@name => {"files" => files, "type" => "files"}}
       end
     end
 
     def update_from_json(json)
       return if database?
 
-      @files = json[:files].map { |sub_json| FileObject.new json: sub_json }
-      @file_names = json[:files].map { |sub_json| sub_json[:name] }
+      @files = json["files"].map { |sub_json| FileObject.new json: sub_json }
+      @file_names = json["files"].map { |sub_json| sub_json["name"] }
       @will_update = false
       self
     end
@@ -82,10 +82,10 @@ module NotionRubyMapping
     # @return [Hash]
     def url_to_hash(url)
       {
-        name: url,
-        type: "external",
-        external: {
-          url: url,
+        "name" => url,
+        "type" => "external",
+        "external" => {
+          "url" => url,
         },
       }
     end

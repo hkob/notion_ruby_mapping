@@ -12,10 +12,10 @@ module NotionRubyMapping
       if @json
         decode_block_rich_text_array
         decode_block_caption
-        @language = json[type][:language] || "shell"
+        @language = json[type]["language"] || "shell"
       else
-        rich_text_array_and_color :rich_text, text_info
-        @caption = RichTextArray.rich_text_array :caption, caption
+        rich_text_array_and_color "rich_text", text_info
+        @caption = RichTextArray.rich_text_array "caption", caption
         @language = language
       end
     end
@@ -32,19 +32,19 @@ module NotionRubyMapping
       ans[type] = @rich_text_array.update_property_schema_json(not_update).merge(
         @caption.update_property_schema_json(not_update),
       )
-      ans[type][:language] = @language
+      ans[type]["language"] = @language
       ans
     end
 
     # @param [String] new_language
     def language=(new_language)
       @language = new_language
-      @payload.add_update_block_key :language
+      @payload.add_update_block_key "language"
     end
 
-    # @return [Symbol]
+    # @return [String]
     def type
-      :code
+      "code"
     end
   end
 end

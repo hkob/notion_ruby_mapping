@@ -3,9 +3,9 @@
 module NotionRubyMapping
   # Notion block
   class ImageBlock < FileBaseBlock
-    # @return [String (frozen)]
+    # @return [String]
     def type
-      :image
+      "image"
     end
   end
 end
