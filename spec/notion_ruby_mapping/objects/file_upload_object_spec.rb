@@ -22,9 +22,10 @@ module NotionRubyMapping
           allow(Faraday::Multipart::FilePart).to receive(:new).and_return(instance_double(Faraday::Multipart::FilePart))
         end
 
-        subject { described_class.new(fname: fname) }
+        subject { described_class.new fname: fname }
 
         it { expect(subject.id).to eq id }
+        it { expect(subject.status).to eq "pending" }
       end
 
       context "with a large file" do
@@ -57,9 +58,21 @@ module NotionRubyMapping
           )
         end
 
-        subject { described_class.new(fname: fname) }
+        subject { described_class.new fname: fname }
 
         it { expect(subject.id).to eq id }
+        it { expect(subject.status).to eq "pending" }
+      end
+
+      context "with an external file" do
+        let(:fname) { "dummy.pdf" }
+        let(:id) { TestConnection::FILE_UPLOAD_PDF_ID }
+        let(:external_url) { "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+
+        subject { described_class.new fname: fname, external_url: external_url }
+        it { expect(subject.id).to eq id }
+        it { expect(subject.status).to eq "pending" }
+        it { expect(subject.reload.status).to eq "uploaded" }
       end
     end
 

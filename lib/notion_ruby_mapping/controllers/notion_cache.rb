@@ -188,13 +188,13 @@ module NotionRubyMapping
     # @param [String] id
     # @param [Hash] options
     # @return [Hash]
-    def file_upload_request(fname, id, options = {})
-      multipart_request(file_upload_path(id), fname, options)
+    def send_file_upload_request(fname, id, options = {})
+      multipart_request(send_file_upload_path(id), fname, options)
     end
 
     # @param [String] id
     # @return [String]
-    def file_upload_path(id)
+    def send_file_upload_path(id)
       "v1/file_uploads/#{id}/send"
     end
 
@@ -301,6 +301,14 @@ module NotionRubyMapping
     # @param [NotionRubyMapping::Query, NilClass] query
     def retrieve_comments_request(block_id, query)
       request :get, retrieve_comments_path(block_id), (query&.query_json || {})
+    end
+
+    def file_upload_request(file_id)
+      request :get, file_upload_path(file_id)
+    end
+
+    def file_upload_path(file_id)
+      "v1/file_uploads/#{file_id}"
     end
 
     # @param [Symbol] method

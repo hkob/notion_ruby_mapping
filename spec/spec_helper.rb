@@ -60,6 +60,7 @@ module NotionRubyMapping
     FILE_UPLOAD_IMAGE_ID = "20cd8e4e98ab81aa973b00b23083c115"
     FILE_UPLOAD_PAGE_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     FILE_UPLOAD_VIDEO_ID = "21ad8e4e98ab814e8d9600b2ded97d6c"
+    FILE_UPLOAD_PDF_ID = "21fd8e4e98ab8108bb7700b2ea9e9905"
     BLOCK_ID_HASH = {
       append_after_parent: APPEND_AFTER_PARENT_ID,
       append_after_previous: APPEND_AFTER_PREVIOUS_ID,
@@ -206,6 +207,7 @@ module NotionRubyMapping
       append_after
       create_file_upload
       complete
+      retrieve
     end
 
     # @param [Symbol] method
@@ -225,12 +227,24 @@ module NotionRubyMapping
       generate_stubs_sub :post, __method__, :file_uploads_path, {
         image: [nil, 200, {}],
         video: [nil, 200, {"number_of_parts" => 2, "mode" => "multi_part", "filename" => "sample-15s.mp4"}],
+        external_url: [nil, 200,
+                       {
+                         "mode" => "external_url",
+                         "external_url" => "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+                         "filename" => "dummy.pdf",
+                       }],
       }
     end
 
     def complete
       generate_stubs_sub :post, __method__, :complete_a_file_upload_path, {
         a_file_upload: [FILE_UPLOAD_VIDEO_ID, 200],
+      }
+    end
+
+    def retrieve
+      generate_stubs_sub :get, __method__, :file_upload_path, {
+        a_file_upload: [FILE_UPLOAD_PDF_ID, 200],
       }
     end
 
