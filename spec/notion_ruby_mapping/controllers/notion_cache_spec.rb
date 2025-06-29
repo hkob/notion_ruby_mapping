@@ -54,11 +54,15 @@ module NotionRubyMapping
     end
 
     describe "file_upload_path" do
-      it { expect(nc.file_upload_path("ABC")).to eq "v1/file_uploads/ABC/send" }
+      it { expect(nc.file_upload_path("ABC")).to eq "v1/file_uploads/ABC" }
     end
 
     describe "file_uploads_path" do
       it { expect(nc.file_uploads_path).to eq "v1/file_uploads" }
+    end
+
+    describe "send_file_upload_path" do
+      it { expect(nc.send_file_upload_path("ABC")).to eq "v1/file_uploads/ABC/send" }
     end
 
     describe "database_path" do

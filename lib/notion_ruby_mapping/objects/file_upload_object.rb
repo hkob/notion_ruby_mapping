@@ -33,13 +33,21 @@ class FileUploadObject
       end
     end
   end
-  attr_reader :id, :fname
+  attr_reader :id, :fname, :status
 
   # @return [FileUploadObject]
   def create(payload)
     nc = NotionRubyMapping::NotionCache.instance
     response = nc.create_file_upload_request(payload)
     @id = nc.hex_id response["id"]
+    @status = response["status"]
+  end
+
+  def reload
+    nc = NotionRubyMapping::NotionCache.instance
+    response = nc.file_upload_request @id
+    @status = response["status"]
+    self
   end
 
   # @param [String] fname
@@ -53,7 +61,7 @@ class FileUploadObject
       status = "uploaded"
     end
     nc = NotionRubyMapping::NotionCache.instance
-    response = nc.file_upload_request fname, @id, options
+    response = nc.send_file_upload_request fname, @id, options
     return if nc.hex_id(response["id"]) == @id && response["status"] == status
 
     raise StandardError, "File upload failed: #{response}"
