@@ -26,6 +26,38 @@ module NotionRubyMapping
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", :email, {}
         end
+      end
+
+      context "created from json" do
+        let(:target) { Property.create_from_json "ep", tc.read_json("email_property_object"), "database" }
+
+        it_behaves_like "has name as", "ep"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "update property schema json", {}
+        it_behaves_like "raw json", :email, {}
+      end
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { described_class.new "ep", base_type: "data_source" }
+
+        it_behaves_like "has name as", "ep"
+        it_behaves_like "filter test", described_class,
+                        %w[equals does_not_equal contains does_not_contain starts_with ends_with], value: "abc"
+        it_behaves_like "filter test", described_class, %w[is_empty is_not_empty]
+        it_behaves_like "raw json", :email, {}
+        it_behaves_like "property schema json", {"ep" => {"email" => {}}}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("email_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {}
+          it_behaves_like "raw json", :email, {}
+        end
 
         describe "new_name=" do
           before { target.new_name = "new_name" }
@@ -45,7 +77,7 @@ module NotionRubyMapping
       end
 
       context "created from json" do
-        let(:target) { Property.create_from_json "ep", tc.read_json("email_property_object"), "database" }
+        let(:target) { Property.create_from_json "ep", tc.read_json("email_property_object"), "data_source" }
 
         it_behaves_like "has name as", "ep"
         it_behaves_like "will not update"

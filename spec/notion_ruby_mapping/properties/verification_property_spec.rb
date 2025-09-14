@@ -16,8 +16,8 @@ module NotionRubyMapping
             "state" => "verified",
             "verified_by" => {"id" => "2200a911-6a96-44bb-bd38-6bfb1e01b9f6", "object" => "user"},
             "date" => {
-              "start" => "2025-02-10T15:00:00.000Z",
-              "end" => "2025-02-17T15:00:00.000Z",
+              "start" => "2025-08-31T15:00:00.000Z",
+              "end" => "2025-11-29T15:00:00.000Z",
               "time_zone" => nil,
             },
           },

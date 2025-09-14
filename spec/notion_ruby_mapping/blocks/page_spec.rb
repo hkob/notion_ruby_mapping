@@ -7,6 +7,8 @@ module NotionRubyMapping
     tc = TestConnection.instance
     let!(:nc) { tc.nc }
 
+    PAGE_TITLE_FOR_CREATED_PAGE = "New Page by data_source_id"
+
     describe "find" do
       subject { -> { described_class.find page_id } }
 
@@ -844,9 +846,9 @@ module NotionRubyMapping
             "title" => [
               {
                 "href" => nil,
-                "plain_text" => "New Page Title",
+                "plain_text" => PAGE_TITLE_FOR_CREATED_PAGE,
                 "text" => {
-                  "content" => "New Page Title",
+                  "content" => PAGE_TITLE_FOR_CREATED_PAGE,
                   "link" => nil,
                 },
                 "type" => "text",
@@ -856,12 +858,12 @@ module NotionRubyMapping
           },
         },
       }
-      let(:parent_db) { Database.new id: TestConnection::PARENT_DATABASE_ID }
+      let(:parent_data_source) { DataSource.new id: TestConnection::PARENT_DATA_SOURCE_ID }
 
-      context "build_child_database" do
+      context "when build_child_page" do
         let(:target) do
-          parent_db.build_child_page TitleProperty, "Name" do |_, ps|
-            ps["Name"] << "New Page Title"
+          parent_data_source.build_child_page TitleProperty, "Name" do |_, ps|
+            ps["Name"] << "New Page by data_source_id"
           end
         end
 
@@ -869,7 +871,7 @@ module NotionRubyMapping
 
         it_behaves_like "property values json", {
           "parent" => {
-            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
+            "data_source_id" => TestConnection::PARENT_DATA_SOURCE_ID,
           },
         }.merge(create_page_title)
 
@@ -883,32 +885,32 @@ module NotionRubyMapping
           before { target.save }
 
           it_behaves_like "property values json", {}
-          it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
+          it { expect(target.id).to eq "267d8e4e98ab81ce88f2c23f71324a63" }
           it { expect(target).not_to be_new_record }
         end
       end
 
-      context "create_child_database" do
+      context "create_child_page" do
         context "not dry_run" do
           let(:target) do
-            parent_db.create_child_page TitleProperty, "Name" do |_, ps|
-              ps["Name"] << "New Page Title"
+            parent_data_source.create_child_page TitleProperty, "Name" do |_, ps|
+              ps["Name"] << PAGE_TITLE_FOR_CREATED_PAGE
             end
           end
 
           it_behaves_like "property values json", {}
-          it { expect(target.id).to eq "b6e9af0269cd4999bce9e28593f65070" }
+          it { expect(target.id).to eq "267d8e4e98ab81ce88f2c23f71324a63" }
           it { expect(target).not_to be_new_record }
         end
 
         context "dry_run" do
           let(:target) do
-            parent_db.build_child_page TitleProperty, "Name" do |_, ps|
+            parent_data_source.build_child_page TitleProperty, "Name" do |_, ps|
               ps["Name"] << "New Page Title"
             end
           end
           let(:dry_run) do
-            parent_db.create_child_page TitleProperty, "Name", dry_run: true do |_, ps|
+            parent_data_source.create_child_page TitleProperty, "Name", dry_run: true do |_, ps|
               ps["Name"] << "New Page Title"
             end
           end

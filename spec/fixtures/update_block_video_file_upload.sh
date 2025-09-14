@@ -1,6 +1,6 @@
 #!/bin/sh
 curl -X PATCH 'https://api.notion.com/v1/blocks/20bd8e4e98ab80269cd7e7c36a2072a0' \
-  -H 'Notion-Version: 2022-06-28' \
+  -H 'Notion-Version: 2025-09-03' \
   -H 'Authorization: Bearer '"$NOTION_API_KEY"'' \
   -H 'Content-Type: application/json' \
   --data '{

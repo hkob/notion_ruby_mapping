@@ -14,10 +14,11 @@
   "cover": null,
   "icon": null,
   "parent": {
-    "type": "database_id",
-    "database_id": "c4b59c45-d24e-410d-b717-d68357de35d8"
+    "type": "data_source_id",
+    "data_source_id": "5a0c756b-a0a7-4799-906f-37e622ea502b"
   },
   "archived": false,
+  "in_trash": false,
   "properties": {
     "Children": {
       "id": "%60%5B%3E%7B",
@@ -130,5 +131,7 @@
       ]
     }
   },
-  "url": "https://www.notion.so/A-parent-b56cba9682ab46f2866ae7a9e590dff3"
+  "url": "https://www.notion.so/A-parent-b56cba9682ab46f2866ae7a9e590dff3",
+  "public_url": "https://hkob.notion.site/A-parent-b56cba9682ab46f2866ae7a9e590dff3",
+  "request_id": "5b2ce087-9b22-491a-b4a9-49a7ae65c17f"
 }

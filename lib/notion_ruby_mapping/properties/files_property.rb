@@ -40,7 +40,7 @@ module NotionRubyMapping
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
-      if database?
+      if database_or_data_source?
         @files = json || {}
       elsif json
         @files = json.map { |sub_json| FileObject.new json: sub_json }
@@ -68,7 +68,7 @@ module NotionRubyMapping
     end
 
     def update_from_json(json)
-      return if database?
+      return if database_or_data_source?
 
       @files = json["files"].map { |sub_json| FileObject.new json: sub_json }
       @file_names = json["files"].map { |sub_json| sub_json["name"] }

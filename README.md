@@ -15,9 +15,10 @@ Development note is here.
 - [notion\_ruby\_mapping](#notion_ruby_mapping)
   - [Table of Contents](#table-of-contents)
   - [0. History of Major Changes / 主な変更履歴](#0-history-of-major-changes--主な変更履歴)
-    - [0.1 Changes in v0.7.0](#01-changes-in-v070)
-    - [0.2 Changes in v0.6.0](#02-changes-in-v060)
-    - [0.3 Changes in v0.5.0](#03-changes-in-v050)
+    - [0.1 Changes in v3.0.0](#01-changes-in-v300)
+    - [0.2 Changes in v0.7.0](#02-changes-in-v070)
+    - [0.3 Changes in v0.6.0](#03-changes-in-v060)
+    - [0.4 Changes in v0.5.0](#04-changes-in-v050)
   - [1. Installation / インストール方法](#1-installation--インストール方法)
   - [2. How to use / 利用方法](#2-how-to-use--利用方法)
     - [2.1 Create a New Integration / インテグレーションの作成](#21-create-a-new-integration--インテグレーションの作成)
@@ -32,13 +33,21 @@ Development note is here.
 
 ## 0. History of Major Changes / 主な変更履歴
 
-### 0.1 Changes in v0.7.0
+### 0.1 Changes in v3.0.0
+
+NotionRubyMapping v3.0.0 now supports Notion-Version 2025-09-03.
+
+NotionRubyMapping v3.0.0 は、Notion-Version 2025-09-03 に対応しました。
+これまで Database で実行していた API は、ほとんど DataSource の API に変更になりました。
+そのため、NotionRubyMapping でも新規に DataSource クラスを追加しました。
+
+### 0.2 Changes in v0.7.0
 
 Since the number of Japanese users has increased, we decided to include Japanese as well.  In addition, we have simplified the method of setting up integration tokens.
 
 日本のユーザが増えたので、日本語も併記することにしました。また、インテグレーショントークンの設定方法を簡単にしました。
 
-### 0.2 Changes in v0.6.0
+### 0.3 Changes in v0.6.0
 
 NotionRubyMapping v0.6.0 now supports Notion-Version 2022-06-28.
 ~~In 2022-06-28, property values are no longer returned when retrieving pages.  NotionRubyMapping temporarily creates a Property Object and calls the retrieve a property item API when a value is needed.  Therefore, users do not need to be aware of any differences, and existing scripts should work as they are.~~
@@ -46,7 +55,7 @@ NotionRubyMapping v0.6.0 now supports Notion-Version 2022-06-28.
 NotionRubyMapping v0.6.0 は、Notion-Version 2022-06-28 に対応しました。
 ~~ 2022-06-28 では、ページを取得する際にプロパティ値を返さなくなりました。NotionRubyMapping は、一時的に Property Object を作成し、値が必要なときにプロパティ項目を取得する API を呼び出します。そのため、ユーザーはこの違いを意識する必要はなく、既存のスクリプトはそのまま動作するはずです。~~
 
-### 0.3 Changes in v0.5.0
+### 0.4 Changes in v0.5.0
 
 NotionRubyMapping v0.5.0 now supports block updates.
 For efficiency, subclasses are provided under Block class. As a result, they are no longer compatible with the scripts used in v0.4.0.
@@ -127,6 +136,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2025/9/15 [v3.0.0] updates for Notion-Version 2025-09-03 (Add DataSource class)
 - 2025/6/29 [v2.0.1] add creating FileUploadObject with external url
 - 2025/6/26 [v2.0.0] [FIX] remove symbolize_names: true (only use String)
 - 2025/6/11 [v1.0.0] Update Faraday to 2.13.1 and Change symbolize_names: true (Broken version)

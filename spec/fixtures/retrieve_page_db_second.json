@@ -14,10 +14,11 @@
   "cover": null,
   "icon": null,
   "parent": {
-    "type": "database_id",
-    "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253"
+    "type": "data_source_id",
+    "data_source_id": "4f93db51-4e1d-4015-b07f-876e34c3b0b1"
   },
   "archived": false,
+  "in_trash": false,
   "properties": {
     "RelationTitle": {
       "id": "%3CnJT",
@@ -26,7 +27,8 @@
         {
           "id": "e4d75736-2ea5-4501-9d05-a3b477b8e76b"
         }
-      ]
+      ],
+      "has_more": false
     },
     "MultiSelectTitle": {
       "id": "Kjx%7D",
@@ -46,7 +48,7 @@
         "object": "user",
         "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
         "name": "Hiroyuki KOBAYASHI",
-        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
         "type": "person",
         "person": {
           "email": "hkob@metro-cit.ac.jp"
@@ -61,7 +63,11 @@
     "StatusTitle": {
       "id": "MNV~",
       "type": "status",
-      "status": null
+      "status": {
+        "id": "dfd8a326-f149-4b01-b01a-57d8aed6de1b",
+        "name": "Not started",
+        "color": "default"
+      }
     },
     "DateTitle": {
       "id": "SPrp",
@@ -105,7 +111,8 @@
     "Related to New database title(Added) (Relation)": {
       "id": "%5CaqD",
       "type": "relation",
-      "relation": []
+      "relation": [],
+      "has_more": false
     },
     "FormulaTitle": {
       "id": "%5D~iZ",
@@ -113,7 +120,7 @@
       "formula": {
         "type": "date",
         "date": {
-          "start": "2022-09-02T01:12:00.000+00:00",
+          "start": "2025-08-31T10:55:00.000+00:00",
           "end": null,
           "time_zone": null
         }
@@ -127,7 +134,8 @@
     "Related to New database title (Relation) 1": {
       "id": "%60%3ATr",
       "type": "relation",
-      "relation": []
+      "relation": [],
+      "has_more": false
     },
     "CreatedByTitle": {
       "id": "eR%3D~",
@@ -136,7 +144,7 @@
         "object": "user",
         "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
         "name": "Hiroyuki KOBAYASHI",
-        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+        "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
         "type": "person",
         "person": {
           "email": "hkob@metro-cit.ac.jp"
@@ -189,7 +197,7 @@
               "object": "user",
               "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
               "name": "Hiroyuki KOBAYASHI",
-              "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+              "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
               "type": "person",
               "person": {
                 "email": "hkob@metro-cit.ac.jp"
@@ -295,7 +303,7 @@
             "code": false,
             "color": "default"
           },
-          "plain_text": "2022-02-21 → ",
+          "plain_text": "2022-02-21",
           "href": null
         },
         {
@@ -333,7 +341,7 @@
             "code": false,
             "color": "default"
           },
-          "plain_text": "2022-02-22T09:00:00.000+09:00 → ",
+          "plain_text": "2022-02-22T09:00:00.000+09:00",
           "href": null
         },
         {
@@ -358,7 +366,7 @@
           "text": {
             "content": "高専HP",
             "link": {
-              "url": "https://www.metro-cit.ac.jp"
+              "url": "https://www.metro-cit.ac.jp/"
             }
           },
           "annotations": {
@@ -370,7 +378,7 @@
             "color": "default"
           },
           "plain_text": "高専HP",
-          "href": "https://www.metro-cit.ac.jp"
+          "href": "https://www.metro-cit.ac.jp/"
         },
         {
           "type": "text",
@@ -430,12 +438,14 @@
     "Related to Database created by API (Relation)": {
       "id": "iijV",
       "type": "relation",
-      "relation": []
+      "relation": [],
+      "has_more": false
     },
     "Related to New database title (Relation)": {
       "id": "mfBo",
       "type": "relation",
-      "relation": []
+      "relation": [],
+      "has_more": false
     },
     "MailTitle": {
       "id": "p%7Ci%3F",
@@ -450,8 +460,8 @@
           "name": "nr.png",
           "type": "file",
           "file": {
-            "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220902%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220902T011231Z&X-Amz-Expires=3600&X-Amz-Signature=fb01e9b2930bdcc296bddb3cb9ec964444356d17dfbd4b37c3f1199760357030&X-Amz-SignedHeaders=host&x-id=GetObject",
-            "expiry_time": "2022-09-02T02:12:31.623Z"
+            "url": "https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466WBIEN5KN%2F20250831%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250831T105510Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEJL%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJIMEYCIQC5jk6gIsVcOUjGerEBmK4tp1tMb%2BSluvl%2BZu2qMn4VwgIhAJoLFe4Zj2k12L16v4%2FUqiuULYfz%2FaU%2F2fscWHCpM6QgKogECOv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjM3NDIzMTgzODA1IgzS15wR69w%2B%2Fxvjrh8q3ANXvLGMkTdyBBNl6EPa1XwXH5sa6hfdYueavrDX2vsv1or4h0Vv7DxRooppwrOQY304sNmObTU15OwgWoTopJMvwRp9ZtPaDHCoFNZV%2FI%2FWWqdmzZg80dZ0Im7xbibZgLjudmhZbFKtJvWZ8U%2BqY8da02ScZzP2cBCux3SKzb2p%2Bo5KOuqDg5I4nd6gjkkFtG54NBhqZgW8QfCsq1pv%2B3LPP4bM7xfGhJ%2FWGSMkVItl5iCeYQVxhLCdf6CaGPpcsAPQoGoX2utd%2F3Snxfvrw30DhABVl00ydeem0FOrJpj%2BQc4xlOcB2pI6pLnwe4KdK40opPeYCBiBm4xEVDUPCG4Ti0pu6RAzK7sAF9WEWdKMJci9i3Bip%2F0%2Fwviqjs21vz1XztUhRWpl%2FCd05ewTQL2oLon1ykna%2B%2F7puqgTJbwE7%2BFrZkL5bgXnC2CAf7Tiwrp2FTKRipW%2BI3o8BNcUhtnWzDMJK6jqab3OSrBl%2Bf0K8qAXPthXYatBq0YbC9SAXXEJdHxH446tfbPqQUkdM5Y%2BmzRPOlyDcQEipfHJvqv7kVtmwuYbeOOTCj5yn5la6LtE5W%2BmEYw%2FRZxEc1%2Fj%2BPJ5FTaXY568pWnwAeu2XZKYy47ssznvbpnmo0KmdzDmuNDFBjqkAWATe8d%2F7vno04JR9l4osJhhwqubiI6WNJpJm1oZ3RxQSt1w9t3JEpfBIxKBFibP%2BOKtemFiIWSco3SLDPiIeg3YSqkH80u%2Fs65xVjbxYJYGK8bKUaWo67jzP0KRgrXjqjuEgGfE%2BVGHe6ex0nnbKmUuaQ%2Fs%2FiTEo2Iy4vyc1nYI9bT33bjC1fafJVcbBZNiJdtXYZ6astWd0BXq8ZzOhGvzjGhP&X-Amz-Signature=2fa7d2234333daf8e0adadeb000f2daa2f009fc98d18160f7a85736862771321&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+            "expiry_time": "2025-08-31T11:55:10.733Z"
           }
         }
       ]
@@ -473,6 +483,14 @@
         "id": "0b71c5a8-ea82-4b21-970e-b155e7c68a7e",
         "name": "Select 2",
         "color": "default"
+      }
+    },
+    "ID": {
+      "id": "%7BGE%7C",
+      "type": "unique_id",
+      "unique_id": {
+        "prefix": "ST",
+        "number": 2
       }
     },
     "TelTitle": {
@@ -504,5 +522,7 @@
       ]
     }
   },
-  "url": "https://www.notion.so/DEF-6601e719a39a460c908e8909467fcccf"
+  "url": "https://www.notion.so/DEF-6601e719a39a460c908e8909467fcccf",
+  "public_url": "https://hkob.notion.site/DEF-6601e719a39a460c908e8909467fcccf",
+  "request_id": "bb99bb4a-f7ce-4b44-9d3c-20a688fecab1"
 }

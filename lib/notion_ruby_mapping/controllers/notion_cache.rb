@@ -126,6 +126,12 @@ module NotionRubyMapping
 
     # @param [Hash] payload
     # @return [Hash] response
+    def create_data_source_request(payload)
+      request :post, data_sources_path, payload
+    end
+
+    # @param [Hash] payload
+    # @return [Hash] response
     def create_file_upload_request(payload = {})
       request :post, file_uploads_path, payload
     end
@@ -142,23 +148,35 @@ module NotionRubyMapping
       object_for_key(id) { database_request id }
     end
 
+    # @param [String] id data_source_id (with or without "-")
+    # @return [NotionRubyMapping::Base] DataSource object or nil
+    def data_source(id)
+      object_for_key(id) { data_source_request id }
+    end
+
     # @param [String] database_id
-    # @return [String (frozen)] page_path
+    # @return [String (frozen)] database_path
     def database_path(database_id)
       "v1/databases/#{database_id}"
+    end
+
+    # @param [String] database_id
+    # @return [String (frozen)] data_source_path
+    def data_source_path(data_source_id)
+      "v1/data_sources/#{data_source_id}"
     end
 
     # @param [String] id page_id / block_id (with or without "-")
     # @param [NotionRubyMapping::Query] query query object
     # @return [NotionRubyMapping::Base] List object
     # def database_query(id, query)
-    #   Base.create_from_json database_query_request(id, query.query_json)
+    #   Base.create_from_json data_source_query_request(id, query.query_json)
     # end
 
-    # @param [String] database_id (with or without "-")
+    # @param [String] data_source_id (with or without "-")
     # @param [NotionRubyMapping::Query] query query object
-    def database_query_request(database_id, query)
-      request :post, "v1/databases/#{database_id}/query#{query.database_query_string}", query.query_json
+    def data_source_query_request(data_source_id, query)
+      request :post, "v1/data_sources/#{data_source_id}/query#{query.database_query_string}", query.query_json
     end
 
     # @param [String] database_id
@@ -167,9 +185,20 @@ module NotionRubyMapping
       request :get, database_path(database_id)
     end
 
+    # @param [String] data_source_id
+    # @return [Hash] response
+    def data_source_request(data_source_id)
+      request :get, data_source_path(data_source_id)
+    end
+
     # @return [String (frozen)] page_path
     def databases_path
       "v1/databases"
+    end
+
+    # @return [String (frozen)] page_path
+    def data_sources_path
+      "v1/data_sources"
     end
 
     # @param [String] id
@@ -288,8 +317,8 @@ module NotionRubyMapping
 
     # @param [String] database_id
     # @return [String (frozen)] page_path
-    def query_database_path(database_id)
-      "v1/databases/#{database_id}/query"
+    def query_data_source_path(data_source_id)
+      "v1/data_sources/#{data_source_id}/query"
     end
 
     # @param [String] block_id
@@ -365,6 +394,12 @@ module NotionRubyMapping
     # @return [Hash] response
     def update_database_request(database_id, payload)
       request :patch, database_path(database_id), payload
+    end
+
+    # @param [String] data_source_id
+    # @return [Hash] response
+    def update_data_source_request(data_source_id, payload)
+      request :patch, data_source_path(data_source_id), payload
     end
 
     # @param [String] page_id

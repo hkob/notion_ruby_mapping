@@ -41,6 +41,87 @@ module NotionRubyMapping
 
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "raw json", "select", select_property_object
+        end
+
+        describe "select_options=" do
+          before { target.add_select_option name: "Select 4", color: "orange" }
+
+          it_behaves_like "will update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {
+            "sp" => {
+              "select" => {
+                "options" => [
+                  {
+                    "name" => "Select 4",
+                    "color" => "orange",
+                  },
+                ],
+              },
+            },
+          }
+          it_behaves_like "property schema json", {
+            "sp" => {
+              "select" => {
+                "options" => [
+                  {
+                    "name" => "Select 4",
+                    "color" => "orange",
+                  },
+                ],
+              },
+            },
+          }
+        end
+      end
+
+      context "when created from json" do
+        let(:target) { Property.create_from_json "sp", tc.read_json("select_property_object"), "database" }
+
+        it_behaves_like "has name as", "sp"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it { expect(target.select_names).to eq ["Select 1", "Select 2", "Select 3"] }
+
+        it_behaves_like "raw json", "select", select_property_object
+      end
+    end
+
+    context "when DataSource property" do
+      select_property_object = {
+        "options" => [
+          {
+            "color" => "brown",
+            "id" => "0fed8e50-c917-4b56-96d9-9691a5132fc4",
+            "name" => "Select 1",
+          },
+          {
+            "color" => "default",
+            "id" => "0b71c5a8-ea82-4b21-970e-b155e7c68a7e",
+            "name" => "Select 2",
+          },
+          {
+            "color" => "purple",
+            "id" => "b32c83bb-c9af-49e8-9b88-122139affdb7",
+            "name" => "Select 3",
+          },
+        ],
+      }
+      context "when created by new" do
+        let(:target) { described_class.new "sp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "sp"
+        it_behaves_like "filter test", described_class, %w[equals does_not_equal], value: true
+        it_behaves_like "filter test", described_class, %w[is_empty is_not_empty]
+        it_behaves_like "raw json", "select", {"options" => []}
+        it_behaves_like "property schema json", {"sp" => {"select" => {"options" => []}}}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("select_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "select", select_property_object
         end
@@ -94,7 +175,7 @@ module NotionRubyMapping
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "sp", tc.read_json("select_property_object"), "database" }
+        let(:target) { Property.create_from_json "sp", tc.read_json("select_property_object"), "data_source" }
 
         it_behaves_like "has name as", "sp"
         it_behaves_like "will not update"

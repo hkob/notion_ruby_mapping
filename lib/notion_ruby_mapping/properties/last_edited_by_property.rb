@@ -27,7 +27,7 @@ module NotionRubyMapping
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
-      @json = if database?
+      @json = if database_or_data_source?
                 json || {}
               else
                 UserObject.new user_id: user_id, json: json
@@ -39,7 +39,7 @@ module NotionRubyMapping
     def update_from_json(json)
       @will_update = false
       leb = json["last_edited_by"]
-      @json = database? ? leb : UserObject.new(json: leb)
+      @json = database_or_data_source? ? leb : UserObject.new(json: leb)
     end
 
     ## Page property only methods

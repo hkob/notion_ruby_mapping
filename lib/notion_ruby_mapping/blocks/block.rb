@@ -44,7 +44,6 @@ module NotionRubyMapping
           table: TableBlock,
           table_row: TableRowBlock,
           table_of_contents: TableOfContentsBlock,
-          template: TemplateBlock,
           to_do: ToDoBlock,
           toggle: ToggleBlock,
           video: VideoBlock,

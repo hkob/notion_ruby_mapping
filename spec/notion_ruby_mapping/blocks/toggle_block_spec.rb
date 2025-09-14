@@ -38,7 +38,7 @@ module NotionRubyMapping
       let(:target) { ToggleBlock.new "A sample toggle", color: "yellow_background", sub_blocks: sub_block }
 
       it_behaves_like "create child block", described_class,
-                      "c4aeec15cce34624b0c67d6b2ca7bdd6", "a1e7d533d263420c8613adab2c1f6ec1"
+                      "26ed8e4e98ab81a787c2cef853157f5b", "26ed8e4e98ab811ba5ede0cc15f93696"
     end
 
     describe "save (update)" do

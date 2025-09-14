@@ -69,7 +69,7 @@
           "code": false,
           "color": "default"
         },
-        "plain_text": "2022-02-21 → ",
+        "plain_text": "2022-02-21",
         "href": null
       }
     },
@@ -117,7 +117,7 @@
           "code": false,
           "color": "default"
         },
-        "plain_text": "2022-02-22T09:00:00.000+09:00 → ",
+        "plain_text": "2022-02-22T09:00:00.000+09:00",
         "href": null
       }
     }
@@ -130,5 +130,6 @@
     "next_url": "https://api.notion.com/v1/pages/6601e719a39a460c908e8909467fcccf/properties/flUp?start_cursor=xQVa1H&page_size=5",
     "type": "rich_text",
     "rich_text": {}
-  }
+  },
+  "request_id": "bbad32a1-769f-4e31-8de7-240ac978727d"
 }

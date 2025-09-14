@@ -5,7 +5,7 @@
       "object": "user",
       "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
       "name": "Hiroyuki KOBAYASHI",
-      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
       "type": "person",
       "person": {
         "email": "hkob@metro-cit.ac.jp"
@@ -33,12 +33,7 @@
       "name": "notion_ruby_mapping",
       "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/b56f7ece-934d-41af-8892-89a6032fc721/nr.png",
       "type": "bot",
-      "bot": {
-        "owner": {
-          "type": "workspace",
-          "workspace": true
-        }
-      }
+      "bot": {}
     },
     {
       "object": "user",
@@ -54,7 +49,16 @@
       "name": "input_tasks",
       "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/d1f637eb-7242-43c1-9500-747bac40275a/1ea5da4c6b0b10c5ed42b763c162fcd9.png",
       "type": "bot",
-      "bot": {}
+      "bot": {
+        "owner": {
+          "type": "workspace",
+          "workspace": true
+        },
+        "workspace_name": "Hiroyuki's Notion",
+        "workspace_limits": {
+          "max_file_upload_size_in_bytes": 5368709120
+        }
+      }
     },
     {
       "object": "user",
@@ -63,10 +67,107 @@
       "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/ec8b750f-0351-4d50-b1b1-ec178c116eee/ErSxuLeq.png-medium.png",
       "type": "bot",
       "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "29c633cc-c44e-444e-b02a-3407e1ff3145",
+      "name": "STUDIO",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/796140e2-f3d3-414c-9c68-110f4c478b07/signup-logo.017b34e4.svg",
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "1d1f5d45-7f19-451c-a367-39e1d1b64f83",
+      "name": "webcitc",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "75a36896-0c39-483c-98c8-b8d990c85c7c",
+      "name": "astro-notion-blog",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/1f3fc205-ecc6-4ea1-9ce4-8b82ae2db6a2/true.png",
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "c03722af-574a-4d53-a0fb-d83f2b36fd10",
+      "name": "programmingI",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "bf937c62-c37c-4db7-a38d-7f7c70ea0a7e",
+      "name": "hkob.laboR5",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "197a41f6-0da8-4e94-bd93-80d55687ff2a",
+      "name": "exp2023",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "f5001380-b61a-410f-ac3e-00a5c25e969b",
+      "name": "Notomo",
+      "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/b224cb6d-3827-40e9-ad1f-5e6fc23cd9e0/Notomo_icon512.png",
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "40d9e98e-7736-4c8f-85bd-17e194e3d9d5",
+      "name": "zadankai",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "8efa2e42-e1e3-4864-b536-07abf245ae76",
+      "name": "NotionRubyMapping",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "4479749a-d9da-403c-bedb-319b88c27b85",
+      "name": "CodeBlockQuickAction",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "4771136a-faca-4e0f-8f70-ad53b9b2771a",
+      "name": "programmingI_2024",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
+    },
+    {
+      "object": "user",
+      "id": "1ebd83bc-8bfd-499d-a540-350a5de6099a",
+      "name": "webhook_test",
+      "avatar_url": null,
+      "type": "bot",
+      "bot": {}
     }
   ],
   "next_cursor": null,
   "has_more": false,
   "type": "user",
-  "user": {}
+  "user": {},
+  "request_id": "7683e068-7dc3-48c7-b243-755a7ab924a5"
 }

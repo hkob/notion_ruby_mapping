@@ -19,6 +19,41 @@ module NotionRubyMapping
 
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "raw json", "date", {}
+          it_behaves_like "property schema json", {"dp" => {"date" => {}}}
+        end
+      end
+    end
+
+    describe "update_from_json" do
+      let(:target) { DateProperty.new "dp", start_date: Date.today }
+
+      before { target.update_from_json(tc.read_json("retrieve_property_date")) }
+
+      it_behaves_like "property values json", {
+        "dp" => {
+          "type" => "date",
+          "date" => {
+            "start" => "2022-02-25T01:23:00.000+09:00",
+            "end" => nil,
+            "time_zone" => nil,
+          },
+        },
+      }
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { DateProperty.new "dp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "dp"
+        it_behaves_like "raw json", :date, {}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("date_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "date", {}
           it_behaves_like "property schema json", {"dp" => {"date" => {}}}

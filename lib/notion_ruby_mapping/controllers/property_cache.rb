@@ -11,7 +11,7 @@ module NotionRubyMapping
       @page_id = page_id
     end
     attr_writer :json
-    attr_reader :page_id
+    attr_reader :page_id, :base_type
 
     # @param [String] key
     # @return [Property] Property for key
@@ -33,6 +33,21 @@ module NotionRubyMapping
       end
     end
 
+    # @return [TrueClass, FalseClass] true if database type
+    def database?
+      @base_type == "database"
+    end
+
+    # @return [TrueClass, FalseClass] true if data_source type
+    def data_source?
+      @base_type == "data_source"
+    end
+
+    # @return [TrueClass, FalseClass] true if database or data_source type
+    def database_or_data_source?
+      %w[database data_source].include? @base_type
+    end
+
     # @return [Hash, Enumerator]
     def each(&block)
       return enum_for(:each) unless block_given?
@@ -41,7 +56,7 @@ module NotionRubyMapping
     end
 
     def generate_all_properties
-      if @json.empty?
+      if @json.nil? || @json.empty?
         @properties.values
       else
         @json.keys.map { |key| self[key] }
@@ -50,6 +65,11 @@ module NotionRubyMapping
 
     def inspect
       "PropertyCache"
+    end
+
+    # @return [TrueClass, FalseClass] true if page type
+    def page?
+      @base_type == "page"
     end
 
     # @return [Hash] created property values json
@@ -64,22 +84,24 @@ module NotionRubyMapping
 
     # @return [Hash] created property schema json
     def property_schema_json
-      @properties.each_with_object({}) do |(_, property), ans|
+      schema = @properties.each_with_object({}) do |(_, property), ans|
         if property.will_update
           ans["properties"] ||= {}
           ans["properties"].merge! property.property_schema_json
         end
       end
+      database? ? {"initial_data_source" => schema} : schema
     end
 
     # @return [Hash] created update property schema json
     def update_property_schema_json
-      @properties.each_with_object({}) do |(_, property), ans|
+      schema = @properties.each_with_object({}) do |(_, property), ans|
         if property.will_update
           ans["properties"] ||= {}
           ans["properties"].merge! property.update_property_schema_json
         end
       end
+      database? ? {"initial_data_source" => schema} : schema
     end
 
     # @param [Array] key

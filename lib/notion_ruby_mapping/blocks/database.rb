@@ -37,22 +37,46 @@ module NotionRubyMapping
       prop
     end
 
+    # @param [String] title
+    # @param [Array<String, Property>] assigns
+    # @return [NotionRubyMapping::DataSource]
+    # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#71f680d59b874930bf9f488a7cd6a49e
+    def build_child_data_source(title, *assigns)
+      ds = DataSource.new json: {"title" => [TextObject.new(title).property_values_json]},
+                          assign: assigns, parent: {"type" => "database_id", "database_id" => @id}
+      yield ds, ds.properties if block_given?
+      ds
+    end
+
+    # @param [String] title
+    # @param [Array<String, Property>] assigns
+    # @param [Boolean] dry_run true if dry_run
+    # @return [NotionRubyMapping::DataSource, String]
+    # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e3f1d21e0f724f589e48431468772eed
+    def create_child_data_source(title, *assigns, dry_run: false)
+      ds = DataSource.new json: {"title" => [TextObject.new(title).property_values_json]},
+                          assign: assigns, parent: {"type" => "database_id", "database_id" => @id}
+      yield ds, ds.properties if block_given?
+      ds.save dry_run: dry_run
+    end
+
     # @param [Array<Property, Class, String>] assign
     # @return [NotionRubyMapping::Base]
-    # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
+    # @see https://www.notion.so/hkob/DataSource-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
     def build_child_page(*assign)
-      assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
-      page = Page.new assign: assign, parent: {"database_id" => @id}
-      pp = page.properties
-      pp.clear_will_update
-      yield page, pp if block_given?
-      page
+      unless data_sources.length == 1
+        raise StandardError, "Database #{id} is linked with multiple data_sources, use data_source.build_child_page"
+      end
+
+      data_sources.first.build_child_page(*assign) do |page, pp|
+        yield page, pp if block_given?
+      end
     end
 
     # @param [Array<Property, Class, String>] assign
     # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base]
-    # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
+    # @see https://www.notion.so/hkob/DataSource-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
     def create_child_page(*assign, dry_run: false)
       assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
       page = Page.new assign: assign, parent: {"database_id" => @id}
@@ -66,6 +90,15 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#217a7d988c404d68b270c4874a9117b4
     def database_title
       @database_title ||= RichTextArray.new "title", json: (self["title"]), will_update: new_record?
+    end
+
+    def data_sources
+      return @data_sources if @data_sources
+
+      reload if @json.nil? || !@json.key?("data_sources")
+      @data_sources = @json["data_sources"].map do |json|
+        DataSource.find json["id"]
+      end
     end
 
     # @return [NotionRubyMapping::RichTextArray]
@@ -96,19 +129,6 @@ module NotionRubyMapping
     # @return [Hash] created json for property values
     def property_values_json
       @payload.property_values_json @property_cache, database_title
-    end
-
-    # @param [NotionRubyMapping::Query] query object
-    # @param [Boolean] dry_run true if dry_run
-    # @return [NotionRubyMapping::List, String]
-    # @see https://www.notion.so/hkob/Database-1462b24502424539a4231bedc07dc2f5#6bd9acf62c454f64bc555c8828057e6b
-    def query_database(query = Query.new, dry_run: false)
-      if dry_run
-        Base.dry_run_script :post, @nc.query_database_path(@id), query.query_json
-      else
-        response = @nc.database_query_request @id, query
-        List.new json: response, type: "database", value: self, query: query
-      end
     end
 
     # @param [Array] property_names

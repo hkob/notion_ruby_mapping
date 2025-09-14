@@ -21,7 +21,7 @@ module NotionRubyMapping
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
-      if database?
+      if database_or_data_source?
         @json = json || {}
       else
         @text_objects = TitleProperty.rich_text_array_from_json json

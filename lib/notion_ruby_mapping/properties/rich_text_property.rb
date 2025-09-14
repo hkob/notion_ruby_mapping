@@ -12,7 +12,7 @@ module NotionRubyMapping
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
-      if database?
+      if database_or_data_source?
         @json = json["rich_text"] || {}
       else
         @text_objects = RichTextArray.new "rich_text", json: json["rich_text"]

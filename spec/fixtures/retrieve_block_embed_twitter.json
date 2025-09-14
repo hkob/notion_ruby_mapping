@@ -1,6 +1,10 @@
 {
   "object": "block",
   "id": "e4c0811c-7154-4fed-9e8c-02d885c898ef",
+  "parent": {
+    "type": "page_id",
+    "page_id": "67cf059c-e746-46a0-b72d-481c9ff5d386"
+  },
   "created_time": "2022-04-23T21:46:00.000Z",
   "last_edited_time": "2022-04-23T21:46:00.000Z",
   "created_by": {
@@ -13,9 +17,11 @@
   },
   "has_children": false,
   "archived": false,
+  "in_trash": false,
   "type": "embed",
   "embed": {
     "caption": [],
     "url": "https://twitter.com/hkob/status/1517825460025331712"
-  }
+  },
+  "request_id": "5729d91b-5480-46b9-99cd-47ad19242de6"
 }

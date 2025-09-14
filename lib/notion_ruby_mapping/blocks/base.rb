@@ -33,6 +33,8 @@ module NotionRubyMapping
       case json["object"]
       when "page"
         Page.new json: json
+      when "data_source"
+        DataSource.new json: json
       when "database"
         Database.new json: json
       when "list"
@@ -52,6 +54,14 @@ module NotionRubyMapping
       end
     end
 
+    # @param [String] str id or URL
+    # @return [String] data_source_id
+    def self.data_source_id(str)
+      NotionCache.instance.hex_id str
+    end
+
+    # @param [String] str id or URL
+    # @return [String] database_id
     def self.database_id(str)
       if /^http/.match str
         /([\da-f]{32})\?/.match(str)[1]
@@ -66,7 +76,7 @@ module NotionRubyMapping
     def self.dry_run_script(method, path, json = nil)
       shell = [
         "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
-        "  -H 'Notion-Version: 2022-06-28'",
+        "  -H 'Notion-Version: #{NotionRubyMapping::NOTION_VERSION}'",
         "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
       shell << "  -H 'Content-Type: application/json'" if %i[post patch].include?(method)
@@ -166,10 +176,16 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Property] generated property
     def assign_property(klass, title)
       @property_cache ||= PropertyCache.new({},
-                                            base_type: database? ? "database" : "page",
+                                            base_type: if database?
+                                                         "database"
+                                                       else
+                                                         data_source? ? "data_source" : "page"
+                                                       end,
                                             page_id: page? ? @id : nil)
       property = if database?
                    klass.new(title, will_update: new_record?, base_type: "database")
+                 elsif data_source?
+                   klass.new(title, will_update: new_record?, base_type: "data_source")
                  else
                    klass.new(title, will_update: true, base_type: "page", property_cache: @property_cache)
                  end
@@ -210,6 +226,11 @@ module NotionRubyMapping
     # @return [TrueClass, FalseClass] true if Database object
     def database?
       is_a? Database
+    end
+
+    # @return [TrueClass, FalseClass] true if Database object
+    def data_source?
+      is_a? DataSource
     end
 
     # @return [Hash, nil] obtained Hash
@@ -280,7 +301,11 @@ module NotionRubyMapping
           reload
         end
         @property_cache = PropertyCache.new json_properties,
-                                            base_type: database? ? "database" : "page",
+                                            base_type: if database?
+                                                         "database"
+                                                       else
+                                                         data_source? ? "data_source" : "page"
+                                                       end,
                                             page_id: page? ? @id : nil
       end
       @property_cache
@@ -343,7 +368,10 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#62eea67af7824496820c6bb903503540
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#e13d526bd709451e9b06fd32e8d07fcd
     def set_icon(emoji: nil, url: nil, file_upload_object: nil)
-      @payload.set_icon(emoji: emoji, url: url, file_upload_object: file_upload_object) if page? || database?
+      if page? || database? || data_source?
+        @payload.set_icon(emoji: emoji, url: url,
+                          file_upload_object: file_upload_object)
+      end
       self
     end
 

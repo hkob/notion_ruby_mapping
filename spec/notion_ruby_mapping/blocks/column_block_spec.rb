@@ -9,7 +9,7 @@ module NotionRubyMapping
     it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), true, {
       "object" => "block",
       "type" => "column",
-      "column" => {},
+      "column" => {"width_ratio" => 0.33333333333333337},
     }
   end
 end

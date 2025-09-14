@@ -39,7 +39,7 @@ module NotionRubyMapping
         let(:target) { described_class.new "Emoji callout", emoji: "✅", color: "blue", sub_blocks: sub_block }
 
         it_behaves_like "create child block", described_class,
-                        "f0585d1274fc45e784697d675ef54d3f", "dbf81dfcd4fa4c459a16476efd4cc5ec"
+                        "26cd8e4e98ab8140b7a1ca62044cd1c5", "26cd8e4e98ab810f9122f43ae1a17649"
       end
 
       context "callout url" do
@@ -50,7 +50,7 @@ module NotionRubyMapping
         end
 
         it_behaves_like "create child block", described_class,
-                        "dbafbbdc77064057a3a5ee3c25fb63ae", "b4e37e50928e490a943a401712d5d3ea"
+                        "26cd8e4e98ab81fbbedddee3debd6120", "26cd8e4e98ab810881e3dda5d55aed3b"
       end
     end
 

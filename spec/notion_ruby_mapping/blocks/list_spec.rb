@@ -7,9 +7,9 @@ module NotionRubyMapping
     # tc = TestConnection.instance
 
     describe "query" do
-      let(:database) { Database.new id: TestConnection::DATABASE_ID }
+      let(:data_source) { DataSource.new id: TestConnection::DATA_SOURCE_ID }
 
-      subject { database.query_database query }
+      subject { data_source.query_data_source query }
       context "when limit 2" do
         let(:query) { Query.new page_size: 2 }
 

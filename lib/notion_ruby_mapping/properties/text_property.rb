@@ -33,7 +33,7 @@ module NotionRubyMapping
 
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache, query: query
-      @text_objects = if database?
+      @text_objects = if database_or_data_source?
                         json || {}
                       else
                         RichTextArray.new "title", json: json, text_objects: text_objects

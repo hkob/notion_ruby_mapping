@@ -21,6 +21,18 @@ module NotionRubyMapping
       end
     end
 
+    context "DataSource property" do
+      context "created from json" do
+        let(:target) { Property.create_from_json "Buttons", tc.read_json("button_property_object"), "data_source" }
+
+        it_behaves_like "has name as", "Buttons"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "update property schema json", {}
+        it_behaves_like "raw json", "button", {}
+      end
+    end
+
     context "Page property" do
       context "created from json" do
         let(:target) { Property.create_from_json "Buttons", tc.read_json("retrieve_property_button") }

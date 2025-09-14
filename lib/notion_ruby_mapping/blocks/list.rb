@@ -13,8 +13,8 @@ module NotionRubyMapping
       case type
       when "comment_parent"
         @comment_parent = value
-      when "database"
-        @database = value
+      when "data_source"
+        @data_source = value
       when "parent"
         @parent = value
       when "property"
@@ -40,9 +40,9 @@ module NotionRubyMapping
                  query: -> { @parent.children @query },
                  create_object: ->(json) { Base.create_from_json json },
                  &block
-      elsif @database
-        each_sub base: @database,
-                 query: -> { @nc.database_query_request @database.id, @query },
+      elsif @data_source
+        each_sub base: @data_source,
+                 query: -> { @nc.data_source_query_request @data_source.id, @query },
                  create_object: ->(json) { Base.create_from_json json },
                  &block
       elsif @property

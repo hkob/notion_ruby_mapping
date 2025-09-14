@@ -24,6 +24,35 @@ module NotionRubyMapping
 
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "raw json", "people", {}
+        end
+      end
+
+      context "when created from json" do
+        let(:target) { Property.create_from_json "pp", tc.read_json("people_property_object"), "database" }
+
+        it_behaves_like "has name as", "pp"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "raw json", "people", {}
+      end
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { described_class.new "pp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "pp"
+        it_behaves_like "filter test", described_class, %w[contains does_not_contain], value: true
+        it_behaves_like "filter test", described_class, %w[is_empty is_not_empty]
+        it_behaves_like "raw json", "people", {}
+        it_behaves_like "property schema json", {"pp" => {"people" => {}}}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("people_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "people", {}
         end
@@ -46,7 +75,7 @@ module NotionRubyMapping
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "pp", tc.read_json("people_property_object"), "database" }
+        let(:target) { Property.create_from_json "pp", tc.read_json("people_property_object"), "data_source" }
 
         it_behaves_like "has name as", "pp"
         it_behaves_like "will not update"

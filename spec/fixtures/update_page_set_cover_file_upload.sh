@@ -1,7 +1,7 @@
 curl https://api.notion.com/v1/pages/20bd8e4e98ab80c79576dcf6f6e5ee4a \
   -H 'Authorization: Bearer '"$NOTION_API_KEY"'' \
   -H "Content-Type: application/json" \
-  -H "Notion-Version: 2022-06-28" \
+  -H "Notion-Version: 2025-09-03" \
   -X PATCH \
 	--data '{
 	  "cover": {

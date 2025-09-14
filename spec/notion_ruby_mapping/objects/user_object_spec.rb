@@ -99,7 +99,7 @@ module NotionRubyMapping
       context "dry_run: false" do
         let(:target) { UserObject.all }
 
-        it { expect(target.count).to eq 7 }
+        it { expect(target.count).to eq 19 }
       end
 
       context "dry_run: true" do

@@ -12,8 +12,8 @@ module NotionRubyMapping
       "file" => {
         "type" => "file",
         "file" => {
-          "url" => "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c55cf49f-fcb4-497e-9645-d484f03bf1d5/sample.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220426%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220426T132600Z&X-Amz-Expires=3600&X-Amz-Signature=0a6b8b6a0d6ae1ca7ec024d357b2c3eb52ed6f0ce14bcead00da1961ad03a6de&X-Amz-SignedHeaders=host&x-id=GetObject",
-          "expiry_time" => "2022-04-26T14:26:00.536Z",
+          "url" => "https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/c55cf49f-fcb4-497e-9645-d484f03bf1d5/sample.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466RSBCTPNM%2F20250913%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250913T064752Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJGMEQCIDUYXZwPTsFLXxWDOsGAKIfx65c%2Ft5ztnYM3hcrrErKZAiAZbD0ixLKikc%2FCsC7vEX0lh5SzGwD550KU5M55F7G3%2Fir%2FAwg%2FEAAaDDYzNzQyMzE4MzgwNSIMiD2S9Aa941VfLCdeKtwDDwE8l2PpeRtZ2zph4d7b8hhevvt71vCJ9Ju3T70FPQ2ylE%2BQPLYfxd65AH5NepZjs5Tmg%2BAwnsIBOgu9oJ431mOttjIIvZ4LglBSrgEasVFouRHPALVcpnqDQxdVavdHmigyIhUqdktvSs19BfLqVfQlJMgGa7x4ykKJsE9IjOib%2BXSFnSqKe4ZZglePxsyPfsdRIod2xATDp3Pw4cG8iLtM5sxacwV3xXbMpczf3SMHb%2F2kEB9YRjPYOEmGTWy79gaKV4PAoZPB4yXcTf2DRmoXvJAi%2FM1v1blsaRw14XMFXJ3tXMwu1iP0XW2HepYb6UGNj%2Bgci0Y2GNGI2E7ZEGK%2FtcJooQ0J091JL4aGUjTP9f1K0ebqQtrj9LljVJEp9yRr2yIu%2B7oORHIJhbZsSpy0hvNS%2BVORrrj%2BmAkJ96j8Zqcth4arcbFQdu1GxngmapDmwqCTvl9slf8WR5SMAIQ7MjS%2FZnqYAala3HbaHjC9ZFnCLqIuwFq6MzIv9KqGEfUV5SrbETL4jnJWpQT3r0kEfmwdF%2BRY8U4%2FnkbJpO%2FL%2BokVXG2lEUuNDnumI5WifchPSY8lsPdFYRlxjShRT0t4dPf7GOEAi2W7q2zQ6fjX%2FPQQrtR%2FYgPEzsMwsJeUxgY6pgGW%2FqLiFuN1jCCdESPEbGJuRmtFMNfaAiPuikTAS3zE76QLyNyEemZzcQMGrHFv4zIm6UNWch5tyhFiKku%2FntJARNB4YsYDdRl4COWu5%2FFaiSyeOoF3akixPOl5kA3VKYJHkK49FfdQOUmnXIGhgh7hdtOYdaYHzBmaeHoln85P%2FKG8gwiZEd4cdrd%2FU0V9t4RKTb2Jg9b6mwrwwJ0dooX3l%2BJkQ2Pb&X-Amz-Signature=80cfc38f2703e2305b3bff01a45a600266d2ac33121d85564461e17e13424e03&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
+          "expiry_time" => "2025-09-13T07:47:52.410Z",
         },
         "caption" => [],
       },
@@ -26,7 +26,7 @@ module NotionRubyMapping
       end
 
       it_behaves_like "create child block", described_class,
-                      "7d216c4e05784d3fade4be41d03f3aa2", "a3e050b85d654b3799c85abe24fa0da1"
+                      "26dd8e4e98ab81f8ad4bf95cfbb4156c", "26dd8e4e98ab8180ac43ccff75418f5e"
     end
 
     describe "save (update)" do
