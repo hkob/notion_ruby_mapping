@@ -1,6 +1,10 @@
 {
   "object": "block",
   "id": "ea525a78-4669-470d-b425-8c4d7cb95667",
+  "parent": {
+    "type": "page_id",
+    "page_id": "67cf059c-e746-46a0-b72d-481c9ff5d386"
+  },
   "created_time": "2022-04-23T21:47:00.000Z",
   "last_edited_time": "2022-04-23T21:48:00.000Z",
   "created_by": {
@@ -13,8 +17,10 @@
   },
   "has_children": false,
   "archived": false,
+  "in_trash": false,
   "type": "child_database",
   "child_database": {
     "title": "Child database"
-  }
+  },
+  "request_id": "7ab30a3f-b088-4f6a-9e2d-d162c471135e"
 }

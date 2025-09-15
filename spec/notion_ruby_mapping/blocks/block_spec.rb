@@ -15,7 +15,7 @@ module NotionRubyMapping
           expect(target.id).to eq nc.hex_id(id)
         end
 
-        can_have_children = %w[bulleted_list_item paragraph inline_contents numbered_list_item synced_block template
+        can_have_children = %w[bulleted_list_item paragraph inline_contents numbered_list_item synced_block
                                toggle toggle_heading_1 toggle_heading_2 toggle_heading_3 quote table to_do
                                synced_block_original callout column_list column append_after_parent
                                append_after_previous].include? key.to_s

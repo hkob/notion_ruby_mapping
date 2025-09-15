@@ -25,7 +25,7 @@ module NotionRubyMapping
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       @json = json
-      @json ||= {} if database?
+      @json ||= {} if database_or_data_source?
     end
 
     ## Page property only methods

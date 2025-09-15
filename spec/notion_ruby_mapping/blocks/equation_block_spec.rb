@@ -18,7 +18,7 @@ module NotionRubyMapping
       let(:target) { described_class.new "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}" }
 
       it_behaves_like "create child block", described_class,
-                      "208f26269c8046739dd364da161960bd", "8fd0a725883047039da04133c9c1633b"
+                      "26dd8e4e98ab8123ae87cca25f6f5354", "26dd8e4e98ab81e086e6c396e5993e3d"
     end
 
     describe "save (update)" do

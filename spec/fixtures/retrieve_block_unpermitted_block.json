@@ -2,5 +2,6 @@
   "object": "error",
   "status": 404,
   "code": "object_not_found",
-  "message": "Could not find block with ID: 0c940186-ab70-4351-bb34-2d16f0635d49. Make sure the relevant pages and databases are shared with your integration."
+  "message": "Could not find block with ID: 0c940186-ab70-4351-bb34-2d16f0635d49. Make sure the relevant pages and databases are shared with your integration.",
+  "request_id": "a2b7c3f5-6ee3-47e0-a8e8-bb730677d25f"
 }

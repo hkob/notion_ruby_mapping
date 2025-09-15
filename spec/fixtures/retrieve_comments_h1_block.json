@@ -33,7 +33,11 @@
           "plain_text": "Comment for a Heading1 block",
           "href": null
         }
-      ]
+      ],
+      "display_name": {
+        "type": "integration",
+        "resolved_name": "input_tasks"
+      }
     },
     {
       "object": "comment",
@@ -67,7 +71,11 @@
           "plain_text": "Another thread",
           "href": null
         }
-      ]
+      ],
+      "display_name": {
+        "type": "integration",
+        "resolved_name": "input_tasks"
+      }
     },
     {
       "object": "comment",
@@ -101,11 +109,16 @@
           "plain_text": "Reply comment",
           "href": null
         }
-      ]
+      ],
+      "display_name": {
+        "type": "integration",
+        "resolved_name": "input_tasks"
+      }
     }
   ],
   "next_cursor": null,
   "has_more": false,
   "type": "comment",
-  "comment": {}
+  "comment": {},
+  "request_id": "1a987d81-9063-4011-95cd-352f1098283e"
 }

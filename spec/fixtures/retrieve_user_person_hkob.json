@@ -2,9 +2,10 @@
   "object": "user",
   "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
   "name": "Hiroyuki KOBAYASHI",
-  "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+  "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
   "type": "person",
   "person": {
     "email": "hkob@metro-cit.ac.jp"
-  }
+  },
+  "request_id": "c943679f-23d7-491c-b4f7-7dbde742865c"
 }

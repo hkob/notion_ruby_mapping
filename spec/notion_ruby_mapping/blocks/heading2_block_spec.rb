@@ -39,7 +39,7 @@ module NotionRubyMapping
       let(:target) { described_class.new "Heading 2", color: "blue_background" }
 
       it_behaves_like "create child block", described_class,
-                      "9714d6719fe3418d88b1212ee7d45d58", "1fbe34f38da7494097db5f4800d7240e"
+                      "26dd8e4e98ab81e08b31cb23538dbc92", "26dd8e4e98ab813f96f8c55ed5603c54"
     end
 
     describe "save (update)" do

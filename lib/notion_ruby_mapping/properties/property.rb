@@ -30,14 +30,14 @@ module NotionRubyMapping
 
     # @param [String] new_name
     def new_name=(new_name)
-      assert_database_property __method__
+      assert_data_source_property __method__
       @will_update = true
       @new_name = new_name
     end
 
     # @return [NotionRubyMapping::Property] self
     def remove
-      assert_database_property __method__
+      assert_data_source_property __method__
       @will_update = true
       @remove = true
       self
@@ -143,6 +143,14 @@ module NotionRubyMapping
       @base_type == "database"
     end
 
+    def data_source?
+      @base_type == "data_source"
+    end
+
+    def database_or_data_source?
+      %w[database data_source].include? @base_type
+    end
+
     # @return [TrueClass, FalseClass] true if it has Property contents
     def contents?
       !instance_of? Property
@@ -188,15 +196,25 @@ module NotionRubyMapping
       raise StandardError, "#{method} can execute only Database property." unless database?
     end
 
+    # @param [Symbol, nil] method
+    def assert_database_or_data_source_property(method)
+      raise StandardError, "#{method} can execute only Database property." if page?
+    end
+
     # @return [Hash]
     def property_schema_json
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       {@name => {type => property_schema_json_sub}}
+    end
+
+    ## DataSource property only methods
+    def assert_data_source_property(method)
+      raise StandardError, "#{method} can execute only DataSource property." unless data_source?
     end
 
     # @return [Hash]
     def update_property_schema_json
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       if @remove
         {@name => nil}
       elsif @new_name
@@ -210,7 +228,7 @@ module NotionRubyMapping
 
     # @param [Symbol, nil] method
     def assert_page_property(method)
-      raise StandardError, "#{method} can execute only Page property." if database?
+      raise StandardError, "#{method} can execute only Page property." if database? || data_source?
     end
 
     # @return [NotionRubyMapping::Property, Array<UserObject>, nil]

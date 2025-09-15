@@ -32,7 +32,7 @@ module NotionRubyMapping
 
     # @return [Array] copyed multi select options
     def edit_multi_select_options
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @will_update = true
       @json["options"] ||= []
     end
@@ -40,7 +40,7 @@ module NotionRubyMapping
     # @return [Array]
     # @see https://www.notion.so/hkob/MultiSelectProperty-b90bba1c55d540ba97131bb013d4ca74#5ff6ec299cf64049bde2416f61b30fa9
     def multi_select_options
-      assert_database_property __method__
+      assert_data_source_property __method__
       @json["options"] || []
     end
 
@@ -65,7 +65,7 @@ module NotionRubyMapping
                    property_id: nil, property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
-      if database?
+      if database_or_data_source?
         @json = json || {"options" => []}
       else
         @json = json || []
@@ -77,7 +77,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def update_property_schema_json
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       ans = super
       return ans if ans != {} || !@will_update
 

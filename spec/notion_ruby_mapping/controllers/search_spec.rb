@@ -58,7 +58,7 @@ module NotionRubyMapping
     describe "exec" do
       let(:exec) { Search.new(query: "Sample table", database_only: true).exec }
 
-      it { expect(exec.first.database_title.full_text).to eq "Sample table" }
+      it { expect(exec.first.data_source_title.full_text).to eq "Sample table" }
     end
   end
 end

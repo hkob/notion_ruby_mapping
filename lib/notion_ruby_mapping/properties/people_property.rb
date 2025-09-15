@@ -56,7 +56,7 @@ module NotionRubyMapping
                    property_cache: nil, query: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache, query: query
-      @json = if database?
+      @json = if database_or_data_source?
                 {}
               elsif people
                 Array(people).map { |uo| UserObject.user_object(uo) }
@@ -84,7 +84,7 @@ module NotionRubyMapping
     # @return [Hash, Array]
     def update_from_json(json)
       @will_update = false
-      @json = database? ? {} : PeopleProperty.people_from_json(json)
+      @json = database_or_data_source? ? {} : PeopleProperty.people_from_json(json)
     end
   end
 end

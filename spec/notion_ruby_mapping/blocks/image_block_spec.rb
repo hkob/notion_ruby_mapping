@@ -18,13 +18,40 @@ module NotionRubyMapping
       },
     }
 
+    describe "initialize" do
+      context "with url" do
+        subject { described_class.new "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg", caption: "Notion logo" }
+
+        it { expect(subject.type).to eq type }
+        it { expect(subject.file_object.url).to eq "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg" }
+        it { expect(subject.caption.full_text).to eq "Notion logo" }
+      end
+
+      context "with file upload object" do
+        let(:file_upload_object) do
+          instance_double FileUploadObject, id: TestConnection::FILE_UPLOAD_IMAGE_ID, fname: "test.png"
+        end
+
+        before do
+          allow(file_upload_object).to receive(:is_a?).with(FileUploadObject).and_return(true)
+        end
+
+        subject { described_class.new file_upload_object }
+        it { expect(subject.type).to eq type }
+
+        it { expect(subject.file_object.file_upload_object.id).to eq TestConnection::FILE_UPLOAD_IMAGE_ID }
+
+        it { expect(subject.file_object.file_upload_object.fname).to eq "test.png" }
+      end
+    end
+
     describe "create_child_block" do
       let(:target) do
         described_class.new "https://cdn.worldvectorlogo.com/logos/notion-logo-1.svg", caption: "Notion logo"
       end
 
       it_behaves_like "create child block", described_class,
-                      "7b2f144fd2714ea690db8ffd5a84e8f0", "9a94b3131a1d4a0b814e60c8bf0345f1"
+                      "26dd8e4e98ab8112913be51c898b9411", "26dd8e4e98ab81278643d16f4a6850ac"
     end
 
     describe "save (update)" do

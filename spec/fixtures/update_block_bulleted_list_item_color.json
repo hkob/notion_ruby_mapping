@@ -6,17 +6,18 @@
     "block_id": "7ccf820b-fde0-4c72-8c0f-fdd28dc8a0b3"
   },
   "created_time": "2022-05-23T04:26:00.000Z",
-  "last_edited_time": "2022-09-02T01:19:00.000Z",
+  "last_edited_time": "2025-09-12T07:26:00.000Z",
   "created_by": {
     "object": "user",
     "id": "019a87c7-d197-44a4-b19a-baa684400f81"
   },
   "last_edited_by": {
     "object": "user",
-    "id": "019a87c7-d197-44a4-b19a-baa684400f81"
+    "id": "40673a87-d8ed-41e0-aa55-7f0e8ace24cd"
   },
   "has_children": false,
   "archived": false,
+  "in_trash": false,
   "type": "bulleted_list_item",
   "bulleted_list_item": {
     "rich_text": [
@@ -39,5 +40,6 @@
       }
     ],
     "color": "orange_background"
-  }
+  },
+  "request_id": "b50d15bf-1c86-4d6d-ae52-5b75561f33ae"
 }

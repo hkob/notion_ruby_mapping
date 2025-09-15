@@ -26,6 +26,48 @@ module NotionRubyMapping
 
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "raw json", :number, {"format" => "number_with_commas"}
+        end
+
+        describe "format=" do
+          before { target.format = "percent" }
+
+          it_behaves_like "will update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {"np" => {"number" => {"format" => "percent"}}}
+        end
+      end
+
+      context "when created from json" do
+        let(:target) { Property.create_from_json "np", tc.read_json("number_property_object"), "database" }
+
+        it_behaves_like "has name as", "np"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+
+        it_behaves_like "raw json", :number, {"format" => "number_with_commas"}
+      end
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { described_class.new "np", base_type: "data_source", format: "yen" }
+
+        it_behaves_like "has name as", "np"
+        it { expect(target.format).to eq "yen" }
+
+        it_behaves_like "filter test", described_class,
+                        %w[equals does_not_equal greater_than less_than greater_than_or_equal_to less_than_or_equal_to],
+                        value: 100
+        it_behaves_like "filter test", described_class, %w[is_empty is_not_empty]
+        it_behaves_like "raw json", :number, {"format" => "yen"}
+        it_behaves_like "property schema json", {"np" => {"number" => {"format" => "yen"}}}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("number_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", :number, {"format" => "number_with_commas"}
         end
@@ -56,7 +98,7 @@ module NotionRubyMapping
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "np", tc.read_json("number_property_object"), "database" }
+        let(:target) { Property.create_from_json "np", tc.read_json("number_property_object"), "data_source" }
 
         it_behaves_like "has name as", "np"
         it_behaves_like "will not update"

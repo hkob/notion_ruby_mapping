@@ -24,6 +24,36 @@ module NotionRubyMapping
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "checkbox", {}
         end
+      end
+
+      context "when created from json" do
+        let(:target) { Property.create_from_json "cp", tc.read_json("checkbox_property_object"), "database" }
+
+        it_behaves_like "has name as", "cp"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "update property schema json", {}
+        it_behaves_like "raw json", "checkbox", {}
+      end
+    end
+
+    context "DataSource property" do
+      context "created by new" do
+        let(:target) { described_class.new "cp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "cp"
+        it_behaves_like "filter test", described_class, %w[equals does_not_equal], value: true
+        it_behaves_like "raw json", "checkbox", {}
+        it_behaves_like "property schema json", {"cp" => {"checkbox" => {}}}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("checkbox_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {}
+          it_behaves_like "raw json", "checkbox", {}
+        end
 
         describe "new_name=" do
           before { target.new_name = "new_name" }
@@ -43,7 +73,7 @@ module NotionRubyMapping
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "cp", tc.read_json("checkbox_property_object"), "database" }
+        let(:target) { Property.create_from_json "cp", tc.read_json("checkbox_property_object"), "data_source" }
 
         it_behaves_like "has name as", "cp"
         it_behaves_like "will not update"

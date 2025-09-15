@@ -16,7 +16,7 @@ module NotionRubyMapping
       let(:target) { described_class.new }
 
       it_behaves_like "create child block", described_class,
-                      "4c86e2f2acbe4fad9a906dd17d24d5e6", "f3cbb6708d084b90bf5ed3c63495247a"
+                      "26cd8e4e98ab819b9354def743626636", "26cd8e4e98ab8136ae54f2651935aec1"
     end
   end
 end

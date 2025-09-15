@@ -2,5 +2,6 @@
   "object": "error",
   "status": 400,
   "code": "validation_error",
-  "message": "path failed validation: path.block_id should be a valid uuid, instead was `\"AAA\"`."
+  "message": "path failed validation: path.block_id should be a valid uuid, instead was `\"AAA\"`.",
+  "request_id": "eaed788c-b1b0-4e7a-a616-c7f33afa7e24"
 }

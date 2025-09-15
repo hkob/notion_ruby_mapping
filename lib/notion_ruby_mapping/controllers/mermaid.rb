@@ -5,10 +5,10 @@ module NotionRubyMapping
     # @param [String] full_text
     def initialize(full_text)
       @lines = full_text.split "\n"
-      @databases = Hash.new {}
+      @data_sources = Hash.new {}
       parse_text
     end
-    attr_reader :lines, :databases
+    attr_reader :lines, :data_sources
 
     def parse_text
       return unless @lines.shift =~ /^erDiagram/
@@ -25,7 +25,7 @@ module NotionRubyMapping
     end
 
     def db_or_create(db_name)
-      @databases[db_name] ||= MermaidDatabase.new db_name
+      @data_sources[db_name] ||= MermaidDataSource.new db_name
     end
 
     def append_db_with_attributes(db_name)
@@ -34,7 +34,7 @@ module NotionRubyMapping
         case @lines.shift
         when /^ *} *$/
           break
-        when /^ *Database +title +"(.*)" *$/
+        when /^ *DataSource +title +"(.*)" *$/
           db.name = Regexp.last_match(1)
         when /^ *([^ ]+) +[^ ]+ +"(.*)" *$/
           db.add_property Regexp.last_match(1), Regexp.last_match(2)
@@ -44,36 +44,36 @@ module NotionRubyMapping
       end
     end
 
-    def attach_database(db)
-      @databases.values.select { |mdb| mdb.name == db.database_title.full_text }.first&.attach_database(db)
+    def attach_data_source(ds)
+      @data_sources.values.select { |mds| mds.name == ds.data_source_title.full_text }.first&.attach_data_source(ds)
     end
 
     def create_notion_db(target_page, inline)
-      @databases.each_value do |mdb|
+      @data_sources.each_value do |mdb|
         mdb.create_notion_db(target_page, inline) unless mdb.real_db
       end
     end
 
     def update_title
-      @databases.each_value do |mdb|
+      @data_sources.each_value do |mdb|
         mdb.update_title
       end
     end
 
-    def update_databases
-      @databases.each_value(&:update_database)
+    def update_data_sources
+      @data_sources.each_value(&:update_database)
     end
 
     def rename_reverse_name
-      @databases.each_value(&:rename_reverse_name)
+      @data_sources.each_value(&:rename_reverse_name)
     end
 
     def count
-      @databases.values.map(&:count).sum
+      @data_sources.values.map(&:count).sum
     end
 
     def remain
-      @databases.values.map(&:remain).sum
+      @data_sources.values.map(&:remain).sum
     end
   end
 end

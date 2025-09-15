@@ -57,7 +57,7 @@
             "object": "user",
             "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6",
             "name": "Hiroyuki KOBAYASHI",
-            "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/7c61d591-74cb-48ff-b28a-6a8b936d8e3f/ErSxuLeq.png-medium.png",
+            "avatar_url": "https://s3-us-west-2.amazonaws.com/public.notion-static.com/166af4f6-0b35-4664-bf0d-0850068dddaa/my-notion-face-portrait.png",
             "type": "person",
             "person": {
               "email": "hkob@metro-cit.ac.jp"
@@ -129,5 +129,6 @@
     "next_url": "https://api.notion.com/v1/pages/6601e719a39a460c908e8909467fcccf/properties/flUp?start_cursor=PLuaRX&page_size=5",
     "type": "rich_text",
     "rich_text": {}
-  }
+  },
+  "request_id": "09c67595-74f1-4726-a28d-218471a0b591"
 }

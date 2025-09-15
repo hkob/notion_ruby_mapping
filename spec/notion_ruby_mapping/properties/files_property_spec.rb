@@ -26,6 +26,33 @@ module NotionRubyMapping
 
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "raw json", "files", {}
+          it_behaves_like "property schema json", {"fp" => {"files" => {}}}
+        end
+      end
+
+      context "when created from json" do
+        let(:target) { Property.create_from_json "fp", tc.read_json("files_property_object"), "database" }
+
+        it_behaves_like "has name as", "fp"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "raw json", "files", {}
+      end
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { described_class.new "fp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "fp"
+        it_behaves_like "raw json", "files", {}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("files_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "files", {}
           it_behaves_like "property schema json", {"fp" => {"files" => {}}}
@@ -49,7 +76,7 @@ module NotionRubyMapping
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "fp", tc.read_json("files_property_object"), "database" }
+        let(:target) { Property.create_from_json "fp", tc.read_json("files_property_object"), "data_source" }
 
         it_behaves_like "has name as", "fp"
         it_behaves_like "will not update"
@@ -365,7 +392,7 @@ module NotionRubyMapping
 
         # hook property_values_json / created_by to retrieve a property item
         it_behaves_like "property values json", {}
-        it { expect(target.files.map(&:url)).to eq ["https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220902%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220902T011420Z&X-Amz-Expires=3600&X-Amz-Signature=f0941c6678b9c2122a8b96ddc884c263451eb45de90c1ce607e82b713096eeb6&X-Amz-SignedHeaders=host&x-id=GetObject"] }
+        it { expect(target.files.map(&:url)).to eq ["https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466XJFZQL7K%2F20250901%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250901T060421Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEKb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQCBszOPzV%2BSDH8fWNljMmBd5nBEX33Oqpbq19czdLRrpQIgbc%2BXNDurI71gUo1q0fbA4jvc3KRSpH%2FGuruHHDx5dDMqiAQI%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDFKZ6Hl%2FjN3koGWtTCrcA3VeIvUped%2Fh5hUbDipveCL7mA%2B2rVyWUNQxhN22HHqn%2Bc5Dm7%2BXz3fG%2BW0BChlrWIfMbERMpbXwEj9puCjMs1uFfKPkt5x8tYkVSzCQqBn3mqJ6Ky8jqkyxhrLDql2FOhLdXZtD1arNDbHh8Nmru4F9PTmTOzPudX17gyiRuUra%2Fy1vhjwanfdqrZHffE3Otc5I8bFpbSpJRJE21nlIJJIqGkU57rLZgF0Y%2BrwUCtNCKL5%2Bz4cANQHVOl%2BOzW8TChgLO0QK2CR%2BPBAlcQFUpfjPLXURvXRUpzKgLtcqPHEPsFJLog8Oo2KtLacIbawZhksSvVFxT%2BGzPyqOuIkVM4CzHeehkHOZISuxNAdmo47TBcMkv62VGoaci38HP3SeCatSToKAKs0TYFpuwInxwhMXCk%2BVLuSsStavI6gyCkqCf5m4sY7Y6O3gJWlgMOZHSYEVP5DPMeMbJ6BJaxy6NEpPGuC9tcHKT%2B%2BqeaYHh0qrZryaDl2MgwZdQCYvhdKi1I98ee2uDuzGZaIgGJL58LwG8sVgvFZ3AHrjx%2B11GUYJ2eE3uze1nnjw9N4D%2BYLNw8KMnQ0d7eFF44uW35TpIHszWlkCE%2FfMmL9m2SHDnbaDQh28%2FUF3rac2%2FDXtMMjn1MUGOqUBgJsqG8R6nmBXU7IUcIJxfuJK01o7TFfShd%2Ft8n8DoBco1hyrlut4J1gkQcRv0K4mohu8cPNbmWz77Ykq0bwupFYBt16fzAaakIjZM50IaiMxwXvNDbUPMm2XkI6olfh2BNutVcG4hmkK2MV5kSug4WXytpzfsYbKVOjoUf82LPse%2F%2BGBtwjR2UR%2F3ckj6NIH6h9kMsijgYmLwUL1U5bN5BhOqU%2FZ&X-Amz-Signature=0dc8278b65e482c0009068a02e279ad6a28f59500edf384727b0131bf8135dbb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject"] }
       end
     end
 

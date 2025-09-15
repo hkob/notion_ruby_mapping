@@ -1,0 +1,233 @@
+{
+  "object": "data_source",
+  "id": "26cd8e4e-98ab-81d0-8983-000b28d9e04d",
+  "cover": null,
+  "icon": {
+    "type": "emoji",
+    "emoji": "🎉"
+  },
+  "created_time": "2022-02-07T21:29:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_time": "2025-09-01T06:31:00.000Z",
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "New data source title",
+        "link": null
+      },
+      "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+      },
+      "plain_text": "New data source title",
+      "href": null
+    }
+  ],
+  "description": [],
+  "is_inline": true,
+  "properties": {
+    "MultiSelect": {
+      "id": "%3BA%3Fa",
+      "name": "MultiSelect",
+      "description": null,
+      "type": "multi_select",
+      "multi_select": {
+        "options": [
+          {
+            "id": "f041d708-e5bd-4302-90cf-5826e2d6e2d4",
+            "name": "MS1",
+            "color": "orange",
+            "description": null
+          },
+          {
+            "id": "79466eab-d44d-4669-9722-105a43fa6240",
+            "name": "MS2",
+            "color": "green",
+            "description": null
+          }
+        ]
+      }
+    },
+    "Files": {
+      "id": "%3CRsW",
+      "name": "Files",
+      "description": null,
+      "type": "files",
+      "files": {}
+    },
+    "CreatedTime": {
+      "id": "BEL~",
+      "name": "CreatedTime",
+      "description": null,
+      "type": "created_time",
+      "created_time": {}
+    },
+    "Email": {
+      "id": "BHc%5C",
+      "name": "Email",
+      "description": null,
+      "type": "email",
+      "email": {}
+    },
+    "CreatedBy": {
+      "id": "G_Y%3B",
+      "name": "CreatedBy",
+      "description": null,
+      "type": "created_by",
+      "created_by": {}
+    },
+    "People": {
+      "id": "HKpZ",
+      "name": "People",
+      "description": null,
+      "type": "people",
+      "people": {}
+    },
+    "Relation": {
+      "id": "QRxU",
+      "name": "Relation",
+      "description": null,
+      "type": "relation",
+      "relation": {
+        "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+        "data_source_id": "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
+        "type": "single_property",
+        "single_property": {}
+      }
+    },
+    "Date": {
+      "id": "%60%40hJ",
+      "name": "Date",
+      "description": null,
+      "type": "date",
+      "date": {}
+    },
+    "Formula": {
+      "id": "gb%5Ek",
+      "name": "Formula",
+      "description": null,
+      "type": "formula",
+      "formula": {
+        "expression": "now()"
+      }
+    },
+    "PhoneNumber": {
+      "id": "jAm%5D",
+      "name": "PhoneNumber",
+      "description": null,
+      "type": "phone_number",
+      "phone_number": {}
+    },
+    "Checkbox": {
+      "id": "mcBU",
+      "name": "Checkbox",
+      "description": null,
+      "type": "checkbox",
+      "checkbox": {}
+    },
+    "Number": {
+      "id": "nCip",
+      "name": "Number",
+      "description": null,
+      "type": "number",
+      "number": {
+        "format": "yen"
+      }
+    },
+    "LastEditedBy": {
+      "id": "npoF",
+      "name": "LastEditedBy",
+      "description": null,
+      "type": "last_edited_by",
+      "last_edited_by": {}
+    },
+    "Select": {
+      "id": "o%5EB%3B",
+      "name": "Select",
+      "description": null,
+      "type": "select",
+      "select": {
+        "options": [
+          {
+            "id": "6d3eded4-d111-465d-ab96-978d4bf63b65",
+            "name": "S1",
+            "color": "yellow",
+            "description": null
+          },
+          {
+            "id": "42111e2e-4f29-483e-91b6-e7d08adc0b5b",
+            "name": "S2",
+            "color": "default",
+            "description": null
+          }
+        ]
+      }
+    },
+    "LastEditedTime": {
+      "id": "tZzh",
+      "name": "LastEditedTime",
+      "description": null,
+      "type": "last_edited_time",
+      "last_edited_time": {}
+    },
+    "Rollup": {
+      "id": "%7BVyY",
+      "name": "Rollup",
+      "description": null,
+      "type": "rollup",
+      "rollup": {
+        "rollup_property_name": "NumberTitle",
+        "relation_property_name": "Relation",
+        "rollup_property_id": "swq\\",
+        "relation_property_id": "QRxU",
+        "function": "sum"
+      }
+    },
+    "RichText": {
+      "id": "%7B%5DIC",
+      "name": "RichText",
+      "description": null,
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "Url": {
+      "id": "%7D%3Bd_",
+      "name": "Url",
+      "description": null,
+      "type": "url",
+      "url": {}
+    },
+    "Title": {
+      "id": "title",
+      "name": "Title",
+      "description": null,
+      "type": "title",
+      "title": {}
+    }
+  },
+  "parent": {
+    "type": "database_id",
+    "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253"
+  },
+  "database_parent": {
+    "type": "page_id",
+    "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
+  },
+  "url": "https://www.notion.so/c37a2c66e3aa4a0da44773de3b80c253",
+  "public_url": "https://hkob.notion.site/c37a2c66e3aa4a0da44773de3b80c253",
+  "archived": false,
+  "in_trash": false,
+  "request_id": "8a7235f1-d887-44e9-aead-7b32a6ff0fcf"
+}

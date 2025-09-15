@@ -37,7 +37,7 @@ module NotionRubyMapping
     DB_MANY_CHILDREN_PAGE_ID = "b56cba9682ab46f2866ae7a9e590dff3"
     PARENT1_PAGE_ID = "860753bb6d1f48de96211fa6e0e31f82"
     BLOCK_TEST_PAGE_ID = "67cf059ce74646a0b72d481c9ff5d386"
-    BLOCK_CREATE_TEST_PAGE_ID = "3867910a437340be931cf7f2c06443c6"
+    BLOCK_CREATE_TEST_PAGE_ID = "26cd8e4e98ab8061b880f8f45db00383"
     STATUS_PAGE_ID = "68ff12a08dc04f94ae2e0931344eb153"
     BUTTON_PAGE_ID = "4ccd9bda0f6440a0b32490c091011b8f"
     WIKI_PAGE_ID = "197d8e4e98ab80d7b0cad8a33a1cbfba"
@@ -50,13 +50,17 @@ module NotionRubyMapping
     STATUS_DATABASE_ID = "71f892a3bf1744918d8e8f125c55bf43"
     BUTTON_DATABASE_ID = "254e7e605aad458a8a877ea7ee355ada"
     WIKI_DATABASE_ID = "197d8e4e98ab805282cce7137a10f133"
+    # datasource_id
+    DATA_SOURCE_ID = "4f93db514e1d4015b07f876e34c3b0b1"
+    PARENT_DATA_SOURCE_ID = "f0a1bf337ff04d24b5b6efb3ea006b15"
+    CREATED_DATA_SOURCE_ID = "26cd8e4e98ab81d08983000b28d9e04d"
     # block_id
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
     PARAGRAPH_BLOCK_ID = "79ddb5ed15c74a409cf6a018d23ceb19"
     APPEND_AFTER_PARENT_ID = "03f6460c26734af484b95de15082d84e"
     APPEND_AFTER_PREVIOUS_ID = "263f125b179e4e4f996a1eff812d9d3d"
-    APPEND_AFTER_ADDED_ID = "67c0e9bdbbe4456c873127763d7fa580"
+    APPEND_AFTER_ADDED_ID = "26dd8e4e98ab81dda004fec6512815a6"
     FILE_UPLOAD_IMAGE_ID = "20cd8e4e98ab81aa973b00b23083c115"
     FILE_UPLOAD_PAGE_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     FILE_UPLOAD_VIDEO_ID = "21ad8e4e98ab814e8d9600b2ded97d6c"
@@ -87,14 +91,13 @@ module NotionRubyMapping
       link_to_page: "b921ff3cb13c43c2b53ad9d1ba19b8c1",
       numbered_list_item: "1860edbc410d408b87f61e37e07352a2",
       paragraph: "79ddb5ed15c74a409cf6a018d23ceb19",
-      pdf: "878fd86ebe37482fb637d09fb63eaee8",
+      pdf: "26ed8e4e98ab809b98b8fdfeca5166e6",
       quote: "8eba490bcc8343849cb09a739a4be91c",
       synced_block_copy: "ea7b5183eea24d30b019010921e93b2c",
       synced_block_original: "4815032e6f2443e4bc8c9bdc6299b090",
       table: "ba612e8bc85845699822ccca7ab4c709",
       table_of_contents: "0de608aac31b4c5ca84aae48d8ea05b8",
       table_row: "57fc378c9db14fef8d7472c1b2084df1",
-      template: "12fe0347f8c44da0ace99c8992b5827f",
       to_do: "676129de8eac42c99449c15893775cae",
       toggle: "005923dab39f4af6bbd11be98150d2b2",
       toggle_heading_1: "82daa282435d4f9f8f3bb8c0328a963f",
@@ -102,7 +105,7 @@ module NotionRubyMapping
       toggle_heading_3: "115fb937ab6d4a2e9079921b03e50756",
       video: "bed3abe020094aa990564844f981b07a",
     }.freeze
-    BLOCK_CREATE_TEST_BLOCK_ID = "82314687163e41baaf300a8a2bec57c2"
+    BLOCK_CREATE_TEST_BLOCK_ID = "26cd8e4e98ab8035a5b4ea240d930619"
     DESTROY_BLOCK_ID = "a1949aaefbfa46f3bd1a90687b86bf1a"
     UPDATE_BLOCK_ID_HASH = {
       bookmark: "899e342cec84415f9ff86225704cbb75",
@@ -125,7 +128,6 @@ module NotionRubyMapping
       quote: "56e80c562281487281f4bf34d8db02bc",
       synced_block: "1798b85f12ec4e28b13e47c591bc0ec5",
       table_of_contents: "b3c6fe0a5885498aa5cb4c4b3080f4cf",
-      template: "704d8961e0fd42c9b5b08a086c84f100",
       to_do: "683ef29efbb84d78a411c541d68ccb06",
       toggle: "5b7373a8ac82456684a02e761aabf6fc",
       video: "8c49d0d66f9b45fb9bea6253997c87ba",
@@ -134,7 +136,7 @@ module NotionRubyMapping
     USER_HKOB_ID = "2200a9116a9644bbbd386bfb1e01b9f6"
     USER_BOT_ID = "019a87c7d19744a4b19abaa684400f81"
 
-    # @param [String] key
+    # @param [String, Symbol] key
     # @return [String] block_id
     def self.block_id(key)
       BLOCK_ID_HASH[key.to_sym]
@@ -187,12 +189,15 @@ module NotionRubyMapping
       WebMock.enable!
       retrieve_page
       retrieve_database
+      retrieve_data_source
       retrieve_block
-      query_database
+      query_data_source
       update_page
       create_page
       create_database
+      create_data_source
       update_database
+      update_data_source
       retrieve_block_children
       append_block_children_page
       append_block_children_block
@@ -270,6 +275,15 @@ module NotionRubyMapping
       }
     end
 
+    def retrieve_data_source
+      generate_stubs_sub :get, __method__, :data_source_path, {
+        data_source: [DATA_SOURCE_ID, 200],
+        wrong_format: ["AAA", 400],
+        parent: [PARENT_DATA_SOURCE_ID, 200],
+        created: [CREATED_DATA_SOURCE_ID, 200],
+      }
+    end
+
     def retrieve_block
       generate_stubs_sub :get, __method__, :block_path, {
         h1block: [H1_BLOCK_ID, 200],
@@ -280,12 +294,12 @@ module NotionRubyMapping
       generate_stubs_sub :get, __method__, :block_path, hash
     end
 
-    def query_database
-      generate_stubs_sub :post, __method__, :query_database_path, {
-        limit_2: [DATABASE_ID, 200, {"page_size" => 2}],
-        next_2: [DATABASE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
-        last_2: [DATABASE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
-        filter_properties: [DATABASE_ID, 200, {"page_size" => 100}],
+    def query_data_source
+      generate_stubs_sub :post, __method__, :query_data_source_path, {
+        limit_2: [DATA_SOURCE_ID, 200, {"page_size" => 2}],
+        next_2: [DATA_SOURCE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
+        last_2: [DATA_SOURCE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
+        filter_properties: [DATA_SOURCE_ID, 200, {"page_size" => 100}],
       }
     end
 
@@ -469,17 +483,38 @@ module NotionRubyMapping
                 {
                   "type" => "text",
                   "text" => {
-                    "content" => "New Page Title",
+                    "content" => "New Page by database_id",
                     "link" => nil,
                   },
-                  "plain_text" => "New Page Title",
+                  "plain_text" => "New Page by database_id",
                   "href" => nil,
                 },
               ],
             },
           },
           "parent" => {
-            "database_id" => "1d6b1040a9fb48d99a3d041429816e9f",
+            "data_source_id" => "f0a1bf337ff04d24b5b6efb3ea006b15",
+          },
+        }],
+        parent_data_source: [nil, 200, {
+          "properties" => {
+            "Name" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page by data_source_id",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Page by data_source_id",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "data_source_id" => "f0a1bf337ff04d24b5b6efb3ea006b15",
           },
         }],
       }
@@ -488,6 +523,78 @@ module NotionRubyMapping
     def create_database
       generate_stubs_sub :post, __method__, :databases_path, {
         from_page: [nil, 200, {
+          "initial_data_source" => {
+            "properties" => {
+              "Checkbox" => {"checkbox" => {}},
+              "CreatedBy" => {"created_by" => {}},
+              "CreatedTime" => {"created_time" => {}},
+              "Date" => {"date" => {}},
+              "Email" => {"email" => {}},
+              "Files" => {"files" => {}},
+              "Formula" => {"formula" => {"expression" => "now()"}},
+              "LastEditedBy" => {"last_edited_by" => {}},
+              "LastEditedTime" => {"last_edited_time" => {}},
+              "MultiSelect" => {
+                "multi_select" => {
+                  "options" => [
+                    {"name" => "MS1", "color" => "orange"},
+                    {"name" => "MS2", "color" => "green"},
+                  ],
+                },
+              },
+              "Number" => {"number" => {"format" => "yen"}},
+              "People" => {"people" => {}},
+              "PhoneNumber" => {"phone_number" => {}},
+              "Relation" => {
+                "relation" => {
+                  "data_source_id" => "4f93db514e1d4015b07f876e34c3b0b1",
+                  "type" => "dual_property",
+                  "dual_property" => {},
+                },
+              },
+              "Rollup" => {
+                "rollup" => {
+                  "function" => "sum",
+                  "relation_property_name" => "Relation",
+                  "rollup_property_name" => "NumberTitle",
+                },
+              },
+              "RichText" => {"rich_text" => {}},
+              "Select" => {
+                "select" => {
+                  "options" => [
+                    {"name" => "S1", "color" => "yellow"},
+                    {"name" => "S2", "color" => "default"},
+                  ],
+                },
+              },
+              "Title" => {"title" => {}},
+              "Url" => {"url" => {}},
+            },
+          },
+          "title" => [
+            {
+              "type" => "text",
+              "text" => {"content" => "New database title", "link" => nil},
+              "plain_text" => "New database title",
+              "href" => nil,
+            },
+          ],
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
+          },
+          "icon" => {
+            "type" => "emoji",
+            "emoji" => "🎉",
+          },
+        }],
+      }
+    end
+
+    def create_data_source
+      generate_stubs_sub :post, __method__, :data_sources_path, {
+        from_database: [nil, 200, {
           "properties" => {
             "Checkbox" => {"checkbox" => {}},
             "CreatedBy" => {"created_by" => {}},
@@ -511,7 +618,7 @@ module NotionRubyMapping
             "PhoneNumber" => {"phone_number" => {}},
             "Relation" => {
               "relation" => {
-                "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
+                "data_source_id" => "4f93db514e1d4015b07f876e34c3b0b1",
                 "type" => "dual_property",
                 "dual_property" => {},
               },
@@ -538,14 +645,14 @@ module NotionRubyMapping
           "title" => [
             {
               "type" => "text",
-              "text" => {"content" => "New database title", "link" => nil},
-              "plain_text" => "New database title",
+              "text" => {"content" => "New data source by database_id", "link" => nil},
+              "plain_text" => "New data source by database_id",
               "href" => nil,
             },
           ],
           "parent" => {
-            "type" => "page_id",
-            "page_id" => "c01166c613ae45cbb96818b4ef2f5a77",
+            "type" => "database_id",
+            "database_id" => "c37a2c66e3aa4a0da44773de3b80c253",
           },
           "icon" => {
             "type" => "emoji",
@@ -627,7 +734,12 @@ module NotionRubyMapping
             "emoji" => "🎉",
           },
         }],
-        add_property: [CREATED_DATABASE_ID, 200, {
+      }
+    end
+
+    def update_data_source
+      generate_stubs_sub :patch, __method__, :data_source_path, {
+        add_property: [CREATED_DATA_SOURCE_ID, 200, {
           "properties" => {
             "added number property" => {
               "number" => {
@@ -639,13 +751,13 @@ module NotionRubyMapping
             },
           },
         }],
-        rename_properties: [CREATED_DATABASE_ID, 200, {
+        rename_properties: [CREATED_DATA_SOURCE_ID, 200, {
           "properties" => {
             "added number property" => {"name" => "renamed number property"},
             "added url property" => {"name" => "renamed url property"},
           },
         }],
-        remove_properties: [CREATED_DATABASE_ID, 200, {
+        remove_properties: [CREATED_DATA_SOURCE_ID, 200, {
           "properties" => {
             "renamed number property" => nil,
             "renamed url property" => nil,
@@ -2373,24 +2485,6 @@ module NotionRubyMapping
             },
           }
         ],
-        template_rta: [
-          UPDATE_BLOCK_ID_HASH[:template], 200,
-          {
-            "template" => {
-              "rich_text" => [
-                {
-                  "type" => "text",
-                  "text" => {
-                    "content" => "New template",
-                    "link" => nil,
-                  },
-                  "plain_text" => "New template",
-                  "href" => nil,
-                },
-              ],
-            },
-          }
-        ],
         to_do_checked: [
           UPDATE_BLOCK_ID_HASH[:to_do], 200,
           {
@@ -2778,7 +2872,7 @@ module RSpec
       path += query.query_string if use_query && method == :get
       shell = [
         "#!/bin/sh\ncurl #{method == :get ? "" : "-X #{method.to_s.upcase}"} 'https://api.notion.com/#{path}'",
-        "  -H 'Notion-Version: 2022-06-28'",
+        "  -H 'Notion-Version: #{NotionRubyMapping::NOTION_VERSION}'",
         "  -H 'Authorization: Bearer '\"$NOTION_API_KEY\"''",
       ]
       shell << "  -H 'Content-Type: application/json'" if %i[post patch].include?(method)
@@ -2990,7 +3084,7 @@ module RSpec
       let(:org_page) { Page.new id: page_id }
       let(:org_block) { CalloutBlock.new "ABC", id: block_id, emoji: "💡" }
 
-      %i[page block].each do |pb|
+      %w[page block].each do |pb|
         is_page = pb == "page"
         ans_block_id = is_page ? block_page_id : block_block_id
         context "when for #{pb}" do

@@ -43,7 +43,7 @@ module NotionRubyMapping
       end
 
       it_behaves_like "create child block", described_class,
-                      "5b8d3a90e9cd4241848fe2508e4520a4", "c594d5122fc742f5a6374f9d2ece148b"
+                      "26ed8e4e98ab815c9df7ed2290d7744a", "26ed8e4e98ab814891e1dd9c66b8836a"
     end
 
     describe "save (update)" do

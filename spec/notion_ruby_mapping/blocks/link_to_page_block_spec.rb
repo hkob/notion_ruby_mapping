@@ -22,7 +22,7 @@ module NotionRubyMapping
         end
 
         it_behaves_like "create child block", described_class,
-                        "943c521713ce408481d2bdc6c4f5fe38", "f6489b0b85234c1793946d996b2cb9f3"
+                        "26ed8e4e98ab811b8c7ddec5fced2b3c", "26ed8e4e98ab815d9a78dfc66f60f888"
       end
 
       context "link_to_page for page (url)" do
@@ -31,7 +31,7 @@ module NotionRubyMapping
         end
 
         it_behaves_like "create child block", described_class,
-                        "943c521713ce408481d2bdc6c4f5fe38", "f6489b0b85234c1793946d996b2cb9f3"
+                        "26ed8e4e98ab811b8c7ddec5fced2b3c", "26ed8e4e98ab815d9a78dfc66f60f888"
       end
 
       context "link_to_page for database" do
@@ -40,7 +40,7 @@ module NotionRubyMapping
         end
 
         it_behaves_like "create child block", described_class,
-                        "2dfb62446fa844b9aaa085e74389a7d8", "7b1a7fe42fd945b18efab54330533d8b"
+                        "26ed8e4e98ab8108beb5e6326b7ba2e3", "26ed8e4e98ab81a9bdf6f36e6b1dfe9c"
       end
 
       context "link_to_page for database (url)" do
@@ -49,7 +49,7 @@ module NotionRubyMapping
         end
 
         it_behaves_like "create child block", described_class,
-                        "2dfb62446fa844b9aaa085e74389a7d8", "7b1a7fe42fd945b18efab54330533d8b"
+                        "26ed8e4e98ab8108beb5e6326b7ba2e3", "26ed8e4e98ab81a9bdf6f36e6b1dfe9c"
       end
     end
   end

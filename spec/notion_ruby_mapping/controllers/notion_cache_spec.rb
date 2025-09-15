@@ -73,12 +73,24 @@ module NotionRubyMapping
       it { expect(nc.databases_path).to eq "v1/databases" }
     end
 
+    describe "data_source_path" do
+      it { expect(nc.data_source_path("ABC")).to eq "v1/data_sources/ABC" }
+    end
+
+    describe "data_sources_path" do
+      it { expect(nc.data_sources_path).to eq "v1/data_sources" }
+    end
+
     describe "page_path" do
       it { expect(nc.page_path("ABC")).to eq "v1/pages/ABC" }
     end
 
     describe "page_property_path" do
       it { expect(nc.page_property_path("ABC", "DEF")).to eq "v1/pages/ABC/properties/DEF" }
+    end
+
+    describe "query_data_source_path" do
+      it { expect(nc.query_data_source_path("ABC")).to eq "v1/data_sources/ABC/query" }
     end
 
     describe "search_path" do

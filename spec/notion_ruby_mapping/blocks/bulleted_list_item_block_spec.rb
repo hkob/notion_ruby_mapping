@@ -38,7 +38,7 @@ module NotionRubyMapping
       let(:target) { described_class.new "Bullet list item", color: "green", sub_blocks: sub_block }
 
       it_behaves_like "create child block", described_class,
-                      "e9b08f364af846d3a282ce575d2abddf", "a1948b8fbdc544f1a1b3f8992b8100b0"
+                      "26cd8e4e98ab817bae85ed8c26e284e3", "26cd8e4e98ab81108e56d02b052efeab"
     end
 
     describe "save (update)" do

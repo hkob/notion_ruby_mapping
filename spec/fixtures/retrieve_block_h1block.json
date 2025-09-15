@@ -17,6 +17,7 @@
   },
   "has_children": false,
   "archived": false,
+  "in_trash": false,
   "type": "heading_1",
   "heading_1": {
     "rich_text": [
@@ -40,5 +41,6 @@
     ],
     "is_toggleable": false,
     "color": "green_background"
-  }
+  },
+  "request_id": "617a7ce8-e644-454f-9e7f-1b450cb691cf"
 }

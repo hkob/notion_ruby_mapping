@@ -32,7 +32,7 @@
         "text": {
           "content": "高専HP",
           "link": {
-            "url": "https://www.metro-cit.ac.jp"
+            "url": "https://www.metro-cit.ac.jp/"
           }
         },
         "annotations": {
@@ -44,7 +44,7 @@
           "color": "default"
         },
         "plain_text": "高専HP",
-        "href": "https://www.metro-cit.ac.jp"
+        "href": "https://www.metro-cit.ac.jp/"
       }
     },
     {
@@ -124,5 +124,6 @@
     "next_url": null,
     "type": "rich_text",
     "rich_text": {}
-  }
+  },
+  "request_id": "42b8a6ab-efd5-4b39-9aac-bc964bfefeaf"
 }

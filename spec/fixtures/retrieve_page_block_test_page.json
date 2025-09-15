@@ -21,6 +21,7 @@
     "page_id": "c01166c6-13ae-45cb-b968-18b4ef2f5a77"
   },
   "archived": false,
+  "in_trash": false,
   "properties": {
     "title": {
       "id": "title",
@@ -46,5 +47,7 @@
       ]
     }
   },
-  "url": "https://www.notion.so/Block-test-page-67cf059ce74646a0b72d481c9ff5d386"
+  "url": "https://www.notion.so/Block-test-page-67cf059ce74646a0b72d481c9ff5d386",
+  "public_url": "https://hkob.notion.site/Block-test-page-67cf059ce74646a0b72d481c9ff5d386",
+  "request_id": "8cdd343a-b124-41da-a07c-87b6d8a776aa"
 }

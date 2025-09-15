@@ -1,13 +1,1 @@
-{
-  "object": "property_item",
-  "type": "formula",
-  "id": "%5D~iZ",
-  "formula": {
-    "type": "date",
-    "date": {
-      "start": "2022-09-02T01:14:00.000+00:00",
-      "end": null,
-      "time_zone": null
-    }
-  }
-}
+{"object":"property_item","type":"formula","id":"%5D~iZ","formula":{"type":"date","date":{"start":"2025-09-01T06:05:00.000+00:00","end":null,"time_zone":null}},"request_id":"4e5685f8-521f-46b0-8861-fb6c3dc35af5"}

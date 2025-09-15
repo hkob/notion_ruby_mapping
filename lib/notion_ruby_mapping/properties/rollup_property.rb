@@ -23,14 +23,14 @@ module NotionRubyMapping
     # @return [String] new or settled function
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#94021d4e6c0b44519443c1e1cc6b3aba
     def function
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @json["function"]
     end
 
     # @param [String] func
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#647c74803cac49a9b79199828157e17a
     def function=(func)
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @will_update = true
       @json["function"] = func
     end
@@ -38,14 +38,14 @@ module NotionRubyMapping
     # @return [String] new or settled relation_property_name
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#684fc4739c4f4d6a9b93687f72cd8dad
     def relation_property_name
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @json["relation_property_name"]
     end
 
     # @param [String] rpn
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#a61c2100758841c381edd820aa88ac65
     def relation_property_name=(rpn)
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @will_update = true
       @json["relation_property_name"] = rpn
     end
@@ -53,14 +53,14 @@ module NotionRubyMapping
     # @return [String] new or settled rollup_property_name
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#8ce9ee31a2e2473ab7ba21781e4b440d
     def rollup_property_name
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @json["rollup_property_name"]
     end
 
     # @param [String] rpn
     # @see https://www.notion.so/hkob/RollupProperty-eb10fbac3a93436289e74e5c651e9134#66503f4472f2456aa9b383f03b1fe0a6
     def rollup_property_name=(rpn)
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       @will_update = true
       @json["rollup_property_name"] = rpn
     end
@@ -82,7 +82,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def update_property_schema_json
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       ans = super
       return ans if ans != {} || !@will_update
 

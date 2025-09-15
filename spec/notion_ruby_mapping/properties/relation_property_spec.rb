@@ -19,9 +19,8 @@ module NotionRubyMapping
 
           it_behaves_like "will not update"
           it_behaves_like "assert different property", :property_values_json
-          it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "relation", {
-            "database_id" => "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+            "data_source_id" => "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
             "type" => "dual_property",
             "dual_property" => {
               "synced_property_name" => "RelationTitle",
@@ -31,7 +30,7 @@ module NotionRubyMapping
           it_behaves_like "property schema json", {
             "rp" => {
               "relation" => {
-                "database_id" => "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+                "data_source_id" => "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
                 "type" => "dual_property",
                 "dual_property" => {
                   "synced_property_id" => "%3CnJT",
@@ -40,17 +39,109 @@ module NotionRubyMapping
               },
             },
           }
+          it { expect(target.dual_property?).to be_truthy }
+          it { expect(target.single_property?).to be_falsey }
+
+          describe "replace_relation_data_source (dual_property)" do
+            before { target.replace_relation_data_source data_source_id: "new_data_source_id" }
+
+            it_behaves_like "will update"
+            it_behaves_like "assert different property", :property_values_json
+            it_behaves_like "update property schema json", {
+              "rp" => {
+                "relation" => {
+                  "data_source_id" => "new_data_source_id",
+                  "type" => "dual_property",
+                  "dual_property" => {},
+                },
+              },
+            }
+          end
+
+          describe "replace_relation_data_source (single_property)" do
+            before do
+              target.replace_relation_data_source data_source_id: "new_data_source_id", type: "single_property"
+            end
+
+            it_behaves_like "will update"
+            it_behaves_like "assert different property", :property_values_json
+            it_behaves_like "update property schema json", {
+              "rp" => {
+                "relation" => {
+                  "data_source_id" => "new_data_source_id",
+                  "type" => "single_property",
+                  "single_property" => {},
+                },
+              },
+            }
+          end
+        end
+      end
+
+      context "when created from json" do
+        let(:target) { Property.create_from_json "rp", tc.read_json("relation_property_object"), "database" }
+
+        it_behaves_like "has name as", "rp"
+        it_behaves_like "will not update"
+        it_behaves_like "assert different property", :property_values_json
+        it_behaves_like "raw json", "relation", {
+          "data_source_id" => "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
+          "type" => "dual_property",
+          "dual_property" => {
+            "synced_property_name" => "RelationTitle",
+            "synced_property_id" => "%3CnJT",
+          },
+        }
+      end
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { described_class.new "rp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "rp"
+        it_behaves_like "raw json", :relation, {}
+
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("relation_property_object")) }
+
+          it_behaves_like "will not update"
+          it_behaves_like "assert different property", :property_values_json
+          it_behaves_like "update property schema json", {}
+          it_behaves_like "raw json", "relation", {
+            "data_source_id" => "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
+            "type" => "dual_property",
+            "dual_property" => {
+              "synced_property_name" => "RelationTitle",
+              "synced_property_id" => "%3CnJT",
+            },
+          }
+          it_behaves_like "property schema json", {
+            "rp" => {
+              "relation" => {
+                "data_source_id" => "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
+                "type" => "dual_property",
+                "dual_property" => {
+                  "synced_property_id" => "%3CnJT",
+                  "synced_property_name" => "RelationTitle",
+                },
+              },
+            },
+          }
+
+          it { expect(target.dual_property?).to be_truthy }
+          it { expect(target.single_property?).to be_falsey }
         end
 
-        describe "replace_relation_database (dual_property)" do
-          before { target.replace_relation_database database_id: "new_database_id" }
+        describe "replace_relation_data_source (dual_property)" do
+          before { target.replace_relation_data_source data_source_id: "new_data_source_id" }
 
           it_behaves_like "will update"
           it_behaves_like "assert different property", :property_values_json
           it_behaves_like "update property schema json", {
             "rp" => {
               "relation" => {
-                "database_id" => "new_database_id",
+                "data_source_id" => "new_data_source_id",
                 "type" => "dual_property",
                 "dual_property" => {},
               },
@@ -58,9 +149,9 @@ module NotionRubyMapping
           }
         end
 
-        describe "replace_relation_database (single_property)" do
+        describe "replace_relation_data_source (single_property)" do
           before do
-            target.replace_relation_database database_id: "new_database_id", type: "single_property"
+            target.replace_relation_data_source data_source_id: "new_data_source_id", type: "single_property"
           end
 
           it_behaves_like "will update"
@@ -68,7 +159,7 @@ module NotionRubyMapping
           it_behaves_like "update property schema json", {
             "rp" => {
               "relation" => {
-                "database_id" => "new_database_id",
+                "data_source_id" => "new_data_source_id",
                 "type" => "single_property",
                 "single_property" => {},
               },
@@ -94,14 +185,14 @@ module NotionRubyMapping
       end
 
       context "when created from json" do
-        let(:target) { Property.create_from_json "rp", tc.read_json("relation_property_object"), "database" }
+        let(:target) { Property.create_from_json "rp", tc.read_json("relation_property_object"), "data_source" }
 
         it_behaves_like "has name as", "rp"
         it_behaves_like "will not update"
         it_behaves_like "assert different property", :property_values_json
         it_behaves_like "update property schema json", {}
         it_behaves_like "raw json", "relation", {
-          "database_id" => "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+          "data_source_id" => "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
           "type" => "dual_property",
           "dual_property" => {
             "synced_property_name" => "RelationTitle",

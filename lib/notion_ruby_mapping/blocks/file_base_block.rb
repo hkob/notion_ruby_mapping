@@ -3,18 +3,18 @@
 module NotionRubyMapping
   # Notion block
   class FileBaseBlock < Block
-    # @param [String, nil] url
+    # @param [String, FileUploadObject, NilClass] url or file upload object
     # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>, nil] caption
     # @see https://www.notion.so/hkob/FileBlock-08f2aa6948364d00b92beacaac9a619c#ace53d2e6ff2404f937179ae1e966e98
     # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#4cb790b8b5c847acab4341d55e4fa66a
-    def initialize(url = nil, caption: [], json: nil, id: nil, parent: nil)
+    def initialize(url_or_fuo = nil, caption: [], json: nil, id: nil, parent: nil)
       super(json: json, id: id, parent: parent)
       if @json
         @file_object = FileObject.new json: @json[type]
         decode_block_caption
         @can_append = @file_object.external?
       else
-        @file_object = FileObject.file_object url
+        @file_object = FileObject.file_object url_or_fuo
         @caption = RichTextArray.rich_text_array "caption", caption
       end
     end

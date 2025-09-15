@@ -8,7 +8,7 @@ module NotionRubyMapping
   # you Notion API token
   NOTION_API_TOKEN = "secret_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx"
   # your task Database id
-  DATABASE_ID = "0123456789abcdef0123456789abcdef"
+  DATA_SOURCE_ID = "0123456789abcdef0123456789abcdef"
   # your Title name
   TITLE_NAME = "タスク名"
   # your DateProperty name
@@ -75,10 +75,10 @@ module NotionRubyMapping
       usage
     end
 
-    NotionCache.instance.create_client NOTION_API_TOKEN
+    NotionRubyMapping.configure { |c| c.token = NOTION_API_TOKEN }
 
-    # create database object without API call and create a child page
-    db = Database.new id: DATABASE_ID
+    # create data_source object without API call and create a child page
+    DataSource.new id: DATA_SOURCE_ID
     page = db.create_child_page TitleProperty, TITLE_NAME, DateProperty, DATE_NAME
 
     # obtain title and date properties and set values

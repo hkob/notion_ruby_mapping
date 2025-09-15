@@ -44,20 +44,20 @@ module NotionRubyMapping
 
     ## Database property only methods
 
-    # @return [String] relation database_id
+    # @return [String] relation data_source_id
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#eb40f1a2ad5c4e368d343870a7e529f9
-    def relation_database_id
-      assert_database_property __method__
-      @json["database_id"]
+    def relation_data_source_id
+      assert_data_source_property __method__
+      @json["data_source_id"]
     end
 
-    # @param [String] database_id
+    # @param [String] data_source_id
     # @param [String] synced_property_name
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#7f5029fb7f6e4c009f22888b233e6f64
-    def replace_relation_database(database_id: nil, type: "dual_property")
-      assert_database_property __method__
+    def replace_relation_data_source(data_source_id: nil, type: "dual_property")
+      assert_database_or_data_source_property __method__
       @will_update = true
-      @json["database_id"] = database_id if database_id
+      @json["data_source_id"] = data_source_id if data_source_id
       @json["type"] = type
       @json[type] = {}
       @json.delete type == "dual_property" ? "single_property" : "dual_property"
@@ -75,7 +75,7 @@ module NotionRubyMapping
                    property_cache: nil, query: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache, query: query
-      @json = if database?
+      @json = if database_or_data_source?
                 json || {}
               elsif relation
                 Array(relation).map { |r| {"id" => r} }
@@ -88,7 +88,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def update_property_schema_json
-      assert_database_property __method__
+      assert_database_or_data_source_property __method__
       ans = super
       return ans if ans != {} || !@will_update
 
@@ -97,16 +97,28 @@ module NotionRubyMapping
       ans
     end
 
-    def database_id
-      @json["database_id"]
+    def data_source_id
+      @json["data_source_id"]
+    end
+
+    # @return [TrueClass, FalseClass] true if dual_property
+    def dual_property?
+      assert_database_or_data_source_property __method__
+      @json["type"] == "dual_property"
+    end
+
+    # @return [TrueClass, FalseClass] true if single_property
+    def single_property?
+      assert_database_or_data_source_property __method__
+      @json["type"] == "single_property"
     end
 
     def synced_property_id
-      @json["type"] == "dual_property" ? @json["dual_property"]["synced_property_id"] : nil
+      dual_property? ? @json["dual_property"]["synced_property_id"] : nil
     end
 
     def synced_property_name
-      @json["type"] == "dual_property" ? @json["dual_property"]["synced_property_name"] : nil
+      dual_property? ? @json["dual_property"]["synced_property_name"] : nil
     end
 
     # @return [Hash] created json

@@ -2,7 +2,7 @@
 
 class FileUploadObject
   MAX_SIZE = 10 * 1024 * 1024 # 10 MB
-  # @param [String] id
+  # @param [String] fname
   def initialize(fname:, external_url: nil)
     @fname = fname
     if external_url

@@ -38,7 +38,7 @@ module NotionRubyMapping
       let(:target) { ParagraphBlock.new "A sample paragraph", color: "yellow_background", sub_blocks: sub_block }
 
       it_behaves_like "create child block", described_class,
-                      "b7fe111b9fed4c9e982286f49968f9f6", "b25a7818ceeb41d09cd65e3547726886"
+                      "26ed8e4e98ab81cf8adce9ffc53b5fe9", "26ed8e4e98ab814aa03be2e5c161f81b"
     end
 
     describe "save (update)" do

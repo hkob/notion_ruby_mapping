@@ -1,8 +1,12 @@
 {
   "object": "block",
   "id": "4815032e-6f24-43e4-bc8c-9bdc6299b090",
+  "parent": {
+    "type": "page_id",
+    "page_id": "67cf059c-e746-46a0-b72d-481c9ff5d386"
+  },
   "created_time": "2022-04-23T21:19:00.000Z",
-  "last_edited_time": "2022-04-23T21:19:00.000Z",
+  "last_edited_time": "2022-07-13T06:55:00.000Z",
   "created_by": {
     "object": "user",
     "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
@@ -13,8 +17,10 @@
   },
   "has_children": true,
   "archived": false,
+  "in_trash": false,
   "type": "synced_block",
   "synced_block": {
     "synced_from": null
-  }
+  },
+  "request_id": "01fca624-dabc-4472-b7f8-6f7c9298e6f4"
 }

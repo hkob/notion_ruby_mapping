@@ -3,7 +3,7 @@
   "name": "Related to Sample table (Column)",
   "type": "relation",
   "relation": {
-    "database_id": "c37a2c66-e3aa-4a0d-a447-73de3b80c253",
+    "data_source_id": "4f93db51-4e1d-4015-b07f-876e34c3b0b1",
     "type": "dual_property",
     "dual_property": {
       "synced_property_name": "RelationTitle",

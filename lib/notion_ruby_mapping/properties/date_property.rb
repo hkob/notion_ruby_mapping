@@ -102,7 +102,7 @@ module NotionRubyMapping
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
       @json = json || {}
-      return if database?
+      return if database_or_data_source?
 
       @json = json || {}
       @json["start"] = start_date if start_date
