@@ -114,6 +114,7 @@ module NotionRubyMapping
           number: NumberProperty,
           people: PeopleProperty,
           phone_number: PhoneNumberProperty,
+          place: PlaceProperty,
           select: SelectProperty,
           status: StatusProperty,
           title: TitleProperty,

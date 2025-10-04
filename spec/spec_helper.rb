@@ -40,6 +40,7 @@ module NotionRubyMapping
     BLOCK_CREATE_TEST_PAGE_ID = "26cd8e4e98ab8061b880f8f45db00383"
     STATUS_PAGE_ID = "68ff12a08dc04f94ae2e0931344eb153"
     BUTTON_PAGE_ID = "4ccd9bda0f6440a0b32490c091011b8f"
+    PLACE_PAGE_ID = "282d8e4e98ab8048bd3ecd8a933392c7"
     WIKI_PAGE_ID = "197d8e4e98ab80d7b0cad8a33a1cbfba"
     FILE_UPLOAD_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     # database_id
@@ -2745,6 +2746,7 @@ module NotionRubyMapping
         multi_select: [[DB_FIRST_PAGE_ID, "Kjx%7D"], 200],
         number: [[DB_FIRST_PAGE_ID, "swq%5C"], 200],
         people: [[DB_FIRST_PAGE_ID, "_x%3E%3D"], 200],
+        place: [[PLACE_PAGE_ID, "AmdZ"], 200],
         phone_number: [[DB_FIRST_PAGE_ID, "%7CNHO"], 200],
         relation: [[DB_FIRST_PAGE_ID, "%3CnJT"], 200],
         relation_with_many_relations: [[DB_MANY_CHILDREN_PAGE_ID, "%60%5B%3E%7B"], 200],
