@@ -43,6 +43,7 @@ module NotionRubyMapping
     PLACE_PAGE_ID = "282d8e4e98ab8048bd3ecd8a933392c7"
     WIKI_PAGE_ID = "197d8e4e98ab80d7b0cad8a33a1cbfba"
     FILE_UPLOAD_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
+    TEMPLATE_PAGE_ID = "293d8e4e98ab80e8b622cd46b8ccb0cb"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
@@ -55,6 +56,7 @@ module NotionRubyMapping
     DATA_SOURCE_ID = "4f93db514e1d4015b07f876e34c3b0b1"
     PARENT_DATA_SOURCE_ID = "f0a1bf337ff04d24b5b6efb3ea006b15"
     CREATED_DATA_SOURCE_ID = "26cd8e4e98ab81d08983000b28d9e04d"
+    TEST_TEMPLATE_DATA_SOURCE_ID = "293d8e4e98ab80e7842e000befaa8ed5"
     # block_id
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
@@ -516,6 +518,31 @@ module NotionRubyMapping
           },
           "parent" => {
             "data_source_id" => "f0a1bf337ff04d24b5b6efb3ea006b15",
+          },
+        }],
+        parent_data_source_with_template: [nil, 200, {
+          "properties" => {
+            "Name" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page by data_source_id with template",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Page by data_source_id with template",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "data_source_id" => "293d8e4e98ab80e7842e000befaa8ed5",
+          },
+          "template" => {
+            "type": "template_id",
+            "template_id": TEMPLATE_PAGE_ID,
           },
         }],
       }
