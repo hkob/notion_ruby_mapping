@@ -136,6 +136,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2025/10/22 [v3.0.2] Add template_page option for create_child_page and build_child_page
 - 2025/10/4 [v3.0.1] Add place_property
 - 2025/9/15 [v3.0.0] updates for Notion-Version 2025-09-03 (Add DataSource class)
 - 2025/6/29 [v2.0.1] add creating FileUploadObject with external url

@@ -7,7 +7,7 @@ module NotionRubyMapping
     # @param [Hash, nil] json
     # @param [String, nil] id
     # @param [Array<Property, Class, String>] assign
-    def initialize(json: nil, id: nil, assign: [], parent: nil)
+    def initialize(json: nil, id: nil, assign: [], parent: nil, template_page: nil)
       @nc = NotionCache.instance
       @json = json
       @id = @nc.hex_id(id || @json && @json["id"])
@@ -16,7 +16,10 @@ module NotionRubyMapping
       @new_record = true unless parent.nil?
       raise StandardError, "Unknown id" if !is_a?(List) && !is_a?(Block) && @id.nil? && parent.nil?
 
-      @payload = Payload.new(!is_a?(Block) && parent && {"parent" => parent})
+      payload_json = {}
+      payload_json["parent"] = parent if !is_a?(Block) && parent
+      payload_json["template"] = {"type" => "template_id", "template_id" => template_page.id} if template_page
+      @payload = Payload.new(payload_json)
       @property_cache = nil
       @created_time = nil
       @last_edited_time = nil
