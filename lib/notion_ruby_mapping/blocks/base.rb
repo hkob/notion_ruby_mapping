@@ -18,7 +18,11 @@ module NotionRubyMapping
 
       payload_json = {}
       payload_json["parent"] = parent if !is_a?(Block) && parent
-      payload_json["template"] = {"type" => "template_id", "template_id" => template_page.id} if template_page
+      if template_page == "default"
+        payload_json["template"] = {"type" => "default"}
+      elsif template_page
+        payload_json["template"] = {"type" => "template_id", "template_id" => template_page.id}
+      end
       @payload = Payload.new(payload_json)
       @property_cache = nil
       @created_time = nil
