@@ -545,6 +545,30 @@ module NotionRubyMapping
             "template_id": TEMPLATE_PAGE_ID,
           },
         }],
+        parent_data_source_with_default_template: [nil, 200, {
+          "properties" => {
+            "Name" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page by data_source_id with default template",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Page by data_source_id with default template",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "data_source_id" => "293d8e4e98ab80e7842e000befaa8ed5",
+          },
+          "template" => {
+            "type": "default",
+          },
+        }],
       }
     end
 

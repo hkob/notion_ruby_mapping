@@ -3,12 +3,13 @@
 require_relative "../../spec_helper"
 
 module NotionRubyMapping
+  PAGE_TITLE_FOR_CREATED_PAGE = "New Page by data_source_id"
+  PAGE_TITLE_FOR_CREATED_PAGE_WITH_TEMPLATE = "New Page by data_source_id with template"
+  PAGE_TITLE_FOR_CREATED_PAGE_WITH_DEFAULT_TEMPLATE = "New Page by data_source_id with default template"
+
   RSpec.describe Page do
     tc = TestConnection.instance
     let!(:nc) { tc.nc }
-
-    PAGE_TITLE_FOR_CREATED_PAGE = "New Page by data_source_id"
-    PAGE_TITLE_FOR_CREATED_PAGE_WITH_TEMPLATE = "New Page by data_source_id with template"
 
     describe "find" do
       subject { -> { described_class.find page_id } }
@@ -998,6 +999,91 @@ module NotionRubyMapping
           end
           let(:dry_run) do
             parent_data_source.create_child_page TitleProperty, "Name", template_page: template_page,
+                                                                        dry_run: true do |_, ps|
+              ps["Name"] << "New Page Title"
+            end
+          end
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
+        end
+      end
+    end
+
+    describe "create with default template" do
+      create_page_title = {
+        "properties" => {
+          "Name" => {
+            "title" => [
+              {
+                "href" => nil,
+                "plain_text" => PAGE_TITLE_FOR_CREATED_PAGE_WITH_DEFAULT_TEMPLATE,
+                "text" => {
+                  "content" => PAGE_TITLE_FOR_CREATED_PAGE_WITH_DEFAULT_TEMPLATE,
+                  "link" => nil,
+                },
+                "type" => "text",
+              },
+            ],
+            "type" => "title",
+          },
+        },
+      }
+      let(:parent_data_source) { DataSource.new id: TestConnection::TEST_TEMPLATE_DATA_SOURCE_ID }
+
+      context "when build_child_page" do
+        let(:target) do
+          parent_data_source.build_child_page TitleProperty, "Name", template_page: "default" do |_, ps|
+            ps["Name"] << PAGE_TITLE_FOR_CREATED_PAGE_WITH_DEFAULT_TEMPLATE
+          end
+        end
+
+        it { expect(target).to be_new_record }
+
+        it_behaves_like "property values json", {
+          "parent" => {
+            "data_source_id" => TestConnection::TEST_TEMPLATE_DATA_SOURCE_ID,
+          },
+          "template" => {
+            "type" => "default",
+          },
+        }.merge(create_page_title)
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
+        end
+
+        describe "create" do
+          before { target.save }
+
+          it_behaves_like "property values json", {}
+          it { expect(target.id).to eq "297d8e4e98ab8179ba96cdd34784e3f3" }
+          it { expect(target).not_to be_new_record }
+        end
+      end
+
+      context "create_child_page" do
+        context "not dry_run" do
+          let(:target) do
+            parent_data_source.create_child_page TitleProperty, "Name", template_page: "default" do |_, ps|
+              ps["Name"] << PAGE_TITLE_FOR_CREATED_PAGE_WITH_DEFAULT_TEMPLATE
+            end
+          end
+
+          it_behaves_like "property values json", {}
+          it { expect(target.id).to eq "297d8e4e98ab8179ba96cdd34784e3f3" }
+          it { expect(target).not_to be_new_record }
+        end
+
+        context "dry_run" do
+          let(:target) do
+            parent_data_source.build_child_page TitleProperty, "Name", template_page: "default" do |_, ps|
+              ps["Name"] << "New Page Title"
+            end
+          end
+          let(:dry_run) do
+            parent_data_source.create_child_page TitleProperty, "Name", template_page: "default",
                                                                         dry_run: true do |_, ps|
               ps["Name"] << "New Page Title"
             end
