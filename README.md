@@ -136,6 +136,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2025/12/9 [v3.0.4] Fix the issue where page.parent could not be executed for pages with a data source as parent
 - 2025/10/25 [v3.0.3] Add default template option for create_child_page and build_child_page
 - 2025/10/22 [v3.0.2] Add template_page option for create_child_page and build_child_page
 - 2025/10/4 [v3.0.1] Add place_property
