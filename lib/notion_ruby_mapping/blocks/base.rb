@@ -279,6 +279,8 @@ module NotionRubyMapping
 
       type = parent_json["type"]
       klass = case type
+              when "data_source_id"
+                DataSource
               when "database_id"
                 Database
               when "page_id"
