@@ -107,10 +107,12 @@ module NotionRubyMapping
       toggle_heading_2: "e5f163568adc49c59f17228589d071ac",
       toggle_heading_3: "115fb937ab6d4a2e9079921b03e50756",
       video: "bed3abe020094aa990564844f981b07a",
+      audio: "2cad8e4e98ab80efb1fdca3b581b4c2c",
     }.freeze
     BLOCK_CREATE_TEST_BLOCK_ID = "26cd8e4e98ab8035a5b4ea240d930619"
     DESTROY_BLOCK_ID = "a1949aaefbfa46f3bd1a90687b86bf1a"
     UPDATE_BLOCK_ID_HASH = {
+      audio: "2cad8e4e98ab806292f9cb56918b2c4c",
       bookmark: "899e342cec84415f9ff86225704cbb75",
       bulleted_list_item: "ab51d1c7094649b5b9007ef0109b33c4",
       callout: "05386a91dfa24296b6b2ac4676006bdb",
@@ -826,6 +828,24 @@ module NotionRubyMapping
 
     def append_block_children_hash(id)
       {
+        audio: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "audio",
+                "object" => "block",
+                "audio" => {
+                  "type" => "external",
+                  "external" => {
+                    "url" => "https://download.samplelib.com/mp3/sample-3s.mp3",
+                  },
+                  "caption" => [],
+                },
+              },
+            ],
+          }
+        ],
         bookmark: [
           id, 200,
           {
@@ -2032,6 +2052,34 @@ module NotionRubyMapping
 
     def update_block
       generate_stubs_sub :patch, __method__, :block_path, {
+        audio_caption: [
+          UPDATE_BLOCK_ID_HASH[:audio], 200,
+          {
+            "audio" => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New caption",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New caption",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        audio_url: [
+          UPDATE_BLOCK_ID_HASH[:audio], 200,
+          {
+            "audio" => {
+              "external" => {
+                "url" => "https://download.samplelib.com/mp3/sample-6s.mp3",
+              },
+            },
+          }
+        ],
         bookmark_url: [
           UPDATE_BLOCK_ID_HASH[:bookmark], 200,
           {

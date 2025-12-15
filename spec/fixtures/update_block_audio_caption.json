@@ -1,0 +1,48 @@
+{
+  "object": "block",
+  "id": "2cad8e4e-98ab-8062-92f9-cb56918b2c4c",
+  "parent": {
+    "type": "block_id",
+    "block_id": "2cad8e4e-98ab-80d5-8916-ea549bf33248"
+  },
+  "created_time": "2025-12-15T12:45:00.000Z",
+  "last_edited_time": "2025-12-15T12:53:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "2200a911-6a96-44bb-bd38-6bfb1e01b9f6"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "40673a87-d8ed-41e0-aa55-7f0e8ace24cd"
+  },
+  "has_children": false,
+  "archived": false,
+  "in_trash": false,
+  "type": "audio",
+  "audio": {
+    "caption": [
+      {
+        "type": "text",
+        "text": {
+          "content": "New caption",
+          "link": null
+        },
+        "annotations": {
+          "bold": false,
+          "italic": false,
+          "strikethrough": false,
+          "underline": false,
+          "code": false,
+          "color": "default"
+        },
+        "plain_text": "New caption",
+        "href": null
+      }
+    ],
+    "type": "external",
+    "external": {
+      "url": "https://download.samplelib.com/mp3/sample-3s.mp3"
+    }
+  },
+  "request_id": "e103bf29-5380-4eb2-a865-aafa4b9d9736"
+}
