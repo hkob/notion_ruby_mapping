@@ -17,6 +17,7 @@ module NotionRubyMapping
     def self.type2class(type, has_children = false)
       @type2class ||= {
         false => {
+          audio: AudioBlock,
           bookmark: BookmarkBlock,
           breadcrumb: BreadcrumbBlock,
           bulleted_list_item: BulletedListItemBlock,
