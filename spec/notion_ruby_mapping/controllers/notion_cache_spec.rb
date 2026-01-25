@@ -81,6 +81,10 @@ module NotionRubyMapping
       it { expect(nc.data_sources_path).to eq "v1/data_sources" }
     end
 
+    describe "move_page_path" do
+      it { expect(nc.move_page_path("ABC")).to eq "v1/pages/ABC/move" }
+    end
+
     describe "page_path" do
       it { expect(nc.page_path("ABC")).to eq "v1/pages/ABC" }
     end
@@ -99,6 +103,15 @@ module NotionRubyMapping
 
     describe "user_path" do
       it { expect(nc.user_path("ABC")).to eq "v1/users/ABC" }
+    end
+
+    describe "list_data_source_templates_path" do
+      it { expect(nc.list_data_source_templates_path("ABC")).to eq "v1/data_sources/ABC/templates" }
+
+      it {
+        expect(nc.list_data_source_templates_path("DEF",
+                                                  "?page_size=1")).to eq "v1/data_sources/DEF/templates?page_size=1"
+      }
     end
   end
 end

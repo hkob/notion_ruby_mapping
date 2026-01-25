@@ -59,6 +59,40 @@ module NotionRubyMapping
       db.save dry_run: dry_run
     end
 
+    # @return [NotionRubyMapping::Base]
+    def build_child_page(template_page: nil, position: nil)
+      page = Page.new assign: [TitleProperty, "title"], parent: {"type" => "page_id", "page_id" => @id},
+                      template_page: template_page, position: position
+      pp = page.properties
+      pp.clear_will_update
+      yield page, pp if block_given?
+      page
+    end
+
+    # @param [Boolean] dry_run true if dry_run
+    # @return [NotionRubyMapping::Base]
+    def create_child_page(template_page: nil, position: nil, dry_run: false)
+      page = Page.new assign: [TitleProperty, "title"], parent: {"type" => "page_id", "page_id" => @id},
+                      template_page: template_page, position: position
+      pp = page.properties
+      pp.clear_will_update
+      yield page, pp if block_given?
+      page.save dry_run: dry_run
+    end
+
+    # @param [Page, DataSource] page_or_data_source
+    # @param [Boolean] dry_run true if dry_run
+    # @return [NotionRubyMapping::Page, String]
+    def move_to(page_or_data_source, dry_run: false)
+      key = page_or_data_source.is_a?(Page) ? "page_id" : "data_source_id"
+      json = {"parent" => {"type" => key, key => page_or_data_source.id}}
+      if dry_run
+        self.class.dry_run_script :post, @nc.move_page_path(@id), json
+      else
+        update_json @nc.move_page_request(@id, json)
+      end
+    end
+
     # @return [String] 公開URL
     def public_url
       @json["public_url"]

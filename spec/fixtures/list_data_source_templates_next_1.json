@@ -1,0 +1,11 @@
+{
+  "templates": [
+    {
+      "id": "2e5d8e4e-98ab-808f-8c3a-f0819e3b3567",
+      "name": "another template",
+      "is_default": false
+    }
+  ],
+  "has_more": false,
+  "next_cursor": null
+}

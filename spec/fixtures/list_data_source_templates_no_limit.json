@@ -1,0 +1,16 @@
+{
+  "templates": [
+    {
+      "id": "88f4a106-b84b-4d35-9c2d-256bcd55901f",
+      "name": "template",
+      "is_default": true
+    },
+    {
+      "id": "2e5d8e4e-98ab-808f-8c3a-f0819e3b3567",
+      "name": "another template",
+      "is_default": false
+    }
+  ],
+  "has_more": false,
+  "next_cursor": null
+}

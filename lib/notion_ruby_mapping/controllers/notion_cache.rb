@@ -243,6 +243,38 @@ module NotionRubyMapping
       "NotionCache"
     end
 
+    # @param [String] data_source_id
+    # @param [Integer] page_size
+    # @param [String] start_cursor
+    # @return [Hash] response hash
+    def list_data_source_templates_request(data_source_id, page_size: nil, start_cursor: nil)
+      options = []
+      options << "page_size=#{page_size}" if page_size
+      options << "start_cursor=#{start_cursor}" if start_cursor
+      option_str = options.empty? ? "" : "?" + options.join("&")
+      request :get, list_data_source_templates_path(data_source_id, option_str)
+    end
+
+    # @param [String] data_source_id
+    # @param [String] options
+    # @return [String] path
+    def list_data_source_templates_path(data_source_id, options = "")
+      "v1/data_sources/#{data_source_id}/templates#{options}"
+    end
+
+    # @param [String] page_id
+    # @param [Hash] payload
+    # @return [Hash] response hash
+    def move_page_request(page_id, payload)
+      request :post, move_page_path(page_id), payload
+    end
+
+    # @param [String] page_id
+    # @return [String] move_page_path
+    def move_page_path(page_id)
+      "v1/pages/#{page_id}/move"
+    end
+
     # @param [String] path
     # @param [String] fname
     # @param [Hash] options
@@ -427,7 +459,7 @@ module NotionRubyMapping
       request :get, user_path(user_id)
     end
 
-    # @return [Array<NotionRubyMapping::UserObject>] UserObject array
+    # @return [NotionRubyMapping::ListObject] List Object for UserObject
     def users
       List.new json: users_request, type: "user_object", value: true
     end

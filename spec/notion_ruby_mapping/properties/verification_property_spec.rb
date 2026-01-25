@@ -8,6 +8,34 @@ module NotionRubyMapping
     let(:verification_page_id) { TestConnection::WIKI_PAGE_ID }
     let(:property_cache_verification) { PropertyCache.new base_type: "page", page_id: verification_page_id }
 
+    context "when Database property" do
+      context "when created by new" do
+        let(:target) { described_class.new "vp", base_type: "database" }
+
+        it_behaves_like "has name as", "vp"
+
+        %w[verified expired none].each do |status|
+          it_behaves_like "filter test", described_class, %w[status], value: status
+        end
+        it_behaves_like "raw json", :verification, {}
+        it_behaves_like "property schema json", {"vp" => {"verification" => {}}}
+      end
+    end
+
+    context "when DataSource property" do
+      context "when created by new" do
+        let(:target) { described_class.new "vp", base_type: "data_source" }
+
+        it_behaves_like "has name as", "vp"
+
+        %w[verified expired none].each do |status|
+          it_behaves_like "filter test", described_class, %w[status], value: status
+        end
+        it_behaves_like "raw json", :verification, {}
+        it_behaves_like "property schema json", {"vp" => {"verification" => {}}}
+      end
+    end
+
     context "when Page property" do
       retrieve_verification = {
         "vp" => {
