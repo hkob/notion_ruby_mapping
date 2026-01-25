@@ -50,6 +50,34 @@ module NotionRubyMapping
       end
     end
 
+    describe "templates" do
+      let(:data_source) { DataSource.find TestConnection::DATA_SOURCE_ID }
+
+      context "when no limit" do
+        let(:templates) { data_source.templates.to_a }
+
+        it { expect(templates.count).to eq 2 }
+        it { expect(templates.map(&:name)).to eq(["template", "another template"]) }
+
+        it {
+          expect(templates.map(&:id)).to eq(%w[88f4a106-b84b-4d35-9c2d-256bcd55901f
+                                               2e5d8e4e-98ab-808f-8c3a-f0819e3b3567])
+        }
+      end
+
+      context "when limit 1" do
+        let(:templates) { data_source.templates(page_size: 1).to_a }
+
+        it { expect(templates.count).to eq 2 }
+        it { expect(templates.map(&:name)).to eq(["template", "another template"]) }
+
+        it {
+          expect(templates.map(&:id)).to eq(%w[88f4a106-b84b-4d35-9c2d-256bcd55901f
+                                               2e5d8e4e-98ab-808f-8c3a-f0819e3b3567])
+        }
+      end
+    end
+
     describe "new and reload" do
       let(:data_source) { DataSource.new id: data_source_id }
 

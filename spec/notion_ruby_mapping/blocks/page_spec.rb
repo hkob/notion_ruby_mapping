@@ -1122,5 +1122,114 @@ module NotionRubyMapping
         }
       end
     end
+
+    describe "move page" do
+      let(:cpid) { TestConnection::MOVE_CHILDREN_PAGE_ID }
+      let(:ppid) { TestConnection::MOVE_PARENT_PAGE_ID }
+      let(:pdid) { TestConnection::MOVE_PARENT_DATA_SOURCE_ID }
+      let(:child_page) { Page.new id: cpid }
+      let(:parent_page) { Page.new id: ppid }
+      let(:parent_data_source) { DataSource.new id: pdid }
+
+      context "when it moves to page" do
+        context "when not dry_run" do
+          let(:target) { child_page.move_to parent_page }
+
+          it { expect(target.id).to eq cpid }
+          it { expect(nc.hex_id(target.parent_id)).to eq ppid }
+        end
+
+        context "when dry_run" do
+          let(:dry_run) { child_page.move_to parent_page, dry_run: true }
+
+          it_behaves_like "dry run", :post, :move_page_path, id: TestConnection::MOVE_CHILDREN_PAGE_ID, json: {
+            "parent" => {
+              "type" => "page_id",
+              "page_id" => TestConnection::MOVE_PARENT_PAGE_ID,
+            },
+          }
+        end
+      end
+
+      context "when it moves to data source" do
+        context "when not dry_run" do
+          let(:target) { parent_page.move_to parent_data_source }
+
+          it { expect(target.id).to eq ppid }
+          it { expect(nc.hex_id(target.parent_id)).to eq pdid }
+        end
+
+        context "when dry_run" do
+          let(:dry_run) { parent_page.move_to parent_data_source, dry_run: true }
+
+          it_behaves_like "dry run", :post, :move_page_path, id: TestConnection::MOVE_PARENT_PAGE_ID, json: {
+            "parent" => {
+              "type" => "data_source_id",
+              "data_source_id" => TestConnection::MOVE_PARENT_DATA_SOURCE_ID,
+            },
+          }
+        end
+      end
+    end
+
+    describe "position object for create a page" do
+      let(:ppid) { TestConnection::POSITION_TEST_PARENT_PAGE_ID }
+      let(:parent_page) { Page.new id: ppid }
+
+      [
+        ["page_end", "page_end", {"type" => "page_end"}, TestConnection::POSITION_TEST_PAGE_END_ID],
+        ["page_start", "page_start", {"type" => "page_start"}, TestConnection::POSITION_TEST_PAGE_START_ID],
+        ["after_block", TestConnection::POSITION_TEST_PAGE_START_ID,
+         {"type" => "after_block", "after_block" => {"id" => TestConnection::POSITION_TEST_PAGE_START_ID}},
+         TestConnection::POSITION_TEST_AFTER_BLOCK_ID],
+      ].each do |(key, value, position, id)|
+        context "when it creates at #{key}" do
+          let(:title) { "New Page at #{key}" }
+
+          context "when not dry_run" do
+            let(:target) do
+              parent_page.create_child_page position: value do |_, pp|
+                pp["title"] << title
+              end
+            end
+
+            it { expect(target.id).to eq id }
+            it { expect(nc.hex_id(target.parent_id)).to eq ppid }
+          end
+
+          context "when dry_run" do
+            let(:dry_run) do
+              parent_page.create_child_page position: value, dry_run: true do |_, pp|
+                pp["title"] << title
+              end
+            end
+
+            it_behaves_like "dry run", :post, :pages_path, json: {
+              "properties" => {
+                "title" => {
+                  "type" => "title",
+                  "title" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "New Page at #{key}",
+                        "link" => nil,
+                      },
+                      "plain_text" => "New Page at #{key}",
+                      "href" => nil,
+                    },
+                  ],
+                },
+              },
+              "parent" => {
+                "type" => "page_id",
+                "page_id" => TestConnection::POSITION_TEST_PARENT_PAGE_ID,
+              },
+              "position" => position,
+            }
+          end
+        end
+      end
+    end
   end
 end

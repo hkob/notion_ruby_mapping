@@ -44,6 +44,12 @@ module NotionRubyMapping
     WIKI_PAGE_ID = "197d8e4e98ab80d7b0cad8a33a1cbfba"
     FILE_UPLOAD_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     TEMPLATE_PAGE_ID = "293d8e4e98ab80e8b622cd46b8ccb0cb"
+    MOVE_CHILDREN_PAGE_ID = "2e8d8e4e98ab80c5b4a1ef787d32f244"
+    MOVE_PARENT_PAGE_ID = "2e8d8e4e98ab80ae9fbef2d0fc4c4fea"
+    POSITION_TEST_PARENT_PAGE_ID = "2f0d8e4e98ab8065b3a2ec9fd4b3e57a"
+    POSITION_TEST_PAGE_END_ID = "2f0d8e4e98ab818d8366c12b276c6a7c"
+    POSITION_TEST_PAGE_START_ID = "2f0d8e4e98ab812ca8f5cce62b2d3f6e"
+    POSITION_TEST_AFTER_BLOCK_ID = "2f0d8e4e98ab818b9968fc9ec363ed6b"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
@@ -52,11 +58,13 @@ module NotionRubyMapping
     STATUS_DATABASE_ID = "71f892a3bf1744918d8e8f125c55bf43"
     BUTTON_DATABASE_ID = "254e7e605aad458a8a877ea7ee355ada"
     WIKI_DATABASE_ID = "197d8e4e98ab805282cce7137a10f133"
-    # datasource_id
+    # data_source_id
     DATA_SOURCE_ID = "4f93db514e1d4015b07f876e34c3b0b1"
     PARENT_DATA_SOURCE_ID = "f0a1bf337ff04d24b5b6efb3ea006b15"
     CREATED_DATA_SOURCE_ID = "26cd8e4e98ab81d08983000b28d9e04d"
     TEST_TEMPLATE_DATA_SOURCE_ID = "293d8e4e98ab80e7842e000befaa8ed5"
+    UNPERMITTED_DATA_SOURCE_ID = "00da364baaca4b3b94f521db691d804a"
+    MOVE_PARENT_DATA_SOURCE_ID = "2e8d8e4e98ab80b1a70e000b9440843a"
     # block_id
     H1_BLOCK_ID = "0250fb6d600142eca4c74efb8794fc6b"
     UNPERMITTED_BLOCK_ID = "0c940186ab704351bb342d16f0635d49"
@@ -218,6 +226,8 @@ module NotionRubyMapping
       create_file_upload
       complete
       retrieve
+      list_data_source_templates
+      move_page
     end
 
     # @param [Symbol] method
@@ -284,6 +294,7 @@ module NotionRubyMapping
       generate_stubs_sub :get, __method__, :data_source_path, {
         data_source: [DATA_SOURCE_ID, 200],
         wrong_format: ["AAA", 400],
+        unpermitted_data_source: [UNPERMITTED_DATA_SOURCE_ID, 404],
         parent: [PARENT_DATA_SOURCE_ID, 200],
         created: [CREATED_DATA_SOURCE_ID, 200],
       }
@@ -569,6 +580,84 @@ module NotionRubyMapping
           },
           "template" => {
             "type": "default",
+          },
+        }],
+        page_start: [nil, 200, {
+          "properties" => {
+            "title" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page at page_start",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Page at page_start",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => TestConnection::POSITION_TEST_PARENT_PAGE_ID,
+          },
+          "position" => {
+            "type" => "page_start",
+          },
+        }],
+        page_end: [nil, 200, {
+          "properties" => {
+            "title" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page at page_end",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Page at page_end",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => TestConnection::POSITION_TEST_PARENT_PAGE_ID,
+          },
+          "position" => {
+            "type" => "page_end",
+          },
+        }],
+        after_block: [nil, 200, {
+          "properties" => {
+            "title" => {
+              "type" => "title",
+              "title" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Page at after_block",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Page at after_block",
+                  "href" => nil,
+                },
+              ],
+            },
+          },
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => TestConnection::POSITION_TEST_PARENT_PAGE_ID,
+          },
+          "position" => {
+            "type" => "after_block",
+            "after_block" => {
+              "id" => "2f0d8e4e98ab812ca8f5cce62b2d3f6e",
+            },
           },
         }],
       }
@@ -2928,6 +3017,37 @@ module NotionRubyMapping
     def search
       generate_stubs_sub :post, __method__, :search_path, {
         sample_table: [nil, 200],
+      }
+    end
+
+    def list_data_source_templates
+      generate_stubs_sub :get, __method__, :list_data_source_templates_path, {
+        no_limit: [DATA_SOURCE_ID, 200],
+        limit_1: [[DATA_SOURCE_ID, "?page_size=1"], 200],
+        next_1: [[DATA_SOURCE_ID, "?start_cursor=2e5d8e4e-98ab-808f-8c3a-f0819e3b3567"], 200],
+      }
+    end
+
+    def move_page
+      generate_stubs_sub :post, __method__, :move_page_path, {
+        to_page: [
+          MOVE_CHILDREN_PAGE_ID, 200,
+          {
+            "parent" => {
+              "type" => "page_id",
+              "page_id" => MOVE_PARENT_PAGE_ID,
+            },
+          }
+        ],
+        to_data_source: [
+          MOVE_PARENT_PAGE_ID, 200,
+          {
+            "parent" => {
+              "type" => "data_source_id",
+              "data_source_id" => MOVE_PARENT_DATA_SOURCE_ID,
+            },
+          }
+        ],
       }
     end
 

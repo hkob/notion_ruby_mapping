@@ -126,6 +126,13 @@ module NotionRubyMapping
       self
     end
 
+    # @param [Integer] page_size
+    # @return [NotionRubyMapping::List] List of Template object
+    def templates(page_size: nil)
+      json = @nc.list_data_source_templates_request(id, page_size: page_size)
+      List.new type: "template", value: id, json: json, query: Query.new
+    end
+
     # @return [Hash] created json for property schemas (for update data_source)
     def update_property_schema_json
       @payload.update_property_schema_json @property_cache, data_source_title

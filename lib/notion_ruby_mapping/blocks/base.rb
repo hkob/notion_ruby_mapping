@@ -7,7 +7,7 @@ module NotionRubyMapping
     # @param [Hash, nil] json
     # @param [String, nil] id
     # @param [Array<Property, Class, String>] assign
-    def initialize(json: nil, id: nil, assign: [], parent: nil, template_page: nil)
+    def initialize(json: nil, id: nil, assign: [], parent: nil, template_page: nil, position: nil)
       @nc = NotionCache.instance
       @json = json
       @id = @nc.hex_id(id || @json && @json["id"])
@@ -22,6 +22,11 @@ module NotionRubyMapping
         payload_json["template"] = {"type" => "default"}
       elsif template_page
         payload_json["template"] = {"type" => "template_id", "template_id" => template_page.id}
+      end
+      if %w[page_start page_end].include? position
+        payload_json["position"] = {"type" => position}
+      elsif position
+        payload_json["position"] = {"type" => "after_block", "after_block" => {"id" => position}}
       end
       @payload = Payload.new(payload_json)
       @property_cache = nil

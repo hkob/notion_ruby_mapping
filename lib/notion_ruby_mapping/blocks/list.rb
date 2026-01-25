@@ -23,6 +23,8 @@ module NotionRubyMapping
         @user_object = value
       when "search"
         @search = value
+      when "template"
+        @template = value
       end
       @query = query
       @index = 0
@@ -82,6 +84,11 @@ module NotionRubyMapping
                  query: -> { @nc.search @search.payload.merge(@query.query_json) },
                  create_object: ->(json) { Base.create_from_json json },
                  &block
+      elsif @template
+        each_sub base: @template,
+                 query: -> { @nc.list_data_source_templates_request @template, start_cursor: @query.start_cursor },
+                 create_object: ->(json) { TemplateObject.new json: json },
+                 &block
       end
       self
     end
@@ -125,7 +132,7 @@ module NotionRubyMapping
 
     # @return [Hash]
     def results
-      @json["results"]
+      @json[@template ? "templates" : "results"]
     end
   end
 end

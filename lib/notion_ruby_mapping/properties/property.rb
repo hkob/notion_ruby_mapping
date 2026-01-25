@@ -157,7 +157,7 @@ module NotionRubyMapping
       !instance_of? Property
     end
 
-    # @param [Symbol] key query parameter
+    # @param [String] key query parameter
     # @param [Object] value query value
     # @return [NotionRubyMapping::Query] generated Query object
     def make_filter_query(key, value, condition: nil, another_type: nil)
