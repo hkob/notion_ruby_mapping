@@ -16,8 +16,8 @@ module NotionRubyMapping
         end
 
         can_have_children = %w[bulleted_list_item paragraph inline_contents numbered_list_item synced_block
-                               toggle toggle_heading_1 toggle_heading_2 toggle_heading_3 quote table to_do
-                               synced_block_original callout column_list column append_after_parent
+                               toggle toggle_heading_1 toggle_heading_2 toggle_heading_3 toggle_heading_4 quote table
+                               to_do synced_block_original callout column_list column append_after_parent
                                append_after_previous].include? key.to_s
         it "can #{key} have children? = #{can_have_children}" do
           expect(target.can_have_children).to eq can_have_children
@@ -59,7 +59,12 @@ module NotionRubyMapping
           it_behaves_like "dry run", :patch, :append_block_children_page_path, id: parent_id,
                                                                                json: {
                                                                                  "children" => [append_block.block_json],
-                                                                                 "after" => previous_id,
+                                                                                 "position" => {
+                                                                                   "type" => "after_block",
+                                                                                   "after_block" => {
+                                                                                     "id" => previous_id,
+                                                                                   },
+                                                                                 },
                                                                                }
         end
 
@@ -69,8 +74,8 @@ module NotionRubyMapping
       end
 
       context "after option" do
-        let(:dry_run) { parent_block.append_block_children append_block, after: previous_id, dry_run: true }
-        let(:block) { parent_block.append_block_children append_block, after: previous_id }
+        let(:dry_run) { parent_block.append_block_children append_block, position: previous_id, dry_run: true }
+        let(:block) { parent_block.append_block_children append_block, position: previous_id }
 
         it_behaves_like "append_block_children_append_after"
       end
@@ -80,6 +85,40 @@ module NotionRubyMapping
         let(:block) { above_block.append_after append_block }
 
         it_behaves_like "append_block_children_append_after"
+      end
+    end
+
+    describe "append block children with start and end" do
+      parent_id = TestConnection::APPEND_AFTER_PARENT_ID
+      let(:parent_block) { Block.find parent_id }
+
+      shared_examples "append_block_children_start_or_end" do |position, append_block, added_block_id|
+        context "dry_run" do
+          it_behaves_like "dry run", :patch, :append_block_children_page_path, id: parent_id,
+                                                                               json: {
+                                                                                 "children" => [append_block.block_json],
+                                                                                 "position" => {
+                                                                                   "type" => position,
+                                                                                 },
+                                                                               }
+        end
+
+        context "create" do
+          it { expect(block.id).to eq added_block_id }
+        end
+      end
+
+      {
+        "start" => "326d8e4e98ab813a9186fd542db3c9b1",
+        "end" => "326d8e4e98ab81bb80bdc90803c9d6f0",
+      }.each do |position, added_block_id|
+        append_block = NumberedListItemBlock.new "#{position} block"
+        context "position #{position}" do
+          let(:dry_run) { parent_block.append_block_children append_block, position: position, dry_run: true }
+          let(:block) { parent_block.append_block_children append_block, position: position }
+
+          it_behaves_like "append_block_children_start_or_end", position, append_block, added_block_id
+        end
       end
     end
 

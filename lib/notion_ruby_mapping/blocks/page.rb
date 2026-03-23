@@ -60,9 +60,12 @@ module NotionRubyMapping
     end
 
     # @return [NotionRubyMapping::Base]
-    def build_child_page(template_page: nil, position: nil)
+    # @param [String, NilClass] template_page
+    # @param [String, NilClass] position
+    # @param [String, NilClass] markdown
+    def build_child_page(template_page: nil, position: nil, markdown: nil)
       page = Page.new assign: [TitleProperty, "title"], parent: {"type" => "page_id", "page_id" => @id},
-                      template_page: template_page, position: position
+                      template_page: template_page, position: position, markdown: markdown
       pp = page.properties
       pp.clear_will_update
       yield page, pp if block_given?
@@ -71,13 +74,30 @@ module NotionRubyMapping
 
     # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base]
-    def create_child_page(template_page: nil, position: nil, dry_run: false)
+    # @param [String, NilClass] template_page
+    # @param [String, NilClass] position
+    # @param [String, NilClass] markdown
+    def create_child_page(template_page: nil, position: nil, markdown: nil, dry_run: false)
       page = Page.new assign: [TitleProperty, "title"], parent: {"type" => "page_id", "page_id" => @id},
-                      template_page: template_page, position: position
+                      template_page: template_page, position: position, markdown: markdown
       pp = page.properties
       pp.clear_will_update
       yield page, pp if block_given?
       page.save dry_run: dry_run
+    end
+
+    # @param [String] markdown
+    # @param [String, NilClass] after
+    # @param [Boolean] dry_run
+    # @return [String, NotionRubyMapping::Base]
+    def insert_markdown(markdown, after: nil, dry_run: false)
+      json = {"type" => "insert_content", "insert_content" => {"content" => markdown}}
+      json["insert_content"]["after"] = after if after
+      if dry_run
+        self.class.dry_run_script :patch, @nc.markdown_page_path(@id), json
+      else
+        update_json @nc.markdown_page_request(@id, json)
+      end
     end
 
     # @param [Page, DataSource] page_or_data_source
@@ -96,6 +116,21 @@ module NotionRubyMapping
     # @return [String] 公開URL
     def public_url
       @json["public_url"]
+    end
+
+    # @param [String] replace
+    # @param [String] replace_range
+    # @param [Boolean] dry_run
+    # @return [String, NotionRubyMapping::Base]
+    def replace_markdown(replace, replace_range, allow_deleting_content: nil, dry_run: false)
+      json = {"type" => "replace_content_range",
+              "replace_content_range" => {"content" => replace, "content_range" => replace_range}}
+      json["replace_content_range"]["allow_deleting_content"] = true if allow_deleting_content
+      if dry_run
+        self.class.dry_run_script :patch, @nc.markdown_page_path(@id), json
+      else
+        update_json @nc.markdown_page_request(@id, json)
+      end
     end
 
     # @return [String] title

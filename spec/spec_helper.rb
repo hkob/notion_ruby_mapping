@@ -50,6 +50,7 @@ module NotionRubyMapping
     POSITION_TEST_PAGE_END_ID = "2f0d8e4e98ab818d8366c12b276c6a7c"
     POSITION_TEST_PAGE_START_ID = "2f0d8e4e98ab812ca8f5cce62b2d3f6e"
     POSITION_TEST_AFTER_BLOCK_ID = "2f0d8e4e98ab818b9968fc9ec363ed6b"
+    NEW_PAGE_WITH_MARKDOWN_PAGE_ID = "315d8e4e98ab8108901dcfa2d3993f6e"
     # database_id
     DATABASE_ID = "c37a2c66e3aa4a0da44773de3b80c253"
     UNPERMITTED_DATABASE_ID = "668d797c76fa49349b05ad288df2d136"
@@ -71,7 +72,7 @@ module NotionRubyMapping
     PARAGRAPH_BLOCK_ID = "79ddb5ed15c74a409cf6a018d23ceb19"
     APPEND_AFTER_PARENT_ID = "03f6460c26734af484b95de15082d84e"
     APPEND_AFTER_PREVIOUS_ID = "263f125b179e4e4f996a1eff812d9d3d"
-    APPEND_AFTER_ADDED_ID = "26dd8e4e98ab81dda004fec6512815a6"
+    APPEND_AFTER_ADDED_ID = "325d8e4e98ab818084fbcc1756204848"
     FILE_UPLOAD_IMAGE_ID = "20cd8e4e98ab81aa973b00b23083c115"
     FILE_UPLOAD_PAGE_ID = "20bd8e4e98ab80c79576dcf6f6e5ee4a"
     FILE_UPLOAD_VIDEO_ID = "21ad8e4e98ab814e8d9600b2ded97d6c"
@@ -95,6 +96,7 @@ module NotionRubyMapping
       heading_1: "0a58761ef3b4429fb86e0ad9ff815fe1",
       heading_2: "d34096c962ba46339294db488ca7b8cc",
       heading_3: "fef62d738d834791b2da681816f56389",
+      heading_4: "32ad8e4e98ab80f1ae91faf02bbb50d8",
       image_external: "ae7be0357ad1418abb8ef0f2d039220c",
       image_file: "293ace3742f545a6b8ff1352f4b3e7c6",
       inline_contents: "2515e2f2a53f40c3a2ea1b5d47afee09",
@@ -114,6 +116,7 @@ module NotionRubyMapping
       toggle_heading_1: "82daa282435d4f9f8f3bb8c0328a963f",
       toggle_heading_2: "e5f163568adc49c59f17228589d071ac",
       toggle_heading_3: "115fb937ab6d4a2e9079921b03e50756",
+      toggle_heading_4: "32ad8e4e98ab80fc8ee9d16833fce3a7",
       video: "bed3abe020094aa990564844f981b07a",
       audio: "2cad8e4e98ab80efb1fdca3b581b4c2c",
     }.freeze
@@ -131,9 +134,11 @@ module NotionRubyMapping
       heading_1: "0ae3399d5599419e84af80433e1290b4",
       heading_2: "a7873498c1cc4032bc4e975b80ec1a1b",
       heading_3: "2bf3a507d066433fad10ed77b342664c",
+      heading_4: "32ad8e4e98ab804c9173c15694f45c5f",
       toggle_heading_1: "a9b7ff827c5b41dba01374b1af8fb516",
       toggle_heading_2: "00ce5fe04b5b485ba157914ae048b780",
       toggle_heading_3: "e16aa38d136e4fcaa54c3a18f6140350",
+      toggle_heading_4: "32ad8e4e98ab808998eae6b408766d68",
       image: "585aa9761ce143c2b9dba3e4503d78c2",
       numbered_list_item: "da9929d35cd849d7990e2ee361239810",
       paragraph: "7de3e4c08c5f4082992268d154f9aefc",
@@ -222,12 +227,13 @@ module NotionRubyMapping
       retrieve_user
       retrieve_users
       search
-      append_after
+      append_block_children
       create_file_upload
       complete
       retrieve
       list_data_source_templates
       move_page
+      markdown_page
     end
 
     # @param [Symbol] method
@@ -297,6 +303,7 @@ module NotionRubyMapping
         unpermitted_data_source: [UNPERMITTED_DATA_SOURCE_ID, 404],
         parent: [PARENT_DATA_SOURCE_ID, 200],
         created: [CREATED_DATA_SOURCE_ID, 200],
+        test_template: [TEST_TEMPLATE_DATA_SOURCE_ID, 200],
       }
     end
 
@@ -489,6 +496,50 @@ module NotionRubyMapping
       }
     end
 
+    def markdown_page
+      generate_stubs_sub :patch, __method__, :markdown_page_path, {
+        by_insert_bottom: [
+          NEW_PAGE_WITH_MARKDOWN_PAGE_ID, 200, {
+            "type" => "insert_content",
+            "insert_content" => {
+              "content" => "- Added new item in page bottom\n",
+            },
+          }
+        ],
+        by_insert_after_todo: [
+          NEW_PAGE_WITH_MARKDOWN_PAGE_ID, 200,
+          {
+            "type" => "insert_content",
+            "insert_content" => {
+              "content" => "1. Added numbered item after To Do item\n",
+              "after" => "- [ ] To Do\n",
+            },
+          }
+        ],
+        by_replace_todo: [
+          NEW_PAGE_WITH_MARKDOWN_PAGE_ID, 200,
+          {
+            "type" => "replace_content_range",
+            "replace_content_range" => {
+              "content" => "- [x] To Do",
+              "content_range" => "- [ ] To Do",
+            },
+          }
+        ],
+        by_replace_todo_allow_deleting_content: [
+          NEW_PAGE_WITH_MARKDOWN_PAGE_ID, 200,
+          {
+            "type" => "replace_content_range",
+            "replace_content_range" => {
+              "content" => "1. Replace numbered item",
+              "content_range" => "- [x] To Do",
+              "allow_deleting_content" => true,
+            },
+          }
+        ],
+      }
+    end
+
     def create_page
       generate_stubs_sub :post, __method__, :pages_path, {
         parent_database: [nil, 200, {
@@ -659,6 +710,19 @@ module NotionRubyMapping
               "id" => "2f0d8e4e98ab812ca8f5cce62b2d3f6e",
             },
           },
+        }],
+        parent_data_source_with_markdown: [nil, 200, {
+          "parent" => {
+            "data_source_id" => TestConnection::TEST_TEMPLATE_DATA_SOURCE_ID,
+          },
+          "markdown" => "# New page with markdown\n## Paragraph 2\n- [ ] To Do\n- [x] Checked To Do\n",
+        }],
+        parent_page_with_markdown: [nil, 200, {
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => TestConnection::POSITION_TEST_PARENT_PAGE_ID,
+          },
+          "markdown" => "# New Page with markdown\n<meeting-notes>\n",
         }],
       }
     end
@@ -1387,6 +1451,32 @@ module NotionRubyMapping
             ],
           }
         ],
+        heading_4: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_4",
+                "object" => "block",
+                "heading_4" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Heading 4",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Heading 4",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "yellow_background",
+                  "is_toggleable" => false,
+                },
+              },
+            ],
+          }
+        ],
         image: [
           id, 200,
           {
@@ -1941,6 +2031,52 @@ module NotionRubyMapping
             ],
           }
         ],
+        toggle_heading_4: [
+          id, 200,
+          {
+            "children" => [
+              {
+                "type" => "heading_4",
+                "object" => "block",
+                "heading_4" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "Toggle Heading 4",
+                        "link" => nil,
+                      },
+                      "plain_text" => "Toggle Heading 4",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "yellow_background",
+                  "children" => [
+                    {
+                      "type" => "bulleted_list_item",
+                      "object" => "block",
+                      "bulleted_list_item" => {
+                        "rich_text" => [
+                          {
+                            "type" => "text",
+                            "text" => {
+                              "content" => "inside Toggle Heading 4",
+                              "link" => nil,
+                            },
+                            "plain_text" => "inside Toggle Heading 4",
+                            "href" => nil,
+                          },
+                        ],
+                        "color" => "default",
+                      },
+                    },
+                  ],
+                  "is_toggleable" => true,
+                },
+              },
+            ],
+          }
+        ],
         video: [
           id, 200,
           {
@@ -2102,8 +2238,8 @@ module NotionRubyMapping
                          append_block_children_hash(BLOCK_CREATE_TEST_BLOCK_ID)
     end
 
-    def append_after
-      generate_stubs_sub :patch, :append_block_children, :append_block_children_block_path, {
+    def append_block_children
+      generate_stubs_sub :patch, __method__, :append_block_children_block_path, {
         append_after: [
           APPEND_AFTER_PARENT_ID, 200,
           {
@@ -2127,7 +2263,68 @@ module NotionRubyMapping
                 },
               },
             ],
-            "after" => "263f125b179e4e4f996a1eff812d9d3d",
+            "position" => {
+              "type" => "after_block",
+              "after_block" => {
+                "id" => "263f125b179e4e4f996a1eff812d9d3d",
+              },
+            },
+          }
+        ],
+        start: [
+          APPEND_AFTER_PARENT_ID, 200,
+          {
+            "children" => [
+              {
+                "type" => "numbered_list_item",
+                "object" => "block",
+                "numbered_list_item" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "start block",
+                        "link" => nil,
+                      },
+                      "plain_text" => "start block",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "default",
+                },
+              },
+            ],
+            "position" => {
+              "type" => "start",
+            },
+          }
+        ],
+        end: [
+          APPEND_AFTER_PARENT_ID, 200,
+          {
+            "children" => [
+              {
+                "type" => "numbered_list_item",
+                "object" => "block",
+                "numbered_list_item" => {
+                  "rich_text" => [
+                    {
+                      "type" => "text",
+                      "text" => {
+                        "content" => "end block",
+                        "link" => nil,
+                      },
+                      "plain_text" => "end block",
+                      "href" => nil,
+                    },
+                  ],
+                  "color" => "default",
+                },
+              },
+            ],
+            "position" => {
+              "type" => "end",
+            },
           }
         ],
       }
@@ -2499,6 +2696,43 @@ module NotionRubyMapping
             },
           }
         ],
+        heading4_color: [
+          UPDATE_BLOCK_ID_HASH[:heading_4], 200,
+          {
+            "heading_4" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Heading 4",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Heading 4",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        heading4_rta: [
+          UPDATE_BLOCK_ID_HASH[:heading_4], 200,
+          {
+            "heading_4" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Heading 4",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Heading 4",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
         image_url: [
           UPDATE_BLOCK_ID_HASH[:image], 200,
           {
@@ -2861,6 +3095,43 @@ module NotionRubyMapping
                     "link" => nil,
                   },
                   "plain_text" => "New Heading 3",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading4_color: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_4], 200,
+          {
+            "heading_4" => {
+              "color" => "green_background",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "Toggle Heading 4",
+                    "link" => nil,
+                  },
+                  "plain_text" => "Toggle Heading 4",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        ],
+        toggle_heading4_rta: [
+          UPDATE_BLOCK_ID_HASH[:toggle_heading_4], 200,
+          {
+            "heading_4" => {
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "New Toggle Heading 4",
+                    "link" => nil,
+                  },
+                  "plain_text" => "New Toggle Heading 4",
                   "href" => nil,
                 },
               ],

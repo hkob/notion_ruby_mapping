@@ -40,9 +40,12 @@ module NotionRubyMapping
     # @param [Array<Property, Class, String>] assign
     # @return [NotionRubyMapping::Base]
     # @see https://www.notion.so/hkob/DataSource-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
-    def build_child_page(*assign, template_page: nil)
+    # @param [String, NilClass] template_page
+    # @param [String, NilClass] markdown
+    def build_child_page(*assign, template_page: nil, markdown: nil)
       assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
-      page = Page.new assign: assign, parent: {"data_source_id" => @id}, template_page: template_page
+      page = Page.new assign: assign, parent: {"data_source_id" => @id}, template_page: template_page,
+                      markdown: markdown
       pp = page.properties
       pp.clear_will_update
       yield page, pp if block_given?
@@ -50,12 +53,15 @@ module NotionRubyMapping
     end
 
     # @param [Array<Property, Class, String>] assign
+    # @param [String, NilClass] template_page
+    # @param [String, NilClass] markdown
     # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Base]
     # @see https://www.notion.so/hkob/DataSource-1462b24502424539a4231bedc07dc2f5#c217ce78020a4de79b720790fce3092d
-    def create_child_page(*assign, template_page: nil, dry_run: false)
+    def create_child_page(*assign, template_page: nil, markdown: nil, dry_run: false)
       assign = properties.map { |p| [p.class, p.name] }.flatten if assign.empty?
-      page = Page.new assign: assign, parent: {"data_source_id" => @id}, template_page: template_page
+      page = Page.new assign: assign, parent: {"data_source_id" => @id}, template_page: template_page,
+                      markdown: markdown
       pp = page.properties
       pp.clear_will_update
       yield page, pp if block_given?

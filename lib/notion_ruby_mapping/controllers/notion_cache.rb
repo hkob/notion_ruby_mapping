@@ -263,6 +263,19 @@ module NotionRubyMapping
     end
 
     # @param [String] page_id
+    # @return [String] path
+    def markdown_page_path(page_id)
+      "v1/pages/#{page_id}/markdown"
+    end
+
+    # @param [String] page_id
+    # @param [Hash] payload
+    # @return [Hash] response hash
+    def markdown_page_request(page_id, payload)
+      request :patch, markdown_page_path(page_id), payload
+    end
+
+    # @param [String] page_id
     # @param [Hash] payload
     # @return [Hash] response hash
     def move_page_request(page_id, payload)

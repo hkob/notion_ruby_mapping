@@ -34,6 +34,7 @@ module NotionRubyMapping
           heading_1: Heading1Block,
           heading_2: Heading2Block,
           heading_3: Heading3Block,
+          heading_4: Heading4Block,
           image: ImageBlock,
           link_preview: LinkPreviewBlock,
           link_to_page: LinkToPageBlock,
@@ -53,6 +54,7 @@ module NotionRubyMapping
           heading_1: ToggleHeading1Block,
           heading_2: ToggleHeading2Block,
           heading_3: ToggleHeading3Block,
+          heading_4: ToggleHeading4Block,
         },
       }
       @klass = @type2class[has_children][type.to_sym] || @type2class[false][type.to_sym] || Block
@@ -80,7 +82,7 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::Block, String]
     # @param [Array<Block>] blocks
     def append_after(*blocks, dry_run: false)
-      parent.append_block_children(*blocks, after: id, dry_run: dry_run)
+      parent.append_block_children(*blocks, position: id, dry_run: dry_run)
     end
 
     # @param [Boolean] not_update false when update
@@ -88,7 +90,7 @@ module NotionRubyMapping
     def block_json(not_update: true)
       ans = {"type" => type}
       ans["object"] = "block"
-      ans["archived"] = true if @archived
+      ans["in_trash"] = true if @in_trash
       ans
     end
 

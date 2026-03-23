@@ -1094,6 +1094,55 @@ module NotionRubyMapping
       end
     end
 
+    describe "create with markdown" do
+      markdown = "# New page with markdown\n## Paragraph 2\n- [ ] To Do\n- [x] Checked To Do\n"
+      let(:parent_data_source) { DataSource.new id: TestConnection::TEST_TEMPLATE_DATA_SOURCE_ID }
+
+      context "when build_child_page" do
+        let(:target) { parent_data_source.build_child_page markdown: markdown }
+
+        it { expect(target).to be_new_record }
+
+        it_behaves_like "property values json", {
+          "parent" => {
+            "data_source_id" => TestConnection::TEST_TEMPLATE_DATA_SOURCE_ID,
+          },
+          "markdown" => markdown,
+        }
+
+        describe "dry_run" do
+          let(:dry_run) { target.save dry_run: true }
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
+        end
+
+        describe "create" do
+          before { target.save }
+
+          it_behaves_like "property values json", {}
+          it { expect(target.id).to eq TestConnection::NEW_PAGE_WITH_MARKDOWN_PAGE_ID }
+          it { expect(target).not_to be_new_record }
+        end
+      end
+
+      context "create_child_page" do
+        context "not dry_run" do
+          let(:target) { parent_data_source.create_child_page markdown: markdown }
+
+          it_behaves_like "property values json", {}
+          it { expect(target.id).to eq TestConnection::NEW_PAGE_WITH_MARKDOWN_PAGE_ID }
+          it { expect(target).not_to be_new_record }
+        end
+
+        context "dry_run" do
+          let(:target) { parent_data_source.build_child_page markdown: markdown }
+          let(:dry_run) { parent_data_source.create_child_page markdown: markdown, dry_run: true }
+
+          it_behaves_like "dry run", :post, :pages_path, json_method: :property_values_json
+        end
+      end
+    end
+
     describe "append_comment" do
       let(:page) { Page.find TestConnection::TOP_PAGE_ID }
 
@@ -1228,6 +1277,145 @@ module NotionRubyMapping
               "position" => position,
             }
           end
+        end
+      end
+    end
+
+    describe "create a page with markdown" do
+      let(:ppid) { TestConnection::POSITION_TEST_PARENT_PAGE_ID }
+      let(:parent_page) { Page.new id: ppid }
+
+      markdown = "# New Page with markdown\n<meeting-notes>\n"
+
+      context "when not dry_run" do
+        let(:target) { parent_page.create_child_page markdown: markdown }
+
+        it { expect(target.id).to eq "316d8e4e98ab81489a5cdbfa4a14ef30" }
+        it { expect(nc.hex_id(target.parent_id)).to eq ppid }
+      end
+
+      context "when dry_run" do
+        let(:dry_run) { parent_page.create_child_page markdown: markdown, dry_run: true }
+
+        it_behaves_like "dry run", :post, :pages_path, json: {
+          "parent" => {
+            "type" => "page_id",
+            "page_id" => TestConnection::POSITION_TEST_PARENT_PAGE_ID,
+          },
+          "markdown" => markdown,
+        }
+      end
+    end
+
+    describe "insert markdown" do
+      let(:pid) { TestConnection::NEW_PAGE_WITH_MARKDOWN_PAGE_ID }
+      let(:page) { Page.new id: pid }
+
+      context "when insert bottom" do
+        markdown = "- Added new item in page bottom\n"
+        let(:target) { page.insert_markdown markdown }
+
+        context "when not dry_run" do
+          it { expect(target.id).to eq pid }
+
+          it {
+            expect(target.markdown).to eq "## Paragraph 2\n- [ ] To Do\n- [x] Checked To Do\n- Added new item in page bottom"
+          }
+        end
+
+        context "when dry_run" do
+          let(:dry_run) { page.insert_markdown markdown, dry_run: true }
+
+          it_behaves_like "dry run", :patch, :markdown_page_path, use_id: true, json: {
+            "type" => "insert_content",
+            "insert_content" => {
+              "content" => markdown,
+            },
+          }
+        end
+      end
+
+      context "when insert after to do" do
+        markdown = "1. Added numbered item after To Do item\n"
+        after = "- [ ] To Do\n"
+        let(:target) { page.insert_markdown markdown, after: after }
+
+        context "when not dry_run" do
+          it { expect(target.id).to eq pid }
+
+          it {
+            expect(target.markdown).to eq "## Paragraph 2\n- [ ] To Do\n1. Added numbered item after To Do item\n- [x] Checked To Do\n- Added new item in page bottom\n<empty-block/>"
+          }
+        end
+
+        context "when dry_run" do
+          let(:dry_run) { page.insert_markdown markdown, after: after, dry_run: true }
+
+          it_behaves_like "dry run", :patch, :markdown_page_path, use_id: true, json: {
+            "type" => "insert_content",
+            "insert_content" => {
+              "content" => markdown,
+              "after" => after,
+            },
+          }
+        end
+      end
+    end
+
+    describe "replace markdown" do
+      let(:pid) { TestConnection::NEW_PAGE_WITH_MARKDOWN_PAGE_ID }
+      let(:page) { Page.new id: pid }
+
+      context "when no flag" do
+        replace = "- [x] To Do"
+        replace_range = "- [ ] To Do"
+        let(:target) { page.replace_markdown replace, replace_range }
+
+        context "when not dry_run" do
+          it { expect(target.id).to eq pid }
+
+          it {
+            expect(target.markdown).to eq "## Paragraph 2\n- [x] To Do\n1. Added numbered item after To Do item\n- [x] Checked To Do\n- Added new item in page bottom\n<empty-block/>"
+          }
+        end
+
+        context "when dry_run" do
+          let(:dry_run) { page.replace_markdown replace, replace_range, dry_run: true }
+
+          it_behaves_like "dry run", :patch, :markdown_page_path, use_id: true, json: {
+            "type" => "replace_content_range",
+            "replace_content_range" => {
+              "content" => replace,
+              "content_range" => replace_range,
+            },
+          }
+        end
+      end
+
+      context "when with allow_deleting_content flag" do
+        replace = "1. Replace numbered item"
+        replace_range = "- [x] To Do"
+        let(:target) { page.replace_markdown replace, replace_range, allow_deleting_content: true }
+
+        context "when not dry_run" do
+          it { expect(target.id).to eq pid }
+
+          it {
+            expect(target.markdown).to eq "## Paragraph 2\n1. Replace numbered item\n2. Added numbered item after To Do item\n- [x] Checked To Do\n- Added new item in page bottom\n<empty-block/>"
+          }
+        end
+
+        context "when dry_run" do
+          let(:dry_run) { page.replace_markdown replace, replace_range, allow_deleting_content: true, dry_run: true }
+
+          it_behaves_like "dry run", :patch, :markdown_page_path, use_id: true, json: {
+            "type" => "replace_content_range",
+            "replace_content_range" => {
+              "content" => replace,
+              "content_range" => replace_range,
+              "allow_deleting_content" => true,
+            },
+          }
         end
       end
     end
