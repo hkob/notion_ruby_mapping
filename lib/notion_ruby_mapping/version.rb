@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  VERSION = "3.0.6"
-  NOTION_VERSION = "2025-09-03"
+  VERSION = "4.0.0"
+  NOTION_VERSION = "2026-03-11"
 end

@@ -81,6 +81,10 @@ module NotionRubyMapping
       it { expect(nc.data_sources_path).to eq "v1/data_sources" }
     end
 
+    describe "markdown_page_path" do
+      it { expect(nc.markdown_page_path("ABC")).to eq "v1/pages/ABC/markdown" }
+    end
+
     describe "move_page_path" do
       it { expect(nc.move_page_path("ABC")).to eq "v1/pages/ABC/move" }
     end

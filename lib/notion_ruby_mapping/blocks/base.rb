@@ -7,11 +7,15 @@ module NotionRubyMapping
     # @param [Hash, nil] json
     # @param [String, nil] id
     # @param [Array<Property, Class, String>] assign
-    def initialize(json: nil, id: nil, assign: [], parent: nil, template_page: nil, position: nil)
+    # @param [Block, nil] parent
+    # @param [String, nil] template_page
+    # @param [String, nil] position
+    # @param [String, nil] markdown
+    def initialize(json: nil, id: nil, assign: [], parent: nil, template_page: nil, position: nil, markdown: nil)
       @nc = NotionCache.instance
       @json = json
       @id = @nc.hex_id(id || @json && @json["id"])
-      @archived = @json && @json["archived"]
+      @in_trash = @json && @json["in_trash"]
       @has_children = @json && @json["has_children"]
       @new_record = true unless parent.nil?
       raise StandardError, "Unknown id" if !is_a?(List) && !is_a?(Block) && @id.nil? && parent.nil?
@@ -28,6 +32,7 @@ module NotionRubyMapping
       elsif position
         payload_json["position"] = {"type" => "after_block", "after_block" => {"id" => position}}
       end
+      payload_json["markdown"] = markdown if markdown
       @payload = Payload.new(payload_json)
       @property_cache = nil
       @created_time = nil
@@ -37,13 +42,13 @@ module NotionRubyMapping
       assign.each_slice(2) { |(klass, key)| assign_property(klass, key) }
       @json ||= {}
     end
-    attr_reader :json, :id, :archived, :has_children
+    attr_reader :json, :id, :in_trash, :has_children
 
     # @param [Hash, Notion::Messages] json
     # @return [NotionRubyMapping::Base]
     def self.create_from_json(json)
       case json["object"]
-      when "page"
+      when "page", "page_markdown"
         Page.new json: json
       when "data_source"
         DataSource.new json: json
@@ -140,12 +145,12 @@ module NotionRubyMapping
     end
 
     # @param [Array<Block>] blocks
-    # @param [String, nil] after block id of previous block
+    # @param [String, nil] position block id of previous block, start, or end
     # @param [Boolean] dry_run true if dry_run
     # @return [NotionRubyMapping::Block, String]
     # @see https://www.notion.so/hkob/Page-d359650e3ca94424af8359a24147b9a0#44bbf83d852c419485c5efe9fe1558fb
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#2c47f7fedae543cf8566389ba1677132
-    def append_block_children(*blocks, after: nil, dry_run: false)
+    def append_block_children(*blocks, position: nil, dry_run: false)
       raise StandardError, "This block can have no children." unless page? || (block? && can_have_children)
 
       only_one = blocks.length == 1
@@ -155,7 +160,11 @@ module NotionRubyMapping
           block.block_json
         end,
       }
-      json["after"] = after if after
+      if %w[start end].include? position
+        json["position"] = {"type" => position}
+      elsif position
+        json["position"] = {"type" => "after_block", "after_block" => {"id" => position}}
+      end
       if dry_run
         path = @nc.append_block_children_page_path(id)
         self.class.dry_run_script :patch, path, json
@@ -264,6 +273,11 @@ module NotionRubyMapping
     # @return [NotionRubyMapping::LastEditedTimeProperty]
     def last_edited_time
       @last_edited_time ||= LastEditedTimeProperty.new("__timestamp__", json: self["last_edited_time"])
+    end
+
+    # @return [String]
+    def markdown
+      @json && @json["markdown"]
     end
 
     # @return [Boolean] true if new record
