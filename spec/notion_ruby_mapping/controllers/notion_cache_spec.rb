@@ -53,6 +53,14 @@ module NotionRubyMapping
       it { expect(nc.block_children_page_path("ABC", "?page_size=100")).to eq "v1/blocks/ABC/children?page_size=100" }
     end
 
+    describe "comments_path" do
+      it { expect(nc.comments_path).to eq "v1/comments" }
+    end
+
+    describe "comment_path" do
+      it { expect(nc.comment_path("ABC")).to eq "v1/comments/ABC" }
+    end
+
     describe "file_upload_path" do
       it { expect(nc.file_upload_path("ABC")).to eq "v1/file_uploads/ABC" }
     end

@@ -153,6 +153,8 @@ module NotionRubyMapping
     # user_id
     USER_HKOB_ID = "2200a9116a9644bbbd386bfb1e01b9f6"
     USER_BOT_ID = "019a87c7d19744a4b19abaa684400f81"
+    # comment object
+    EDIT_TEXT_COMMENT_ID = "37921658084045ae924ad9ce1d60375b"
 
     # @param [String, Symbol] key
     # @return [String] block_id
@@ -189,7 +191,7 @@ module NotionRubyMapping
           "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
           "Authorization" => "Bearer #{notion_token}",
           "Notion-Version" => NotionRubyMapping::NOTION_VERSION,
-          "User-Agent" => "Faraday v2.13.1",
+          "User-Agent" => "Faraday v2.14.1",
         },
       }
       request[:body] = JSON.generate(payload) if payload
@@ -223,6 +225,7 @@ module NotionRubyMapping
       update_block
       retrieve_property
       retrieve_comments
+      retrieve_comment
       append_comment
       retrieve_user
       retrieve_users
@@ -234,6 +237,8 @@ module NotionRubyMapping
       list_data_source_templates
       move_page
       markdown_page
+      update_comment
+      destroy_comment
     end
 
     # @param [Symbol] method
@@ -323,6 +328,19 @@ module NotionRubyMapping
         next_2: [DATA_SOURCE_ID, 200, {"start_cursor" => "6601e719-a39a-460c-908e-8909467fcccf", "page_size" => 2}],
         last_2: [DATA_SOURCE_ID, 200, {"start_cursor" => "dcdc805c-85fa-4155-a55c-20fc28771af7", "page_size" => 2}],
         filter_properties: [DATA_SOURCE_ID, 200, {"page_size" => 100}],
+        select_multi_values: [DATA_SOURCE_ID, 200,
+                              {
+                                "filter" => {
+                                  "property": "SelectTitle",
+                                  "select" => {
+                                    "equals": [
+                                      "Select 1",
+                                      "Select 2",
+                                    ],
+                                  },
+                                },
+                                "page_size": 100,
+                              }],
       }
     end
 
@@ -3231,6 +3249,12 @@ module NotionRubyMapping
       }
     end
 
+    def retrieve_comment
+      generate_stubs_sub :get, __method__, :comment_path, {
+        edit_text: [EDIT_TEXT_COMMENT_ID, 200],
+      }
+    end
+
     def append_comment
       generate_stubs_sub :post, __method__, :comments_path, {
         top_page: [
@@ -3340,6 +3364,35 @@ module NotionRubyMapping
 
     def to_href
       @to_href ||= TextObject.new "href_text", "href" => "https://www.google.com/"
+    end
+
+    def update_comment
+      generate_stubs_sub :patch, __method__, :comment_path, {
+        rich_text: [EDIT_TEXT_COMMENT_ID, 200,
+                    {
+                      "rich_text" => [
+                        {
+                          "type" => "text",
+                          "text" => {
+                            "content" => "update comment by rich text",
+                            "link" => nil,
+                          },
+                          "plain_text" => "update comment by rich text",
+                          "href" => nil,
+                        },
+                      ],
+                    }],
+        markdown: [EDIT_TEXT_COMMENT_ID, 200,
+                   {
+                     "markdown" => "update comment by markdown",
+                   }],
+      }
+    end
+
+    def destroy_comment
+      generate_stubs_sub :delete, __method__, :comment_path, {
+        by_id: [EDIT_TEXT_COMMENT_ID, 200],
+      }
     end
   end
 end

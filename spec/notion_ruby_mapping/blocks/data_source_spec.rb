@@ -311,6 +311,24 @@ module NotionRubyMapping
       it { expect(target.count).to eq 5 }
     end
 
+    describe "query with multivalue filter" do
+      let(:target) { DataSource.new id: TestConnection::DATA_SOURCE_ID, assign: [SelectProperty, "SelectTitle"] }
+      let(:sp) { target.properties["SelectTitle"] }
+      let(:query) { sp.filter_equals ["Select 1", "Select 2"] }
+
+      context "when API access" do
+        let(:result) { target.query_data_source query }
+
+        it { expect(result.count).to eq 1 }
+      end
+
+      context "when dry_run" do
+        let(:dry_run) { target.query_data_source query, dry_run: true }
+
+        it_behaves_like "dry run", :post, :query_data_source_path, use_id: true, use_query: true
+      end
+    end
+
     describe "created_time and last_edited_time" do
       let(:target) { DataSource.new id: TestConnection::DATA_SOURCE_ID }
       let(:ct) { target.created_time }
@@ -476,6 +494,7 @@ module NotionRubyMapping
                                              TitleProperty, "Title",
                                              UrlProperty, "Url" do |db, ps|
             fp, msp, np, rp, rup, sp = ps.values_at "Formula", "MultiSelect", "Number", "Relation", "Rollup", "Select"
+            p fp, msp, np, rp, rup, sp
             fp.formula_expression = "now()"
             msp.add_multi_select_option name: "MS1", color: "orange"
             msp.add_multi_select_option name: "MS2", color: "green"
