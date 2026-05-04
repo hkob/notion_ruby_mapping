@@ -101,6 +101,14 @@ module NotionRubyMapping
       "v1/comments"
     end
 
+    def comment_path(comment_id)
+      "v1/comments/#{comment_id}"
+    end
+
+    def comment_request(comment_id)
+      request :get, comment_path(comment_id)
+    end
+
     def complete_a_file_upload_path(file_id)
       "v1/file_uploads/#{file_id}/complete"
     end
@@ -211,6 +219,12 @@ module NotionRubyMapping
     # @return [Hash]
     def destroy_block_request(id)
       request :delete, block_path(id)
+    end
+
+    # @param [String] id
+    # @return [Hash]
+    def destroy_comment_request(id)
+      request :delete, comment_path(id)
     end
 
     # @param [String] fname
@@ -426,6 +440,14 @@ module NotionRubyMapping
 
     def update_block_request(block_id, payload)
       request :patch, block_path(block_id), payload
+    end
+
+    def update_comment_request(comment_id, rich_text: nil, markdown: nil)
+      if rich_text
+        request :patch, comment_path(comment_id), {"rich_text" => rich_text}
+      else
+        request :patch, comment_path(comment_id), {"markdown" => markdown}
+      end
     end
 
     # @param [String] id page_id (with or without "-")

@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday-multipart"
   spec.add_dependency "mime-types"
 
+  spec.add_development_dependency "ostruct"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rb-readline"
