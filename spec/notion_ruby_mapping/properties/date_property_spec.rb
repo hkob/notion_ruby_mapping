@@ -96,7 +96,7 @@ module NotionRubyMapping
 
     describe "a date property with parameters" do
       [
-        [{}, {"start" => nil, "end" => nil, "time_zone" => nil}],
+        [{}, nil],
         [{start_date: Date.new(2022, 2, 20)}, {"start" => "2022-02-20", "end" => nil, "time_zone" => nil}],
         [
           {start_date: Date.new(2022, 2, 20), end_date: Date.new(2022, 2, 21)},
@@ -131,6 +131,15 @@ module NotionRubyMapping
           it_behaves_like "property values json", {"dp" => {"type" => "date", "date" => json}}
           it_behaves_like "will not update"
         end
+      end
+
+      describe "clear" do
+        let(:target) { DateProperty.new "dp", start_date: "2026-07-14", end_date: "2026-07-15" }
+
+        before { target.clear }
+
+        it_behaves_like "property values json", {"dp" => {"type" => "date", "date" => nil}}
+        it_behaves_like "will update"
       end
 
       describe "start=" do
@@ -195,6 +204,21 @@ module NotionRubyMapping
               {"start" => "2022-02-22T01:23:45+09:00", "end" => "2022-02-20T01:23:45+09:00", "time_zone" => nil},
             ],
           ],
+          nil => [
+            [{}, nil],
+            [
+              {start_date: Date.new(2022, 2, 22)}, nil
+            ],
+            [
+              {end_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00")}, nil
+            ],
+            [
+              {end_date: Date.new(2022, 2, 24)}, nil
+            ],
+            [
+              {end_date: DateTime.new(2022, 2, 20, 1, 23, 45, "+09:00")}, nil
+            ],
+          ],
         }.each do |date, array|
           array.each do |params, answer|
             context params do
@@ -212,7 +236,7 @@ module NotionRubyMapping
       describe "end=" do
         {
           Date.new(2022, 2, 22) => [
-            [{}, {"start" => nil, "end" => "2022-02-22", "time_zone" => nil}],
+            [{}, nil],
             [{start_date: Date.new(2022, 2, 20)},
              {"start" => "2022-02-20", "end" => "2022-02-22", "time_zone" => nil}],
             [
@@ -231,7 +255,7 @@ module NotionRubyMapping
             ],
           ],
           Time.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-            [{}, {"start" => nil, "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil}],
+            [{}, nil],
             [
               {start_date: Time.new(2022, 2, 21, 1, 23, 45, "+09:00")},
               {"start" => "2022-02-21T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
@@ -255,7 +279,7 @@ module NotionRubyMapping
             ],
           ],
           DateTime.new(2022, 2, 22, 1, 23, 45, "+09:00") => [
-            [{}, {"start" => nil, "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil}],
+            [{}, nil],
             [
               {start_date: DateTime.new(2022, 2, 21, 1, 23, 45, "+09:00")},
               {"start" => "2022-02-21T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
@@ -276,6 +300,30 @@ module NotionRubyMapping
               {start_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00")},
               # (Previous date -> clear end_date) -> not clear
               {"start" => "2022-02-24T01:23:45+09:00", "end" => "2022-02-22T01:23:45+09:00", "time_zone" => nil},
+            ],
+          ],
+          nil => [
+            [{}, nil],
+            [
+              {start_date: DateTime.new(2022, 2, 21, 1, 23, 45, "+09:00")},
+              {"start" => "2022-02-21T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+            ],
+            [
+              {
+                start_date: DateTime.new(2022, 2, 20, 1, 23, 45, "+09:00"),
+                end_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00"),
+              },
+              {"start" => "2022-02-20T01:23:45+09:00", "end" => nil, "time_zone" => nil},
+            ],
+            [
+              {start_date: Date.new(2022, 2, 20)},
+              # (Different class -> clear end_date) -> not clear
+              {"start" => "2022-02-20", "end" => nil, "time_zone" => nil},
+            ],
+            [
+              {start_date: DateTime.new(2022, 2, 24, 1, 23, 45, "+09:00")},
+              # (Previous date -> clear end_date) -> not clear
+              {"start" => "2022-02-24T01:23:45+09:00", "end" => nil, "time_zone" => nil},
             ],
           ],
         }.each do |date, array|

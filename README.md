@@ -143,6 +143,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2027/7/14 [v4.0.2] Add clear method for DateProperty
 - 2027/5/4 [v4.0.1] Add retrieve / update / delete a comment
 - 2027/3/23 [v4.0.0] Add markdown support, headnig_4, toggle_heading_4, and position support for appending blocks
 - 2026/1/25 [v3.0.6] add move page, list templates, and create child page to page

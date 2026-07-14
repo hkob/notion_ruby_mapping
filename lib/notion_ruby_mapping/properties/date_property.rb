@@ -112,17 +112,26 @@ module NotionRubyMapping
 
     ## Page property only methods
 
+    def clear
+      self.start_date = nil
+      self
+    end
+
     # @return [Hash] created json
     def property_values_json
       assert_page_property __method__
       {
         @name => {
           "type" => TYPE,
-          "date" => {
-            "start" => value_str(@json["start"]),
-            "end" => value_str(@json["end"]),
-            "time_zone" => @json["time_zone"],
-          },
+          "date" => if @json["start"].nil?
+                      nil
+                    else
+                      {
+                        "start" => value_str(@json["start"]),
+                        "end" => value_str(@json["end"]),
+                        "time_zone" => @json["time_zone"],
+                      }
+                    end,
         },
       }
     end
