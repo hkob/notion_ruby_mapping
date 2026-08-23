@@ -25,14 +25,41 @@ module NotionRubyMapping
       @json["name"]
     end
 
-    ## Page property only methods
-
     # @param [String] status
     # @see https://www.notion.so/hkob/StatusProperty-c8b2c83019bc42edbc1527386c7ef453#b3fba1b6322140f28308de3ba70a8b7b
     def status=(status)
       assert_page_property __method__
       @will_update = true
       @json = {"name" => status}
+    end
+
+    ## Database or DataSource property only methods
+    # @param [String] name
+    # @param [String] color
+    # @return [Array<Hash>] updated status options
+    def add_status_option(name:, color:, group: nil)
+      hash = {"name" => name, "color" => color}
+      hash["group"] = group if group
+      edit_status_options << hash
+    end
+
+    # @return [Array<Hash>] editable status options
+    def edit_status_options
+      assert_database_or_data_source_property __method__
+      @will_update = true
+      @json["edit_options"] ||= []
+    end
+
+    # @return [Array<Hash>] status options
+    def status_options
+      assert_database_or_data_source_property __method__
+      @json["options"] || []
+    end
+
+    # @return [Array<String>] status option names
+    def status_names
+      assert_database_or_data_source_property __method__
+      status_options.map { |s| s["name"] }
     end
 
     ### Not public announced methods
@@ -53,6 +80,27 @@ module NotionRubyMapping
     def property_values_json
       assert_page_property __method__
       {@name => {"status" => @json, "type" => "status"}}
+    end
+
+    ## Database property only methods
+
+    # @return [Hash]
+    def update_property_schema_json
+      assert_database_or_data_source_property __method__
+      ans = super
+      return ans if ans != {} || !@will_update
+
+      ans[@name] ||= {}
+      ans[@name]["status"] ||= {}
+      ans[@name]["status"]["options"] = @json["edit_options"]
+      ans
+    end
+
+    ## Database property only methods
+
+    # @return [Hash]
+    def property_schema_json_sub
+      @json["edit_options"] ? {"options" => @json["edit_options"]} : {}
     end
   end
 end

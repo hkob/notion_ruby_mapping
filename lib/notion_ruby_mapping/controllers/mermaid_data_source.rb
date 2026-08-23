@@ -96,7 +96,7 @@ module NotionRubyMapping
 
         when "multi_select"
           if property
-            (options - (property.multi_select_options.map { |h| h["name"] })).each do |select_name|
+            (options - property.multi_select_options.map { |h| h["name"] }).each do |select_name|
               property.add_multi_select_option name: select_name, color: "default"
             end
           else
@@ -145,7 +145,7 @@ module NotionRubyMapping
           end
         when "select"
           if property
-            (options - (property.select_options.map { |h| h["name"] })).each do |select_name|
+            (options - property.select_options.map { |h| h["name"] }).each do |select_name|
               property.add_select_option name: select_name, color: "default"
             end
           else
@@ -165,7 +165,7 @@ module NotionRubyMapping
         property = ps.values_at(forward).first
         if property
           if reverse
-            if property.data_source_id == db_is && property.synced_property_name == reverse
+            if property.relation_data_source_id == db_is && property.synced_property_name == reverse
               relation_ds.add_property "relation", reverse
               relation_ds.finish_flag[reverse] = true
             else

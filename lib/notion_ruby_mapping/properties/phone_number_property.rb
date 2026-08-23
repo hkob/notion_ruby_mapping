@@ -13,7 +13,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [String, Hash, nil] phone number (Page), {} (Database)
+    # @return [String, Hash, nil] phone number for page properties, empty hash for database/data source properties
     # @see https://www.notion.so/hkob/PhoneNumberProperty-5df14aaa938c4888aecd53ab6752d2e6#40bceda04fe04c64b932d6a1ed180eaa
     def phone_number
       @json
@@ -21,7 +21,7 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [String] phone_number
+    # @param [String, nil] phone_number
     # @see https://www.notion.so/hkob/PhoneNumberProperty-5df14aaa938c4888aecd53ab6752d2e6#dc7e00e0558d40f79ca5cade1fccef29
     def phone_number=(phone_number)
       assert_page_property __method__

@@ -1,30 +1,14 @@
 # frozen_string_literal: true
 
-require "forwardable"
-
 module NotionRubyMapping
   # abstract class for property
   class Property
-    extend Forwardable
-
     ### Public announced methods
 
     ## Common methods
 
     attr_reader :name, :will_update, :property_id
     attr_accessor :property_cache
-
-    def_delegators :retrieve_page_property, :<<, :[], :add_person, :add_relation, :checkbox, :checkbox=, :created_by,
-                   :created_time, :date, :each, :email, :email=, :end_date, :end_date=, :files, :files=, :filter_after,
-                   :filter_before, :filter_contains, :filter_does_not_contain, :filter_does_not_equal,
-                   :filter_ends_with, :filter_equals, :filter_greater_than, :filter_greater_than_or_equal_to,
-                   :filter_is_empty, :filter_is_not_empty, :filter_less_than, :filter_less_than_or_equal_to,
-                   :filter_next_month, :filter_next_week, :filter_next_year, :filter_on_or_after, :filter_on_or_before,
-                   :filter_past_month, :filter_past_week, :filter_past_year, :filter_starts_with, :formula, :full_text,
-                   :last_edited_by, :last_edited_time, :multi_select, :multi_select=, :multi_select_names, :number,
-                   :number=, :people, :people=, :phone_number, :phone_number=, :property_values_json, :relation=,
-                   :rollup, :start_date, :start_date=, :time_zone, :time_zone=, :select, :select=, :select_name, :url,
-                   :url=, :start_date_obj, :end_date_obj
 
     ## Database property only methods
 
@@ -72,12 +56,13 @@ module NotionRubyMapping
 
       type = input_json["type"]
       if type.nil?
-        new name, property_id: input_json["id"], base_type: base_type, property_cache: property_cache, query: query
+        raise StandardError, "Property value is not returned: #{name}"
       elsif type == "property_item"
         tmp = new name, property_id: input_json["property_item"]["id"], base_type: base_type,
                         property_cache: property_cache, query: query
         objects = List.new(json: input_json, type: "property", value: tmp, query: query).to_a
-        case input_json["property_item"]["type"]
+        input_type = input_json["property_item"]["type"]
+        case input_type
         when "people"
           PeopleProperty.new name, people: objects, base_type: base_type,
                                    property_cache: property_cache, query: query
@@ -94,7 +79,7 @@ module NotionRubyMapping
           TitleProperty.new name, text_objects: objects, base_type: base_type,
                                   property_cache: property_cache, query: query
         else
-          raise StandardError, "Irregular property type: #{input_json["property_item"]["type"]}"
+          raise StandardError, "Unsupported property type: #{input_type} (#{name}). Please update notion_ruby_mapping."
         end
       else
         klass = {
@@ -123,7 +108,10 @@ module NotionRubyMapping
           url: UrlProperty,
           verification: VerificationProperty,
         }[type.to_sym]
-        raise StandardError, "Irregular property type: #{type}" unless klass
+        unless klass
+          raise StandardError,
+                "Unsupported property type: #{type} (#{name}). Please update notion_ruby_mapping."
+        end
 
         answer = klass.new name, property_id: input_json["id"], json: input_json[type], base_type: base_type,
                                  property_cache: property_cache
@@ -152,11 +140,6 @@ module NotionRubyMapping
       %w[database data_source].include? @base_type
     end
 
-    # @return [TrueClass, FalseClass] true if it has Property contents
-    def contents?
-      !instance_of? Property
-    end
-
     # @param [String] key query parameter
     # @param [Object] value query value
     # @return [NotionRubyMapping::Query] generated Query object
@@ -180,9 +163,9 @@ module NotionRubyMapping
     # @param [Hash] json
     def update_from_json(json)
       @will_update = false
-      return unless contents?
+      return unless json.key?(type)
 
-      @json = json[type] if json[type] && json[type] != "property_item"
+      @json = json[type]
     end
 
     # @return [Symbol] property type
@@ -193,13 +176,8 @@ module NotionRubyMapping
     ## Database property only methods
 
     # @param [Symbol, nil] method
-    def assert_database_property(method)
-      raise StandardError, "#{method} can execute only Database property." unless database?
-    end
-
-    # @param [Symbol, nil] method
     def assert_database_or_data_source_property(method)
-      raise StandardError, "#{method} can execute only Database property." if page?
+      raise StandardError, "#{method} can execute only Database or DataSource property." unless database_or_data_source?
     end
 
     # @return [Hash]
@@ -209,6 +187,7 @@ module NotionRubyMapping
     end
 
     ## DataSource property only methods
+    # @param [Symbol, nil] method
     def assert_data_source_property(method)
       raise StandardError, "#{method} can execute only DataSource property." unless data_source?
     end
@@ -229,7 +208,7 @@ module NotionRubyMapping
 
     # @param [Symbol, nil] method
     def assert_page_property(method)
-      raise StandardError, "#{method} can execute only Page property." if database? || data_source?
+      raise StandardError, "#{method} can execute only Page property." unless page?
     end
 
     # @return [NotionRubyMapping::Property, Array<UserObject>, nil]

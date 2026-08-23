@@ -11,7 +11,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Hash]
+    # @return [Hash] raw select object for page property, or select schema object for database/data_source property
     # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#7ad3734ac42c43068f1e04633bab400b
     def select
       @json
@@ -19,7 +19,7 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @return [String]
+    # @return [String, nil]
     # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#27a05e52715a4acd9156b5f146653e51
     def select_name
       assert_page_property __method__
@@ -30,27 +30,27 @@ module NotionRubyMapping
 
     # @param [String] name
     # @param [String] color
-    # @return [Array] added array
+    # @return [Array<Hash>] updated select options
     # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#3e1c7dbda7fb455f94ee93d9653b7880
     def add_select_option(name:, color:)
       edit_select_options << {"name" => name, "color" => color}
     end
 
-    # @return [Array] copyed multi select options
+    # @return [Array<Hash>] editable select options
     def edit_select_options
       assert_database_or_data_source_property __method__
       @will_update = true
       @json["options"] ||= []
     end
 
-    # @return [Array]
+    # @return [Array<Hash>]
     # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#790a297f2c1b4ba5a4d86074d4c70a89
     def select_options
       assert_database_or_data_source_property __method__
       @json["options"] || []
     end
 
-    # @return [String]
+    # @return [Array<String>]
     # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#72da1632793c4a5296f3bc89de2df413
     def select_names
       assert_database_or_data_source_property __method__
@@ -59,12 +59,12 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [String] select
+    # @param [String, nil] name
     # @see https://www.notion.so/hkob/SelectProperty-6d6a0defa70d4b26af0fdbdcfbf99f28#3bd195bf5c0a498ebf850409f7deb67a
-    def select=(select)
+    def select=(name)
       assert_page_property __method__
       @will_update = true
-      @json = {"name" => select}
+      @json = {"name" => name}
     end
 
     ### Not public announced methods
@@ -72,8 +72,8 @@ module NotionRubyMapping
     ## Common methods
 
     # @param [String, Symbol] name Property name
-    # @param [Hash] json
-    # @param [String] select String value (optional)
+    # @param [Hash, nil] json
+    # @param [String, nil] select select option name (optional)
     def initialize(name, will_update: false, base_type: "page", json: nil, select: nil, property_id: nil,
                    property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,

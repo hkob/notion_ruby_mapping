@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe TitleProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "title"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -163,6 +162,73 @@ module NotionRubyMapping
         end
       end
 
+      describe "empty title" do
+        context "when all title text objects are deleted" do
+          let(:target) { described_class.new "title", text_objects: [tc.to_text] }
+
+          before { target.delete_at 0 }
+
+          it_behaves_like "will update"
+
+          it_behaves_like "property values json", {
+            "title" => {
+              "type" => "title",
+              "title" => [],
+            },
+          }
+        end
+      end
+
+      describe "plain_text=" do
+        let(:target) { described_class.new "tp", text_objects: [tc.to_href] }
+
+        before { target.plain_text = "new title" }
+
+        it_behaves_like "will update"
+
+        it { expect(target.full_text).to eq "new title" }
+
+        it_behaves_like "property values json", {
+          "tp" => {
+            "type" => "title",
+            "title" => [
+              {
+                "type" => "text",
+                "text" => {
+                  "content" => "new title",
+                  "link" => nil,
+                },
+                "plain_text" => "new title",
+                "href" => nil,
+              },
+            ],
+          },
+        }
+      end
+
+      describe "plain_text= nil" do
+        let(:target) { described_class.new "tp", text_objects: [tc.to_text] }
+
+        it "raises an error when nil is given" do
+          expect { target.plain_text = nil }.to raise_error(ArgumentError)
+        end
+      end
+
+      describe "clear" do
+        let(:target) { described_class.new "title", text_objects: [tc.to_text] }
+
+        before { target.clear }
+
+        it_behaves_like "will update"
+
+        it_behaves_like "property values json", {
+          "title" => {
+            "type" => "title",
+            "title" => [],
+          },
+        }
+      end
+
       describe "a title property from property_item_json" do
         let(:target) { Property.create_from_json "tp", tc.read_json("retrieve_property_title") }
 
@@ -188,19 +254,6 @@ module NotionRubyMapping
               expect(ans).to eq %w[0:plain_text 1:href_text]
             end
           end
-        end
-
-        context "when created from json (no content)" do
-          let(:target) { Property.create_from_json "tp", no_content_json, "page", property_cache_first }
-
-          it_behaves_like "has name as", "tp"
-          it_behaves_like "will not update"
-          it { expect(target).not_to be_contents }
-
-          it_behaves_like "assert different property", :update_property_schema_json
-
-          # hook property_values_json / title to retrieve a property item
-          it_behaves_like "property values json", retrieve_title
         end
       end
     end

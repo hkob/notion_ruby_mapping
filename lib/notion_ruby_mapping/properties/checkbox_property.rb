@@ -10,7 +10,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Boolean, Hash, nil]
+    # @return [Boolean, Hash] true/false for page property, schema hash for database/data_source property
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#20da1bf0cbcc4d4eb22d9125386522c2
     def checkbox
       @json
@@ -18,7 +18,7 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [Boolean] flag
+    # @param [Boolean] flag Checkbox value. Use true or false.
     # @return [TrueClass, FalseClass] settled value
     # @see https://www.notion.so/hkob/CheckboxProperty-ac1edbdb8e264af5ad1432b522b429fd#f167c85c1d2d40dfb8b3b6ce582e0f15
     def checkbox=(flag)
@@ -39,7 +39,7 @@ module NotionRubyMapping
       @json = if database_or_data_source?
                 json || {}
               else
-                json || false
+                json.nil? ? false : json
               end
     end
 

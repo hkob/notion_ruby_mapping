@@ -79,6 +79,10 @@ module NotionRubyMapping
       map(&:text).join ""
     end
 
+    def clear
+      self.rich_text_objects = []
+    end
+
     # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>] text_info
     def rich_text_objects=(text_info)
       @will_update = true

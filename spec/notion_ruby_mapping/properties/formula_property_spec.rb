@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe FormulaProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "%5D~iZ"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -181,42 +180,27 @@ module NotionRubyMapping
       end
     end
 
-    describe "a formula property with parameters" do
-      let(:target) { described_class.new "fp", json: {"type" => "number", "number" => 123} }
+    context "when Page property" do
+      describe "a formula property with parameters" do
+        let(:target) { described_class.new "fp", json: {"type" => "number", "number" => 123} }
 
-      it_behaves_like "property values json", {}
-      it_behaves_like "will not update"
-      describe "update_from_json" do
-        before { target.update_from_json(tc.read_json("retrieve_property_formula")) }
+        it_behaves_like "property values json", {}
+        it_behaves_like "will not update"
+        describe "update_from_json" do
+          before { target.update_from_json(tc.read_json("retrieve_property_formula")) }
 
+          it_behaves_like "will not update"
+          it_behaves_like "property values json", {}
+        end
+      end
+
+      describe "a formula property from property_item_json" do
+        let(:target) { Property.create_from_json "fp", tc.read_json("retrieve_property_formula") }
+
+        it_behaves_like "has name as", "fp"
         it_behaves_like "will not update"
         it_behaves_like "property values json", {}
       end
-    end
-
-    describe "a formula property from property_item_json" do
-      let(:target) { Property.create_from_json "fp", tc.read_json("retrieve_property_formula") }
-
-      it_behaves_like "has name as", "fp"
-      it_behaves_like "will not update"
-      it_behaves_like "property values json", {}
-    end
-
-    context "when created from json (no content)" do
-      let(:target) { Property.create_from_json "fp", no_content_json, "page", property_cache_first }
-
-      it_behaves_like "has name as", "fp"
-      it_behaves_like "will not update"
-      it { expect(target).not_to be_contents }
-
-      it_behaves_like "assert different property", :update_property_schema_json
-
-      # hook property_values_json / formula to retrieve a property item
-      it_behaves_like "property values json", {}
-      it {
-        expect(target.formula).to eq({"type" => "date", "date" => {"start" => "2025-09-01T06:05:00.000+00:00",
-                                                                   "end" => nil, "time_zone" => nil}})
-      }
     end
   end
 end

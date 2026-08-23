@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe RelationProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "%3CnJT"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -41,6 +40,7 @@ module NotionRubyMapping
           }
           it { expect(target.dual_property?).to be_truthy }
           it { expect(target.single_property?).to be_falsey }
+          it { expect(target.relation_data_source_id).to eq "4f93db51-4e1d-4015-b07f-876e34c3b0b1" }
 
           describe "replace_relation_data_source (dual_property)" do
             before { target.replace_relation_data_source data_source_id: "new_data_source_id" }
@@ -131,6 +131,7 @@ module NotionRubyMapping
 
           it { expect(target.dual_property?).to be_truthy }
           it { expect(target.single_property?).to be_falsey }
+          it { expect(target.relation_data_source_id).to eq "4f93db51-4e1d-4015-b07f-876e34c3b0b1" }
         end
 
         describe "replace_relation_data_source (dual_property)" do
@@ -165,6 +166,14 @@ module NotionRubyMapping
               },
             },
           }
+        end
+
+        describe "replace_relation_data_source (invalid type)" do
+          it "raises ArgumentError" do
+            expect do
+              target.replace_relation_data_source type: "invalid"
+            end.to raise_error ArgumentError
+          end
         end
 
         describe "new_name=" do
@@ -247,6 +256,7 @@ module NotionRubyMapping
 
         describe "relation=" do
           [
+            nil, [],
             "a_id", "a_id",
             %w[a_id b_id], %w[a_id b_id],
             {"id" => "a_id"}, "a_id",
@@ -267,19 +277,35 @@ module NotionRubyMapping
         end
 
         describe "update_from_json" do
-          before { target.update_from_json(tc.read_json("retrieve_property_relation")) }
+          context "with a property item response" do
+            before { target.update_from_json(tc.read_json("retrieve_property_relation")) }
 
-          it_behaves_like "will not update"
-          it_behaves_like "property values json", {
-            "rp" => {
-              "relation" => [
-                {"id" => "page_id"},
-              ],
-              "type" => "relation",
-            },
-          }
-          it_behaves_like "assert different property", :update_property_schema_json
-          it_behaves_like "assert different property", :property_schema_json
+            it_behaves_like "will not update"
+            it_behaves_like "property values json", {
+              "rp" => {
+                "relation" => [
+                  {"id" => "page_id"},
+                ],
+                "type" => "relation",
+              },
+            }
+            it_behaves_like "assert different property", :update_property_schema_json
+            it_behaves_like "assert different property", :property_schema_json
+          end
+
+          context "with a page property response" do
+            before do
+              target.update_from_json({
+                                        "id" => "%3CnJT",
+                                        "type" => "relation",
+                                        "relation" => [{"id" => "860753bb-6d1f-48de-9621-1fa6e0e31f82"}],
+                                        "has_more" => false,
+                                      })
+            end
+
+            it_behaves_like "will not update"
+            it_behaves_like "property values json", retrieve_relation
+          end
         end
       end
 
@@ -291,19 +317,6 @@ module NotionRubyMapping
         it_behaves_like "property values json", retrieve_relation
         it_behaves_like "assert different property", :update_property_schema_json
         it_behaves_like "assert different property", :property_schema_json
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "rp", no_content_json, "page", property_cache_first }
-
-        it_behaves_like "has name as", "rp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / title to retrieve a property item
-        it_behaves_like "property values json", retrieve_relation
       end
     end
   end

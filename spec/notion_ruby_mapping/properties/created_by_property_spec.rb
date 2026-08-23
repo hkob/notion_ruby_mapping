@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe CreatedByProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "eR%3D~"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -112,20 +111,6 @@ module NotionRubyMapping
 
         it_behaves_like "assert different property", :update_property_schema_json
       end
-    end
-
-    context "created from json (no content)" do
-      let(:target) { Property.create_from_json "cbp", no_content_json, "page", property_cache_first }
-
-      it_behaves_like "has name as", "cbp"
-      it_behaves_like "will not update"
-      it { expect(target.contents?).to be_falsey }
-
-      it_behaves_like "assert different property", :update_property_schema_json
-
-      # hook property_values_json / created_by to retrieve a property item
-      it_behaves_like "property values json", {}
-      it { expect(target.created_by.name).to eq "Hiroyuki KOBAYASHI" }
     end
 
     describe "a created_by property with parameters" do

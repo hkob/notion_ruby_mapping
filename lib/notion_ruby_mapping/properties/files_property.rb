@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  # Select property
+  # Files property
   class FilesProperty < Property
     include IsEmptyIsNotEmpty
     TYPE = "files"
@@ -11,6 +11,14 @@ module NotionRubyMapping
     ### Public announced methods
 
     ## Page property only methods
+
+    # Removes all files from the property.
+    #
+    # This method replaces the files array with an empty array.
+    def clear
+      assert_page_property __method__
+      self.files = []
+    end
 
     def files=(files = [])
       assert_page_property __method__
@@ -22,7 +30,7 @@ module NotionRubyMapping
     def file_names=(file_names = [])
       array_file_names = Array(file_names)
       unless @files.length == array_file_names.length
-        raise StandardError,
+        raise ArgumentError,
               "files and file_names must be the same sizes."
       end
 
@@ -74,20 +82,6 @@ module NotionRubyMapping
       @file_names = json["files"].map { |sub_json| sub_json["name"] }
       @will_update = false
       self
-    end
-
-    protected
-
-    # @param [String] url
-    # @return [Hash]
-    def url_to_hash(url)
-      {
-        "name" => url,
-        "type" => "external",
-        "external" => {
-          "url" => url,
-        },
-      }
     end
   end
 end

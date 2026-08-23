@@ -13,7 +13,7 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [String, Hash, nil] url (Page), {} (Database)
+    # @return [String, Hash, nil] URL for page properties, empty hash for database/data source properties
     # @see https://www.notion.so/hkob/UrlProperty-8a0094fdf6494151983cb4694f6626cc#8342eef7df3c43eaad10c48d4757b4ae
     def url
       @json
@@ -21,7 +21,7 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [String] url
+    # @param [String, nil] url
     # @see https://www.notion.so/hkob/UrlProperty-8a0094fdf6494151983cb4694f6626cc#cfa5463a121b4002b250b38d7d0a0d34
     def url=(url)
       assert_page_property __method__
@@ -37,7 +37,7 @@ module NotionRubyMapping
     def initialize(name, will_update: false, base_type: "page", json: nil, property_id: nil, property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache
-      @json = json || (database_or_data_source? ? {} : nil)
+      @json = database_or_data_source? ? {} : json
     end
 
     ## Page property only methods

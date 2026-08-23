@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe DateProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "SPrp"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -360,33 +359,6 @@ module NotionRubyMapping
           it_behaves_like "will not update"
         end
       end
-    end
-
-    context "created from json (no content)" do
-      let(:target) { Property.create_from_json "dp", no_content_json, "page", property_cache_first }
-
-      it_behaves_like "has name as", "dp"
-      it_behaves_like "will not update"
-      it { expect(target.contents?).to be_falsey }
-
-      it_behaves_like "assert different property", :update_property_schema_json
-
-      # hook property_values_json / start_time to retrieve a property item
-      it_behaves_like "property values json", {
-        "dp" => {
-          "type" => "date",
-          "date" => {
-            "start" => "2022-02-25T01:23:00.000+09:00",
-            "end" => nil,
-            "time_zone" => nil,
-          },
-        },
-      }
-      it { expect(target.start_date).to eq "2022-02-25T01:23:00.000+09:00" }
-      it { expect(target.start_date_obj).to eq Time.local(2022, 2, 25, 1, 23, 0o0) }
-      it { expect(target.end_date).to eq nil }
-      it { expect(target.end_date_obj).to eq nil }
-      it { expect(target.time_zone).to eq nil }
     end
 
     describe "a date property from property_item_json" do

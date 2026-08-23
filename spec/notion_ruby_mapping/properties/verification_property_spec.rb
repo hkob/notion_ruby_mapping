@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe VerificationProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "verification"} }
     let(:verification_database_id) { TestConnection::WIKI_DATABASE_ID }
     let(:verification_page_id) { TestConnection::WIKI_PAGE_ID }
     let(:property_cache_verification) { PropertyCache.new base_type: "page", page_id: verification_page_id }
@@ -14,6 +13,7 @@ module NotionRubyMapping
 
         it_behaves_like "has name as", "vp"
 
+        # Notion API uses "status" as the verification filter condition.
         %w[verified expired none].each do |status|
           it_behaves_like "filter test", described_class, %w[status], value: status
         end
@@ -28,6 +28,7 @@ module NotionRubyMapping
 
         it_behaves_like "has name as", "vp"
 
+        # Notion API uses "status" as the verification filter condition.
         %w[verified expired none].each do |status|
           it_behaves_like "filter test", described_class, %w[status], value: status
         end
@@ -74,19 +75,6 @@ module NotionRubyMapping
         it_behaves_like "will not update"
         it_behaves_like "property values json", retrieve_verification
         it_behaves_like "assert different property", :update_property_schema_json
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "vp", no_content_json, "page", property_cache_verification }
-
-        it_behaves_like "has name as", "vp"
-        it_behaves_like "will not update"
-        it { expect(target.contents?).to be_falsey }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / verification to retrieve a property item
-        it_behaves_like "property values json", retrieve_verification
       end
     end
   end

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
+  DATABASE_OR_DATA_SOURCE_METHODS = %i[update_property_schema_json property_schema_json function relation_property_name
+                                       rollup_property_name function= relation_property_name= rollup_property_name=]
   RSpec.describe RollupProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {id: "STe_"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
 
     context "Database property" do
@@ -274,16 +275,18 @@ module NotionRubyMapping
 
         it_behaves_like "property values json", {}
         it_behaves_like "will not update"
-        it_behaves_like "assert different property", :update_property_schema_json
-        it_behaves_like "assert different property", :property_schema_json
+        DATABASE_OR_DATA_SOURCE_METHODS.each do |method|
+          it_behaves_like "assert different property", method
+        end
 
         describe "update_from_json" do
           before { target.update_from_json(tc.read_json("retrieve_property_rollup")) }
 
           it_behaves_like "will not update"
           it_behaves_like "property values json", {}
-          it_behaves_like "assert different property", :update_property_schema_json
-          it_behaves_like "assert different property", :property_schema_json
+          DATABASE_OR_DATA_SOURCE_METHODS.each do |method|
+            it_behaves_like "assert different property", method
+          end
         end
       end
 
@@ -293,8 +296,9 @@ module NotionRubyMapping
         it_behaves_like "has name as", "rp"
         it_behaves_like "will not update"
         it_behaves_like "property values json", {}
-        it_behaves_like "assert different property", :update_property_schema_json
-        it_behaves_like "assert different property", :property_schema_json
+        DATABASE_OR_DATA_SOURCE_METHODS.each do |method|
+          it_behaves_like "assert different property", method
+        end
       end
     end
   end

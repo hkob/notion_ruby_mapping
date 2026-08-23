@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe FilesProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "qEdK"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:second_page_id) { TestConnection::DB_SECOND_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
@@ -106,7 +105,7 @@ module NotionRubyMapping
         let(:target) { described_class.new "fp", files: files }
 
         context "when no files" do
-          let("files") { [] }
+          let(:files) { [] }
 
           it_behaves_like "property values json", {"fp" => {"type" => "files", "files" => []}}
 
@@ -210,7 +209,7 @@ module NotionRubyMapping
             context "a file" do
               let(:files) { "f3" }
 
-              it { expect { target.file_names = %w[A B] }.to raise_error(StandardError) }
+              it { expect { target.file_names = %w[A B] }.to raise_error(ArgumentError) }
 
               context "success" do
                 before { target.file_names = "fn3" }
@@ -236,7 +235,7 @@ module NotionRubyMapping
             context "2 files" do
               let(:files) { %w[f3 f4] }
 
-              it { expect { target.file_names = "A" }.to raise_error(StandardError) }
+              it { expect { target.file_names = "A" }.to raise_error(ArgumentError) }
 
               context "success" do
                 before { target.file_names = %w[fn3 fn4] }
@@ -356,6 +355,18 @@ module NotionRubyMapping
           it_behaves_like "has name as", "fp"
           it_behaves_like "will not update"
           it_behaves_like "property values json", {}
+
+          describe "clear" do
+            before { target.clear }
+
+            it_behaves_like "will update"
+            it_behaves_like "property values json", {
+              "fp" => {
+                "type" => "files",
+                "files" => [],
+              },
+            }
+          end
         end
 
         describe "an external files property from property_item_json" do
@@ -364,35 +375,19 @@ module NotionRubyMapping
           it_behaves_like "has name as", "fp"
           it_behaves_like "will not update"
           it_behaves_like "property values json", external_json
+
+          describe "clear" do
+            before { target.clear }
+
+            it_behaves_like "will update"
+            it_behaves_like "property values json", {
+              "fp" => {
+                "type" => "files",
+                "files" => [],
+              },
+            }
+          end
         end
-      end
-
-      context "created from json (no content:external)" do
-        let(:target) { Property.create_from_json "fp", no_content_json, "page", property_cache_first }
-
-        it_behaves_like "has name as", "fp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / created_by to retrieve a property item
-        it_behaves_like "property values json", external_json
-        it { expect(target.files.map(&:url)).to eq ["https://img.icons8.com/ios-filled/250/000000/mac-os.png"] }
-      end
-
-      context "created from json (no content:internal)" do
-        let(:target) { Property.create_from_json "fp", no_content_json, "page", property_cache_second }
-
-        it_behaves_like "has name as", "fp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / created_by to retrieve a property item
-        it_behaves_like "property values json", {}
-        it { expect(target.files.map(&:url)).to eq ["https://prod-files-secure.s3.us-west-2.amazonaws.com/2b7b01f0-67a8-40f8-acd4-88dd2805f216/f7b6864c-f809-498d-8725-03fc7e85a9ff/nr.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466XJFZQL7K%2F20250901%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20250901T060421Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEKb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLXdlc3QtMiJHMEUCIQCBszOPzV%2BSDH8fWNljMmBd5nBEX33Oqpbq19czdLRrpQIgbc%2BXNDurI71gUo1q0fbA4jvc3KRSpH%2FGuruHHDx5dDMqiAQI%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDFKZ6Hl%2FjN3koGWtTCrcA3VeIvUped%2Fh5hUbDipveCL7mA%2B2rVyWUNQxhN22HHqn%2Bc5Dm7%2BXz3fG%2BW0BChlrWIfMbERMpbXwEj9puCjMs1uFfKPkt5x8tYkVSzCQqBn3mqJ6Ky8jqkyxhrLDql2FOhLdXZtD1arNDbHh8Nmru4F9PTmTOzPudX17gyiRuUra%2Fy1vhjwanfdqrZHffE3Otc5I8bFpbSpJRJE21nlIJJIqGkU57rLZgF0Y%2BrwUCtNCKL5%2Bz4cANQHVOl%2BOzW8TChgLO0QK2CR%2BPBAlcQFUpfjPLXURvXRUpzKgLtcqPHEPsFJLog8Oo2KtLacIbawZhksSvVFxT%2BGzPyqOuIkVM4CzHeehkHOZISuxNAdmo47TBcMkv62VGoaci38HP3SeCatSToKAKs0TYFpuwInxwhMXCk%2BVLuSsStavI6gyCkqCf5m4sY7Y6O3gJWlgMOZHSYEVP5DPMeMbJ6BJaxy6NEpPGuC9tcHKT%2B%2BqeaYHh0qrZryaDl2MgwZdQCYvhdKi1I98ee2uDuzGZaIgGJL58LwG8sVgvFZ3AHrjx%2B11GUYJ2eE3uze1nnjw9N4D%2BYLNw8KMnQ0d7eFF44uW35TpIHszWlkCE%2FfMmL9m2SHDnbaDQh28%2FUF3rac2%2FDXtMMjn1MUGOqUBgJsqG8R6nmBXU7IUcIJxfuJK01o7TFfShd%2Ft8n8DoBco1hyrlut4J1gkQcRv0K4mohu8cPNbmWz77Ykq0bwupFYBt16fzAaakIjZM50IaiMxwXvNDbUPMm2XkI6olfh2BNutVcG4hmkK2MV5kSug4WXytpzfsYbKVOjoUf82LPse%2F%2BGBtwjR2UR%2F3ckj6NIH6h9kMsijgYmLwUL1U5bN5BhOqU%2FZ&X-Amz-Signature=0dc8278b65e482c0009068a02e279ad6a28f59500edf384727b0131bf8135dbb&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject"] }
       end
     end
 

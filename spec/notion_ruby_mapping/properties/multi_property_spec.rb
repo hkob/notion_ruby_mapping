@@ -5,7 +5,7 @@ module NotionRubyMapping
     RSpec.describe c do
       let(:property) { c.new "up" }
 
-      describe "a user property" do
+      describe "a multi property" do
         it "has name" do
           expect(property.name).to eq "up"
         end
