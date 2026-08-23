@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  # MultiSelect property
+  # Relation property
   class RelationProperty < MultiProperty
     TYPE = "relation"
+    RELATION_PROPERTY_TYPES = %w[dual_property single_property].freeze
 
     ### Public announced methods
 
     ## Common methods
 
-    # @return [Hash, Array, nil]
+    # @return [Array<Hash>, Hash, nil] relation value or relation schema
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#6c14207b2d1340d2bbc08d17eee2cb22
     def relation
       @json
@@ -35,6 +36,7 @@ module NotionRubyMapping
     def relation=(page_ids_or_jsons)
       assert_page_property __method__
       @will_update = true
+      page_ids_or_jsons = [] if page_ids_or_jsons.nil?
       page_ids_or_jsons = [page_ids_or_jsons] unless page_ids_or_jsons.is_a? Array
 
       @json = page_ids_or_jsons.map do |page_id_or_json|
@@ -47,7 +49,7 @@ module NotionRubyMapping
     # @return [String] relation data_source_id
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#eb40f1a2ad5c4e368d343870a7e529f9
     def relation_data_source_id
-      assert_data_source_property __method__
+      assert_database_or_data_source_property __method__
       @json["data_source_id"]
     end
 
@@ -56,6 +58,8 @@ module NotionRubyMapping
     # @see https://www.notion.so/hkob/RelationProperty-f608ab41a1f0476b98456620346fba03#7f5029fb7f6e4c009f22888b233e6f64
     def replace_relation_data_source(data_source_id: nil, type: "dual_property")
       assert_database_or_data_source_property __method__
+      raise ArgumentError, "type must be dual_property or single_property" unless RELATION_PROPERTY_TYPES.include? type
+
       @will_update = true
       @json["data_source_id"] = data_source_id if data_source_id
       @json["type"] = type
@@ -95,10 +99,6 @@ module NotionRubyMapping
       ans[@name] ||= {}
       ans[@name]["relation"] = @json
       ans
-    end
-
-    def data_source_id
-      @json["data_source_id"]
     end
 
     # @return [TrueClass, FalseClass] true if dual_property

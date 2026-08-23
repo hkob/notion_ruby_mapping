@@ -26,7 +26,7 @@ module NotionRubyMapping
       when "template"
         @template = value
       end
-      @query = query
+      @query = query || Query.new
       @index = 0
       @has_content = true
     end

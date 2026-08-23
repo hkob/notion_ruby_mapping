@@ -9,13 +9,13 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Boolean, Hash, nil]
+    # @return [Hash, nil]
     def button
       @json
     end
 
     # @param [String, Symbol] name Property name
-    # @param [Boolean, Hash] json
+    # @param [Hash, nil] json Button property object
     def initialize(name, will_update: false, base_type: "page", property_id: nil, property_cache: nil, json: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id,
                   property_cache: property_cache

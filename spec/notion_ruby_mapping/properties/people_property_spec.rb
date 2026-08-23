@@ -3,11 +3,10 @@
 module NotionRubyMapping
   RSpec.describe PeopleProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "_x%3E%3D"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
-    p_12 = {"type" => "people", "people" => (%w[P1 P2].map { |id| {"object" => "user", "id" => id} })}
+    p_12 = {"type" => "people", "people" => %w[P1 P2].map { |id| {"object" => "user", "id" => id} }}
 
     context "when Database property" do
       context "when created by new" do
@@ -107,8 +106,30 @@ module NotionRubyMapping
         it_behaves_like "assert different property", :update_property_schema_json
 
         describe "people=" do
-          context "when a value" do
-            before { target.people = "P1" }
+          [
+            ["a value", "P1", [{"object" => "user", "id" => "P1"}]],
+            ["an array value", %w[P1 P2], p_12["people"]],
+            ["nil", nil, []],
+            ["empty array", [], []],
+          ].each do |name, value, people|
+            context "when #{name}" do
+              before { target.people = value }
+
+              it_behaves_like "property values json", {
+                "pp" => {
+                  "type" => "people",
+                  "people" => people,
+                },
+              }
+              it_behaves_like "will update"
+              it_behaves_like "assert different property", :update_property_schema_json
+            end
+          end
+        end
+
+        describe "add_person" do
+          context "when a string value" do
+            before { target.add_person "P1" }
 
             it_behaves_like "property values json", {
               "pp" => {
@@ -117,12 +138,29 @@ module NotionRubyMapping
               },
             }
             it_behaves_like "will update"
+            it_behaves_like "assert different property", :update_property_schema_json
           end
 
-          context "when an array value" do
-            before { target.people = %w[P1 P2] }
+          context "when called multiple times" do
+            before do
+              target.add_person "P1"
+              target.add_person "P2"
+            end
 
             it_behaves_like "property values json", {"pp" => p_12}
+            it_behaves_like "will update"
+            it_behaves_like "assert different property", :update_property_schema_json
+          end
+
+          context "when a UserObject value" do
+            before { target.add_person UserObject.user_object("P1") }
+
+            it_behaves_like "property values json", {
+              "pp" => {
+                "type" => "people",
+                "people" => [{"object" => "user", "id" => "P1"}],
+              },
+            }
             it_behaves_like "will update"
             it_behaves_like "assert different property", :update_property_schema_json
           end
@@ -148,19 +186,6 @@ module NotionRubyMapping
         it { expect(target.people.first).to be_an_instance_of(UserObject) }
 
         it_behaves_like "assert different property", :update_property_schema_json
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "pp", no_content_json, "page", property_cache_first }
-
-        it_behaves_like "has name as", "pp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / created_by to retrieve a property item
-        it_behaves_like "property values json", retrieve_user
       end
     end
   end

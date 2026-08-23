@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe StatusProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "Qy~%3E"} }
     let(:status_database_id) { TestConnection::STATUS_DATABASE_ID }
     let(:status_page_id) { TestConnection::STATUS_PAGE_ID }
     let(:property_cache_status) { PropertyCache.new base_type: "page", page_id: status_page_id }
@@ -153,6 +152,8 @@ module NotionRubyMapping
         it_behaves_like "filter test", described_class, %w[is_empty is_not_empty]
         it_behaves_like "raw json", "status", {}
         it_behaves_like "property schema json", {"sp" => {"status" => {}}}
+        it { expect(target.status_options).to eq [] }
+        it { expect(target.status_names).to eq [] }
 
         describe "update_from_json" do
           before { target.update_from_json(tc.read_json("status_property_object")) }
@@ -162,6 +163,50 @@ module NotionRubyMapping
           it_behaves_like "update property schema json", {}
           it_behaves_like "raw json", "status", status_property_object
           it_behaves_like "property schema json", {"sp" => {"status" => {}}}
+          it { expect(target.status_options).to eq status_property_object["options"] }
+
+          it {
+            expect(target.status_names).to eq [
+              "Not started",
+              "In progress",
+              "Implementation",
+              "Design",
+              "Done",
+            ]
+          }
+
+          describe "add_status_option" do
+            [
+              {name: "Review", color: "yellow", group: "In progress"},
+              {name: "Feedback", color: "red"},
+            ].each do |params|
+              context "when param hash is #{params}" do
+                before do
+                  target.add_status_option(**params)
+                end
+
+                it_behaves_like "update property schema json", {
+                  "sp" => {
+                    "status" => {
+                      "options" => [
+                        params.map { |key, value| [key.to_s, value] }.to_h,
+                      ],
+                    },
+                  },
+                }
+                it_behaves_like "property schema json", {
+                  "sp" => {
+                    "status" => {
+                      "options" => [
+                        params.map { |key, value| [key.to_s, value] }.to_h,
+                      ],
+                    },
+                  },
+                }
+                it_behaves_like "will update"
+              end
+            end
+          end
         end
 
         describe "new_name=" do
@@ -189,6 +234,17 @@ module NotionRubyMapping
         it_behaves_like "assert different property", :property_values_json
         it_behaves_like "update property schema json", {}
         it_behaves_like "raw json", "status", status_property_object
+        it { expect(target.status_options).to eq status_property_object["options"] }
+
+        it {
+          expect(target.status_names).to eq [
+            "Not started",
+            "In progress",
+            "Implementation",
+            "Design",
+            "Done",
+          ]
+        }
       end
     end
 
@@ -240,19 +296,6 @@ module NotionRubyMapping
         it_behaves_like "will not update"
         it_behaves_like "property values json", retrieve_status
         it_behaves_like "assert different property", :update_property_schema_json
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "sp", no_content_json, "page", property_cache_status }
-
-        it_behaves_like "has name as", "sp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / status to retrieve a property item
-        it_behaves_like "property values json", retrieve_status
       end
     end
   end

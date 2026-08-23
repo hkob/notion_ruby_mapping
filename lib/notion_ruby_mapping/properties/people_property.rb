@@ -9,7 +9,15 @@ module NotionRubyMapping
 
     ## Common methods
 
-    # @return [Array, Hash]
+    # Returns the people assigned to this property.
+    #
+    # For a page property, this returns an array of UserObject instances.
+    # For a database or data source property, this returns the schema payload.
+    #
+    # Do not modify the returned array directly. Use `people=` or `add_person`
+    # to update the property.
+    #
+    # @return [Array<UserObject>, Hash]
     # @see https://www.notion.so/hkob/PeopleProperty-144355d25f0e4feba9ae39fe28ca6ae7#7e3e56c2080d4834902cfa0223e807e5
     def people
       @json
@@ -17,8 +25,13 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [String, NotionRubyMapping::UserObject] user_id_or_uo
-    # @return [Array<UserObject>]
+    # Adds a person to this people property.
+    #
+    # This method marks the property as changed.
+    # This method does not remove duplicate users.
+    #
+    # @param [String, UserObject] user_id_or_uo user ID or user object to add
+    # @return [Array<UserObject>] updated people
     # @see https://www.notion.so/hkob/PeopleProperty-144355d25f0e4feba9ae39fe28ca6ae7#26344b145a254cc58dd845780e0a26ea
     def add_person(user_id_or_uo)
       assert_page_property __method__
@@ -26,8 +39,14 @@ module NotionRubyMapping
       @json << UserObject.user_object(user_id_or_uo)
     end
 
-    # @param [Hash] people
-    # @return [Array, nil] replaced array
+    # Replaces all people in this property.
+    #
+    # Passing nil or an empty array clears the people property.
+    # This method marks the property as changed.
+    #
+    # @param [String, UserObject, Array<String>, Array<UserObject>, nil] people
+    #   user ID, user object, array of them, or nil
+    # @return [Array<UserObject>] replaced people
     # @see https://www.notion.so/hkob/PeopleProperty-144355d25f0e4feba9ae39fe28ca6ae7#815acfef9a664e3e8915fb31b8fefc42
     def people=(people)
       assert_page_property __method__

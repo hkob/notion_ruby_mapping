@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  # Number property
+  # Unique ID property
   class UniqueIdProperty < Property
     include EqualsDoesNotEqual
     include GreaterThanLessThan
@@ -17,7 +17,25 @@ module NotionRubyMapping
       @json
     end
 
+    # @return [String, nil]
+    def prefix
+      @json && @json["prefix"]
+    end
+
+    # @return [Integer, nil]
+    def number
+      @json && @json["number"]
+    end
+
     ## Database property only methods
+
+    # @param [String, nil] prefix
+    # @return [String, nil]
+    def prefix=(prefix)
+      assert_database_or_data_source_property __method__
+      @will_update = true
+      @json["prefix"] = prefix
+    end
 
     ## Page property only methods
 
@@ -26,7 +44,7 @@ module NotionRubyMapping
     ## Common methods
 
     # @param [String] name Property name
-    # @param [Float, Integer, Hash] json Number value or format Hash
+    # @param [Hash, nil] json unique_id Hash
     def initialize(name, will_update: false, base_type: "page", json: nil, property_id: nil, property_cache: nil)
       super name, will_update: will_update, base_type: base_type, property_id: property_id, property_cache: property_cache
       @json = json
@@ -34,7 +52,7 @@ module NotionRubyMapping
     end
 
     # @param [Hash] json
-    # @return [NotionRubyMapping::NumberProperty]
+    # @return [NotionRubyMapping::UniqueIdProperty]
     def update_from_json(json)
       @will_update = false
       @json = json["unique_id"]
@@ -42,6 +60,17 @@ module NotionRubyMapping
     end
 
     ## Database property only methods
+
+    # @return [Hash]
+    def update_property_schema_json
+      assert_database_or_data_source_property __method__
+      ans = super
+      return ans if ans != {} || !@will_update
+
+      ans[@name] ||= {}
+      ans[@name]["unique_id"] = @json
+      ans
+    end
 
     ## Page property only methods
 
@@ -51,6 +80,13 @@ module NotionRubyMapping
       {@name => {"unique_id" => @json, "type" => "unique_id"}}
     end
 
+    protected
+
     ## Database property only methods
+
+    # @return [Hash]
+    def property_schema_json_sub
+      {"prefix" => prefix}
+    end
   end
 end

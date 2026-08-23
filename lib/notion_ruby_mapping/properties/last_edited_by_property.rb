@@ -33,7 +33,6 @@ module NotionRubyMapping
                 UserObject.new user_id: user_id, json: json
               end
     end
-    attr_reader :user
 
     # @param [Hash] json
     def update_from_json(json)

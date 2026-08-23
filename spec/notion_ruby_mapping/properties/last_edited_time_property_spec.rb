@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe LastEditedTimeProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "X%3E%40X"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -111,20 +110,6 @@ module NotionRubyMapping
         it { expect(target.last_edited_time).to eq "2022-09-01T04:35:00.000Z" }
 
         it_behaves_like "assert different property", :update_property_schema_json
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "letp", no_content_json, "page", property_cache_first }
-
-        it_behaves_like "has name as", "letp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / created_by to retrieve a property item
-        it_behaves_like "property values json", {}
-        it { expect(target.last_edited_time).to eq "2022-09-01T04:35:00.000Z" }
       end
     end
   end

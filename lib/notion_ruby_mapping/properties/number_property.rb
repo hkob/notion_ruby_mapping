@@ -38,8 +38,8 @@ module NotionRubyMapping
 
     ## Page property only methods
 
-    # @param [Numeric] num
-    # @return [Numeric] settled number
+    # @param [Numeric, nil] num Number value. nil clears the value.
+    # @return [Numeric, nil] settled number
     # @see https://www.notion.so/hkob/NumberProperty-964ebc1948074d7ca8340187aa352d40#a3f28cc7029046878dfd694b5b33e8d8
     def number=(num)
       assert_page_property __method__

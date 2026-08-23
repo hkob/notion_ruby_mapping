@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  RSpec.describe TextObject do
+  RSpec.describe RichTextArray do
     tc = TestConnection.instance
     rich_text_array_json = tc.read_json "rich_text_array"
     rich_text_property_values_json = tc.read_json "rich_text_array"
@@ -113,6 +113,20 @@ module NotionRubyMapping
         end
 
         it_behaves_like "will update"
+      end
+
+      context "clear" do
+        before { target.clear }
+
+        describe "count" do
+          it { expect(target.count).to eq 0 }
+
+          describe "full_text" do
+            it { expect(target.full_text).to eq "" }
+          end
+
+          it_behaves_like "will update"
+        end
       end
     end
 

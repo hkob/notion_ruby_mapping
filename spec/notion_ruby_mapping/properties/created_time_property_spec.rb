@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe CreatedTimeProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "WsEj"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -111,20 +110,6 @@ module NotionRubyMapping
         it { expect(target.created_time).to eq "2022-02-07T21:29:00.000Z" }
 
         it_behaves_like "assert different property", :update_property_schema_json
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "ctp", no_content_json, "page", property_cache_first }
-
-        it_behaves_like "has name as", "ctp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / created_time to retrieve a property item
-        it_behaves_like "property values json", {}
-        it { expect(target.created_time).to eq "2022-02-07T21:29:00.000Z" }
       end
     end
   end

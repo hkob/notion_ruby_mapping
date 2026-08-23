@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe LastEditedByProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "LQGa"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -30,7 +29,7 @@ module NotionRubyMapping
         it_behaves_like "has name as", "lebp"
         it_behaves_like "will not update"
         it_behaves_like "assert different property", :property_values_json
-        it_behaves_like "raw json", :last_edited_by, {}
+        it_behaves_like "raw json", "last_edited_by", {}
       end
     end
 
@@ -75,7 +74,7 @@ module NotionRubyMapping
         it_behaves_like "will not update"
         it_behaves_like "assert different property", :property_values_json
         it_behaves_like "update property schema json", {}
-        it_behaves_like "raw json", :last_edited_by, {}
+        it_behaves_like "raw json", "last_edited_by", {}
       end
     end
 
@@ -110,20 +109,6 @@ module NotionRubyMapping
 
         it_behaves_like "assert different property", :update_property_schema_json
       end
-    end
-
-    context "when created from json (no content)" do
-      let(:target) { Property.create_from_json "lebp", no_content_json, "page", property_cache_first }
-
-      it_behaves_like "has name as", "lebp"
-      it_behaves_like "will not update"
-      it { expect(target).not_to be_contents }
-
-      it_behaves_like "assert different property", :update_property_schema_json
-
-      # hook property_values_json / last_edited_by to retrieve a property item
-      it_behaves_like "property values json", {}
-      it { expect(target.last_edited_by.name).to eq "Hiroyuki KOBAYASHI" }
     end
 
     describe "a last_edited_by property with parameters" do

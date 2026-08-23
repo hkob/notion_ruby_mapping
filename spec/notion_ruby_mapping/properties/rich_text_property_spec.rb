@@ -3,7 +3,6 @@
 module NotionRubyMapping
   RSpec.describe RichTextProperty do
     tc = TestConnection.instance
-    let(:no_content_json) { {"id" => "flUp"} }
     let(:first_page_id) { TestConnection::DB_FIRST_PAGE_ID }
     let(:property_cache_first) { PropertyCache.new base_type: "page", page_id: first_page_id }
 
@@ -161,24 +160,78 @@ module NotionRubyMapping
         end
       end
 
+      describe "empty rich_text" do
+        context "when all rich_text text objects are deleted" do
+          let(:target) { described_class.new "rich_text", text_objects: [tc.to_text] }
+
+          before { target.delete_at 0 }
+
+          it_behaves_like "will update"
+
+          it_behaves_like "property values json", {
+            "rich_text" => {
+              "type" => "rich_text",
+              "rich_text" => [],
+            },
+          }
+        end
+      end
+
+      describe "plain_text=" do
+        let(:target) { described_class.new "rtp", text_objects: [tc.to_href] }
+
+        before { target.plain_text = "new text" }
+
+        it_behaves_like "will update"
+
+        it { expect(target.full_text).to eq "new text" }
+
+        it_behaves_like "property values json", {
+          "rtp" => {
+            "type" => "rich_text",
+            "rich_text" => [
+              {
+                "type" => "text",
+                "text" => {
+                  "content" => "new text",
+                  "link" => nil,
+                },
+                "plain_text" => "new text",
+                "href" => nil,
+              },
+            ],
+          },
+        }
+      end
+
+      describe "plain_text= nil" do
+        let(:target) { described_class.new "rtp", text_objects: [tc.to_text] }
+
+        it "raises an error when nil is given" do
+          expect { target.plain_text = nil }.to raise_error(ArgumentError)
+        end
+      end
+
+      describe "clear" do
+        let(:target) { described_class.new "rich_text", text_objects: [tc.to_text] }
+
+        before { target.clear }
+
+        it_behaves_like "will update"
+
+        it_behaves_like "property values json", {
+          "rich_text" => {
+            "type" => "rich_text",
+            "rich_text" => [],
+          },
+        }
+      end
+
       describe "a rich_text property from property_item_json" do
         let(:target) { Property.create_from_json "rtp", tc.read_json("retrieve_property_rich_text") }
 
         it_behaves_like "has name as", "rtp"
         it_behaves_like "will not update"
-        it_behaves_like "property values json", retrieve_rich_text
-      end
-
-      context "when created from json (no content)" do
-        let(:target) { Property.create_from_json "rtp", no_content_json, "page", property_cache_first }
-
-        it_behaves_like "has name as", "rtp"
-        it_behaves_like "will not update"
-        it { expect(target).not_to be_contents }
-
-        it_behaves_like "assert different property", :update_property_schema_json
-
-        # hook property_values_json / title to retrieve a property item
         it_behaves_like "property values json", retrieve_rich_text
       end
     end
