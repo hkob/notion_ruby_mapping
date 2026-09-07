@@ -14,7 +14,6 @@ module NotionRubyMapping
 
         it { expect(subject.url).to eq url }
         it { expect(subject.type).to eq "external" }
-        it { expect(subject.will_update).to be_falsey }
       end
 
       context "with file_upload_object" do
@@ -22,7 +21,6 @@ module NotionRubyMapping
 
         it { expect(subject.file_upload_object).to eq file_upload_object }
         it { expect(subject.type).to eq "file_upload" }
-        it { expect(subject.will_update).to be_falsey }
       end
 
       context "with json" do
@@ -30,13 +28,15 @@ module NotionRubyMapping
 
         it { expect(subject.url).to eq file_internal_json["file"]["url"] }
         it { expect(subject.type).to eq "file" }
-        it { expect(subject.will_update).to be_falsey }
       end
 
       context "without arguments" do
-        subject { -> { FileObject.new } }
-
-        it { expect { subject.call }.to raise_error(StandardError) }
+        it "raises an error with a clear message" do
+          expect { described_class.new }.to raise_error(
+            ArgumentError,
+            "FileObject requires url:, file_upload_object:, or json:",
+          )
+        end
       end
     end
 

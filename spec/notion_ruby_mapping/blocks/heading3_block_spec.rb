@@ -49,5 +49,9 @@ module NotionRubyMapping
       it_behaves_like "update block rich text array", type, "New Heading 3"
       it_behaves_like "update block color", type, "green_background", true
     end
+
+    describe "default color" do
+      it { expect(described_class.new("Heading").color).to eq "default" }
+    end
   end
 end

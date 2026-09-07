@@ -1,12 +1,21 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  # Notion block
+  # Base class for blocks that contain a file and an optional caption.
+  #
+  # This class manages the file representation, caption, and update payload
+  # shared by file-based block types.
+  # @abstract Subclass and implement {#type}.
   class FileBaseBlock < Block
-    # @param [String, FileUploadObject, NilClass] url or file upload object
-    # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>, nil] caption
-    # @see https://www.notion.so/hkob/FileBlock-08f2aa6948364d00b92beacaac9a619c#ace53d2e6ff2404f937179ae1e966e98
-    # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#4cb790b8b5c847acab4341d55e4fa66a
+    # Creates a file-based block.
+    #
+    # @param url_or_fuo [String, FileUploadObject, FileObject, nil]
+    #   an external URL, a file upload object, or a file object
+    # @param caption [RichTextArray, String, Array<String>, RichTextObject,
+    #   Array<RichTextObject>, nil] caption content
+    # @param json [Hash, nil] block JSON returned by the Notion API
+    # @param id [String, nil] block ID
+    # @param parent [Page, Block, nil] parent object
     def initialize(url_or_fuo = nil, caption: [], json: nil, id: nil, parent: nil)
       super(json: json, id: id, parent: parent)
       if @json
@@ -19,12 +28,18 @@ module NotionRubyMapping
       end
     end
 
-    # @see https://www.notion.so/hkob/FileBlock-08f2aa6948364d00b92beacaac9a619c#158487a7e1644fae8778dcff59869356
-    # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#19a4aa3e06514bbe84be9d3b8a45a20f
-    attr_reader :caption, :file_object
+    # @return [RichTextArray] block caption
+    attr_reader :caption
 
-    # @param [Boolean] not_update false when update
-    # @return [Hash{String (frozen)->Hash}]
+    # @return [FileObject] current file representation
+    attr_reader :file_object
+
+    # Builds the block JSON representation.
+    #
+    # @param not_update [Boolean] true for a complete block payload;
+    #   false for an update payload
+    # @return [Hash{String => Object}] block JSON
+    # @api private
     def block_json(not_update: true)
       ans = super
       ans[type] = @file_object.property_values_json
@@ -32,27 +47,41 @@ module NotionRubyMapping
       ans
     end
 
-    # @return [String]
-    # @see https://www.notion.so/hkob/FileBlock-08f2aa6948364d00b92beacaac9a619c#d3e7d31b7b274955aa7603163867fa57
-    # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#01e1883119f14c5f9f7f6823793e72ec
+    # Returns the current file URL.
+    #
+    # A URL returned for a Notion-hosted file may expire.
+    #
+    # @return [String, nil] current file URL
     def url
       @file_object&.url
     end
 
-    # @param [String] url
-    # @see https://www.notion.so/hkob/FileBlock-08f2aa6948364d00b92beacaac9a619c#23497b8eb2214c45b3d5881796f984cb
-    # @see https://www.notion.so/hkob/ImageBlock-806b3d2a9a2c4bf5a5aca6e3fbc8a7e2#61598d260b6140f2a359f7d22ea2548a
+    # Replaces the current file with an external URL.
+    #
+    # Call {Block#save} to send the change to the Notion API.
+    #
+    # @param url [String] new external URL
     def url=(url)
       @file_object.url = url
       @payload.add_update_block_key "external"
     end
 
-    # @param [FileUploadObject] fuo
-    def file_upload_object=(fuo)
-      @file_object.file_upload_object = fuo
+    # Replaces the current file with an uploaded file.
+    #
+    # Call {Block#save} to send the change to the Notion API. After saving,
+    # the file is reconstructed as a Notion-hosted file.
+    #
+    # @param file_upload_object [FileUploadObject] uploaded file
+    def file_upload_object=(file_upload_object)
+      @file_object.file_upload_object = file_upload_object
       @payload.add_update_block_key "file_upload"
     end
 
+    # Reconstructs the file and caption from an API response.
+    #
+    # @param json [Hash] block JSON returned by the Notion API
+    # @return [void]
+    # @api private
     def update_file_object_from_json(json)
       @file_object = FileObject.new json: json[type]
       decode_block_caption

@@ -14,6 +14,13 @@ module NotionRubyMapping
       },
     }
 
+    describe "constructor with nil" do
+      let(:target) { described_class.new }
+
+      it { expect(target.expression).to eq "" }
+      it { expect(target.block_json["equation"]["expression"]).to eq "" }
+    end
+
     describe "create_child_block" do
       let(:target) { described_class.new "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}" }
 

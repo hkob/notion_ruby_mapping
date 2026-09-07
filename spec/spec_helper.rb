@@ -127,6 +127,8 @@ module NotionRubyMapping
       bookmark: "899e342cec84415f9ff86225704cbb75",
       bulleted_list_item: "ab51d1c7094649b5b9007ef0109b33c4",
       callout: "05386a91dfa24296b6b2ac4676006bdb",
+      callout_internal_file: "3cdd8e4e98ab80d9873cdb8c766e8413",
+      callout_external_file: "05386a91dfa24296b6b2ac4676006bdb",
       code: "5568c1c36fe84f12b83edfe2dda83028",
       embed: "7ba68fa8f57f456cbd7c73fa37f7f3ea",
       equation: "db334fcf9f6d4f179edbe534229b1f87",

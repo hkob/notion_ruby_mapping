@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  # Notion block
+  # Notion breadcrumb block
   class BreadcrumbBlock < Block
-    # @return [String (frozen)]
+    # @return [String] block type
     def type
       "breadcrumb"
     end
 
-    # @param [Boolean] not_update false when update
-    # @return [Hash{String (frozen)->Hash}]
+    # @param [Boolean] not_update true for a full block payload; false for an update payload
+    # @return [Hash{String => Object}] block payload
     def block_json(not_update: true)
       ans = super
       ans[type] = {}

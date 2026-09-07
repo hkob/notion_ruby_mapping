@@ -143,6 +143,7 @@ NotionRubyMapping.configuration { |c| c.notion_token = ENV["NOTION_API_TOKEN"] }
 
 ## 3. ChangeLog
 
+- 2026/9/7 [v4.2.0] Refactor file handling (move FileUploadObject into NotionRubyMapping, remove FileObject update tracking, and reject missing or empty file sources)
 - 2026/8/23 [v4.1.0] Refactor Property base class (remove def_delegators and contents?, raise for unsupported property type)
 - 2026/7/14 [v4.0.2] Add clear method for DateProperty
 - 2026/5/4 [v4.0.1] Add retrieve / update / delete a comment

@@ -3,16 +3,17 @@
 module NotionRubyMapping
   # EquationObject
   class EquationObject < RichTextObject
-    # @param [String] expression
-    # @return [TextObject]
+    # @param [String, nil] expression
+    # @return [EquationObject]
     def initialize(expression, options = {})
+      expression ||= ""
       super "equation", {"plain_text" => expression}.merge(options)
       @expression = expression
       @will_update = false
     end
     attr_reader :will_update, :expression
 
-    # @param [EquationObject, String] uo
+    # @param [EquationObject, String, nil] expression_or_eo
     # @return [EquationObject] self or created EquationObject
     # @see https://www.notion.so/hkob/EquationObject-cd50126fce544ad5bb76463a4269859b#45b0b0810d8647a1968a5e4293920aeb
     def self.equation_object(expression_or_eo)
@@ -23,9 +24,10 @@ module NotionRubyMapping
       end
     end
 
-    # @param [String] expression
+    # @param [String, nil] expression
     # @see https://www.notion.so/hkob/EquationObject-cd50126fce544ad5bb76463a4269859b#155800e2c69d4676a2d74572ed8f0de8
     def expression=(expression)
+      expression ||= ""
       @expression = expression
       @options["plain_text"] = expression
       @will_update = true
