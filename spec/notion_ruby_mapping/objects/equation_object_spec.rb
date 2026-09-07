@@ -7,18 +7,25 @@ module NotionRubyMapping
 
     describe "self.equation_object" do
       subject { EquationObject.equation_object eo }
-      context "String" do
+      context "with String" do
         let(:eo) { "y = x^2 + 2x + 1" }
 
         it { expect(subject).to be_is_a EquationObject }
         it { expect(subject.expression).to eq "y = x^2 + 2x + 1" }
       end
 
-      context "EquationObject" do
+      context "with EquationObject" do
         let(:eo) { EquationObject.new "y = f(x)" }
 
         it { expect(subject).to be_is_a EquationObject }
         it { expect(subject.expression).to eq "y = f(x)" }
+      end
+
+      context "with nil" do
+        let(:eo) { nil }
+
+        it { expect(subject).to be_is_a EquationObject }
+        it { expect(subject.expression).to eq "" }
       end
     end
 
@@ -61,10 +68,21 @@ module NotionRubyMapping
     describe "expression=" do
       let(:target) { EquationObject.new "x^2 + y^2 = 1" }
 
-      before { target.expression = "y = f(x)" }
+      before { target.expression = value }
 
-      it { expect(target.expression).to eq "y = f(x)" }
-      it { expect(target.will_update).to eq true }
+      context "when has value" do
+        let(:value) { "y = f(x)" }
+
+        it { expect(target.expression).to eq value }
+        it { expect(target.will_update).to eq true }
+      end
+
+      context "with nil" do
+        let(:value) { nil }
+
+        it { expect(target.expression).to eq "" }
+        it { expect(target.will_update).to eq true }
+      end
     end
   end
 end

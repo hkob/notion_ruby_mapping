@@ -14,8 +14,13 @@ module NotionRubyMapping
       if @json
         decode_block_rich_text_array
         decode_color
+        @emoji = json[type]&.dig("icon", "emoji")&.then { |str| EmojiObject.new emoji: str }
+        @file_object = json[type]&.dig("icon")&.then { |file_json| FileObject.new json: file_json }
       else
         rich_text_array_and_color "rich_text", text_info, color
+        raise ArgumentError, "Specify either emoji or file_url." if emoji.nil? && file_url.nil?
+        raise ArgumentError, "Specify either emoji or file_url, not both." if !emoji.nil? && !file_url.nil?
+
         @emoji = EmojiObject.emoji_object emoji if emoji
         @file_object = FileObject.file_object file_url if file_url
         add_sub_blocks sub_blocks
@@ -34,7 +39,7 @@ module NotionRubyMapping
       ans[type] = @rich_text_array.update_property_schema_json not_update
       ans[type]["color"] = @color
       ans[type]["icon"] = @emoji.property_values_json if @emoji
-      ans[type]["icon"] = @file_object.property_values_json if @file_object
+      ans[type]["icon"] = @file_object.property_values_json if @file_object && @file_object.url
       ans[type]["children"] = @sub_blocks.map(&:block_json) if @sub_blocks
       ans
     end

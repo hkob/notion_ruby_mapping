@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 module NotionRubyMapping
-  # Notion block
+  # Represents a Notion file block.
   class FileBlock < FileBaseBlock
-    # @return [String]
+    # Returns the Notion block type.
+    #
+    # @return [String] `"file"`
     def type
       "file"
     end

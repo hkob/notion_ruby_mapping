@@ -64,6 +64,24 @@ module NotionRubyMapping
         it { expect(subject.status).to eq "pending" }
       end
 
+      context "with an empty file" do
+        let(:fname) { "spec/fixtures/empty.txt" }
+
+        before do
+          allow(File).to receive(:exist?).with(fname).and_return(true)
+          allow(File).to receive(:size).with(fname).and_return(0)
+        end
+
+        it "raises an error before creating a file upload" do
+          expect(tc.nc).not_to receive(:create_file_upload_request)
+
+          expect { described_class.new fname: fname }.to raise_error(
+            ArgumentError,
+            "FileUploadObject requires a non-empty file: #{fname}",
+          )
+        end
+      end
+
       context "with an external file" do
         let(:fname) { "dummy.pdf" }
         let(:id) { TestConnection::FILE_UPLOAD_PDF_ID }

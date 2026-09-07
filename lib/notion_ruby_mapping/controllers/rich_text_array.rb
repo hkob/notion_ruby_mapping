@@ -19,13 +19,14 @@ module NotionRubyMapping
                            end
       @will_update = will_update
     end
+    attr_reader :rich_text_objects
     attr_writer :will_update
 
     def self.rich_text_array(key, text_objects = nil)
       if text_objects.nil?
         RichTextArray.new key
       elsif text_objects.is_a? RichTextArray
-        text_objects
+        RichTextArray.new key, text_objects: text_objects.rich_text_objects
       else
         RichTextArray.new key, text_objects: text_objects
       end

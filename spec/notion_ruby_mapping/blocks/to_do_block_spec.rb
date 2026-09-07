@@ -16,6 +16,43 @@ module NotionRubyMapping
       },
     }
 
+    describe "constructor" do
+      let(:target) { ToDoBlock.new "tdb", true }
+
+      subject { target.block_json["to_do"] }
+
+      it { expect(subject["checked"]).to be true }
+      it { expect(subject["color"]).to eq "default" }
+      it { expect(subject["rich_text"].first["plain_text"]).to eq "tdb" }
+    end
+
+    describe "retrieve checked" do
+      let(:json) do
+        {
+          "object" => "block",
+          "type" => "to_do",
+          "to_do" => {
+            "rich_text" => [],
+            "checked" => true,
+            "color" => "default",
+          },
+        }
+      end
+      let(:target) { described_class.new json: json }
+
+      it { expect(target.checked).to be true }
+
+      context "when unchecked" do
+        before { target.checked = false }
+
+        it do
+          expect(target.update_block_json).to eq(
+            "to_do" => {"checked" => false},
+          )
+        end
+      end
+    end
+
     describe "create_child_block" do
       let(:sub_block) { ParagraphBlock.new "with children" }
       let(:target) { ToDoBlock.new "A sample To-Do", color: "brown_background", sub_blocks: sub_block }

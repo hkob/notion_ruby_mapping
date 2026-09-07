@@ -14,54 +14,10 @@ module NotionRubyMapping
     end
     attr_reader :can_have_children, :can_append, :type, :rich_text_array, :url, :caption, :color, :language
 
-    def self.type2class(type, has_children = false)
-      @type2class ||= {
-        false => {
-          audio: AudioBlock,
-          bookmark: BookmarkBlock,
-          breadcrumb: BreadcrumbBlock,
-          bulleted_list_item: BulletedListItemBlock,
-          callout: CalloutBlock,
-          child_database: ChildDatabaseBlock,
-          child_page: ChildPageBlock,
-          code: CodeBlock,
-          column: ColumnBlock,
-          column_list: ColumnListBlock,
-          divider: DividerBlock,
-          embed: EmbedBlock,
-          equation: EquationBlock,
-          file: FileBlock,
-          heading_1: Heading1Block,
-          heading_2: Heading2Block,
-          heading_3: Heading3Block,
-          heading_4: Heading4Block,
-          image: ImageBlock,
-          link_preview: LinkPreviewBlock,
-          link_to_page: LinkToPageBlock,
-          numbered_list_item: NumberedListItemBlock,
-          paragraph: ParagraphBlock,
-          pdf: PdfBlock,
-          quote: QuoteBlock,
-          synced_block: SyncedBlock,
-          table: TableBlock,
-          table_row: TableRowBlock,
-          table_of_contents: TableOfContentsBlock,
-          to_do: ToDoBlock,
-          toggle: ToggleBlock,
-          video: VideoBlock,
-        },
-        true => {
-          heading_1: ToggleHeading1Block,
-          heading_2: ToggleHeading2Block,
-          heading_3: ToggleHeading3Block,
-          heading_4: ToggleHeading4Block,
-        },
-      }
-      @klass = @type2class[has_children][type.to_sym] || @type2class[false][type.to_sym] || Block
-    end
-
     def self.decode_block(json)
-      type2class(json["type"], json["has_children"]).new json: json
+      type = json["type"]
+      is_toggleable = !!(json[type] && json[type]["is_toggleable"])
+      type2class(type, is_toggleable).new json: json
     end
 
     # @see https://www.notion.so/hkob/Block-689ad4cbff50404d8a1baf67b6d6d78d#298916c7c379424682f39ff09ee38544
@@ -101,7 +57,7 @@ module NotionRubyMapping
 
     # @return [NotionRubyMapping::RichTextArray]
     def decode_block_caption
-      @caption = RichTextArray.new "caption", json: @json[type]["caption"] if @json[type]["caption"]
+      @caption = RichTextArray.new "caption", json: @json[type]["caption"] || []
     end
 
     # @return [String]
@@ -154,5 +110,52 @@ module NotionRubyMapping
       @color = color
       self
     end
+
+    def self.type2class(type, is_toggleable = false)
+      @type2class ||= {
+        false => {
+          audio: AudioBlock,
+          bookmark: BookmarkBlock,
+          breadcrumb: BreadcrumbBlock,
+          bulleted_list_item: BulletedListItemBlock,
+          callout: CalloutBlock,
+          child_database: ChildDatabaseBlock,
+          child_page: ChildPageBlock,
+          code: CodeBlock,
+          column: ColumnBlock,
+          column_list: ColumnListBlock,
+          divider: DividerBlock,
+          embed: EmbedBlock,
+          equation: EquationBlock,
+          file: FileBlock,
+          heading_1: Heading1Block,
+          heading_2: Heading2Block,
+          heading_3: Heading3Block,
+          heading_4: Heading4Block,
+          image: ImageBlock,
+          link_preview: LinkPreviewBlock,
+          link_to_page: LinkToPageBlock,
+          numbered_list_item: NumberedListItemBlock,
+          paragraph: ParagraphBlock,
+          pdf: PdfBlock,
+          quote: QuoteBlock,
+          synced_block: SyncedBlock,
+          table: TableBlock,
+          table_row: TableRowBlock,
+          table_of_contents: TableOfContentsBlock,
+          to_do: ToDoBlock,
+          toggle: ToggleBlock,
+          video: VideoBlock,
+        },
+        true => {
+          heading_1: ToggleHeading1Block,
+          heading_2: ToggleHeading2Block,
+          heading_3: ToggleHeading3Block,
+          heading_4: ToggleHeading4Block,
+        },
+      }
+      @type2class[is_toggleable][type.to_sym] || @type2class[false][type.to_sym] || Block
+    end
+    private_class_method :type2class
   end
 end

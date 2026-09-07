@@ -5,7 +5,7 @@ module NotionRubyMapping
   class Heading1Block < TextSubBlockColorBaseBlock
     # @param [RichTextArray, String, Array<String>, RichTextObject, Array<RichTextObject>, nil] text_info
     # @param [String] color
-    def initialize(text_info = nil, color: nil, json: nil, id: nil, parent: nil)
+    def initialize(text_info = nil, color: "default", json: nil, id: nil, parent: nil)
       super(text_info, color: color, json: json, id: id, parent: parent)
       @can_have_children = false
     end

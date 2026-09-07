@@ -48,5 +48,11 @@ module NotionRubyMapping
       it_behaves_like "update block rich text array", type, "new text"
       it_behaves_like "update block color", type, "orange_background", true
     end
+
+    describe "default color" do
+      let(:target) { described_class.new "blib" }
+
+      it { expect(target.color).to eq "default" }
+    end
   end
 end

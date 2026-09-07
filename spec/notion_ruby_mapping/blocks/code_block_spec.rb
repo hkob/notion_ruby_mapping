@@ -5,6 +5,7 @@ require_relative "../../spec_helper"
 module NotionRubyMapping
   RSpec.describe CodeBlock do
     type = "code"
+    tc = TestConnection.instance
 
     it_behaves_like "retrieve block", described_class, TestConnection.block_id(type), false, {
       "object" => "block",
@@ -33,6 +34,59 @@ module NotionRubyMapping
         "caption" => [],
       },
     }
+
+    describe "create from json (without caption)" do
+      let(:json) { tc.read_json "retrieve_block_code_block" }
+      let(:target) { described_class.new "cb", json: json }
+
+      before { json["code"].delete "caption" }
+
+      subject { target.caption }
+      it { expect(subject.full_text).to eq "" }
+      it { expect(subject.will_update).to be_falsey }
+      it { expect(target.update_block_json).to eq({"code" => {}}) }
+    end
+
+    describe "constructor with wrong key caption" do
+      let(:wrong_key_caption) { RichTextArray.new "rich_text", text_objects: "list command" }
+      let(:target) { CodeBlock.new "%ls -l", caption: wrong_key_caption }
+
+      let(:json) do
+        {
+          "code" => {
+            "caption" => [
+              {
+                "href" => nil,
+                "plain_text" => "list command",
+                "text" => {
+                  "content" => "list command",
+                  "link" => nil,
+                },
+                "type" => "text",
+              },
+            ],
+            "language" => "shell",
+            "rich_text" => [
+              {
+                "href" => nil,
+                "plain_text" => "%ls -l",
+                "text" => {
+                  "content" => "%ls -l",
+                  "link" => nil,
+                },
+                "type" => "text",
+              },
+            ],
+          },
+          "object" => "block",
+          "type" => "code",
+        }
+      end
+
+      it {
+        expect(target.block_json).to eq json
+      }
+    end
 
     describe "create_child_block" do
       let(:sub_block) { ParagraphBlock.new "with children" }
@@ -67,6 +121,72 @@ module NotionRubyMapping
 
       it_behaves_like "update block rich text array", type, "array = %w[ABC DEF]"
       it_behaves_like "update block caption", type, "set an array"
+
+      context "with language, rich_text and caption" do
+        before do
+          target.language = "ruby"
+          target.rich_text_array.rich_text_objects = "array = %w[ABC DEF]"
+          target.caption.rich_text_objects = "set an array"
+        end
+
+        let(:json) do
+          {
+            type => {
+              "language" => "ruby",
+              "rich_text" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "array = %w[ABC DEF]",
+                    "link" => nil,
+                  },
+                  "plain_text" => "array = %w[ABC DEF]",
+                  "href" => nil,
+                },
+              ],
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "set an array",
+                    "link" => nil,
+                  },
+                  "plain_text" => "set an array",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        end
+
+        it { expect(target.update_block_json).to eq json }
+      end
+
+      context "with caption by wrong key" do
+        before do
+          target.caption.rich_text_objects = RichTextArray.new "rich_text", text_objects: "set an array"
+        end
+
+        let(:json) do
+          {
+            type => {
+              "caption" => [
+                {
+                  "type" => "text",
+                  "text" => {
+                    "content" => "set an array",
+                    "link" => nil,
+                  },
+                  "plain_text" => "set an array",
+                  "href" => nil,
+                },
+              ],
+            },
+          }
+        end
+
+        it { expect(target.update_block_json).to eq json }
+      end
     end
   end
 end

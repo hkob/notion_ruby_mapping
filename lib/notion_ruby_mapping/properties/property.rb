@@ -168,7 +168,7 @@ module NotionRubyMapping
       @json = json[type]
     end
 
-    # @return [Symbol] property type
+    # @return [String] property type
     def type
       self.class::TYPE
     end
